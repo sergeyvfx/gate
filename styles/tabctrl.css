@@ -1,0 +1,34 @@
+#content div.tabctrl #tabs { margin: 0; padding: 0; }
+
+#content div.tabctrl #tabs li {
+  position: relative;
+  display: block;
+  float: left;
+  margin-left: 10px;
+  bottom: -1px;
+  border: 1px solid #aaa;
+}
+
+#content div.tabctrl #tabs li a {
+  display: block;
+  padding: 0 4px;
+  background: #eee;
+  text-decoration: none;
+  color: #000;
+}
+#content div.tabctrl #tabs li a:hover { background: #fff; }
+
+#content div.tabctrl #tabs li#act  { padding: 0 4px; background: #fff; border-bottom: 1px #fff solid; }
+
+#content div.tabctrl #cnt { clear: left; border: 1px solid #aaa; padding: 6px; background: #fff; }
+
+#content div.tabctrl #cnt input.txt, #content div.tabctrl #cnt select, #content div.tabctrl #cnt textarea
+  { background-color: #f0f0f0; }
+
+#content div.tabctrl table.list tr.subactive,
+#content div.tabctrl table.list tr.active    { border-left: 1px #aaa solid; border-right: 1px #aaa solid; }
+
+#content div.tabctrl table.list tr         { border-left: 1px #fff solid; border-right: 1px #fff solid; }
+
+#content div.tabctrl #cnt button       { background: #eef; border-color: #a0a0ef; }
+#content div.tabctrl #cnt button:hover { background: #ccf; }

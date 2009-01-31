@@ -1,0 +1,70 @@
+<div id="iframeEditor_<?=targ ('name');?>_dialog_default">
+  <table class="dialog">
+    <tr>
+      <td class="title">Форматирование</td>
+      <td>
+        <? img_button ('stock/bold.gif',          'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'BOLD\');',      'Жирный'); ?>
+        <? img_button ('stock/italic.gif',        'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'ITALIC\');',    'Курсивный'); ?>
+        <? img_button ('stock/underline.gif',     'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'UNDERLINE\');', 'Подчеркнутый'); ?>
+        <? img_button ('stock/strikethrough.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'STRIKEOUT\');', 'Зачеркнытый'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/h1.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'header\', \'H1\');', 'Заголовок первого уровня'); ?>
+        <? img_button ('stock/h2.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'header\', \'H2\');', 'Заголовок второго уровня'); ?>
+        <? img_button ('stock/h3.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'header\', \'H3\');', 'Заголовок третьего уровня'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/align_left.gif',    'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'ALIGNLEFT\');',    'Выравнивание по левому краю'); ?>
+        <? img_button ('stock/align_right.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'ALIGNRIGHT\');',   'Выравнивание по правому краю'); ?>
+        <? img_button ('stock/align_centre.gif',  'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'ALIGNCENTRE\');',  'Выравнивание по центру'); ?>
+        <? img_button ('stock/align_justify.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'ALIGNJUSTIFY\');', 'Выравнивание по ширине'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/bullets.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'BULLETEDLIST\');', 'Организовать список'); ?>
+        <? img_button ('stock/numbering.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'NUMBEREDLIST\');', 'Организовать нумерованый список'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/superscript.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'SUPERSCRIPT\');', 'Надстрочный'); ?>
+        <? img_button ('stock/subscript.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'SUBSCRIPT\');',   'Подстрочный'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/decrease_indent.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'DECREASEINDENT\');', 'Уменьшить отступ'); ?>
+        <? img_button ('stock/increase_indent.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'INCREASEINDENT\');', 'Увеличить отступ'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/format_painter.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'DEFORMAT\');', 'Убрать форматирование'); ?>
+        <? button_separator (); ?>
+        <? button ('Гиперссылка', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'show_dialog\', \'hyperlink\');', 'Организовать гиперссылку'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/undo.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'UNDO\');', 'Отменить'); ?>
+        <? img_button ('stock/redo.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'formation\', \'REDO\');', 'Повторить'); ?>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Разное</td>
+      <td>
+        <? img_button ('stock/horizontal_line.gif',  'iframeEditor_ExecAction (\''.targ ('name').'\', \'insert\', \'HR\');',      'Горизонтальная линия'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/preview.gif',          'iframeEditor_ExecAction (\''.targ ('name').'\', \'preview\', null);',       'Предварительный просмотр'); ?>
+        <? button_separator (); ?>
+        <? button ('Редактировать HTML',             'iframeEditor_ExecAction (\''.targ ('name').'\', \'show_dialog\', \'html\');', 'Редактировать HTML код'); ?>
+        <? button_separator (); ?>
+        <? button ('Типографика',                    'iframeEditor_ExecAction (\''.targ ('name').'\', \'typography\', null);', 'Редактировать типографику'); ?>
+        <? button_separator (); ?>
+        <? button ('Блок', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'show_dialog\', \'lblock\');', 'Вставить информационный блок'); ?>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Таблицы</td>
+      <td>
+        <? button ('Вставить таблицу', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'show_dialog\', \'table\');', 'Вставить таблицу'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/delete_table.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'table_delete\', null);',  'Удалить таблицу'); ?>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Изображения</td>
+      <td>
+        <? button ('Вставить изображение', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'show_dialog\', \'image\');', 'Вставить изображение'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/img_align_left.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'img_align\', \'left\');',  'Обтекание слева'); ?>
+        <? img_button ('stock/img_align_none.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'img_align\', \'none\');',  'Убрать обтекание'); ?>
+        <? img_button ('stock/img_align_right.gif',  'iframeEditor_ExecAction (\''.targ ('name').'\', \'img_align\', \'right\');', 'Обтекание справа'); ?>
+      </td>
+    </tr>
+  </table>
+</div>

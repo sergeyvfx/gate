@@ -1,0 +1,43 @@
+Статьи / Заглавная страница / Левый колонтитул
+<?php
+  global $login, $passwd;
+  if ($login!='' && user_authorize (stripslashes ($login), stripslashes ($passwd))) {
+    redirect (config_get ('http-document-root'));
+  }
+  if (!user_authorized ()) {
+?>
+<form action="." method="POST">
+  <div class="form">
+    <div class="content">
+      <table class="clear" width="100%">
+        <tr>
+          <td width="80">Ваш логин</td>
+          <td style="padding: 2px 0;"><input type="text" class="txt block" id="login" name="login"></td>
+        </tr>
+        <tr>
+          <td>Пароль</td>
+          <td style="padding: 2px 0;">
+            <table class="clear" width="100%">
+              <tr>
+                <td><input type="password" class="txt block" name="passwd"></td>
+                <td width="54" align="right"><button class="small" style="width: 48px;"  type="submit">Войти</button></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</form>
+<script language="JavaScript" type="text/javascript">
+  getElementById ('login').focus ();
+</script>
+<div id="hr"></div>
+<?php } ?>
+<div style="text-align: justify;">
+  <b>Внимание:</b> Наша тестирующая система портирована на ОС Linux. В связи с этим появились некоторе <a href="JavaScript:dn ();">тонкости</a>, которые Вам следовало бы знать.<br>
+<div style="height: 4px;"></div>
+Если Вы впервые находитесь в этой системе, то Вам следует изучить <a href="<?=config_get ('document-root');?>/articles/rules">правила</a>.
+<div style="height: 4px;"></div>
+Перед заданием вопроса администраторам ресурса, изучите раздел <a href="<?=config_get ('document-root');?>/articles/FAQ">ЧаВо</a>. На вопросы, расмотренные в этом разделе, ответ дан не будет.
+</div>

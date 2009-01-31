@@ -1,0 +1,20 @@
+<?php
+  $p=targs ();
+  $url=$p['url'];
+  $suff=$p['suff'];
+?>
+
+<div class="tabctrl">
+  <ul id="tabs">
+<?php
+  $n=$p['count'];
+  // print_r ($p);
+  for ($i=0; $i<$n; $i++) {
+    $it=$p['tab'.$i];
+    if ($i!=$p['active'])
+      println ('    <li><a href="'.$url.'&'.$suff.'='.$i.'">'.$p['tab'.$i].'</a></li>'); else
+      println ('    <li id="act">'.$p['tab'.$i].'</li>');
+  }
+?>
+  </ul>
+  <div id="cnt">

@@ -1,0 +1,70 @@
+<?php
+  $value=tpl_arg ('value');
+
+//  $CORE->PAGE->AddScript ('language=JavaScript;type=text/javascript', "\n".tpl ('back/dialogs', array (), false));
+  $CORE->PAGE->AddScriptFile ('dialogs.js');
+  add_body_handler ('onunload', 'CloseDialogs');
+?>
+
+<script language="JavaScript" type="text/JavaScript">
+
+  function TestsAutomate (count, maxpoints) {
+    var widget=getElementById ('ProblemSettings_tests');
+
+    var points=Math.floor (maxpoints/count);
+    var str='';
+    for (i=maxpoints-points*count; i<count; i++) {if (str!='') str+=' '; str+=points;}
+    for (i=0; i<maxpoints-points*count; i++) {if (str!='') str+=' '; str+=points+1;}
+
+    widget.value=str;
+
+    RecalcTests ();
+  }
+
+  function OnTestsOk (wnd) {
+    var count     = wnd.document.getElementById ('count').value;
+    var maxpoints = wnd.document.getElementById ('maxpoints').value;
+    
+    TestsAutomate (count, maxpoints);
+    
+    return true;
+  }
+
+  function OnTestsCancel (wnd) { return true; }
+  
+  function RecalcTests () {
+    var widget=getElementById ('ProblemSettings_tests');
+    var string=widget.value;
+
+    string=string.replace (/(\ )+/g, ' ').replace (/(\ )*$/, '');
+
+    var arr=string.split (" ");
+    var points=new Number (0);
+    
+    for (var i=0; i<arr.length; i++)
+      points+=new Number (arr[i]);
+      
+    var count=arr.length;
+    if (qtrim (string)=='') count=0;
+      
+    getElementById ('count').innerHTML=count;
+    getElementById ('MaxPoints').innerHTML=points;
+  }
+
+  var TestsAutomate_HTML = 'Количество тестов:<br><input type="text" class="txt block" id="count"><br>Стоимость задачи (без учета бонуса)<br><input type="text" class="txt block" id="maxpoints"><br>';
+</script>
+
+
+<table width="100%" class="clear">
+  <tr>
+    <td>
+      <input type="text" class="txt block" id="ProblemSettings_tests" name="ProblemSettings_tests" value="<?=$value;?>" onchange="RecalcTests ();" onkeyup="RecalcTests ();">
+    </td>
+    <td width="100" style="padding: 0 4px;" align="center"><button style="width: 90px;" class="small" type="button" onclick="ShowDialog (340, 135, TestsAutomate_HTML, OnTestsOk, OnTestsCancel, 'count')">Рассчитать</button></td>
+  </tr>
+</table>
+<div>Количество тестов: <span id="count"></span>. Стоимость задачи (без учета бонуса): <span id="MaxPoints"></span></div>
+
+<script language="JavaScript" type="text/JavaScript">
+  RecalcTests ();
+</script>

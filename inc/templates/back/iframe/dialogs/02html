@@ -1,0 +1,11 @@
+<div id="iframeEditor_<?=targ ('name');?>_dialog_html" class="invisible">
+  <table class="dialog">
+    <tr>
+      <td class="title">HTML вид</td>
+      <td>
+        <? img_button ('stock/confirm.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_accept\', \'html\');', 'Сохранить HTML код'); ?>
+        <? img_button ('stock/discard.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_cancel\', \'html\');', 'Отменить'); ?>
+      </td>
+    </tr>
+  </table>
+</div>

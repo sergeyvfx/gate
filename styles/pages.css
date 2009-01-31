@@ -1,0 +1,55 @@
+ /* DEEP CONTENT-BASED STYLESHEETS  */
+
+ /* NEWS */
+#content #news #entry { margin: 16px 0px 0 24px; border-left: 6px #00007f solid; padding-left: 6px; }
+#content #news #entry #head .title .sub { font-size: 8pt; font-weight: normal; }
+#content #news #entry #text    { padding: 8px 16px 0 32px; text-align: justify; }
+#content #news #entry #text img { margin: 4px 8px 8px 4px; float: left; }
+#content #news #entry #bottom { padding: 6px 0 8px 8px; }
+
+ /* Multisection publication */
+#content #news #entry #head, #content #sectionlist #entry #head { border-bottom: 1px #aaa solid; padding: 0; padding: 2px 0 4px 8px; }
+#content #news #entry #head table,  #content #sectionlist #entry #head table  { width: 100%; }
+#content #news #entry #head .title, #content #sectionlist #entry #head .title { font-size: 11pt; font-weight: bold; }
+#content #news #entry #head .acts,  #content #sectionlist #entry #head .acts  { text-align: right; padding-right: 16px; }
+#content #sectionlist #entry #text { padding: 0 8px 4px 8px; }
+
+#content #sectionlist #author, #content #news #author   { color: #606060; margin-left: 32px; }
+#content #sectionlist #author, #content #news #author a { color: #606060; }
+
+/* Pagintation  */
+#content div.pagintation { margin-bottom: 6px; }
+#content div.pagintation a { margin: 0 2px; padding: 0 2px; }
+#content div.pagintation a.active { color: #000; }
+
+/* Labeled blocks */
+#content div.lblock { border: 1px #aaa solid; padding: 0; }
+#content div.lblock div.title   { padding: 2px 8px; font-weight: normal; font-size: 7pt; border-bottom: 1px #aaa solid;  }
+#content div.lblock div.tblue   { background: #ccf; }
+#content div.lblock div.tred    { background: #fcc; }
+#content div.lblock div.tyellow { background: #ffe; }
+#content div.lblock div.tgreen  { background: #efe; }
+#content div.lblock div.content { padding: 4px; margin: 0; background-color: #fff; }
+
+#content div.lblock div.content div.form div.content { background: transparent; padding: 4px; margin: 0; }
+
+#content .actionPubs { background: url(../pics/symbol_s.gif) 20px 3px no-repeat; padding-left: 32px; }
+
+/* FAQ */
+#content div.FAQ div.c { width: 80%; }
+#content div.FAQ div.sub { padding-left: 16px;  }
+#content div.FAQ div.s { margin-top: 8px; }
+#content div.FAQ div.s div.title { font-size: 12pt; border-bottom: 1px #777 solid; padding-left: 8px;  }
+#content div.FAQ div.s div.list div.q { margin-top: 12px; }
+#content div.FAQ div.s div.list div.f { margin-top: 4px; }
+#content div.FAQ div.s div.list div.q div.short { font-size: 10pt;padding-left: 8px; border-bottom: 1px #777 solid;  }
+#content div.FAQ div.s div.list div.q div.full { font-weight: bold; margin-top: 6px;  }
+#content div.FAQ div.s div.list div.q div.ans  {  }
+
+#content table.info { margin-top: 4px; width: 80%; }
+#content table.info tr.h th { border: 1px #aaa solid; padding: 1px 4px; background: #cfcfcf; }
+#content table.info td { border: 1px #aaa solid; padding: 1px 4px; vertical-align: top; background: #f0f0f0; white-space: nowrap; }
+#content table.info tr.l td { background: #fff; }
+
+#content span.source, #content div.source { background: #eee; border: 1px #777 dotted; padding: 6px 8px; font-family: "lucida console" "dejavu sans mono" "monospace" }
+#content span.source { padding: 1px 4px; margin: 4px; white-space: nowrap; }

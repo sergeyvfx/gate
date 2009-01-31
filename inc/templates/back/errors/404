@@ -1,0 +1,3 @@
+<? $url=preg_replace ('/^'.prepare_pattern (config_get ('site-root')).'/', '', targ ('url')); ?>
+<div id="navigator">Файл не найден</div>
+<h3>Невозможно отобразить страницу, так как запрошенный файл <?=$url;?> не найден.</h3>

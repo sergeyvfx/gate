@@ -1,0 +1,11 @@
+<table class="frame">
+  <tr class="h">
+    <td class="sp"><img src="<?=config_get ('document-root');?>/pics/clear.gif" class="sep16" alt=""></td>
+    <td class="tc"><div><?=targ ('caption');?></div></td>
+    <td class="sp" style="width: 100%"><img src="<?=config_get ('document-root');?>/pics/clear.gif"></td>
+  </tr>
+  <tr>
+    <td colspan="3"><div class="frame_cnt"><?=targ ('content');?></div></td>
+  </tr>
+</table>
+

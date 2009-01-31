@@ -1,0 +1,21 @@
+Страница / Меню навигации
+<!--
+  `+`   -    Начать новое меню
+  `,` <модификаторы>     -   Новый элемент вне списка в текущем меню/подменю.
+  `.` <модификаторы>     -   Новый элемент в текущем меню/подменю.
+    Модификаторы:
+      `:`  - Запрет препарсинга html кода
+      'l'    - Отображать элемент только если пользователь авторизовался
+      'L'    - Отображать элемент только если пользователь _не_ авторизовался
+-->
++ Навигация
+. [url href="$document_root/"]Заглавная страница[/url]
+. l [url href="$document_root/login/profile"]Мой профиль[/url]
+. [url href="$document_root/tester/?$anon_redirect"]Олимпиады[/url]
++ Wiki
+. [url href="$document_root/articles/news"]Новости[/url]
+. [url href="$document_root/articles/FAQ"]ЧаВо[/url]
+. [url href="$document_root/articles/rules"]Правила[/url]
+. [url href="$document_root/articles/about"]О проекте[/url]
++ Администрирование
+. [url href="/phpmyadmin/"]phpMyAdmin[/url]

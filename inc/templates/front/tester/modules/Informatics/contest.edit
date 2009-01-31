@@ -1,0 +1,93 @@
+<?php
+
+  global $WT_contest_id;
+
+  if (browser_engine ()!='DONKEY')
+    print ('<div id="editor" style="margin-top: -6px; padding-top: 6px;">'); else
+    print ('<div id="editor" style="_height: 1%;">');
+
+  $redirection=get_redirection ();
+
+  $data=targ ('data');
+
+  $lib=targ ('lib');
+  $rules=$lib->GetRules ();
+  
+  $cur_data=wt_contest_by_id ($WT_contest_id);
+
+  // General settings form
+  $f=new CVCForm ();
+  
+  global $cman;
+  $s='';
+  if ($cman==0 || $cman=='')
+    $s='enctype=multipart/form-data;';
+
+  $f->Init ('ContestSettings', 'method=POST;action=.?action\=save&id\='.$data['id'].';titlewidth=160;backlink=.?page\=contest;'.$s);
+
+  $f->AppendTextField     ('Название контеста',  'name', $data['name'], true);
+  $f->AppendComboBoxField ('Правила проведения', 'rules',$data['settings']['rules'], $lib->GetRules ());
+
+  $f->AppendTextField     ('Продолжительность (мин.)<br><small>&nbsp;&nbsp;&nbsp;Ноль эквивалентен бесконечности</small>', 'duration',   $data['settings']['duration'],   false);
+  $f->AppendTextField     ('Время заморозки (мин.)<br><small>&nbsp;&nbsp;&nbsp;До окончания контеста</small>',             'freezetime', $data['settings']['freezetime'], false);
+
+  $f->AppendTextField     ('Штраф за попытку',    'penalty',  $data['settings']['penalty'], false);
+  $f->AppendTextField     ('Количество попыток<br><small>&nbsp;&nbsp;&nbsp;Ноль эквивалентен бесконечности</small>',  'trycount', $data['settings']['trycount'], false);
+
+  $f->AppendCheckBoxField ('Разморожен',  'unfrozen', $data['settings']['unfrozen'], false);
+  $f->AppendCheckBoxField ('Подробная информация<br><small>&nbsp;&nbsp;&nbsp;Просмотр участниками подробной информации о солюшене</small>',  'viewdetail', $data['settings']['viewdetail'], false);
+  $f->AppendCheckBoxField ('Отображать последний Accepted',  'show_last_accepted', $data['settings']['show_last_accepted'], false);
+  $f->AppendCheckBoxField ('Игнорировать Compile Error<br><small>&nbsp;&nbsp;&nbsp;Не засчитывать CE попыткой</small>',  'ignore_ce', $data['settings']['ignore_ce'], false);
+
+  $autostart=array ('src'=>tpl ('front/tester/modules/Informatics/contest.field.autostart', targs ()), 'title'=>'Автозапуск<br><small>Запустить контест автоматически в указанное время</small>');
+  $f->AppendCustomField ($autostart);
+
+  $archive=array ('src'=>tpl ('front/tester/modules/Informatics/contest.field.archive', targs ()));
+  $f->AppendCustomField ($archive);
+
+  $res_cman   = content_url_var_pop ('cman');
+  $res_pbrows = content_url_var_pop ('pbrows');
+  $url=prepare_arg (content_url_get_full ());
+  if ($res_cman)   content_url_var_push ('cman', $res_cman);
+  if ($res_pbrows) content_url_var_push ('pbrows', $res_pbrows);
+
+  // Contest edit tab control
+  $t=new CVCTabCtrl ();
+  $t->Init ('cman', 'url='.$url.';');
+  $t->StartNewPage ('title=Основные;');
+  print ($f->OuterHTML ());
+  $t->FinishPage ();
+  $t->StartNewPage ('title=Задачи;');
+  
+  if ($cur_data['lid']==0) {
+?>
+
+  <div class="cats" style="margin-bottom: 10px;">
+    Быстрые ссылки: <a href=".?page=prbmanager&action=showcreate&promtadd=<?=$data['id'];?>&redirect=<?=$redirection;?>">Создать задачу</a>
+  </div>
+
+<?php
+  }
+
+  groupo ('title=Задачи на контесте;');
+  print ($lib->Template ('contest.edit.prusage', array ('data'=>$data, 'lib'=>$lib)));
+  groupc ();
+
+  groupo ('title=Браузер задач;');
+  print ($lib->Template ('contest.edit.prbrows', array ('data'=>$data, 'lib'=>$lib)));
+  groupc ();
+
+  print ('<div class="formPast"><button class="block" onclick="nav (\'.?page=contest\');">Назад</button></div>');
+  $t->FinishPage ();
+
+  $t->StartNewPage ('title=Группы;');
+  print ($lib->Template ('contest.edit.groups', array ('data'=>$data, 'lib'=>$lib)));
+  $t->FinishPage ();
+
+  $t->StartNewPage ('title=Компиляторы;');
+  print ($lib->Template ('contest.edit.compilers', array ('data'=>$data, 'lib'=>$lib)));
+  $t->FinishPage ();
+
+  $t->Draw ();
+?>
+</div>

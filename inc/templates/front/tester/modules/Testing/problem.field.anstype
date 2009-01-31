@@ -1,0 +1,13 @@
+<?php
+  $lib=targ ('lib');
+  $data=targ ('data');
+
+  $arr=$lib->AnsType_GetRegistered ();
+?>
+<select name="anstype" class="block">
+<?php
+  for ($i=0, $n=count ($arr); $i<$n; $i++) {
+    print ('  <option value="'.$arr[$i]['ClassName'].'"'.(($data['settings']['anstype']==$arr[$i]['ClassName'])?(' selected'):('')).'>'.$arr[$i]['title'].'</option>');
+  }
+?>
+</select>

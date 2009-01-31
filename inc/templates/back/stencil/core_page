@@ -1,0 +1,1 @@
+<?=stencil_tframe (eval_code (targ ('content')), '<a href="'.get_redirection (false,true).'">'.targ ('caption').'</a>');?>

@@ -1,0 +1,94 @@
+<?php
+
+  function DrawProblemRow ($pr, $n, $c, $absCount) {
+    global $id, $pbrows, $cman, $act, $uid, $prpage;
+    
+    $lib=targ ('lib');
+    $prefix=content_url_get_full ();
+
+    $delete=$lib->GetAllowed ('PROBLEMS.DELETE');
+
+    $class='';
+    $class.=(($n==$c-1)?((($class!='')?(' '):('')).'last'):(''));
+    $class.=(($c!=1 && $n==0)?((($class!='')?(' '):('')).'first'):(''));
+    $class.=(($act=='view' && $uid==$pr['data']['id'])?( (($class!='')?(' '):('')).'active'):(''));
+    $class.=(($act=='add'  && $uid==$pr['data']['id'])?( (($class!='')?(' '):('')).'subactive'):(''));
+    $class=($class!='')?(' class="'.$class.'"'):('');
+
+    $num=$absCount.'.';
+    $comment=htmlspecialchars ($pr['data']['settings']['comment']);
+    $title='<a href="'.$prefix.'&act=view&uid='.$pr['data']['id'].'#view">'.$pr['data']['name'].'</a>';
+    $actions=stencil_ibtnav ('plus.gif', $prefix.'&act=add&uid='.$pr['data']['id'].'#editor', 'Добавить на контест');
+    $cb='<input type="checkbox" id="problem_'.$pr['data']['id'].'_cb">';
+    if ($delete)
+      $actions.=stencil_ibtnav ('cross.gif', $prefix.'&act=delete&pid='.$pr['data']['id'].'#editor', 'Удалить (глобально)', 'Удалить эту задачу?');
+    return '<tr'.$class.'><td width="18">'.$cb.'</td><td class="n">'.$num.'</td><td width="50%">'.$title.'</td><td>'.$comment.'</td><td align="right" width="48">'.$actions.'</td></tr>'."\n";
+  }
+
+  function ParseDrawableList ($list) {
+    $perPage=opt_get ('WT_problems_per_browser_page');
+    if ($perPage<=0) $perPage=10;
+    $n=count ($list);
+    $pages=new CVCPagintation ();
+    $prefix=content_url_get_full ();
+    $pages->Init ('', 'pageid=prpage;bottomPages=false;skiponcepage=true;');
+    $i=0;
+    $tn=min ($n, $perPage);
+    while ($i<$n) {
+      $pageSrc='<table class="list smb" width="100%">'."\n";
+      $c=0;
+      $uid='';
+      $uidCheck='';
+      while ($c<$perPage && $i<$n) {
+        if ($list[$i]['type']=='problem') {
+          $uid.=(($uid!='')?(','):('')).$list[$i]['data']['id'];
+          $uidCheck.='if (getElementById (\'problem_'.$list[$i]['data']['id'].'_cb\').checked) res+=((res!="")?(","):(""))+\''.$list[$i]['data']['id'].'\';'."\n";
+          $pageSrc.=DrawProblemRow ($list[$i], $i, $tn, $i+1);
+        }
+        $i++; $c++;
+      }
+      $pageSrc.='<script language="JavaScript" type="text/javascript">function prepareMassUID () { var res=\'\';'."\n".
+        $uidCheck.
+        'return res;'."\n".
+        '} </script>';
+      $pageSrc.='<tr class="last"><td colspan="2" valign="top" style="padding-left: 6px;"><img src="'.config_get ('document-root').'/pics/arrow_ltr.gif"></td>'.
+        '<td colspan="3">С выделенным: <a href="JavaScript:nav (\''.$prefix.'&act=massadd&uid=\'+prepareMassUID ());">Добавить на контест</a>'.
+        '&nbsp;/&nbsp;<a href="JavaScript:if (confirm (\'Удалить выбранные задачи?\')) nav (\''.$prefix.'&act=massdel&uid=\'+prepareMassUID ());">Удалить</a>'.
+        '</td></tr>'."\n";
+      $pageSrc.='</table>'."\n";
+      $pages->AppendPage ($pageSrc);
+      $tn+=min ($perPage, $n-$i);
+    }
+    return $pages->OuterHTML ();
+  }
+
+  function DrawAllItems () {
+    $cnt=INFORMATICS_SpawnNewProblemsContainer (nil);
+    $list=$cnt->GetList ();
+    $n=count ($list);
+  
+    if (!$n) { print '<span class="contentSub">В этой категории нет задач</span>'; return; }
+
+    $arr=array ();
+    for ($i=0; $i<$n; $i++) $arr[]=array ('type'=>'problem', 'data'=>$list[$i]);
+
+    print ParseDrawableList ($arr);
+  }
+
+  function DrawStructedItems () {
+    print ('<span class="contentSub2">Not inplemented yet</span>');
+  }
+
+  global $cman;
+  $data=targ ('data');
+  $url=prepare_arg (content_url_get_full ());
+  $t2=new CVCTabCtrl ();
+  $t2->Init ('pbrows', 'url='.$url.';');
+  $t2->StartNewPage ('title=Все задачи;');
+  DrawAllItems ();
+  $t2->FinishPage ();
+  $t2->StartNewPage ('title=Структурированые задачи;');
+  DrawStructedItems ();
+  $t2->FinishPage ();
+  $t2->Draw ();
+?>

@@ -1,0 +1,25 @@
+<?php
+  $settings=targ ('settings');
+?>
+
+<div id="iframeEditor_<?=targ ('name');?>_dialog_image" class="invisible">
+  <table class="dialog">
+    <tr>
+      <td class="title">Вставка изображения</td>
+      <td>
+        <? img_button ('stock/confirm.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_accept\', \'image\');', 'Вставить изображение'); ?>
+        <? img_button ('stock/discard.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_cancel\', \'image\');', 'Отменить'); ?>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Изображение</td>
+      <td><?php
+  $c=new CDCImage ();
+  $c->Init ();
+  $c->SetSettings ($settings['image']);
+
+  $c->DrawEditorForm ('image', 'iframeEditor_'.targ ('name').'_dialog_image');
+?></td>
+    </tr>
+  </table>
+</div>

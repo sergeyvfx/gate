@@ -1,0 +1,87 @@
+<?php
+  $lib      = targ ('lib');
+  $data     = targ ('data');
+  $backlink = targ ('backlink');
+  $detail   = targ ('detail');
+
+  $p=$data['parameters'];
+
+  function INFORMATICS_TestsInfoPrintable ($data) {
+    $p=$data['parameters'];
+    if ($data['errors']=='CR' || $data['errors']=='CE') return false;
+    if ($p['force_status']=='ML') return false;
+    return true;
+  }
+
+  if ($detail) { ?>
+<table width="100%">
+  <tr valign="top">
+    <td width="60%">
+<?php
+  }
+  groupo ('title=Исходный текст;');
+  print ('      <textarea class="block" rows="15" readonly>'.htmlspecialchars ($data['parameters']['src']).'</textarea>');
+  groupc ();
+
+if ($detail) { ?>
+    </td>
+    <td style="padding-left: 6px;">
+<?php
+  groupo ('title=Дополнительная информация;');
+  if ($data['status']!=2)
+    $status='Идет тестирование...'; else
+    $status='Протестирован';
+?>
+      <table width="100%">
+        <tr>
+          <td width="80">Статус</td>
+          <td><?=$status;?></td>
+        </tr>
+        <tr>
+          <td width="80">Компилятор</td>
+          <td><?=$data['parameters']['compiler_id'];?></td>
+        </tr>
+      <?php if ($data['status']==2) { ?>
+        <tr>
+          <td>Балл</td>
+          <td><?=$data['points'];?></td>
+        </tr>
+        <tr>
+          <td>Результат</td>
+<!--          <td><?=WT_errors_string ($data['errors'], $data['parameters']['force_status']);?></td> -->
+          <td><? $r=$lib->SpawnRulesLib (); print $r->TaskStatus ($data);?></td>
+        </tr>
+<?php if ($data['errors']=='CR') { ?>
+        <tr valign="top">
+          <td>Отчет</td>
+          <td><?=$data['parameters']['REPORT'];?></td>
+        </tr>
+<?php } ?>
+<?php   if (INFORMATICS_TestsInfoPrintable ($data)) { ?>
+        <tr>
+          <td colspan="2" style="padding: 4px 0 0 0;">Распечатка по тестам:<br>
+          <?=INFORMATICS_tests_info ($data['id'], $data['parameters']['TESTS']);?>
+        </tr>
+<?php   } else
+        if ($data['errors']=='CE') { ?>
+        <tr>
+          <td colspan="2" style="padding: 4px 0 0 0;">
+            Сообщения компилятора:<br>
+            <textarea class="block" rows="5" readonly><?=htmlspecialchars ($data['parameters']['COMPILER_MESSAGES'])?></textarea>
+          </td>
+        </tr>
+<?php   } ?>
+<?php } ?>
+      </table>
+    </td>
+<?php
+  groupc ();
+?>
+  </tr>
+</table>
+<?
+  }
+
+  if ($backlink!='')
+    print '<div class="formPast"><button class="block" onclick="nav (\''.$backlink.'\')">Назад</button></div>';
+?>

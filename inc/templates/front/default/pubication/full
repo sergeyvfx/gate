@@ -1,0 +1,11 @@
+Заготовки / Публикация / Подробно о публикации
+<div id="navigator"><?=$pIFACE->GetName ();?></div>
+${subnav}
+<?php
+global $oldid, $uid;
+if ($oldid=='')
+  // Получение последней версии публикаии
+  $data=$pIFACE->GetListRowByUid ($uid); else
+  // Получение бубликации с указанным id
+  $data=$pIFACE->GetListRowbyId ($oldid);
+?>

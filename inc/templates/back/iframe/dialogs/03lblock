@@ -1,0 +1,25 @@
+<div id="iframeEditor_<?=targ ('name');?>_dialog_lblock" class="invisible">
+  <table class="dialog">
+    <tr>
+      <td class="title">Блок</td>
+      <td>
+        <? img_button ('stock/confirm.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_accept\', \'lblock\');', 'Сохранить HTML код'); ?>
+        <? img_button ('stock/discard.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_cancel\', \'lblock\');', 'Отменить'); ?>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Тип</td>
+      <td>
+        <select id="iframeEditor_<?=targ ('name');?>_lblockDialog_type" class="block">
+          <option value="lblock.blue">Простой информационный блок. Цвет: синий.</option>
+          <option value="lblock.red">Простой информационный блок. Цвет: красный.</option>
+          <option value="lblock.yellow">Простой информационный блок. Цвет: желтый.</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Заголовок</td>
+      <td><input type="text" class="txt block" value="" id="iframeEditor_<?=targ ('name');?>_lblockDialog_title"></td>
+    </tr>
+  </table>
+</div>

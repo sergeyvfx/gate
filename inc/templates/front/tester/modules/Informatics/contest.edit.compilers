@@ -1,0 +1,20 @@
+<?php
+  $data=targ ('data');
+
+  settings_formo (content_url_get_full ().'&act=savecompilers');
+  groupo ('title=Разрешенные компиляторы');
+
+  $list=WT_compiler_list ();
+  $n=count ($list);
+  println ('<table width="100%" class="spacing">');
+  for ($i=0; $i<$n; $i++) {
+    println ('  <tr>');
+    $checked=$data['settings']['compilers'][$list[$i]['id']];
+    println ('    <td'.(($i==0 && $counter==0)?(' width="50%"'):('')).'><input type="checkbox" class="cb" name="'.$list[$i]['id'].'" value="1"'.(($checked)?(' checked'):('')).'> '.$list[$i]['title'].'</td>');
+    println ('  </tr>');
+  }
+  println ('</table>');
+  
+  groupc ();
+  settings_formc ('.?page=contest');
+?>

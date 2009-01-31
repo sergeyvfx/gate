@@ -1,0 +1,5 @@
+<link<?php
+  $args=targs ();
+  foreach ($args as $k=>$v)
+    print " $k=\"$v\"";
+?>>

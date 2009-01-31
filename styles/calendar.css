@@ -1,0 +1,18 @@
+#content #calendar input[type="text"]   { width: 150px; }
+
+#content #calendar td { padding: 0; border: 0;  }
+
+#content #calendar #btnc  { padding: 0 4px; vertical-align: top; }
+#content #calendar #month { width: 72px; }
+#content #calendar #year  { width: 76px; margin-left: 8px; }
+#content #calendar #days  { width: 100%; margin-top: 2px; border: 1px #aaa solid; }
+#content #calendar #days .n td { background-color: #00007f; width: 14%; text-align: center; color: #fff; font-weight: bold; }
+#content #calendar #days .n td.h { background-color: #7f0707; }
+#content #calendar #days td.last { border-right: 1px #aaa solid; }
+#content #calendar #days td { background-color: #f0f0f0; text-align: center;  }
+#content #calendar #days td.h { background-color: #fcc; }
+#content #calendar #days td.h a { font-size: 8pt; }
+#content #calendar #days td.d { color: #999; }
+#content #calendar #days a, #content #calendar #days a:link, #content #calendar #days  a:visited { color: #303030; display: block; }
+#content #calendar #days a:hover { text-decoration: none; color: #00007f; }
+#content #calendar #days td.c a, #content #calendar #days td.c a:link,  #content #calendar #days td.c a:visited { color: #fff; background: #00007f; font-weight: bold; }

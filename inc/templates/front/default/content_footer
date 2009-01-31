@@ -1,0 +1,7 @@
+Статья / Нижний колонтитул
+<?php
+  global $oldid, $pIFACE, $uid;
+  if ($oldid!='' && $pIFACE->GetAllowed ('EDIT')) { ?>
+<div id="hr"></div><div class="contentSub2">
+Вернуться к разделу &laquo;<a href=".?wiki=history<?=(($uid!='')?('&uid='.$uid):(''));?>">История</a>&raquo;
+<?php  } ?>

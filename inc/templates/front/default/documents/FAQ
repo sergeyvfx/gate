@@ -1,0 +1,49 @@
+Статьи / ЧаВо
+<div id="navigator"><?=$pIFACE->GetName ();?></div>
+${subnav}
+<?php
+  $sections=$pIFACE->GetCatalogueData (0, 0);
+  $all_items=array ();
+
+  println ('<div class="FAQ">');
+
+  // Содержание
+  println ('<div class="c">');
+  contentso ('id=FAQ;');
+  for ($i=0, $n=count ($sections); $i<$n; $i++) {
+    $s=$sections[$i];
+    println ('  <div class="cs">');
+    println ('    <div class="title">'.($i+1).'. <a href=".#s_'.$i.'">'.htmlspecialchars ($s['title']).'</a></div>');
+    $items=$pIFACE->GetCatalogueData (1, $s['uid']);
+    for ($j=0, $m=count ($items); $j<$m; $j++) {
+      $it=$items[$j];
+      println ('    <div class="sub">'.($i+1).'.'.($j+1).' <a href="#s_'.$i.'_q_'.$j.'">'.htmlspecialchars ($it['short']).'</a></div>');
+    }
+    $all_items[$i]=$items;
+    println ('  </div>');
+  }
+  contentsc ();
+  println ('</div>');
+
+  // Собственно данные
+  for ($i=0, $n=count ($sections); $i<$n; $i++) {
+    $s=$sections[$i]; ?>
+<div class="s" id="s_<?=$i;?>">
+  <div class="title"><?=htmlspecialchars ($s['title']);?></div>
+  <div class="list">
+<?php
+   $items=$all_items[$i];
+    for ($j=0, $m=count ($items); $j<$m; $j++) {
+      $it=$items[$j];
+?>
+      <div class="q<?=(($j==0)?(' f'):(''));?>" id="s_<?=$i;?>_q_<?=$j;?>">
+        <div class="short"><?=$it['short'];?></div>
+<?=((trim ($it['full'])!='')?('        <div class="full">Вопрос: '.htmlspecialchars ($it['full']).'</div>'."\n"):(''));?>
+        <div class="ans"><?=$it['answer'];?></div>
+      <div>
+<?php } ?>
+  </div>
+</div>
+<?php  }
+  println ('</div>');
+?>

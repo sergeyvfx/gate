@@ -1,0 +1,34 @@
+<?
+  $s=targ ('settings');
+  $items=targ ('items');
+  $align='left';
+  if ($s['align']=='right') $align='right';
+  $active=targ ('active');
+  if ($s['transparent']) print ('<div class="transp_menu">');
+  if ($s['colorized']) print ('<div class="color_menu">');
+  if ($s['sublevel']) $addStyle='border-top: 0px;';
+  if ($s['hassubmenu']) $addStyle='margin-bottom: 0px;';
+  if ($s['border']=='thin') print ('<div class="thin">');
+  if ($s['top']!='') $addStyle.='margin-top: '.$s['top'].';';
+?>
+<table class="hor_menu"<?=($addStyle!='')?(' style="'.$addStyle.'"'):('')?>><tr><td align="<?=$align;?>">
+  <table<?=(($s['small'])?(' class="cntsmall"'):(''));?>><tr>
+<?
+    for ($i=0; $i<count ($items); $i++) {
+      $it=$items[$i];
+      $class=($i==0)?'first':'';
+      if ($it['tag']==$active) $class=(($i==0)?('first_'):(''))."active";
+      print ('    <td'.(($class!='')?(' class="'.$class.'"'):('')).'>');
+      if ($it['img']!='') print (stencil_imaged_href ($it['title'], $it['href'], $it['img'])); else
+        print ((($it['tag']!=$active)?('<a href="'.$it['href'].'">'):('<span class="act">')).$it['title'].(($it['tag']!=$active)?('</a>'):('</span>')));
+      print ('</td>'."\n");
+      if (!$s['colorized'])
+        if ($i!=count ($items)-1) print ('    <td class="sep">::</td>'."\n");
+    }
+?>
+  </tr></table>
+</td></tr></table>
+<? if ($s['colorized'] || $s['transparent']) print ('</div>');
+if ($s['border']=='thin') print ('</div>');
+print ("\n");
+?>

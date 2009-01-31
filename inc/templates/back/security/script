@@ -1,0 +1,295 @@
+// Localization stuff
+<?php
+  $limits=targ ('limits');
+  $orders=targ ('orders');
+  $actions=targ ('actions');
+?>
+var sef_limits=[<? $f=1; foreach ($limits as $k=>$v){?><?=(($f)?(''):(','));?>'<?=$k?>'<?$f=0;}?>];
+var sef_actions=[<? $f=1; foreach ($actions as $k=>$v){?><?=(($f)?(''):(','));?>'<?=$k?>'<?$f=0;}?>];
+var sef_orders=[<? $f=1; foreach ($orders as $k=>$v){?><?=(($f)?(''):(','));?>'<?=$k?>'<?$f=0;}?>];
+
+var sef_limit=new Array ();
+<?php foreach ($limits as $k=>$v) { ?>
+sef_limit['<?=$k;?>']='<?=$v;?>';
+<?php } ?>
+
+var sef_order=new Array ();
+<?php foreach ($orders as $k=>$v) { ?>
+sef_order['<?=$k;?>']='<?=$v;?>';
+<?php } ?>
+
+var sef_action=new Array ();
+<?php foreach ($actions as $k=>$v) { ?>
+sef_action['<?=$k;?>']='<?=$v;?>';
+<?php } ?>
+
+function sef_limit_str (limit) { return  sef_limit[limit]; }
+function sef_order_str (order) { return sef_order[order]; }
+function sef_action_str (action) { return sef_action[action]; }
+
+function sef_get_action (name) { return getElementById (name+'_action').value; }
+function sef_get_order  (name) { return getElementById (name+'_order').value; }
+function sef_get_limit  (name) { return getElementById (name+'_limit').value; }
+function sef_get_cnt    (name) { return getElementById (name+'_cnt'); }
+
+function sef_get_action_cfg_form (name, action) { return getElementById (name+'_cfg_frm_'+action); }
+
+function sef_get_active_action (name) { return eval (name+'_activeAction;'); }
+function sef_set_active_action (name, action) { eval (name+'_activeAction="'+action+'"'); } 
+
+function sef_get_data (name) { return eval (name+'_data;'); }
+
+// Action config form
+function sef_hide_action_cfg_form (name, action) { sef_get_action_cfg_form (name, action).style.display='none'; }
+function sef_hide_cur_action_cfg_form (name) { var action=sef_get_active_action (name); sef_get_action_cfg_form (name, action).style.display='none'; }
+function sef_set_active_action_cfg_form (name, action) { sef_get_action_cfg_form (name, action).style.display='block'; sef_set_active_action (name, action); }
+
+// Outputting stuff
+
+function sef_get_action_desc (name, params) {
+  var action=params['act'];
+  var dummy='';
+  if (action=='AllowUser'  || action=='DenyUser') { var select=getElementById (name+'_'+ action+'_user'); dummy=select_title_by_value (select, params['val']); }
+  if (action=='AllowGroup' || action=='DenyGroup') { var select=getElementById (name+'_'+ action+'_group'); dummy=select_title_by_value (select, params['val']); }
+  if (dummy!='') dummy=':&nbsp;<b>'+dummy+'</b>';
+  return sef_action_str (action)+dummy;
+ }
+
+function sef_get_new_action_desc (name) {
+  var action=sef_get_action (name);
+  var dummy='';
+  if (action=='AllowUser'  || action=='DenyUser') { var select=getElementById (name+'_'+ action+'_user');  dummy=select_title_by_value (select, select.value); }
+  if (action=='AllowGroup' || action=='DenyGroup') { var select=getElementById (name+'_'+ action+'_group'); dummy=select_title_by_value (select, select.value); }
+  if (dummy!='') dummy=':&nbsp;<b>'+dummy+'</b>';
+  return sef_action_str (action)+dummy;
+}
+
+function sef_order_select (name, limit, order) {
+  return '<select class="small" id="'+name+'_limit_'+limit+'_order" onchange="sef_limit_update_order (\''+name+'\', \''+limit+'\');">'+
+    '<option value="allow_deny"'+((order=='allow_deny')?(' selected'):(''))+'>Разрешить, запретить</option>'+
+    '<option value="deny_allow"'+((order=='deny_allow')?(' selected'):(''))+'>Запретить, разрешить</option>'+
+    '</select>';
+}
+
+function sef_new_action_container (name, limit, action, number, actParams) {
+  var up_act='sef_action_up (\''+name+'\', \''+limit+'\', \''+number+'\');';
+  var down_act='sef_action_down (\''+name+'\', \''+limit+'\', \''+number+'\');';
+  var desc;
+  if (actParams===undefined)
+    desc=sef_get_new_action_desc (name); else
+    desc=sef_get_action_desc (name, actParams);
+  return '<div id="'+name+'_limit_'+limit+'_action_'+number+'"><table width="100%" class="action"><tr><td>'+desc+'</td>'+
+    '<td width="70" align="center">'+
+      ((number!=0)?
+        ('<img id="up" src="'+document_root+'/pics/arrup_blue.gif" class="btn" onclick="'+up_act+'" alt="Поднять" title="Поднять">'+
+         '<img id="down" src="'+document_root+'/pics/arrdown_d.gif" class="btnd" onclick="'+down_act+'" alt="Опустить" title="Опустить">'):
+        ('<img id="up" src="'+document_root+'/pics/arrup_d.gif" class="btnd" onclick="'+up_act+'" alt="Поднять" title="Поднять">'+
+         '<img id="down" src="'+document_root+'/pics/arrdown_d.gif" class="btnd" onclick="'+down_act+'" alt="Опустить" title="Опустить">')
+      )+
+      '<img id="delete" src="'+document_root+'/pics/cross.gif" onclick="JavaScript:sef_action_delete (\''+name+'\', \''+limit+'\', \''+number+'\');" class="btn" alt="Удалить" title="Удалить"></td></tr></table></div>';
+}
+
+function sef_limit_append_new (name, cnt, limit, order, action, actParams) {
+  cnt.innerHTML+='<div class="info" id="'+name+'_limit_'+limit+'">'+
+    '<div class="limit"><table width="100%"><tr><td>Ограничить:&nbsp;<b>'+sef_limit_str (limit)+'</b></td>'+
+    '<td width="24" align="center"><img class="btn" src="'+document_root+'/pics/cross.gif" '+
+      'onclick="JavaScript:sef_limit_delete (\''+name+'\', \''+limit+'\');" alt="Удалить" title="Удалить"></td></tr></table>'+
+    '</div>'+
+    '<div class="icnt">'+
+    '  Порядок применения правил: <b>'+sef_order_select (name, limit, order)+'</b><div id="hr"></div>'+
+    '<div class="actions" id="'+name+'_limit_'+limit+'_actions">'+sef_new_action_container (name, limit, action, 0, actParams)+'</div>'+
+    '</div>'+
+    '</div>';
+}
+
+function sef_action_append_to_limit (name, cnt, limit, order, action, number, actParams) {
+  var limitActions=getElementById (name+'_limit_'+limit+'_actions');
+  limitActions.innerHTML+=sef_new_action_container (name, limit, action, number, actParams);
+}
+
+// Manipulating with limits
+function sef_get_action_node_by_index (name, limit, number) { return getElementById (name+'_limit_'+limit+'_action_'+number); }
+function sef_get_new_action_params (name, action) {
+  var res=new Array ();
+  res['val']='';
+  if (action=='AllowUser'  || action=='DenyUser')  { res['val']=getElementById (name+'_'+action+'_user').value; }
+  if (action=='AllowGroup' || action=='DenyGroup') { res['val']=getElementById (name+'_'+action+'_group').value; }
+  return res;
+}
+
+
+function sef_limit_update_order (name, limit) {
+  var data=sef_get_data (name);
+  data[limit]['order']=getElementById (name+'_limit_'+limit+'_order').value;
+}
+
+function sef_limit_delete (name, limit) {
+  var data=sef_get_data (name);
+  data[limit]=null;
+  remove_node (getElementById (name+'_limit_'+limit)); 
+}
+
+function sef_action_add (name, limit, order, action, actParams) {
+  var cnt=sef_get_cnt (name);
+  var data=sef_get_data (name);
+  if (actParams===undefined) var actParams=sef_get_new_action_params (name, action);
+  actParams['act']=action;
+  if ((action=='AllowUser' || action=='DenyUser' || action=='AllowGroup' || action=='DenyGroup') && actParams['val']=='') return;
+  if (data[limit]===undefined || data[limit]==null) {
+    data[limit]=new Array ();
+    data[limit]['order']=order;
+    data[limit]['actions']=new Array ();
+    data[limit]['actions'][0]=actParams;
+    sef_limit_append_new (name, cnt, limit, order, action, actParams);
+  } else {
+    var len=data[limit]['actions'].length;
+    data[limit]['actions'][len]=actParams;
+    sef_action_append_to_limit (name, cnt, limit, order, action, len, actParams);
+  }
+  sef_update_buttons (name, limit);
+}
+
+function sef_action_delete (name, limit, number) {
+  var number=new Number (number);
+  var data=sef_get_data (name);
+  var len=data[limit]['actions'].length;
+  if (len==1) {
+    sef_limit_delete (name, limit);
+    return;
+  }
+  var deletedIndex=-1;
+  for (var i=number; i<len-1; i++) {
+    data[limit]['actions'][i]=data[limit]['actions'][i+1];
+    var cur=sef_get_action_node_by_index (name, limit, i);
+    var next=sef_get_action_node_by_index (name, limit, i+1);
+    cur.innerHTML=next.innerHTML;
+    elementByIdInTree (cur, 'up').onclick=function () { sef_action_up (name, limit, i-1); };
+    elementByIdInTree (cur, 'down').onclick=function () { sef_action_down (name, limit, i-1); };
+    elementByIdInTree (cur, 'delete').onclick=function () { sef_action_delete (name, limit, i-1); };
+  }
+  remove_node (sef_get_action_node_by_index (name, limit, len-1));
+  data[limit]['actions'][len-1]=null;
+  data[limit]['actions'].length--;
+  sef_update_buttons (name, limit);
+}
+
+function sef_action_up (name, limit, number) {
+  var number=new Number (number);
+  if (number<=0) return;
+  var selfNode=sef_get_action_node_by_index (name, limit, number);
+  var prevNode=sef_get_action_node_by_index (name, limit, number-1);
+  var data=sef_get_data (name);
+  var dummy;
+
+  dummy=selfNode.innerHTML;
+  selfNode.innerHTML=prevNode.innerHTML;
+  prevNode.innerHTML=dummy;
+
+  elementByIdInTree (prevNode, 'up').onclick=function () { sef_action_up (name, limit, number-1); };
+  elementByIdInTree (prevNode, 'down').onclick=function () { sef_action_down (name, limit, number-1); };
+  elementByIdInTree (prevNode, 'delete').onclick=function () { sef_action_delete (name, limit, number-1); };
+  elementByIdInTree (selfNode, 'up').onclick=function () { sef_action_up (name, limit, number); };
+  elementByIdInTree (selfNode, 'down').onclick=function () { sef_action_down (name, limit, number); };
+  elementByIdInTree (selfNode, 'delete').onclick=function () { sef_action_delete (name, limit, number); };
+  
+  var dummy=data[limit]['actions'][number];
+  data[limit]['actions'][number]=data[limit]['actions'][number-1];
+  data[limit]['actions'][number-1]=dummy;
+  sef_update_buttons (name, limit);
+}
+
+function sef_action_down (name, limit, number) {
+  var number=new Number (number);
+  var data=sef_get_data (name);
+  var len=data[limit]['actions'].length;
+  if (number>=len-1) return;
+  var selfNode=sef_get_action_node_by_index (name, limit, number);
+  var nextNode=sef_get_action_node_by_index (name, limit, number+1);
+  var dummy;
+  dummy=selfNode.innerHTML;
+  selfNode.innerHTML=nextNode.innerHTML;
+  nextNode.innerHTML=dummy;
+
+  elementByIdInTree (nextNode, 'up').onclick=function () { sef_action_up (name, limit, number+1); };
+  elementByIdInTree (nextNode, 'down').onclick=function () { sef_action_down (name, limit, number+1); };
+  elementByIdInTree (selfNode, 'up').onclick=function () { sef_action_up (name, limit, number); };
+  elementByIdInTree (selfNode, 'down').onclick=function () { sef_action_down (name, limit, number); };
+  
+  var dummy=data[limit]['actions'][number];
+  data[limit]['actions'][number]=data[limit]['actions'][number+1];
+  data[limit]['actions'][number+1]=dummy;
+  sef_update_buttons (name, limit);
+  
+}
+
+function sef_update_buttons (name, limit) {
+  var data=sef_get_data (name);
+  var len=data[limit]['actions'].length;
+  for (i=1; i<len-1; i++) {
+    var cur=sef_get_action_node_by_index (name, limit, i);
+    elementByIdInTree (cur, 'up').src=document_root+'/pics/arrup_blue.gif';
+    elementByIdInTree (cur, 'down').src=document_root+'/pics/arrdown_blue.gif';
+  }
+  
+  if (len>1) {
+    var cur=sef_get_action_node_by_index (name, limit, 0);
+    elementByIdInTree (cur, 'up').src=document_root+'/pics/arrup_d.gif';
+    elementByIdInTree (cur, 'down').src=document_root+'/pics/arrdown_blue.gif';
+
+    var cur=sef_get_action_node_by_index (name, limit, len-1);
+    elementByIdInTree (cur, 'up').src=document_root+'/pics/arrup_blue.gif';
+    elementByIdInTree (cur, 'down').src=document_root+'/pics/arrdown_d.gif';
+  } else {
+    if (len>0) {
+      var cur=sef_get_action_node_by_index (name, limit, 0);
+      elementByIdInTree (cur, 'up').src=document_root+'/pics/arrup_d.gif';
+      elementByIdInTree (cur, 'down').src=document_root+'/pics/arrdown_d.gif';
+    }
+  }
+
+}
+
+function sef_init (name) { if (isMSIE) eval ('var '+name+'_data=new Array ();'); else eval (name+'_data=new Array ();'); }
+
+function sef_serialize_action (number, action) {
+  var params='';
+  params='act;'+action['act'].length+';'+action['act']+';val;'+action['val'].length+';'+action['val']+';';
+  var res=number+';'+params.length+';'+params+';';
+  return res;
+}
+
+function sef_prepare_post_data (name) {
+  var data=sef_get_data (name);
+  var postData=getElementById (name+'_postdata');
+  var res='';
+  for (var i=0; i<sef_limits.length; i++) {
+    if (data[sef_limits[i]]!=null) {
+      var actions=data[sef_limits[i]]['actions'];
+      var acts='';
+      for (var j=0; j<actions.length; j++) acts+=sef_serialize_action (j, actions[j]);
+      var order=data[sef_limits[i]]['order'];
+      var pars='acts;'+acts.length+';'+acts+';order;'+order.length+';'+order+';';
+      res+=sef_limits[i]+';'+pars.length+';'+pars+';';
+    }
+  }
+  postData.value=res;
+}
+
+// Events
+function sef_on_append_click (name) {
+  var action=sef_get_action (name);
+  var order=sef_get_order (name);
+  var limit=sef_get_limit (name);
+  sef_action_add (name, limit, order, action);
+}
+
+function sef_update_settings_form (name) {
+  sef_hide_cur_action_cfg_form (name);
+  sef_set_active_action_cfg_form (name, sef_get_action (name));
+}
+
+function sef_on_inherit_click (name) {
+  var checked=getElementById (name+'_inherit').checked;
+  var cnt=getElementById (name+'_data');
+  if (!checked) cnt.style.display='block'; else cnt.style.display='none';
+}

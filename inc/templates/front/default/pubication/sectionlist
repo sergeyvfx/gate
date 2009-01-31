@@ -1,0 +1,17 @@
+Заготовки / Публикация / Многосекционный лист
+<?php
+  global $page;
+  $data=$pIFACE->GetPagedList ($page);
+  $n=count ($data);
+  $script=$pIFACE->ItemScript ();
+?>
+<div id="navigator"><?=$pIFACE->GetName ();?></div>
+${subnav}
+<?=$pIFACE->GetPagintation ($page);?>
+<div id="sectionlist">
+<? for ($i=0; $i<$n; $i++) { $r=$data[$i]; tpl_srcp ($script, $r); }
+?>
+</div>
+<div style="margin-top: 6px;">
+<?=$pIFACE->GetPagintation ($page);?>
+</div>

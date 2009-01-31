@@ -1,0 +1,4 @@
+Заготовки / Лист / Просто лист
+<div id="navigator"><?=$pIFACE->GetName ();?></div>
+${subnav}
+<?=$pIFACE->Field ('text');?>

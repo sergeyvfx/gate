@@ -1,0 +1,168 @@
+<?php
+  $lib=targ ('lib');
+  $data=$lib->GetAllSolutions ();
+  $n=count ($data);
+
+  $contest=WT_contest_by_id ();
+  $s=$contest['settings'];
+
+  if (!$n) {
+    print '<span class="contentSub2">На этот контест еще никто задач не сдавал</span>';
+  } else {
+    global $full, $action, $id;
+
+    $del=targ ('accDel');
+    $delete=$lib->GetAllowed ('SOLUTIONS.DELETE');
+    $view=$lib->GetAllowed ('SOLUTIONS.MANAGE')||$lib->IsContestJudge ();
+
+    $d=$data;
+    $data=array ();
+    $user_count=0;
+    usort ($d, create_function ('$a, $b', '{ '.
+      'if ($a[\'user_id\']==$b[\'user_id\']) return $b[\'try\']>$a[\'try\']; '.
+      '$ai=user_info_by_id ($a[\'user_id\']); $bi=user_info_by_id ($b[\'user_id\']); '.
+      'return $bi[\'name\']<$ai[\'name\']; }'));
+
+    for ($i=0; $i<$n; $i++) {
+      if (!isset ($data[$d[$i]['user_id']])) {
+        $user_count++;
+        $data[$d[$i]['user_id']]['maxpoints']=0;
+      }
+      $data[$d[$i]['user_id']]['data'][]=$d[$i];
+      $data[$d[$i]['user_id']]['trycount']++;
+      if ($d[$i]['points']>$data[$d[$i]['user_id']]['maxpoints']) {
+        $data[$d[$i]['user_id']]['maxrating.timestamp']=$d[$i]['timestamp'];
+        $data[$d[$i]['user_id']]['maxpoints']=$d[$i]['points'];
+        $data[$d[$i]['user_id']]['maxdata']=$d[$i];
+      }
+    }
+
+    if (isset ($full))
+      $f=1; else
+      $f=0;
+
+    content_url_var_push_global ('full');
+    $full=content_url_get_full ();
+
+    if ($action=='view' && $view) {
+      $ud=array ();
+      for ($i=0; $i<$n; $i++) {
+        if ($d[$i]['id']==$id)
+          $ud=$d[$i];
+      }
+      
+      if ($ud['parameters']['finished']) {
+        $total=count ($ud['parameters']['tasks']);
+        $maxtotal=count ($data[$ud['user_id']]['maxdata']['parameters']['tasks']);
+
+        if (!$maxtotal)
+          $maxtotal=$total;
+
+        $time=$ud['timestamp'];
+        if (!$time) $time=time ();
+       if ($s['duration'])
+           $time=Timer ($time-$s['timestamp']); else
+          $time=format_ltime ($time, false);
+
+        print ('<table class="clear">');
+        print ('<tr><td width="180">Испытуемый:</td><td>'.user_generate_short_info_string ($ud['user_id']).'</td></tr>');
+        print ('<tr><td>Рейтинг:</td><td>'.$ud['points'].' ('.floor ($ud['points']/$total*100).'%)<td></td></tr>');
+        print ('<tr><td>Всего попыток:</td><td>'.$ud['try'].'</td></tr>');
+        print ('<tr><td>Максимальный рэйтинг:</td><td>'.$data[$ud['user_id']]['maxpoints'].' ('.floor ($data[$ud['user_id']]['maxpoints']/$total*100).'%)'.
+          ' <span style="margin-left: 20px;"><a class="arr" href=".?page=solutions&action=view&id='.$data[$ud['user_id']]['maxdata']['id'].(($f)?('&full=1'):('')).'">перейти к просмотру</a></span>'.
+          '</td></tr>');
+        print ('<tr><td>Время:</td><td>'.$time.'</td></tr>');
+        print ('</table>');
+        print ('<div style="padding: 4px 0;">Распечатка по заданиям:</div>');
+        print ('<div class="user_answers">');
+        print ($lib->Answers_Info ($ud));
+        print ('</div>');
+      } else
+        print ('<span>Решение не было отправлено</span>');
+      
+      print ('<div style="margin-top: 4px;"><button class="btn block" onclick="nav (\''.htmlspecialchars ($full).'\');">Назад</button></div>');
+    } else {
+      print ('<div style="margin-bottom: 6px;">');
+      if (!$f)
+        print ('<a class="arr" href=".?page=solutions&full=1">Отобразить все результаты</a>'); else
+        print ('<a class="arr" href=".?page=solutions">Отобразить только последние результаты</a>');
+      print('</div>');
+
+      print ('<table class="list" width="100%">');
+      print (' <tr class="h"><th class="first" width="120">Время</th><th width="100" style="text-align: center">Попытка</th><th>Результат</th><th class="last" width="48px">&nbsp;</th></tr>');
+      $j=0;
+      foreach ($data as $k=>$v) {
+      
+        print ('<tr class="common"><td colspan="4"><div><span>Результаты '.user_generate_short_info_string ($k).(($f)?(''):(' <span class="shade">(только последняя попытка)</span>')).'</span></div></td></tr>');
+
+        $total=count ($v['data'][0]['parameters']['tasks']);
+        $maxtotal=count ($v['maxdata']['parameters']['tasks']);
+        
+        if (!$maxtotal)
+          $maxtotal=$total;
+
+        $time=$v['data'][0]['timestamp'];
+        if (!$time) $time=time ();
+        if ($s['duration'])
+          $time=Timer ($time-$s['timestamp']); else
+          $time=format_ltime ($time, false);
+
+        print ('<tr class="last"><td colspan="4" style="padding: 0;"><div style="color: #606060; margin-left: 20px;">');
+        print ('<table class="clear">');
+        print ('<tr><td style="padding: 0; width: 180px;">Рейтинг последней попытки:</td><td style="padding: 0; font-weight: bold;">'.$v['data'][0]['points'].' ('.floor ($v['data'][0]['points']/$total*100).'%)<td></td></tr>');
+        print ('<tr><td style="padding: 0;">Всего попыток:</td><td style="padding: 0; font-weight: bold;">'.$v['trycount'].'<td></td></tr>');
+        print ('<tr><td style="padding: 0;">Максимальный рейтинг:</td><td style="padding: 0; font-weight: bold;">'.$v['maxpoints'].' ('.floor ($v['maxpoints']/$maxtotal*100).'%)</td></tr>');
+        print ('<tr><td style="padding: 0;">Последняя попытка:</td><td style="padding: 0; font-weight: bold;">'.$time.'<td></td></tr>');
+        print ('</table>');
+        print ('</div></td></tr>');
+
+        for ($i=0, $m=count ($v['data']); $i<$m; $i++) {
+          $r=$v['data'][$i];
+          $time=$r['timestamp'];
+          if (!$time) $time=time ();
+          if ($s['duration'])
+            $time=Timer ($time-$s['timestamp']); else
+            $time=format_date_time ($time);
+
+          $result='';
+          if ($r['parameters']['interrupted']) {
+            $result='Решение не было отправлено вовремя';
+          } else
+          if ($r['parameters']['finished']) {
+            if ($r['points']=='') $r['points']=0;
+            $total=count ($r['parameters']['tasks']);
+            $pos=floor ($r['points']/$total*100);
+            $result='Баллы: <b>'.$r['points'].'</b>/'.$total.' Рейтинг: <b>'.$pos.'%</b>';
+            //$result.=stencil_progress ('width=200;pos='.$pos);
+          } else {
+            if ($s['timelimit']) {
+              if ($r['timestamp']+$s['timelimit']*60-time ()>=0)
+                $result='До сдачи осталось: '.Timer ($r['timestamp']+$s['timelimit']*60-time ()); else
+                $result='Решение не было отправлено вовремя';
+            } else
+              $result='Идет решение';
+          }
+
+          $class='';
+          if (/*$j==$user_count-1 && */$i==$m-1 || !$f) $class='last';
+  //        if ($r['parameters']['finished']) $class=(($class!='')?(' '):('')).'subactive';
+          print ('  <tr'.(($class!='')?(' class="'.$class.'"'):('')).'>');
+
+          $acts='';
+          if ($view)   $acts.=stencil_ibtnav ('detail.gif', $full.'&action=view&id='.$r['id'], 'Просмотреть решение');
+          if ($delete) $acts.=stencil_ibtnav ('cross.gif', $full.'&action=delete&id='.$r['id'], 'Удалить решение', 'Вы уверены?');
+
+          print ('<td>'.$time.'</td>');
+          print ('<td align="center">'.$r['try'].'</td>');
+          print ('<td>'.$result.'</td>');
+          print ('<td align="right">'.$acts.'</td>');
+          print ('</tr>');
+
+          if (!$f)
+            break;
+        }
+      }
+      print ('</table>');
+    }
+  }
+?>

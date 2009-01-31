@@ -1,0 +1,33 @@
+<?php
+  global $id, $cman, $catid, $act, $uid;
+
+  $redirection=get_redirection ();
+  
+  $data=targ ('data');
+  $lib=targ ('lib');
+
+  redirector_remove_skipvar ('act');
+  redirector_add_emptyvar ('clear');
+
+  $if=iframe_editor ('desc', $data['description'] ,true, 'ProblemSettings');
+  $tmp=handler_get_list ('ProblemSettings'); $arr=$tmp['onsubmit'];
+  $onsubmit='';
+  for ($i=0; $i<count ($arr); $i++)
+    $onsubmit.=' '.handler_build_callback ($arr[$i]);
+
+  $f=new CVCForm ();
+  $f->Init ('ProblemSettings', 'method=POST;action=.?page\=contest&action\=manage&id\='.$id.'&cman\='.$cman.'&catid\='.$catid.'&act\='.targ ('act').(($uid!='')?('&uid\='.$uid):('')).';titlewidth=160;backlink='.prepare_arg (urldecode ($redirection)).';caption='.(($act!='editproblem')?('Добавить'):('Сохранить')).';onsubmit='.prepare_arg ($onsubmit).$s);
+
+  $f->AppendTextField ('Название задания',  'name', $data['name'], true);
+
+  $if=array ('src'=>'<div style="padding-bottom: 2px;"><center><b>Текст задания</b></center></div>'.$if);
+  $f->AppendCustomField ($if);
+
+  $anstype=array ('src'=>tpl ('front/tester/modules/Testing/problem.field.anstype', targs ()), 'title'=>'Тип ответа на задание');
+  $f->AppendCustomField ($anstype);
+
+  $answers=array ('src'=>tpl ('front/tester/modules/Testing/problem.field.answers', targs ()), 'title'=>'');
+  $f->AppendCustomField ($answers);
+
+  $f->Draw ();
+?>

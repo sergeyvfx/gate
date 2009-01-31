@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<?
+  $handlers=get_body_handlers ();
+?>
+<html>
+  <head>
+    ${head}<?
+  if (count ($handlers)>0) {
+?>
+    <script language="JavaScript" type="text/javascript">
+<?php foreach ($handlers as $handler=>$callbacks) { ?>
+      function body_<?=$handler;?> (event) {
+<?php for ($i=0; $i<count ($callbacks); $i++) { ?>
+        if (<?=handler_build_callback ($callbacks[$i]);?>) return false;
+<?php } ?>
+        return true;
+      }
+<?php } ?>
+    </script>
+<?php
+  }
+?>
+  </head>
+  <body<?php foreach ($handlers as $k=>$v) print " $k=\"if (!body_$k (event)) return false;\"";?> id="content">
+    <table width="100%">
+      <tr>
+        <td id="leftCatchword" valign="top">
+          <table>
+            <tr>
+              <td>
+                <div id="logo">
+                  <img src="<?=config_get ('document-root');?>/pics/wt_l.gif" alt="logo" onclick="nav ('<?=config_get ('document-root');?>');">
+                </div>
+                <div id="nav">
+<?
+  $tpl=manage_template_by_name ('Страница / Меню навигации');
+  print (wiki_menu_parse ($tpl->GetText ()));
+?>
+                </div>
+                <img src="<?=config_get ('document-root');?>/pics/clear.gif" width="145" height="1" alt="">
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td valign="top" style="width: 100%;">
+          <table id="container">
+            <tr><td style="padding: 2px 0;">${topmenu}</td></tr>
+            <tr>
+              <td style="padding-left: 8px;">
+                ${content}
+              </td>
+            </tr>
+          </table>
+          <img src="<?=config_get ('document-root');?>/pics/clear.gif" width="620" height="1" alt="">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><?=tpl ('common/footer');?></td>
+      </tr>
+    </table>
+  </body>
+</html>

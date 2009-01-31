@@ -1,0 +1,1 @@
+<span class="imghref" style="background: url(<?=config_get ('document-root').'/pics/'.targ ('img');?>) no-repeat left center;"><?=((browser_engine ()=='DONKEY')?('<div style="margin: 4px 0;">'):(''));?><a href="<?=targ ('href')?>"><?=targ ('title');?></a><?=((browser_engine ()=='DONKEY')?('</div>'):(''));?></span>

@@ -1,0 +1,31 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+body { font-family:"tahoma","arial","verdana"; font-size:8pt; }
+a, a:visited, a:link { color: #0007f; text-decoration:underline; }
+a:hover { color:#0000FF; text-decoration:none; }
+</style>
+
+<html>
+<body>
+Это письмо является потверждением того, что вы действительно хотите сменить восстановить пароль на свой аккаунт в системе GATE.<br>
+<br>
+Параметры аккаунта:
+<br>
+----------------------------<br>
+Имя пользователя: ${login}<br>
+E-Mail:           ${email}<br>
+----------------------------<br>
+<br>
+Для продолжения этого процесса проследуйте по ссылке:<br>
+<a href="${reglink}">${link}</a><br>
+<br>
+Если же это письмо попало к вам случайно, ничего не делайте. Если оно будет приходить вновь - свяжитесь с
+администрацией системы.
+<br><br>
+<span style="color: #606060;">
+--<br>
+Thanks, The Management 
+</span>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+#content div#monitor { background: transparent; overflow: scroll; border: 1px #aaa solid; height: 340px; background: #e7e7e7; }
+
+#content div#monitor table.data tr.l    { background-color: #fff; }
+#content div#monitor table.data tr      { background-color: #eee; }
+
+#content div#monitor table.data tr.l td    { background-color: #fff; }
+#content div#monitor table.data tr   td    { background-color: #eee; }
+
+#content div#monitor table.data tr.act td,
+#content div#monitor table.data tr.act td.total  { background: #e5ffe5 url(../pics/theme/list.act.gif) 0 0 repeat-x !important; }
+
+#content div#monitor table.data tr th   { border: 1px #aaa solid; border-top: 0; height: 24px; padding: 0 6px; background: #dbdbdb url(../pics/theme/list.title.gif) 0 0 repeat-x;  }
+#content div#monitor table.data tr th.prb   { white-space: nowrap; }
+#content div#monitor table.data tr th.prb a { color: #000; text-decoration: none; }
+#content div#monitor table.data tr th.prb small { font-weight: normal; }
+#content div#monitor table.data tr td { border: 1px #aaa solid; padding: 2px 4px; text-align: center; background: transparent; }
+#content div#monitor table.data tr td.user { text-align: left; }
+#content div#monitor table.data tr td.user a { display: block; width: 120px;  }
+#content div#monitor table.data tr td.first, #content div#monitor table.data tr th.first { border-left: 0; }
+
+#content div#monitor table.data tr td.l  { border-right: 1px #aaa dotted; }
+#content div#monitor table.data tr td.m  { border-left: 1px #aaa dotted; border-right: 1px #aaa dotted; }
+#content div#monitor table.data tr td.r  { border-left: 1px #aaa dotted; }
+
+#content div#monitor table.data tr td    { text-align: center; min-width: 30px; }
+#content div#monitor table.data tr td b  { margin: 0; padding: 0; }
+
+#content div#monitor table.data tr.l td.total   { background: #eee; }
+#content div#monitor table.data tr td.total     { background: #ddd; }
+#content div#monitor table.data tr td.div,#content div#monitor table.data tr th.div      { border-left: 2px #aaa solid; }
+
+#content div#monitor table.data tr.stat th.h     { text-align: right; border-top: 2px #aaa solid; }
+#content div#monitor table.data tr.stat th.prb,#content div#monitor table.data tr.stat th.div   { border-top: 2px #aaa solid; }
+#content div#monitor table.data tr.stat td.h     { text-align: right; }
+
+#content div#monitor table.data tr.stat th div.ind { border: 1px #aaa solid; height: 3px; }

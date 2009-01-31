@@ -1,0 +1,39 @@
+<div id="iframeEditor_<?=targ ('name');?>_dialog_hyperlink" class="invisible">
+  <table class="dialog">
+    <tr>
+      <td class="title">Гиперссылка</td>
+      <td>
+        <? img_button ('stock/confirm.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_accept\', \'hyperlink\');', 'Вставить гиперссылку'); ?>
+        <? img_button ('stock/discard.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_cancel\', \'hyperlink\');', 'Отменить'); ?>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Ссылка</td>
+      <td><input type="text" class="txt block" id="iframeEditor_<?=targ ('name');?>_hyperlink_href"></td>
+    </tr>
+    <tr>
+      <td class="title">Протокол</td>
+      <td>
+        <select class="block" id="iframeEditor_<?=targ ('name');?>_hyperlink_protocol">
+          <option value="HTTP">HTTP</option>
+          <option value="HTTPS">HTTPS</option>
+          <option value="FTP">FTP</option>
+          <option value="MAILTO">mailto</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Целевое окно</td>
+      <td>
+        <select class="block" id="iframeEditor_<?=targ ('name');?>_hyperlink_target">
+          <option value="CURRENT">Текущее окно</option>
+          <option value="BLANK">Новое окно</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Заголовок</td>
+      <td><input type="text" class="txt block" id="iframeEditor_<?=targ ('name');?>_hyperlink_title"></td>
+    </tr>
+  </table>
+</div>

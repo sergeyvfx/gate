@@ -1,0 +1,5 @@
+#content div.contents { border: 1px #aaa solid; padding: 6px; background: #eee; margin-right: 6px; }
+#content div.contents #title { text-align: center; white-space: nowrap; }
+#content div.contents #title #text   { font-weight: bold; }
+#content div.contents #title #action { margin-left: 4px; }
+#content div.contents #body { margin-top: 6px; border-top: 1px #aaa dotted; padding-top: 6px; }

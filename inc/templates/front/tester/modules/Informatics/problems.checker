@@ -1,0 +1,15 @@
+<?php
+  $v=targ ('value');
+?>
+
+<select class="block" name="ProblemSettings_checker">
+  <option value="">&lt;Не указан&gt;</option>
+<?php
+  $q=db_select ('tester_checkers', array ('*'), '', 'ORDER BY `name`');
+  while ($r=db_row ($q)) {
+    $s=unserialize ($r['settings']);
+    if ($s['ERR']!='OK') continue; ?>
+    <option value="<?=$r['id'];?>"<?=(($v==$r['id'])?(' selected'):(''));?>><?=$r['name'];?></option>
+<?php  }
+?>
+</select>

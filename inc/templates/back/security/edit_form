@@ -1,0 +1,122 @@
+<?php $data=targ ('data'); ?>
+<div id="securForm">
+  <? if (targ ('canInherit')) { ?>
+  <input type="checkbox" class="cb" name="<?=targ ('name');?>_inherit" id="<?=targ ('name');?>_inherit" onclick="sef_on_inherit_click ('<?=targ ('name');?>');" value="1" <?=(($data['inherit'])?(' checked'):(''));?>>Переносить права доступа от предка
+<? } ?>
+    <div id="<?=targ ('name');?>_data" style="display: <?=(($data['inherit'])?('none'):('block'));?>">
+    <? if (targ ('canInherit')) { ?><div id="hr"></div><? } ?>
+    <table width="100%">
+      <tr valign="top">
+        <td><div id="<?=targ ('name');?>_cnt" class="cnt"></div></td>
+        <?=((browser_engine ()=='DONKEY')?('<td width="24px">&nbsp;</td>'):(''));?>
+        <td width="40%" style="padding-left: 6px;">
+          Ограничить:
+          <select class="block" id="<?=targ ('name');?>_limit">
+<?php
+  $limits=targ ('limits');
+  $opened=false;
+  foreach ($limits as $k=>$v) {
+    if (preg_match ('/^\{\{\{\{GROUP[0-9]+\}\}\}\}$/', $k)) {
+      if ($opened) println ('            </optgroup>');
+      println ('            <optgroup label="'.htmlspecialchars ($v).'">');
+      $opened=true;
+    } else {
+?>
+            <option value="<?=$k;?>"><?=$v;?></option>
+<?php } 
+  }
+  if ($opened) println ('            </optgroup>');
+?>
+          </select>
+          <div id="hr"></div>
+          Порядок применения правил:
+          <select class="block" id="<?=targ ('name');?>_order">
+            <option value="allow_deny">Разрешить, запретить</option>
+            <option value="deny_allow">Запретить, разрешить</option>
+          </select>
+          <div id="hr"></div>
+          Действие:
+          <select class="block" id="<?=targ ('name');?>_action" onchange="sef_update_settings_form ('<?=targ ('name');?>');">
+            <option value="AllowAll">Разрешить всем</option>
+            <option value="AllowUser">Разрешить пользователю</option>
+            <option value="DenyUser">Запретить пользователю</option>
+            <option value="AllowGroup">Разрешить группе</option>
+            <option value="DenyGroup">Запретить группе</option>
+            <option value="DenyAll">Запретить всем</option>
+          </select>
+          <div id="hr"></div>
+          <div id="<?=targ ('name');?>_cfg_frm_AllowAll" class="cfgFrm"></div>
+          <div id="<?=targ ('name');?>_cfg_frm_AllowUser"  class="cfgFrm">
+            Пользователь:
+            <select class="block" id="<?=targ ('name');?>_AllowUser_user">
+  <?php
+    $list=user_authorized_list (-1);
+    for ($i=0; $i<count ($list); $i++) {
+      $u=$list[$i];
+  ?>
+              <option value="<?=$u['id'];?>"><?=$u['login'];?>&nbsp;(<?=$u['name'];?>)</option>
+  <?php } ?>
+            </select><div id="hr"></div>
+          </div>
+          <div id="<?=targ ('name');?>_cfg_frm_DenyUser"  class="cfgFrm">
+            Пользователь:
+            <select class="block" id="<?=targ ('name');?>_DenyUser_user">
+  <?php
+    $list=user_authorized_list (-1);
+    for ($i=0; $i<count ($list); $i++) {
+      $u=$list[$i];
+  ?>
+              <option value="<?=$u['id'];?>"><?=$u['login'];?>&nbsp;(<?=$u['name'];?>)</option>
+  <?php } ?>
+            </select><div id="hr"></div>
+          </div>
+          <div id="<?=targ ('name');?>_cfg_frm_AllowGroup" class="cfgFrm">
+            Группа:
+            <select class="block" id="<?=targ ('name');?>_AllowGroup_group">
+  <?php
+    $list=group_list ();
+    for ($i=0; $i<count ($list); $i++) {
+      $g=$list[$i];
+  ?>
+              <option value="<?=$g['id'];?>"><?=$g['name'];?></option>
+  <?php } ?>
+            </select><div id="hr"></div>
+          </div>
+          <div id="<?=targ ('name');?>_cfg_frm_DenyGroup" class="cfgFrm">
+            Группа:
+            <select class="block" id="<?=targ ('name');?>_DenyGroup_group">
+  <?php
+    $list=group_list ();
+    for ($i=0; $i<count ($list); $i++) {
+      $g=$list[$i];
+  ?>
+              <option value="<?=$g['id'];?>"><?=$g['name'];?></option>
+  <?php } ?>
+            </select><div id="hr"></div>
+          </div>
+          <div id="<?=targ ('name');?>_cfg_frm_DenyAll" class="cfgFrm"></div>
+          <button type="button" class="block" onclick="sef_on_append_click ('<?=targ ('name');?>');">Добавить</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<input type="hidden" id="<?=targ ('name');?>_postdata" name="<?=targ ('name');?>_postdata" value="">
+<script language="JavaScript" type="text/javascript">
+  sef_init ('<?=targ ('name');?>');
+  sef_set_active_action_cfg_form ('<?=targ ('name');?>', 'AllowAll');
+<?php
+  $data=targ ('data');
+  foreach ($data as $limit=>$lData) {
+    $order=$lData['order'];
+    $acts=$lData['acts'];
+    for ($i=0; $i<count ($acts); $i++) {
+      $act=$acts[$i]['act'];
+      $val=$acts[$i]['val'];
+?>
+  var pars=new Array (); pars['val']='<?=$val;?>'; sef_action_add ('<?=targ ('name');?>', '<?=$limit;?>', '<?=$order;?>', '<?=$act;?>', pars);
+<?php
+    }
+  }
+?>
+</script>

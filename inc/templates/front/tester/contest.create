@@ -1,0 +1,18 @@
+<?php
+  $cnt=WT_spawn_new_library_container ();
+  $arr=$cnt->GetList ();
+  $sel=array ();
+  
+  for ($i=0; $i<count ($arr); $i++) {
+    $sel[]=array ('id'=>$arr[$i]['lid'], 'title'=>$arr[$i]['pseudonym']);
+  }
+
+  $f=new CVCForm ();
+  
+  $f->Init ('ContestData', 'method=POST;action=.?page\=contest&action\=create;titlewidth=160;caption=Создать;');
+
+  $f->AppendTextField     ('Названеи контеста', 'name',   '', true);
+  $f->AppendComboBoxField ('Модуль',            'module', '', $sel);
+
+  print ($f->OuterHTML ());
+?>

@@ -1,0 +1,76 @@
+<?php
+  global $uid, $act;
+  
+  $data=targ ('data'); $lib=targ ('lib');
+
+  redirector_add_skipvar ('act', 'up');
+  redirector_add_skipvar ('act', 'down');
+  redirector_add_skipvar ('act', 'togdis');
+  redirector_add_skipvar ('act', 'rejudge');
+  redirector_add_skipvar ('act', 'drop');
+  redirector_add_skipvar ('pid', '');
+
+  $arr=$lib->GetProblemsAtContest ($data['id']);
+  $n=count ($arr);
+
+  $delete  = $lib->GetAllowed ('PROBLEMS.DELETE');
+  $rejudge = $lib->GetAllowed ('PROBLEMS.REJUDGE');
+
+  if ($n<=0) {
+?>
+<span class="contentSub">Нет задач на контесте</span>
+<?php
+  } else {
+    $dis=array ();
+    $q=db_select ('tester_disabled_problems', array ('problem_id'), '`contest_id`='.$data['id']);
+    while ($r=db_row ($q)) {
+      $dis[$r['problem_id']]=true;
+    }
+  ?>
+<script language="JavaScript" type="text/JavaScript">
+  var last_active_row=<?=(($id!='')?($id):('-1'));?>;
+
+  function toggle_callback (w, id, response) {
+    if (response=='+OK')
+      w.checked=!w.checked;
+  }
+
+  function toggle_problem_usage (w, id) {
+    IPC_Send_Command ('/tester/', 'ipc=cmd_problem_toggle_usage&cid=<?=$data['id']?>&id='+id, function (response ) { toggle_callback (w, id, response); });
+  }
+
+  function rejudge_callback (response) {
+    if (response!='+OK')
+      alert ('Ошибка сброса статуса решений на эту задачу.');
+  }
+
+  function rejudge_problem (id) {
+    IPC_Send_Command ('/tester/', 'ipc=cmd_problem_rejudge&id='+id, rejudge_callback);
+  }
+</script>
+<table class="list">
+<?php
+  $full=content_url_get_full ();
+  for ($i=0; $i<$n; $i++) { $it=$arr[$i];
+    $class='';
+    $class.=(($i==$n-1)?((($class!='')?(' '):('')).'last'):(''));
+    $class.=(($n!=1 && $i==0)?((($class!='')?(' '):('')).'first'):(''));
+    $class.=(($act=='view' && $uid==$it['id'])?( (($class!='')?(' '):('')).'active'):(''));
+    $class=($class!='')?(' class="'.$class.'"'):('');
+
+    $comment=$it['settings']['comment'];
+    $comment=(($comment!='')?(' title="'.$comment.'"'):(''));
+    $s=$it['settings'];
+  ?>
+  <tr<?=$class;?>>
+    <td width="16"><input type="checkbox" onclick="toggle_problem_usage (this, <?=$it['id'];?>); return false;"<?=((!isset ($dis[$it['id']]))?(' checked'):(''));?>></td>
+    <td class="n">
+      <?=core_alpha ($it['letter']);?>.</td><td><a href="<?=$full;?>&act=view&uid=<?=$it['id'];?>#view"<?=$comment;?>><?=$it['name'];?></a></td>
+      <td width="116" align="right">
+        <?=stencil_updownbtn ($i, $n, $it['id'], $full, 'pid', 'act', true)?><? ibtnav ('delete_row.gif', $full.'&act=drop&pid='.$it['id'].'#editor', 'Выкинуть задачу'); ?><?=(($rejudge)?(stencil_ibtnav ('painter.gif', 'JavaScript:rejudge_problem ('.$it['id'].')', 'Глобальное перетестирование задачи')):('')); ?><?=(($delete)?(stencil_ibtnav ('cross.gif', $full.'&act=delete&pid='.$it['id'].'#editor', 'Удалить (глобально)', 'Удалить эту задачу?')):('')); ?>
+      </td>
+  </tr>
+<?php } ?>
+</table>
+
+<?php } ?>

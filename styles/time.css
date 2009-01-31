@@ -1,0 +1,12 @@
+#content table.time td.inpcnt { border: 1px #aaa solid !important; background: #eee; width: 60px; height: 18px; }
+
+#content table.time td.inpcnt input   { border: 0; background: transparent; width: 20px; text-align: center; cursor: pointer;  }
+#content table.time td.inpcnt input.h { margin-right: 2px; }
+#content table.time td.inpcnt input.m { margin-left:  2px; }
+
+#content table.time td.btncnt { border: 1px #aaa solid !important; background: #eee; width: 12px; }
+
+#content table.time td.btncnt div {height: 9px; font-size: 1px; cursor: pointer; }
+#content table.time td.btncnt div.up { border-bottom: 1px #aaa solid; }
+
+#content table.time td.btncnt div img { margin: 2px 0 0 2px; }

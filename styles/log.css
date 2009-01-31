@@ -1,0 +1,8 @@
+#content #log table td { padding: 2px; border-right: 1px #aaa solid; }
+#content #log table td.time   { width: 200px;}
+#content #log table td.module { width: 96px;}
+#content #log table td.status { width: 114px;}
+#content #log table td.msg    { border: 0; background: transparent; }
+#content #log .msg     { background-color: #ccffcc; border-bottom: 1px #aaa solid; }
+#content #log .warning { background-color: #ffffcc; border-bottom: 1px #aaa solid; }
+#content #log .err     { background-color: #ffcccc; border-bottom: 1px #aaa solid; }

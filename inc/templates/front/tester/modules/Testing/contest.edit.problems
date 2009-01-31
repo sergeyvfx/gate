@@ -1,0 +1,107 @@
+<?php
+  global $catid, $id;
+
+  $data=targ ('data');
+  $lib=targ ('lib');
+  
+  content_url_var_push_global ('catid');
+  
+  $url=content_url_get_full ();
+  
+  redirector_add_skipvar ('act');
+  redirector_add_skipvar ('name');
+  redirector_add_skipvar ('uid');
+  
+?>
+
+<script type="text/javascript" language="javascript">
+  function oncatadd () {
+    var url="<?=$url;?>";
+    var value=getElementById ('catname').value;
+    if (qtrim (value)=='') { alert ('Имя категории не может быть пустым'); return; }
+    url+="&act=addcat&name="+(value);
+    nav (url);
+  }
+
+  function onproblemadd () {
+    nav ("<?=$url;?>&clear&act=showaddproblem&redirect=<?=get_redirection ()?>");
+  }
+</script>
+
+<table class="clear problems">
+  <tr>
+    <th>Категории</th>
+    <th>Задания</th>
+  </tr>
+  <tr>
+    <td class="data">
+<?php
+  $arr=$lib->Categories_Get ($id);
+  if (count ($arr)==0) {
+    print ('<center><i><span class="shade">Нет категории</span></i></center>');
+  } else {
+    print ('<table class="clear catdata">');
+    for ($i=0, $n=count ($arr); $i<$n; $i++)  {
+      $cat=$arr[$i];
+      print ('<tr'.(($i==$n-1)?(' class="last"'):('')).'>');
+      print ('<td>'.($i+1).'. ');
+      if ($cat['id']!=$catid)
+        print ('<a href="'.$url.'&catid='.$cat['id'].'">'.$cat['name'].'</a>'); else
+        print ('<span class="arr">'.$cat['name'].'</span>');
+      print ('</td>');
+      print ('<td class="act">');
+      if ($i!=0)
+        ibtnav ('arrup_blue.gif', $url.'&act=upcat&uid='.$cat['id'], 'Вверх'); else
+        ibtnav ('arrup_d.gif', '', 'Вверх');
+      if ($i!=$n-1)
+        ibtnav ('arrdown_blue.gif', $url.'&act=downcat&uid='.$cat['id'], 'Вниз'); else
+        ibtnav ('arrdown_d.gif', '', 'Вниз');
+      ibtnav ('cross.gif', $url.'&act=delcat&uid='.$cat['id'], 'Удалить', 'Удалить эту категорию?');
+      print ('</td>');
+      print ('</tr>');
+    }
+    print ('</table>');
+  }
+?>
+    </td>
+    <td class="data">
+<?php
+  if ($catid!='') {
+    $arr=$lib->Problems_GetAtCat ($catid);
+    if (count ($arr)==0) {
+      print ('<center><i><span class="shade">Нет заданий в этой категории</span></i></center>');
+    } else {
+      print ('<table class="clear catdata pr">');
+      for ($i=0, $n=count ($arr); $i<$n; $i++) {
+        $p=$arr[$i];
+        print ('<tr'.(($i==$n-1)?(' class="last"'):('')).'>');
+        print ('<td>'.($i+1).'. ');
+        print ('<a href="'.$url.'&act=editproblem&uid='.$p['id'].'&clear">'.$p['name'].'</a>');
+        print ('</td>');
+
+        print ('<td class="act">');
+        ibtnav ('cross.gif', $url.'&act=delproblem&uid='.$p['id'], 'Удалить', 'Удалить это задание?');
+        print ('</td>');
+
+        print ('</tr>');
+      }
+      print ('</table>');
+    }
+  } else
+    print ('<center><i><span class="shade">Категория не выбрана</span></i></center>');
+?>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" class="act">
+      <input type="text" class="txt" style="width: 95%;" id="catname"><br>
+      <a href="JavaScript:oncatadd ();">Добавить</a>
+    </td>
+    <td class="act" align="center">
+<?php
+  if ($catid!='')
+    print ('<a href="JavaScript:onproblemadd ();">Добавить задачу в категорию</a>');
+?>
+    </td>
+  </tr>
+</table>

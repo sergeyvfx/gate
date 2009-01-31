@@ -1,0 +1,19 @@
+Заготовки / Публикация / Список публикаций
+<?php
+  global $page;
+  $data=$pIFACE->GetPagedList ($data->PageCount-$page+1);
+  $n=count ($data);
+  $script=$pIFACE->ItemScript ();
+?>
+<div id="navigator"><?=$pIFACE->GetName ();?></div>
+${subnav}
+<?=$pIFACE->GetPagintation ($page);?>
+<div id="news">
+<?
+  // Скрипт создавался для вывода списка новостей. Так что вывод в обратном порядке :)
+  for ($i=$n-1; $i>=0; $i--) { $r=$data[$i]; tpl_srcp ($script, $r); }
+?>
+</div>
+<div style="margin-top: 6px;">
+<?=$pIFACE->GetPagintation ($page);?>
+</div>

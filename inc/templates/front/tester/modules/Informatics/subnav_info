@@ -1,0 +1,41 @@
+<?php
+  global $page, $WT_contest_id;
+
+  $data=targ ('data');
+  $lib=targ ('lib');
+
+  $s=$data['settings'];
+
+  $status=WT_contest_status_string ($data);
+
+  if (trim (preg_replace ('/\&nbsp\;/', '', $status))!='')
+    print '<div><b>Статус контеста:</b> '.$status.'</div>';
+
+  if ($s['duration']>0) {
+    if (WT_contest_running ($data['id']) && !$s['unfrozen'] && $s['freezetime']>0 &&
+         $s['timestamp']+($s['duration']-$s['freezetime'])*60<=time ())
+      print ('<div><b>Монитор заморожен</b></div>');
+  }
+
+  if ($page=='monitor' && (($s['show_last_accepted'] && (WT_contest_running ($data['id']) || WT_contest_finished ($data['id']))) || $lib->IsContestJudge ($data['id']))) {
+    $arr=$lib->GetLastAcceptedAtContest ($data['id']);
+
+    if ($arr['id']!='') {
+      $cnt=$lib->problemsContainer;
+
+      $users=$lib->GetUsersAtContest ($data['id']);
+      for ($i=0, $n=count ($users); $i<$n; $i++)
+        if ($users[$i]['id']==$arr['user_id']) {
+          $u=$users[$i];
+          break;
+        }
+
+      $problem=$cnt->GetById ($arr['problem_id']);
+      $letter=$cnt->GetProblemLetter ($data['id'], $problem['id']);
+      $time=$lib->GetSolutionTime ($arr);
+      print '<div><b>Последний <i>&laquo;Accepted&raquo;</i></b>: '.
+        $time.' <a href="'.user_generate_viewlink ($arr['user_id']).'">'.htmlspecialchars ($u['name']).'</a> - '.
+        $letter.'. <a href="?page=problems&act=view&id='.$problem['id'].'&redirect='.get_redirection ().'">'.htmlspecialchars ($problem['name']).'</a></div>';
+    }
+  }
+?>

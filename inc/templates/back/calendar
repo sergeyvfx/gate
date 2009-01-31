@@ -1,0 +1,56 @@
+<?
+  $date=targ ('date');
+  $d=preg_replace ('/([0-9]+)\-([0-9]+)\-([0-9]+).*/', '\\3', $date);
+  $m=preg_replace ('/([0-9]+)\-([0-9]+)\-([0-9]+).*/', '\\2', $date);
+  $y=preg_replace ('/([0-9]+)\-([0-9]+)\-([0-9]+).*/', '\\1', $date);
+?>
+
+<div id="calendar">
+  <table id="calendar_<?=targ ('name');?>">
+    <tr>
+      <td>
+        <table width="160">
+          <tr id="short">
+            <td id="txt">
+              <input type="hidden" readonly="1" id="<?=targ ('name');?>" name="<?=targ ('name');?>" value="<?=$date;?>">
+              <input type="text" class="txt" readonly="1" id="title" value="<?=$date;?>">
+            </td>
+          </tr>
+          <tr id="full" style="display: none;">
+            <td>
+              <table width="100%">
+                <tr>
+                  <td>
+                    <select id="month" onchange="calendar_onMonthChange ('<?=targ ('name');?>');">
+<? global $months;
+  foreach ($months as $i=>$n) { ?>
+<option value="<?=$i;?>"<?=(($i==$m)?(' selected'):(''));?>><?=$n?></option>
+<? } ?>
+                    </select>
+                  </td>
+                  <td align="right">
+                    <select id="year" onchange="calendar_onYearChange ('<?=targ ('name');?>');">
+<? for ($i=$y-2; $i<=$y+2; $i++) { ?>
+                      <option value="<?=$i;?>"<?=(($i==$y)?(' selected'):(''));?>><?=$i?></option>
+<? } ?>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <table id="days">
+                      <tr class="n">
+                        <td>Пн</td><td>Вт</td><td>Ср</td><td>Чт</td><td>Пт</td><td class="h">Сб</td><td class="h last">Вс</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td id="btnc"><? cbimage ('calendar.gif', 'calendar_changeFull (\''.targ ('name').'\');', 'Календарь'); ?></td>
+    </tr>
+  </table>
+</div>

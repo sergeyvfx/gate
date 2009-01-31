@@ -1,0 +1,32 @@
+<?php
+  global $redirect;
+  $data=targ ('data');
+  $s=$data['settings'];
+  $editbtn=targ ('editbtn');
+  formo ('title='.prepare_arg ($data['name']).';');
+?>
+<table width="100%"><tr><td>
+  <table class="right" style="margin: 0  0 6px 6px;" >
+    <tr>
+      <td style="padding: 0 0 6px 6px;">
+        <?php lblocko ('color=blue;'); ?>
+          <table width="100%" class="small">
+            <tr><td>Максимум баллов</td><td align="center">:</td><td><?=WT_CalculateMaxPoints ($s['tests'], $s['bonus']);?></td></tr>
+            <tr><td>Имя входного файла</td><td width="10" align="center">:</td><td><?=$s['input'];?></td></tr>
+            <tr><td>Имя выходного файла</td><td align="center">:</td><td><?=$s['output'];?></td></tr>
+            <tr><td>Ограничение по времени</td><td align="center">:</td><td><?=$s['timelimit'];?>&nbsp;сек</td></tr>
+            <tr><td>Ограничение по памяти</td><td align="center">:</td><td><?=$s['memorylimit'];?>&nbsp;Мб</td></tr>
+          </table>
+          <?php lblockc (); ?>
+      </td>
+    </tr>
+  </table>
+<?php print ($data['description']); ?>
+</td></tr></table>
+<?php $backlink=targ ('backlink'); if ($backlink=='') $backlink=$redirect; if ($backlink!='' || $editbtn) { ?>
+  <div class="formPast">
+    <? if ($backlink!='') { ?><button class="submitBtn<?=((!$editbtn)?(' block'):(''));?>" onclick="nav ('<?=$backlink;?>');">Назад</button><?php } ?>
+    <? if ($editbtn)      { ?><button class="submitBtn<?=(($backlink=='')?(' block'):(''));?>" onclick="nav ('?page=prbmanager&action=edit&id=<?=$data['id'];?>&redirect=<?=WT_validate_ipc_link (get_redirection (true, true));?>');">Редактировать</button><?php } ?>
+  </div>
+<?php } ?>
+<?php formc (); ?>

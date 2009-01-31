@@ -1,0 +1,28 @@
+Статьи / Заглавная страница / Список новостей / Коротко о новости
+<?php
+  $full=trim (html2txt (targ ('full')))!='';
+  $edit=$pIFACE->GetAllowed ('EDITINFO');
+
+  $doc_root=config_get ('document-root');
+  $edit_link=$pIFACE->GetItemEditorLink (targ ('id'));
+  $edit_link=preg_replace ('/'.prepare_pattern ($doc_root).'/i', $doc_root.'/articles/news', $edit_link);
+
+  if ($full) $full='<span class="arr"><a href="'.$doc_root.'/articles/news/text/?uid='.targ ('uid').'">Подробнее...</a></span>';
+  if ($edit) $acts='<td class="acts">[<a href="'.$edit_link.'" title="Редактировать секцию: '.targ ('title').'">Редактировать</a>]</td>';
+
+  $img=targ ('image');
+?>
+<div id="entry">
+  <div id="head">
+    <table><tr><td><h3 style="margin: 0;"><?=htmlspecialchars (targ ('title'));?></h3></td><?=$acts;?></tr></table>
+  </div>
+  <div id="text"><?=(($img!='')?('<img src="'.$img.'">'):(''));?><?=fakecode (targ ('short'));?></div>
+  <table class="clear" width="100%"><tr>
+<? if ($full || $edit) { ?>
+    <td width="96"><div id="bottom"><?=$full;?></div></td>
+<? } ?>
+    <td style="text-align: right; padding-right: 16px;">
+      <div><span id="author" style="margin: 0;"><?=targ ('date');?> by <?=user_generate_short_info_string (targ ('user_id'));?></span></div>
+    </td>
+  </tr></table>
+</div>

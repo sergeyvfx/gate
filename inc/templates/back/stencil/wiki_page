@@ -1,0 +1,30 @@
+<table class="frame">
+  <tr class="h">
+    <td class="sp"><img src="<?=config_get ('document-root');?>/pics/clear.gif" class="sep16" alt=""></td>
+<?php
+    $tabs=targ ('tabs');
+    $colspan=2;
+    for ($i=0; $i<count ($tabs); $i++) {
+      $colspan++;
+      $tab=unserialize_params ($tabs[$i]);
+      if ($tab['separator']) {
+        println ('    <td class="sp"><img src="'.config_get ('document-root').'/pics/clear.gif" class="sep16" alt=""></td>');
+      }
+      else {
+        $colspan++;
+?>
+    <td class="<?=(($tab['active'])?( ($tab['active']!='shaded')?('tc'):('tc s')):('t'))?>"><div><a href="<?=urldecode ($tab['url']);?>"<?=(($tab['hint']!='')?(' title="'.$tab['hint'].'"'):(''));?>><?=$tab['title'];?></a></div></td>
+    <td class="sp"><img src="<?=config_get ('document-root');?>/pics/clear.gif" class="sep16" alt=""></td>
+<?
+      }
+    }
+    // It is wrong by logick, but without this suck opera renders the tabs wrong
+    $colspan++;
+?>
+    <td class="sp" style="width: 100%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="<?=$colspan;?>"><div class="frame_cnt"><?=targ ('content');?></div></td>
+  </tr>
+</table>
+

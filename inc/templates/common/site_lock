@@ -1,0 +1,30 @@
+<?php
+  global $DOCUMENT_ROOT;
+?>
+
+<html>
+  <head>
+    <style>
+      h2 { font-family: "tahoma" "arial" "verdana"; font-size: 12pt; margin: 8px 0 4px 5px; }
+      h3 { font-family: "tahoma" "arial" "verdana"; font-size: 10pt; margin: 6px 0 4px 5px; }
+      body       { margin: 0; padding: 2px 4px 4px 4px; font-family: "tahoma" "arial" "verdana"; font-size: 8pt; background: #f7f7f7; }
+      input.txt  { border: 1px #777 solid; padding: 1px 2px; font-family: "tahoma" "arial" "verdana"; font-size: 8pt; }
+      .submitBtn { width: 150px; border-width: 1px; font-size: 8pt; padding: 2px 0; margin: 8px 0; }
+    </style>
+    <title>GATE</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" charset="utf-8">
+    <link rel="icon" href="<?=config_get ('document-root');?>/pics/favicon.ico" type="image/x-icon">
+    <link rel="SHORTCUT ICON" href="<?=config_get ('document-root');?>/pics/favicon.ico" topabs="<?=$DOCUMENT_ROOT;?>/pics/favicon.ico">
+  </head>
+  <body onload="document.getElementById ('login').focus ()">
+    <center>
+      <h2>Сайт заблокирован</h2>
+      <h3>Для входа в него Вам необходимо иметь доступ администратора</h3>
+      <br>
+      <form action="." method="POST">
+        Логин:&nbsp;<input type="text" class="txt" id="login" name="login">&nbsp;&nbsp;&nbsp;Пароль:&nbsp;<input type="password" class="txt" name="passwd"><br>
+        <button class="submitBtn" type="submit">Войти на сайт</button>
+      </form>
+    </center>
+  </body>
+</html>

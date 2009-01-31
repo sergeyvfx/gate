@@ -1,0 +1,33 @@
+<?php
+  $settings=targ ('settings');
+?>
+
+<div id="iframeEditor_<?=targ ('name');?>_dialog_table" class="invisible">
+  <table class="dialog">
+    <tr>
+      <td class="title">Вставка таблицы</td>
+      <td>
+        <? img_button ('stock/confirm.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_accept\', \'table\');', 'Вставить таблицу'); ?>
+        <? img_button ('stock/discard.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_cancel\', \'table\');', 'Отменить'); ?>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Заголовок</td>
+      <td><input type="text" class="txt block" value="" id="iframeEditor_<?=targ ('name');?>_tableDialog_title"></td>
+    </tr>
+    <tr>
+      <td class="title">Размеры</td>
+      <td>
+        Количество строк: <input type="text" class="txt" value="" id="iframeEditor_<?=targ ('name');?>_tableDialog_rowCount" style="width: 70px;">
+        &nbsp;&nbsp;Количество столбцов: <input type="text" class="txt" value="" id="iframeEditor_<?=targ ('name');?>_tableDialog_columnCount" style="width: 70px;">
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Заголовки</td>
+      <td>
+        <input type="checkbox" class="cb" value="1" id="iframeEditor_<?=targ ('name');?>_tableDialog_rowHeaders"> Заголовки строк
+        <input type="checkbox" class="cb" value="1" id="iframeEditor_<?=targ ('name');?>_tableDialog_columnHeaders"> Заголовки столбцов
+      </td>
+    </tr>
+  </table>
+</div>

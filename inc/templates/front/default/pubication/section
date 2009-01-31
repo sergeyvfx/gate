@@ -1,0 +1,9 @@
+Заготовки / Публикация / Абзац многосекционного листа
+<?php
+   $edit=$pIFACE->GetAllowed ('EDITINFO');
+   if ($edit) $acts='<td class="acts">[<a href="'.$pIFACE->GetItemEditorLink (targ ('id')).'" title="Редактировать секцию: '.targ ('title').'">Редактировать</a>]</td>';
+?>
+<div id="entry">
+  <div id="head"><table><tr><td class="title"><?=htmlspecialchars (targ ('title'));?></td><?=$acts;?></tr></table></div>
+  <div id="text"><?=targ ('text');?></div>
+</div>

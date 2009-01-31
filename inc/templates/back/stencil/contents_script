@@ -1,0 +1,24 @@
+<script language="JavaScript">
+  function HideContents (id) {
+    var root=getElementById (id);
+    var title=elementByIdInTree (root, 'action');
+    var body=elementByIdInTree (root, 'body');
+    var hide=elementByIdInTree (title, 'hide');
+    var show=elementByIdInTree (title, 'show');
+    body.style.display='none';
+    hide.style.display='none';
+    show.style.display='inline';
+    document.cookie = "contents_"+id+"_folded=false; expires=<?=FulllocalTime (time ()+7*24*60*60)?>; path=<?=dirname ($GLOBALS['SCRIPT_NAME']);?>"
+  }
+  function ShowContents (id) {
+    var root=getElementById (id);
+    var title=elementByIdInTree (root, 'action');
+    var body=elementByIdInTree (root, 'body');
+    var hide=elementByIdInTree (title, 'hide');
+    var show=elementByIdInTree (title, 'show');
+    body.style.display='block';
+    hide.style.display='inline';
+    show.style.display='none';
+    document.cookie = "contents_"+id+"_folded=true; expires=<?=FulllocalTime (time ()+7*24*60*60)?>; path=<?=dirname ($GLOBALS['SCRIPT_NAME']);?>"
+  }
+</script>

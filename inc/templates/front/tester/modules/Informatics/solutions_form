@@ -1,0 +1,39 @@
+<?php
+  $lib=targ ('lib');
+  $data=$lib->GetAllSolutions ();
+  $n=count ($data);
+
+  if (!$n) {
+    print '<span class="contentSub2">На этот контест еще никто задач не сдавал</span>';
+  } else {
+    $del=targ ('accDel');
+    $perPage=opt_get ('WT_items_per_status_page');
+    if ($perPage<=0) $perPage=10;
+    
+    $page=new CVCPagintation ();
+    $page->Init ('', 'pageid=pageid;bottomPages=false;skiponcepage=1;');
+
+    $pcnt=$lib->problemsContainer;
+    $rules=$lib->SpawnRulesLib ();
+
+    content_url_var_push_global ('pageid');
+    $full=content_url_get_full ();
+
+    $i=0;
+    while ($i<$n) {
+      $c=0;
+      $src='<table class="list" width="100%">'."\n";
+      $src.='  '.$rules->SolutionsHeader ()."\n";
+      while ($c<$perPage && $i<$n) {
+        $r=$data[$i];
+        $row=$rules->SolutionsRow (-1, $r, $n, $c, $perPage, $full, array ('delete'=>$del));
+        $src.=$row."\n";
+        $i++; $c++;
+      }
+      $src.='</table>'."\n";
+      $page->AppendPage ($src);
+    }
+
+    $page->Draw ();
+  }
+?>

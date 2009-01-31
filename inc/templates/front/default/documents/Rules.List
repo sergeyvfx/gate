@@ -1,0 +1,29 @@
+Статьи / Правила / Лист
+<?php
+  $data=$pIFACE->GetList ();
+  $n=count ($data);
+  $script=$pIFACE->ItemScript ();
+?>
+<div id="navigator"><?=$pIFACE->GetName ();?></div>
+${subnav}
+<div style="width: 320px; padding-left: 40px; margin-bottom: 16px;">
+<?php
+  if ($n>0) {
+    contentso ('id=rules');
+    println ('<div style="padding-left: 8px;">');
+    for ($i=0; $i<$n; $i++) { $r=$data[$i]; println ('<div>'.($i+1).'. <a href="#section_'.$i.'">'.htmlspecialchars ($r['title']).'</a></div>'); }
+    println ('</div>');
+    contentsc ();
+  } else
+    println ('<span class="contentSub">В разработке</span>');
+?>
+</div>
+<div id="sectionlist">
+<?php
+  for ($i=0; $i<$n; $i++) {
+    $r=$data[$i];
+    println ('<div id="section_'.$i.'"></div>');
+    tpl_srcp ($script, $r);
+  }
+?>
+</div>

@@ -1,0 +1,32 @@
+<?php
+
+  global $WT_TESTING_Cache, $WT_contest_id;
+
+  $assoc_data=targ ('assoc_data');
+  $lib=targ ('lib');
+  $form_prefix=targ ('form_prefix');
+
+  if (isset ($WT_TESTING_Cache['AllProblemsById'])) {
+    $arr=$WT_TESTING_Cache['AllProblemsById'];
+  } else {
+    $arr=array ();
+    $all=$lib->Problems_GetAll ();
+    for ($i=0, $n=count ($all); $i<$n; $i++) {
+      $arr[$all[$i]['id']]=$all[$i];
+    }
+    $WT_TESTING_Cache['AllProblemsById']=$arr;
+  }
+  
+  $p=$arr[$assoc_data['problem_id']];
+  $s=$p['settings'];
+
+  $cans=new $s['anstype'] ();
+
+  print ('<div class="task">');
+  print ('  <div class="title">Задача №'.targ ('num').'</div>');
+  print ('  <div class="desc">'.$p['description'].'</div>');
+  print ('  <div class="anscnt">');
+  $cans->Draw ($s, $assoc_data, targ ('num')-1, $form_prefix);
+  print ('  </div>');
+  print ('</div>');
+?>

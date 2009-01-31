@@ -1,0 +1,21 @@
+<table class="iframe" id="iframeEditor_<?=targ ('name');?>">
+  <tr>
+    <td class="dialogContainer">
+<?
+  tpl_linkage ('./dialogs', targs ());
+?>
+    </td>
+  </tr>
+  <tr height="16">
+    <td style="padding: 1px;">
+      <? block_img_button ('full_small.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'full_change\', null);'); ?>
+    </td>
+  </tr>
+  <tr>
+    <td class="iframeContainer">
+      <input type="hidden" id="<?=targ ('name');?>" name="<?=targ ('name');?>" value="<?=htmlspecialchars (targ ('innerHTML'));?>">
+      <iframe frameborder="no" id="iframeEditor_<?=targ ('name');?>_editor"></iframe>
+      <textarea id="iframeEditor_<?=targ ('name');?>_editor_html" class="html block" style="display: none;"></textarea>
+    </td>
+  </tr>
+</table>
