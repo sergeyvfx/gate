@@ -40,11 +40,12 @@
 <?php } 
   }
 ?>
+<?=((browser_engine ()!='GECKO')?(' width="100%"'):(''));?>
   <body id="content" style="background: transparent">
     <form id="ipc_form" method="POST" action="<?=config_get ('http-document-root');?>/inc/stuff/image/image.edit.php?storage=<?=$storage?>&size=<?=urlencode ($size);?>&vlimit=<?=urlencode ($vlimit);?>&hlimit=<?=urlencode ($hlimit);?>&field=<?=$field;?>&field=<?=$field;?>&user_id=<?=$user_id;?>&formname=<?=$formname;?>&value=<?=$value?>" enctype="multipart/form-data">
-      <table class="clear" style="width: 100%;"><tr>
-        <td<?=((browser_engine ()!='GECKO')?(' width="100%"'):(''));?>><input type="file" onchange=" onImgChange ();" name="uploading" class="block"></td>
-        <?php if ($value!=''||true) { ?><td<?=((browser_engine ()=='GECKO')?(' style=" width: 100%;"'):(''));?>><button style="width: 200px;" type="button" class="alert" onclick="nav ('<?=config_get ('http-document-root');?>/inc/stuff/image/image.edit.php?storage=<?=$storage?>&size=<?=urlencode ($size);?>&vlimit=<?=urlencode ($vlimit);?>&hlimit=<?=urlencode ($hlimit);?>&field=<?=$field;?>&field=<?=$field;?>&user_id=<?=$user_id;?>&formname=<?=$formname;?>&action=delete&value=<?=$value?>');">Удалить с сервера</button></td> <?php } ?>
+      <table class="clear"><tr>
+        <td><input type="file" onchange=" onImgChange ();" name="uploading" class="block"></td>
+        <?php if ($value!='') { ?><td><button style="width: 200px;" type="button" class="alert" onclick="nav ('<?=config_get ('http-document-root');?>/inc/stuff/image/image.edit.php?storage=<?=$storage?>&size=<?=urlencode ($size);?>&vlimit=<?=urlencode ($vlimit);?>&hlimit=<?=urlencode ($hlimit);?>&field=<?=$field;?>&field=<?=$field;?>&user_id=<?=$user_id;?>&formname=<?=$formname;?>&action=delete&value=<?=$value?>');">Удалить с сервера</button></td> <?php } ?>
       </tr></table>
     </form>
   </body>

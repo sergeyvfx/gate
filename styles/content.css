@@ -141,7 +141,7 @@ body {
 #content table.frame .h .tc div { border: 1px #f93 solid; border-bottom: 0; -moz-border-radius-topleft: 6px; background: #fff; font-weight: bold; position: relative; z-index: 10; height: 14px; }
 
 #content table.frame .h .t      { border: 0; width: 1px; white-space: nowrap; }
-#content table.frame .h .t div  { border: 1px #aaa solid; border-bottom: 0; }
+#content table.frame .h .t div  { border: 1px #aaa solid; border-bottom2: 0; }
 
 #content table.frame .h .s     { background-color: #f7f7f7; }
 #content table.frame .h .s div { height: 12px; border: 1px #d56900 solid; border-bottom: 0; }
