@@ -177,7 +177,7 @@
       $dir=config_get ('WT-Problems-Storage');
       @mkdir ($dir, config_get ('WT-Problems-Storage-mode'));
       @chmod ($dir, config_get ('WT-Problems-Storage-mode'));
-      $name=preg_replace ('/^[A-Z0-9\-\ ]+/i', $id.'@0', $file['name']);
+      $name=preg_replace ('/^[^\.]+/i', $id.'@0', $file['name']);
       $fn=$dir.'/'.$name;
       move_uploaded_file ($file['tmp_name'], $fn);
       @chmod ($fn, config_get ('WT-Problems-Storage-data-mode'));

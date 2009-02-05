@@ -76,7 +76,7 @@
       <?=WT_compiler_selector ('*', '', $data['settings']['compiler_id']);?>
       <div class="formPast">
         <button class="submitBtn" onclick="nav ('<?=$href?>');" type="button">Назад</button>
-        <button class="submitBtn">Сохранить</button>
+        <button class="submitBtn" type="submit">Сохранить</button>
       </div>
     </form>
 <?php
@@ -134,7 +134,7 @@
       <textarea class="block" rows="10" name="src"></textarea><div id="hr"></div>
       Язык компилирования:
       <?=WT_compiler_selector ();?>
-      <div class="formPast"><button class="block">Создать</button></div>
+      <div class="formPast"><button class="block" type="submit">Создать</button></div>
     </form>
 <?php
       dd_formc ();
