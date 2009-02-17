@@ -1,0 +1,17 @@
+<?php
+    $filter=$_GET['filter'];
+    content_url_var_pop ('filter');
+    $url=content_url_get_full ();
+    content_url_var_push_global ('filter');
+?>
+
+<div class="problem_filter" style="background: #ddd;">
+  <form method="post" action="<?=$url;?>" onsubmit="var filter = escapeURLVal (this.filter.value); nav (this.action+'&filter='+filter); return false;">
+  <table width="100%">
+    <tr>
+      <td width="60px">Фильтр:</td>
+      <td><input type="text" class="txt block" value="<?=htmlspecialchars (stripslashes ($filter));?>" name="filter"></td>
+      <td width="80" align="right"><button class="submitBtn" type="submit">Обновить</button></td>
+    </tr>
+  </table>
+</div>
