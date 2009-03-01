@@ -187,7 +187,7 @@
     function Create ($name, $settings) {
       if (trim ($name)=='') { add_info ('Название задачи не может быть пустым.'); return false; }
       if ($this->GetByName (htmlspecialchars ($name))) { add_info ('Задача с таким именем уже существует.'); return false; }
-      
+
       if ($_FILES['TestsArchive']['name']=='') { add_info ('Не указан архив с тестами.'); return false; }
 
       $arr=array (); $n=count ($this->problem_setts);
@@ -282,17 +282,26 @@
       return false;
     }
 
-    function GetList  ()   { return $this->data; }
+    function GetList  ($filter='')   { if ($filter!='') return $this->Filter ($filter); return $this->data; }
     function GetCount ()   { return count ($this->data); }
     function GetItem  ($i) { return $this->data[$i]; }
-    
+    function Filter   ($filter) {
+      $res=array ();
+      for ($i=0, $n=count ($this->data); $i<$n; ++$i) {
+        if (preg_match ("/$filter/", $this->data[$i]['name']) || preg_match ("/$filter/", $this->data[$i]['settings']['comment'])) {
+          $res[]=$this->data[$i];
+        }
+      }
+      return $res;
+    }
+
     function UpdateTasksCache ($contest_id, $problem_id) {
       if ($contest_id<0) $contest_id=$WT_contest_id;
       if (isset ($this->cache['tasks'][$contest_id])) return;
       $t=arr_from_query ("SELECT * FROM `tester_tasks` WHERE `contest_id`=$contest_id");
       $this->cache['tasks'][$contest_id]=$t;
     }
-    
+
     function GetProblemLetter ($contest_id, $problem_id) {
       global $WT_contest_id;
       if ($contest_id<0) $contest_id=$WT_contest_id;
@@ -850,19 +859,21 @@
       $edit    = $this->GetAllowed ('PROBLEMS.EDIT');
       $rejudge = $this->GetAllowed ('PROBLEMS.REJUDGE');
 
-      $n=$this->problemsContainer->GetCount ();
+      $list=$this->problemsContainer->GetList ($_GET['filter']);
+
+      $n=count ($list);
       if ($n==0) {
         $this->CPrintLn ('<span class="contentSub2">Нет задач для редактирования или просмотра.</span>');
+        $this->CPrintLn ($this->Template ('problems.filter.form'));
         return;
       }
-      $list=$this->problemsContainer->GetList ();
       $problemsPerPage=opt_get ('WT_problems_per_page');
       if (!$problemsPerPage) $problemsPerPage=15;
       $page=$i=0;
 
       $pages=new CVCPagintation();
       $pages->Init ('PAGES', 'pageid=pageid;bottomPages=false;skiponcepage=true;');
-      
+
       while ($i<$n) {
         $c=0;
         $arr=array ();
@@ -870,14 +881,15 @@
           $arr[]=$list[$i];
           $c++; $i++;
         }
-        $src=$this->Template ('problems.list.page', array ('data'=>$arr, 'page'=>$page, 'perpage'=>$problemsPerPage,
+        $src=$this->Template ('problems.list.page', array ('lib'=>$this, 'data'=>$arr, 'page'=>$page, 'perpage'=>$problemsPerPage,
           'acc.manage'=>$manage, 'acc.delete'=>$delete, 'acc.edit'=>$edit, 'acc.rejudge'=>$rejudge));
         $pages->AppendPage ($src);
         $page++;
       }
       $this->CPrintLn ($pages->OuterHTML ());
+      $this->CPrintLn ($this->Template ('problems.filter.form'));
     }
-    
+
     function Problem_Rejudge ($id) {
       if ($this->GetAllowed ('PROBLEMS.REJUDGE')) {
         $this->problemsContainer->Rejudge ($id);
@@ -1121,7 +1133,7 @@
       if (!$this->GetAllowed ('SOLUTIONS.MANAGE')) return;
       $this->Solutions_ActionHandler ();
       $this->gateway->AppendNavigation ('Список решений участников олимпиады', '?page=solutions'.(($pageid!='')?('&pageid='.$pageid):('')));
-      
+
       $this->CPrintLn (stencil_formo ());
       $this->InsertTemplate ('solutions_form', array ('lib'=>$this, 'accDel'=>$this->GetAllowed ('SOLUTIONS.DELETE')));
       $this->CPrintLn (stencil_formc ());

@@ -34,3 +34,8 @@
 #content div#monitor table.data tr.stat td.h     { text-align: right; }
 
 #content div#monitor table.data tr.stat th div.ind { border: 1px #aaa solid; height: 3px; }
+
+#content div.problem_filter { margin-top: 6px; border: 1px #aaa solid; background: #eee; padding: 6px 8px; }
+#content div.problem_filter input.txt { background: #fff !important; }
+#content div.problem_filter td { vertical-align: middle; }
+#content div.problem_filter .submitBtn { width: auto; }

@@ -55,13 +55,13 @@ function show_desc (id) {
         $print=true;
       }
       if (!$print) return false;
-      
+
       if ($break)
         print '<br>';
 
       println (stencil_contentso ('title='.$title.';id='.$id));
       println ('<table width="100%">');
-      
+
       for ($i=0; $i<$n; $i++) {
         if (isset ($dis_data[$arr[$i]['id']]) != $dis) continue;
         $active=$id==$arr[$i]['id'];

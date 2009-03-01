@@ -40,13 +40,13 @@
 
     var arr=string.split (" ");
     var points=new Number (0);
-    
+
     for (var i=0; i<arr.length; i++)
       points+=new Number (arr[i]);
-      
+
     var count=arr.length;
     if (qtrim (string)=='') count=0;
-      
+
     getElementById ('count').innerHTML=count;
     getElementById ('MaxPoints').innerHTML=points;
   }

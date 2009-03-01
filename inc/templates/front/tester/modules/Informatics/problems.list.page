@@ -1,12 +1,15 @@
 <?php
   global $id, $action;
+  $lib     = targ ('lib');
   $manage  = targ ('acc.manage');
   $delete  = targ ('acc.delete');
   $edit    = targ ('acc.edit');
   $rejudge = targ ('acc.rejudge');
 
+  content_url_var_push_global ('filter');
   $showActs=$delete|$edit|$rejudge;
   $full=content_url_get_full ();
+
 ?>
 
 <script language="JavaScript" type="text/javascript">

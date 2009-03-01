@@ -2,7 +2,7 @@
 
   function DrawProblemRow ($pr, $n, $c, $absCount) {
     global $id, $pbrows, $cman, $act, $uid, $prpage;
-    
+
     $lib=targ ('lib');
     $prefix=content_url_get_full ();
 
@@ -23,6 +23,11 @@
     if ($delete)
       $actions.=stencil_ibtnav ('cross.gif', $prefix.'&act=delete&pid='.$pr['data']['id'].'#editor', 'Удалить (глобально)', 'Удалить эту задачу?');
     return '<tr'.$class.'><td width="18">'.$cb.'</td><td class="n">'.$num.'</td><td width="50%">'.$title.'</td><td>'.$comment.'</td><td align="right" width="48">'.$actions.'</td></tr>'."\n";
+  }
+
+  function getFilterFormSource () {
+    $lib=targ ('lib');
+    return $lib->Template ('problems.filter.form');
   }
 
   function ParseDrawableList ($list) {
@@ -63,16 +68,21 @@
   }
 
   function DrawAllItems () {
+    $filter=$_GET['filter'];
+
     $cnt=INFORMATICS_SpawnNewProblemsContainer (nil);
-    $list=$cnt->GetList ();
+    $list=$cnt->GetList (stripslashes ($filter));
     $n=count ($list);
-  
-    if (!$n) { print '<span class="contentSub">В этой категории нет задач</span>'; return; }
 
     $arr=array ();
-    for ($i=0; $i<$n; $i++) $arr[]=array ('type'=>'problem', 'data'=>$list[$i]);
+    for ($i=0; $i<$n; $i++) {
+      $arr[]=array ('type'=>'problem', 'data'=>$list[$i]);
+    }
 
-    print ParseDrawableList ($arr);
+    $suffix = getFilterFormSource ();
+    if (count ($arr) == 0) { print '<span class="contentSub">В этой категории нет задач</span>'.$suffix; return; }
+
+    print ParseDrawableList ($arr).$suffix;
   }
 
   function DrawStructedItems () {

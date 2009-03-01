@@ -185,3 +185,6 @@ function core_WindowDimensions (w) {
 function getKeyCode(event) {
   return window.event ? window.event.keyCode : (event.keyCode ? event.keyCode : (event.which ? event.which : null));
 };
+function escapeURLVal(val) {
+  return val.replace (/\&/g, '&quot;');
+};
