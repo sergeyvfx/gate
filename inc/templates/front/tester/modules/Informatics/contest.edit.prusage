@@ -1,6 +1,8 @@
 <?php
   global $uid, $act;
-  
+
+  content_url_var_push_global ('filter');
+
   $data=targ ('data'); $lib=targ ('lib');
 
   redirector_add_skipvar ('act', 'up');
