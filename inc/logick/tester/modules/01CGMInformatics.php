@@ -288,7 +288,7 @@
     function Filter   ($filter) {
       $res=array ();
       for ($i=0, $n=count ($this->data); $i<$n; ++$i) {
-        if (preg_match ("/$filter/", $this->data[$i]['name']) || preg_match ("/$filter/", $this->data[$i]['settings']['comment'])) {
+        if (preg_match ("/$filter/i", $this->data[$i]['name']) || preg_match ("/$filter/", $this->data[$i]['settings']['comment'])) {
           $res[]=$this->data[$i];
         }
       }
