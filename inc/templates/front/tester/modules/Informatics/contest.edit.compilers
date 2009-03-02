@@ -14,7 +14,7 @@
     println ('  </tr>');
   }
   println ('</table>');
-  
+
   groupc ();
   settings_formc ('.?page=contest');
 ?>
