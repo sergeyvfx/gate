@@ -189,6 +189,7 @@
     $d=floor ($t/60/60/24);
     if ($d) {
       if ($d%10==1) $ds=' день'; else
+      if ($d%100==0) $ds='дней'; else
       if ($d%10<5)  $ds=' дня'; else $ds='дней';
       return $res=$d." $ds, ".$res;
     }
