@@ -9,7 +9,7 @@
     $del=targ ('accDel');
     $perPage=opt_get ('WT_items_per_status_page');
     if ($perPage<=0) $perPage=10;
-    
+
     $page=new CVCPagintation ();
     $page->Init ('', 'pageid=pageid;bottomPages=false;skiponcepage=1;');
 

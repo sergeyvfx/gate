@@ -299,8 +299,12 @@
     function Page_Contest () {
       global $action, $id, $changeto, $clear;
       $this->AppendNavigation ('Список контестов', '/?page=contest');
-      
+
       redirector_add_skipvar ('action', 'restart');
+      redirector_add_skipvar ('action', 'start');
+      redirector_add_skipvar ('action', 'delete');
+      if ($action != 'manage')
+        redirector_add_skipvar ('id');
 
       $ccnt=$this->SpawnContestContainer ();
 

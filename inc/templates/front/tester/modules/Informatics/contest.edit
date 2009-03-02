@@ -1,5 +1,4 @@
 <?php
-
   global $WT_contest_id;
 
   if (browser_engine ()!='DONKEY')
@@ -12,12 +11,12 @@
 
   $lib=targ ('lib');
   $rules=$lib->GetRules ();
-  
+
   $cur_data=wt_contest_by_id ($WT_contest_id);
 
   // General settings form
   $f=new CVCForm ();
-  
+
   global $cman;
   $s='';
   if ($cman==0 || $cman=='')
@@ -58,7 +57,7 @@
   print ($f->OuterHTML ());
   $t->FinishPage ();
   $t->StartNewPage ('title=Задачи;');
-  
+
   if ($cur_data['lid']==0) {
 ?>
 

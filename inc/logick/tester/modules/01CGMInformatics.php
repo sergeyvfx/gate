@@ -46,7 +46,7 @@
 
       if ($contest_id<0 ) $contest_id=$WT_contest_id;
       $contest=WT_contest_by_id ($contest_id);
-      
+
       if ($c==$perPage-1 || $c==$n-1) $class='last';
       if ($id==$row_data['id']) $class.=(($class!='')?(' '):('')).'active';
       if ($row_data['status']==2 && $row_data['errors']=='OK') $class.=(($class!='')?(' '):('')).'subactive';
@@ -402,11 +402,11 @@
           $this->CPrintLn ($tpl->GetText ());
         }
     }
-    
+
     function IPC_Problem_Rejudge ($id) {
       return $this->Problem_Rejudge ($id);
     }
-    
+
     function IPC_Monitor () {
       $this->PAGE_Monitor ();
       return preg_replace ('/\<div id\="monitor" style\="_position\: relative\;"\>(.*)\<\/div\>/si', '\1', preg_replace ('/\<script[\s|\w|\=|\|\/"]*\>.*\<\/script\>/si', '', $this->GetContent ()));
@@ -459,15 +459,15 @@
       return true;
     }
 
-	function Solution_DBInfoByID ($solution_id) {
-	  return db_row_value ('tester_solutions', "`id`=$solution_id");
-	}
-	
-	function Solution_ParametersByID ($solution_id) {
-	  $data=$this->Solution_DBInfoByID ($solution_id);
-	  return unserialize ($data['parameters']);
-	}
-	
+    function Solution_DBInfoByID ($solution_id) {
+      return db_row_value ('tester_solutions', "`id`=$solution_id");
+    }
+
+    function Solution_ParametersByID ($solution_id) {
+      $data=$this->Solution_DBInfoByID ($solution_id);
+      return unserialize ($data['parameters']);
+    }
+
     function Solution_Remove ($solution_id) {
       if (!$this->GetAllowed ('SOLUTIONS.DELETE')) return;
       db_delete ('tester_solutions', "`id`=$solution_id");
@@ -560,7 +560,7 @@
         db_insert ('tester_disabled_problems', array ('contest_id'=>$id, 'problem_id'=>$pid));
       return true;
     }
-    
+
     function Contest_UpdateRecievedCompilers ($id=-1) {
       if (!$this->GetAllowed ('CONTEST.MANAGE')) return;
       global $WT_contest_id;
@@ -572,7 +572,7 @@
         if ($_POST[$list[$i]['id']])
           $arr[$list[$i]['id']]=1;
       }
-      
+
       $this->UpdateCompilers ($id, $arr);
     }
 
@@ -610,7 +610,7 @@
       while ($r=db_row ($q)) $arr[]=$r['group_id'];
       return $arr;
     }
- 
+
     function Contest_GetUserGroup  ($id=-1) { return $this->Contest_GetUserGroup_Iterator ($id, 'tester_contestgroup'); }
     function Contest_GetJudgeGroup ($id=-1) { return $this->Contest_GetUserGroup_Iterator ($id, 'tester_judgegroup'); }
 
@@ -621,7 +621,7 @@
       db_insert ('tester_tasks', array ('contest_id'=>$contest_id, 'problem_id'=>$problem_id, 'letter'=>$letter));
       return true;
     }
-    
+
     function Contenst_MassAddProblemToContest ($contest_id, $ids) {
       if (!$this->GetAllowed ('CONTEST.MANAGE')) return;
       $ids=explode (',', $ids);
@@ -629,7 +629,7 @@
       for ($i=0; $i<$n; $i++)
         $this->Contenst_AddProblemToContest ($contest_id, $ids[$i]);
     }
-    
+
     function Contenst_MassProblemDelete ($contest_id, $ids) {
       if (!$this->GetAllowed ('PROBLEMS.DELETE')) return;
       $ids=explode (',', $ids);
@@ -644,6 +644,7 @@
       content_url_var_push_global ('cman');
       content_url_var_push_global ('pbrows');
       content_url_var_push_global ('prpage');
+
       $this->Contest_ActionHandler ();
       $contest=WT_contest_by_id ($id);
       $this->InsertTemplate ('contest.edit', array ('data'=>$contest, 'lib'=>$this));
@@ -708,7 +709,7 @@
     function Problem_Accessible ($problem_id, $contest_id=-1) {
       global $WT_contest_id;
       if ($contest_id<0) $contest_id=$WT_contest_id;
-      
+
       // TODO:
       // Add checking of contest state here
 
@@ -732,7 +733,7 @@
           add_info ('Невозможно послать задачу, так как превышен лимит попыток.');
           return false;
       }
-      
+
       if (db_count ('tester_disabled_problems', '(`contest_id`='.$contest_id.') AND (`problem_id`='.$problem_id.')')>0)
         return false;
 
@@ -838,7 +839,7 @@
       }
       return $res;
     }
-    
+
     function Problem_Accepted ($id) {
       global $WT_contest_id;
       $user_id=user_id ();
@@ -897,9 +898,9 @@
       }
       return false;
     }
-    
+
     //
-    
+
     function GetSolutionsEntry ($contest_id, $clause='') {
       $arr=array ();
       $q=db_select ('tester_solutions', array ('*'), "`contest_id`=$contest_id".(($clause!='')?(' AND '.$clause):(''))."", 'ORDER BY `timestamp` DESC');
@@ -917,7 +918,7 @@
       $tries=array ();
       for ($i=$n-1 ;$i>=0; $i--) {
         if (!WT_ForceStatusAffective ($arr[$i]['parameters']['force_status']) || $arr[$i]['ignored'] || $arr[$i]['errors']=='CR' ||
-	     ($p &&$arr[$i]['errors']=='CE')) {
+             ($p &&$arr[$i]['errors']=='CE')) {
           $arr[$i]['try']=$tries[$arr[$i]['user_id']][$arr[$i]['problem_id']];
           if (!isset ($arr[$i]['try'])) $arr[$i]['try']=0;
           continue;
@@ -929,7 +930,7 @@
     }
 
     function GetSolutionsCountEntry ($contest_id=-1, $clause='') { global $WT_contest_id; if ($contest_id=-1) $contest_id=$WT_contest_id; return db_count ('tester_solutions', "`contest_id`=$contest_id".(($clause!='')?(' AND '.$clause):('')).""); }
-    
+
     function GetUserSolutions ($contest_id, $user_id) { return $this->GetSolutionsEntry ($contest_id, "`user_id`=$user_id"); }
     function GetAllSolutions  ($contest_id=-1)           { global $WT_contest_id; if ($contest_id<0) $contest_id=$WT_contest_id; return $this->GetSolutionsEntry ($contest_id); }
 
@@ -968,7 +969,6 @@
 
       if (!WT_contest_running ($WT_contest_id) && !WT_contest_finished ($WT_contest_id) && !$this->IsContestJudge ())
         return;
-        
 
       $this->gateway->AppendNavigation ('Монитор', '.?page=monitor');
 
@@ -1005,10 +1005,10 @@
       $manage=$this->IsContestJudge ();
       if (!WT_contest_running ($WT_contest_id) && !WT_contest_finished ($WT_contest_id) && !$manage) { $this->CPrintLn ('<span class="contentSub2">Список задач недоступен, так как контест незапущен.</span>'); return; }
       $this->gateway->AppendNavigation ('Статус по контесту', '.?page=submit');
-      
+
       if ($action=='view')
         $this->Solution_DrawInformation ($id);
-      
+
       $this->CPrintLn (stencil_formo (''));
       $this->InsertTemplate ('status_form', array ('lib'=>$this));
       $this->CPrintLn (stencil_formc ());
@@ -1073,7 +1073,7 @@
           if ($redirect!='') redirect ($redirect);
         }
       }
-      
+
       if ($rejudge) {
         if ($action=='rejudge')
           $this->Problem_Rejudge ($id);
@@ -1081,7 +1081,7 @@
 
       if ($action=='delete' && $delete) { $this->problemsContainer->Delete ($id); }
       if ($action=='view') $this->CPrintLn ('<table width="100%"><tr valign="top"><td width="40%" style="padding-right: 2px;">');
-      
+
       $this->CPrintLn (stencil_formo ('title=Список существующих задач;'));
       $this->Problem_DrawProblems ();
       $this->CPrintLn (stencil_formc ());
@@ -1176,7 +1176,7 @@
       $this->cache[$id]['IsContestJudge']=$res;
       return $res;
     }
-    
+
     function Subnav_Info () {
       global $WT_contest_id;
       if (!isset ($WT_contest_id) || $WT_contest_id=='') return;

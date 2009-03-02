@@ -11,7 +11,7 @@
     function PerformContestStateUpdate ($contest, $state) {  }
     function Contest_Manager ($id, $clear=false) {  }
     function Contest_Save    ($id, $clear=false) { return true; }
-    
+
     function COntest_ClearManagerCaption () { return ''; }
 
     function CPrint   ($t) { $this->gateway->CPrint ($t); }

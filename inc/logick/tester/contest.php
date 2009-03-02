@@ -4,7 +4,6 @@
   class CGContestContainer {
     var $data;
     var $cache=array ();
-    
     var $lib_cache;
 
     function CheckTables () {
@@ -44,7 +43,7 @@
         if ($deadline<=time ()) {
           $s=$c['settings'];
           $s['timestamp']=$deadline;
-          
+
           if ($s)
             $ns['timestamp']=$deadline;
 
