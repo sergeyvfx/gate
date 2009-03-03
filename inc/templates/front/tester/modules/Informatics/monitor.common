@@ -67,6 +67,12 @@
 
    wnd.setTimeout (wnd.onresize, 100);
   }
+
+  function validateMonitorWidth( ) {
+    var monitor = document.getElementById ('monitor');
+    monitor.style.width = '200px';
+    window.setTimeout (function (_monitor) { return function () { _monitor.style.width=_monitor.parentNode.offsetWidth-14+'px' }; } (monitor), 10);
+  }
 </script>
 
 <?php
@@ -76,4 +82,7 @@
     $c='ffc';
     return '<div class="ind" style="background: #'.$c.';"></div>';
   }
+
+  add_body_handler ('onload', 'validateMonitorWidth');
+  add_body_handler ('onresize', 'validateMonitorWidth');
 ?>

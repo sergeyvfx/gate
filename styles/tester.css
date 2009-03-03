@@ -1,4 +1,4 @@
-#content div#monitor { background: transparent; overflow: scroll; border: 1px #aaa solid; height: 340px; background: #e7e7e7; }
+#content div#monitor { background: transparent; overflow: auto; _overflow: scroll; border: 1px #aaa solid; height: 340px; background: #e7e7e7; }
 
 #content div#monitor table.data tr.l    { background-color: #fff; }
 #content div#monitor table.data tr      { background-color: #eee; }
