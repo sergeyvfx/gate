@@ -3,6 +3,17 @@
   $contest_id=targ ('contest_id');
   $user_id=targ ('user_id');
 
+  // Statistics preinicialization
+  $stats_info=array (
+      array ('title'=>'Пытавшихся участников',    'id'=>'tries_users'),
+      array ('title'=>'Решивших участников',      'id'=>'ok_users'), // %
+      array ('title'=>'Зачтено решений',          'id'=>'ok_submits'),
+      array ('title'=>'Не зачтено',               'id'=>'nonok_submits'),
+      array ('title'=>'Процент успешных попыток', 'id'=>'ok_perc')
+    );
+  $stats_data=array ();
+  $stats_cache=array ();
+
   $redirect=get_redirection ();
 
   $sols=$lib->GetAllSolutions ($contest_id);
@@ -41,6 +52,22 @@
     $uid=$s['user_id'];
     $pid=$s['problem_id'];
 
+    if (!isset ($judge_assoc[$uid])) {
+      // Count of users tried to send problem
+      if (!$stats_cache[$pid]['tries_users'][$uid]) {
+        $stats_data[$pid]['tries_users']++;
+        $stats_cache[$pid]['tries_users'][$uid]=true;
+      }
+
+      if ($s['errors']=='OK') {
+        if (!$stats_cache[$pid]['ok_users'][$uid]) {
+          $stats_data[$pid]['ok_submits']++;
+          $stats_cache[$pid]['ok_users'][$uid]=true;
+        }
+      } else
+        $stats_data[$pid]['nonok_submits']++;
+    }
+
 /*    if (!$data[$uid][$pid]['acc']) */{
       $data[$uid][$pid]['try']++;
       $n=$s['points']-($data[$uid][$pid]['try']-1)*$penalty;
@@ -72,7 +99,12 @@
     $max_total=max ($max_total, $data[$uid]['total']);
   }
   
-  
+  $n=count ($users);
+  foreach ($stats_data as $pid=>$v) {
+      $stats_data[$pid]['ok_perc']=floor (($stats_data[$pid]['ok_submits']/($stats_data[$pid]['nonok_submits']+$stats_data[$pid]['ok_submits']))*100).'%';
+      $stats_data[$pid]['ok_users']=floor (($stats_data[$pid]['ok_submits']/($n-$deltan))*100).'%';
+  }
+
   function KIROV_Monitor_Comparator ($data, $a, $b) {
     $r1=$data[$a['id']]; $r2=$data[$b['id']];
     if ($r1['total']>$r2['total']) return 1; else
@@ -169,5 +201,28 @@
     $prev_total=$data[$uid]['total'];
   }
 ?>
+
+      <tr class="stat"><th class="h" colspan="2">Статистика</th>
+<?php
+    for ($j=0; $j<$problems_count; $j++) {
+      $it=$problems[$j];
+?>
+      <th class="prb" colspan="3"><?=color_div ($stats_data[$it['id']]['ok_perc']);?><a href=".?page=problems&act=view&id=<?=$it['id'];?>&redirect=<?=$redirect?>"><acronym title="<?=htmlspecialchars ($it['name']);?>">Задача <?=core_alpha ($it['letter']);?></acronym></a></th>
+<?php    }
+?><th class="div">&nbsp;</th></tr>
+<?php
+  for ($i=0, $n=count ($stats_info); $i<$n; $i++) {
+    $s=$stats_info[$i];
+    print ('<tr class="stat'.(($i%2==0)?(' l'):('')).'"><td class="h" colspan="2">'.$s['title'].'</td>');
+    for ($j=0; $j<$problems_count; $j++) {
+      $it=$problems[$j];
+      $t=$stats_data[$it['id']][$s['id']];
+      if ($t=='') $t=0;
+      print ('<td colspan="3">'.$t.'</td>');
+    }
+    print ('<td class="div">&nbsp;</td></tr>');
+  }
+?>
+
     </table>
   </div>
