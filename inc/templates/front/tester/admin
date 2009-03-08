@@ -8,15 +8,15 @@
   groupo ('title=Настройка прав доступ;');
   print $self->security->EditForm ();
   groupc ();
-  
+
   groupo ('title=Настройка хранилищ данных;');
-  
+
   $iframe=new CDCIFrame ();
   $iframe->Init ();
   $iframe->SetSettings ($self->content_settings['iframe']);
 
   $iframe->DrawContentSettingsForm ('', 'null');
-  
+
   groupc ();
 ?>
   <div class="formPast"><button class="block" type="submit">Сохранить</button></div>

@@ -26,13 +26,22 @@
         'items'=>$this->items, 'itemsUsed'=>$this->itemsUsed));
     }
     function ReceiveItemsUsed () {
-      $s=stripslashes ($_POST['alist_'.$this->name.'_items']);
+      $s=$_POST['alist_'.$this->name.'_items'];
+      $s=preg_replace ('/\r/', '', $s);
+      if ($s=='') return array ();
       $this->itemsUsed=explode ("\n", $s);
     }
     function GetItemsUsed () { return $this->itemsUsed; }
     function SetItemsUsed ($items) { $this->itemsUsed=$items; }
 
     function SetItems ($arr) { $this->items=$arr; }
+  }
+
+  function receiveDataFromAList ($name) {
+    $list=new CVCAppendingList ();
+    $list->Init ($name);
+    $list->ReceiveItemsUsed ();
+    return $list->GetItemsUsed ();
   }
 
   content_Register_VCClass ('CVCAppendingList');

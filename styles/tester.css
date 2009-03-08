@@ -11,7 +11,7 @@
 
 #content div#monitor table.data tr th   { border: 1px #aaa solid; border-top: 0; height: 24px; padding: 0 6px; background: #dbdbdb url(../pics/theme/list.title.gif) 0 0 repeat-x;  }
 #content div#monitor table.data tr th.prb   { white-space: nowrap; }
-#content div#monitor table.data tr th.prb a { color: #000; text-decoration: none; }
+#content div#monitor table.data tr th.prb a, #content div#monitor table.data tr th.contest a { color: #000; text-decoration: none; }
 #content div#monitor table.data tr th.prb small { font-weight: normal; }
 #content div#monitor table.data tr td { border: 1px #aaa solid; padding: 2px 4px; text-align: center; background: transparent; }
 #content div#monitor table.data tr td.user { text-align: left; }

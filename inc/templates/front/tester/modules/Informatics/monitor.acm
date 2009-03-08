@@ -2,55 +2,75 @@
   $lib=targ ('lib');
   $contest_id=targ ('contest_id');
   $user_id=targ ('user_id');
+  $contests_ids=targ ('contests');
 
   // Statistics preinicialization
   $stats_info=array (
       array ('title'=>'Пытавшихся участников',    'id'=>'tries_users'),
-      array ('title'=>'Решивших участников',      'id'=>'ok_users'), // %
+      array ('title'=>'Решивших участников',      'id'=>'ok_users', 'perc'=>1), // %
       array ('title'=>'Зачтено решений',          'id'=>'ok_submits'),
       array ('title'=>'Не зачтено',               'id'=>'nonok_submits'),
-      array ('title'=>'Процент успешных попыток', 'id'=>'ok_perc')
+      array ('title'=>'Процент успешных попыток', 'id'=>'ok_perc',  'perc'=>1)
     );
   $stats_data=array ();
   $stats_cache=array ();
 
   $redirect=get_redirection ();
 
-  $sols=$lib->GetAllSolutions ($contest_id);
+  $sols=targ ('solutions');
+  if (!isset ($sols)) $sols=$lib->GetAllSolutions ($contest_id);
 
-  $users=$lib->GetUsersAtContest ($contest_id);
-  $judges=$lib->GetJudgesAtContest ($contest_id);
-  $problems=$lib->GetProblemsAtContest ($contest_id);
+  $users=targ ('users');
+  if (!isset ($users)) $users=$lib->GetUsersAtContest ($contest_id);
+
+  $judges=targ ('judges');
+  if (!isset ($judges)) $judges=$lib->GetJudgesAtContest ($contest_id);
+
+  $problems=targ ('problems');
+  if (!isset ($problems)) $problems=$lib->GetProblemsAtContest ($contest_id);
 
   $judge_assoc=array ();
   $n=count ($judges);
   for ($i=0; $i<$n; $i++)
     $judge_assoc[$judges[$i]['id']]=true;
 
-  $contest=WT_contest_by_id ($contest_id);
+  if (isset ($contests_ids)) {
+    $contests=array ();
+    for ($i=0, $n=count ($contests_ids); $i<$n; ++$i) {
+      $id=$contests_ids[$i];
+      $contests[$id]=WT_contest_by_id ($id);
+    }
+  } else {
+    $contests=array ($contest_id => WT_contest_by_id ($contest_id));
+    setContestId (&$sols, $contest_id);
+    setContestId (&$problems, $contest_id);
+  }
 
   // Parse solutions
   $data=array ();
   $n=count ($sols);
 
-  $base=$contest['settings']['timestamp'];
-  $penalty=$contest['settings']['penalty'];
+  $timestamps=array ();
+  $skip_ce=array ();
+  foreach ($contests as $id => $d) {
+    $base[$id]=$contests[$id]['settings']['timestamp'];
+    $penalty[$id]=$contests[$id]['settings']['penalty'];
+    $timestamps[$id]=-1;
 
+    if ($contests[$id]['settings']['freezetime']>0 && !$contest[$id]['settings']['unfrozen'] && !$lib->IsContestJudge ($id))
+      $timestamps[$id]=$contests[$id]['settings']['timestamp']+$contests[$id]['settings']['duration']*60-$contests[$id]['settings']['freezetime']*60;
+
+    $skip_ce[$id]=$contest['settings']['ignore_ce'];
+  }
   $max_problems=0;
-
-  $timestamp=-1;
-  if ($contest['settings']['freezetime']>0 && !$contest['settings']['unfrozen'] && !$lib->IsContestJudge ())
-    $timestamp=$contest['settings']['timestamp']+$contest['settings']['duration']*60-$contest['settings']['freezetime']*60;
-
-  $skip_ce=$contest['settings']['ignore_ce'];
-
   $deltan=0;
   $deltan_assoc=array ();
-  
+
   for ($i=$n-1; $i>=0; $i--) {
     $s=$sols[$i];
-    if ($s['status']!=2 || $s['ignored'] || $s['errors']=='CR' || ($skip_ce && $s['errors']=='CE')) continue;
-    if ($timestamp>0 && $s['timestamp']>$timestamp) continue;
+    $c_id=$s['contest_id'];
+    if ($s['status']!=2 || $s['ignored'] || $s['errors']=='CR' || ($skip_ce[$c_id] && $s['errors']=='CE')) continue;
+    if ($timestamps[$c_id]>0 && $s['timestamp']>$timestamps[$c_id]) continue;
 
     $uid=$s['user_id'];
     $pid=$s['problem_id'];
@@ -62,50 +82,52 @@
 
     if (!isset ($judge_assoc[$uid])) {
       // Count of users tried to send problem
-      if (!$stats_cache[$pid]['tries_users'][$uid]) {
-        $stats_data[$pid]['tries_users']++;
-        $stats_cache[$pid]['tries_users'][$uid]=true;
+      if (!$stats_cache[$c_id][$pid]['tries_users'][$uid]) {
+        $stats_data[$c_id][$pid]['tries_users']++;
+        $stats_cache[$c_id][$pid]['tries_users'][$uid]=true;
       }
 
       if ($s['errors']=='OK') {
-        if (!$stats_cache[$pid]['ok_users'][$uid]) {
-          $stats_data[$pid]['ok_submits']++;
-          $stats_cache[$pid]['ok_users'][$uid]=true;
+        if (!$stats_cache[$c_id][$pid]['ok_users'][$uid]) {
+          $stats_data[$c_id][$pid]['ok_submits']++;
+          $stats_cache[$c_id][$pid]['ok_users'][$uid]=true;
         }
       } else
-        $stats_data[$pid]['nonok_submits']++;
+        $stats_data[$c_id][$pid]['nonok_submits']++;
     }
 
-    if (!$data[$uid][$pid]['acc'])
-      $data[$uid][$pid]['try']++;  else
+    if (!$data[$uid][$c_id][$pid]['acc'])
+      $data[$uid][$c_id][$pid]['try']++;  else
       if ($s['errors']!='OK')
         {
-          $data[$uid][$pid]['penalty']+=$penalty;
-          $data[$uid]['penalty']+=$penalty;
-          $data[$uid][$pid]['try']++;
+          $data[$uid][$c_id][$pid]['penalty']+=$penalty[$c_id];
+          $data[$uid][$c_id]['penalty']+=$penalty[$c_id];
+          $data[$uid][$c_id][$pid]['try']++;
         }
 
-    if ($s['errors']=='OK' && !$data[$uid][$pid]['acc']) {
-      $data[$uid][$pid]['acc']=true;
+    if ($s['errors']=='OK' && !$data[$uid][$c_id][$pid]['acc']) {
+      $data[$uid][$c_id][$pid]['acc']=true;
 
-      $t=($s['timestamp']-$base)/60;
+      $t=($s['timestamp']-$base[$c_id])/60;
       if ($t>floor ($t))
         $t=floor ($t)+1; else
         $t=floor ($t);
 
-      $data[$uid][$pid]['penalty']=$t+$penalty*($data[$uid][$pid]['try']-1);
-      $data[$uid][$pid]['time']=$t;
+      $data[$uid][$c_id][$pid]['penalty']=$t+$penalty[$c_id]*($data[$uid][$c_id][$pid]['try']-1);
+      $data[$uid][$c_id][$pid]['time']=$t;
       $data[$uid]['total']++;
-      $data[$uid]['penalty']+=$data[$uid][$pid]['penalty'];
+      $data[$uid]['penalty']+=$data[$uid][$c_id][$pid]['penalty'];
 
       $max_problems=max ($max_problems, $data[$uid]['total']);
     }
   }
 
   $n=count ($users);
-  foreach ($stats_data as $pid=>$v) {
-      $stats_data[$pid]['ok_perc']=floor (($stats_data[$pid]['ok_submits']/($stats_data[$pid]['nonok_submits']+$stats_data[$pid]['ok_submits']))*100).'%';
-      $stats_data[$pid]['ok_users']=floor (($stats_data[$pid]['ok_submits']/($n-$deltan))*100).'%';
+  foreach ($stats_data as $c_id=>$w) {
+    foreach ($w as $pid=>$v) {
+      $stats_data[$c_id][$pid]['ok_perc']=floor (($stats_data[$c_id][$pid]['ok_submits']/($stats_data[$c_id][$pid]['nonok_submits']+$stats_data[$c_id][$pid]['ok_submits']))*100);
+      $stats_data[$c_id][$pid]['ok_users']=floor (($stats_data[$c_id][$pid]['ok_submits']/($n-$deltan))*100);
+    }
   }
 
   function ACM_Monitor_Comparator ($data, $a, $b) {
@@ -126,33 +148,30 @@
         swap (&$users[$j], &$users[$j+1]);
     }
 
+  $contests_titles=count ($contests)>1;
+  if ($contests_titles) $th_rowspan=' rowspan="2"'; else $th_colspan='';
+  $prev_cid=-1;
 ?>
 
-<?php
-/*  if ($contest['settings']['duration']) {
-    print '<div style="margin-bottom: 4px; text-align: center;">';
-    if (WT_contest_finished ($contest_id))
-      print 'Контест завершен'; else {
-        $t=(time ()-$contest['settings']['timestamp'])/60;
-        if ($t>floor ($t))
-          $t=floor ($t)+1; else
-          $t=floor ($t);
-        print 'Положение участников на минуту '.$t.' из '.$contest['settings']['duration'];
-      }
-    if ($contest['settings']['timestamp']+$contest['settings']['duration']*60-$contest['settings']['freezetime']*60<=time () &&
-        !$contest['settings']['unfrozen'])
-      print '<br>Монитор заморожен';
-    print '</div>';
-  } */
-?>
-
-  <div id="monitor" style="_position: relative;">
+  <div id="monitor" style="_position: relative;" name="monitor">
     <table class="data" style="_position: absolute;">
       <tr>
-        <th class="first">Место</th>
-        <th>Участник</th>
+        <th class="first"<?=$th_rowspan;?>>Место</th>
+        <th <?=$th_rowspan;?>>Участник</th>
 <?php
   $problems_count=count ($problems);
+  if ($contests_titles) {
+    $counts=array ();
+    for ($i=0; $i<$problems_count; $i++) {
+      ++$counts[$problems[$i]['contest_id']];
+    }
+    for ($i=0, $n=count ($contests_ids); $i<$n; ++$i) {
+      $id=$contests_ids[$i];
+      $c=$contests[$id];
+      print ('<th class="contest" colspan="'.$counts[$c['id']].'"><a href="./?action=manage&id='.$id.'"><acronym title="Перейти к редактированию контеста">'.htmlspecialchars ($c['name']).'</acronym></a></th>');
+    }
+    print ('<th colspan="2">&nbsp;</th></tr><tr>');
+  }
   for ($i=0; $i<$problems_count; $i++) {
     $it=$problems[$i];
 ?>
@@ -181,7 +200,7 @@
         $place+=$place_delta;
         $place_delta=0;
       }
-      
+
 ?>
       <tr<?=(($class!='')?(' class="'.$class.'"'):(''));?>>
         <td class="first"><?=$place;?></td>
@@ -190,7 +209,8 @@
     for ($j=0; $j<$problems_count; $j++) {
       $p=$problems[$j];
       $pid=$p['id'];
-      $t=$data[$uid][$pid];
+      $c_id=$p['contest_id'];
+      $t=$data[$uid][$c_id][$pid];
       if (isset ($t)) {
         if ($t['acc']) $d=1; else $d=0;
          $s=(($t['acc'])?('<b>+'):('-')).(($t['try']-$d)?($t['try']-$d):('')).(($t['time']!='')?('<br>'.($t['time'])):('')).(($t['acc'])?('</b>'):(''));
@@ -222,8 +242,10 @@
     print ('<tr class="stat'.(($i%2==0)?(' l'):('')).'"><td class="h" colspan="2">'.$s['title'].'</td>');
     for ($j=0; $j<$problems_count; $j++) {
       $it=$problems[$j];
-      $t=$stats_data[$it['id']][$s['id']];
+      $c_id=$it['contest_id'];
+      $t=$stats_data[$c_id][$it['id']][$s['id']];
       if ($t=='') $t=0;
+      if ($s['perc']) $t.='%';
       print ('<td>'.$t.'</td>');
     }
     print ('<td colspan="2" class="div">&nbsp;</td></tr>');

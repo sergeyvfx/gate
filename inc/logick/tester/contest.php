@@ -134,6 +134,7 @@
       $n=count ($data);
       for ($i=0; $i<$n; $i++)
         if ($data[$i][$f]==$v) return $data[$i];
+
       return array ();
     }
     function ContestById ($v=-1) { global $WT_contest_id; if ($v<0) $v=$WT_contest_id; return $this->ContestByField ('id', $v); }

@@ -4,20 +4,20 @@
   define ('ACCESS_USER',  1);
   define ('ACCESS_ROOT',  7);
   define ('CORRECT_LOGIN', 'random_seed');
-  
+
   $security_orders=array ('allow_deny'=>'Разрешить, запретить', 'deny_allow'=>'Запретить, разрешить');
   $security_actions=array ('AllowAll'=>'Разрешить всем', 'AllowUser'=>'Разрешить пользователю', 'DenyUser'=>'Запретить пользователю',
     'AllowGroup'=>'Разрешить группе', 'DenyGroup'=>'Запретить группе', 'DenyAll'=>'Запретить всем');
-  
+
   class CSecurityInformation extends CVirtual {
     var $data;
     var $name;
     var $canInherit;
     var $precompiled=array ();
-    
+
     var $security_limits=array ('ALL'=>'Все', 'READ'=>'Чтение', 'EDIT'=>'Изменение', 'DELETE'=>'Удаление', 'ADDINFO'=>'Добавление информации',
       'EDITINFO'=>'Изменение информации', 'DELETEINFO'=>'Удаление информации');
-    
+
     function CSecurityInformation () { $this->SetClassName ('CSecurityInformation'); }
     function Init ($name='', $data=null) {
       $this->SetDefaultData ();
@@ -96,7 +96,7 @@
 
       $this->precompiled[$user_id]['user_group']=$user_group;
     }
-    
+
     function GetAllowedByUser_entry ($uid, $action) {
       $user_group=$this->precompiled[$uid]['user_group'];
       $data=$this->data[$action];
@@ -120,7 +120,7 @@
         return $this->GetAllowedByUser_entry ($uid, $action); else
         return $this->GetAllowedByUser_entry ($uid, 'ALL');
     }
-    
+
     function GetAllowed ($action) { return $this->GetAllowedToUser (user_id (), $action); }
   }
 
@@ -170,7 +170,7 @@
       array ('title'=>'Администратор', 'access'=>'7', 'desc'=>'Администратор сайта. Имеет доступ к полному управлению структуры, пользователей и настройкам сайта.')
     );
   }
-  
+
   function security_group_by_access ($acc) {
     $arr=security_groups ();
     for ($i=0; $i<count ($arr); $i++)
@@ -179,10 +179,10 @@
       }
     return $arr;
   }
-  
+
   function security_group_name_by_access ($acc) { $arr=security_group_by_access ($acc); return $arr['title']; }
   function security_group_desc_by_access ($acc) { $arr=security_group_by_access ($acc); return $arr['desc']; }
-  
+
   function security_access_title ($a) {
     $arr=security_groups ();
     for ($i=0; $i<count ($arr); $i++)
