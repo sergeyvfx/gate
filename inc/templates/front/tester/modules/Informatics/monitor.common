@@ -1,7 +1,7 @@
 <script language="JavaScript" type="text/javascript">
   var monitor_full_wnd=null;
   var monitor_auto_refresh=false;
-  
+
   function monitor_update () {
     var w=monitor_full_wnd;
 
@@ -69,14 +69,22 @@
   }
 
   function validateMonitorWidth( ) {
-    var monitor = document.getElementById ('monitor');
-    monitor.style.width = '200px';
-    window.setTimeout (function (_monitor) { return function () { _monitor.style.width=_monitor.parentNode.offsetWidth-14+'px' }; } (monitor), 10);
+    var monitors = document.getElementsByName ('monitor');
+    for (i=0, n=monitors.length; i<n; ++i) {
+      monitor=monitors[i];
+      monitor.style.width = '200px';
+      window.setTimeout (function (_monitor) { return function () { _monitor.style.width=_monitor.parentNode.offsetWidth-14+'px' }; } (monitor), 10);
+    }
   }
 </script>
 
 <?php
-  function color_div ($perc) {
+  function setContestId ($arr, $contest_id) {
+    for ($i=0, $n=count ($arr); $i<$n; ++$i)
+      $arr[$i]['contest_id']=$contest_id;
+  }
+
+function color_div ($perc) {
     return '';
     $t=preg_replace ('/^([0-9]+).*/', '\1', $perc);
     $c='ffc';

@@ -95,7 +95,7 @@
     user_add_to_groups ($uid, $groups);
     return true;
   }
-  
+
   function user_create_received ($authorized=true) {
     // Get post data
     $login=stripslashes (trim ($_POST['login']));
@@ -117,7 +117,7 @@
     }
     return false;
   }
-  
+
   function user_update ($id, $name, $email, $access, $groups=array (),  $passwd='') {
     if (!user_check_fields (CORRECT_LOGIN, $name, $passwd, $email, false, $id)) return false;
     $info=user_get_by_id ($id);
@@ -130,7 +130,7 @@
     user_add_to_groups ($id, $groups);
     return true;
   }
-  
+
   function user_update_received ($id) {
     $name=stripslashes (trim ($_POST['name']));
     $passwd=stripslashes ($_POST['passwd']);
@@ -142,16 +142,16 @@
     $groups->ReceiveItemsUsed ();
     if (user_update ($id, $name, $email, $_POST['acgroup'], $groups->GetItemsUsed (), $passwd)) $_POST=array ();
   }
-  
+
   function user_is_system ($id) { return $id==1; }
   function user_authorized_list ($gid=-1) {
     if ($gid=='') $gid=-1;
-    if ($gid<0) 
+    if ($gid<0)
       return arr_from_query ('SELECT * FROM `user` ORDER BY  `login`');
       return arr_from_query ('SELECT `user`.* FROM `user`, `usergroup` WHERE `user`.`id`=`usergroup`.`user_id` '.
         ' AND `usergroup`.`group_id`='.$gid.' ORDER BY  `login`');
   }
-  
+
   function user_add_to_groups ($uid, $arr) {
     for ($i=0; $i<count ($arr); $i++) 
       if (trim ($arr[$i])!='') user_add_to_group ($uid, $arr[$i]);
@@ -215,7 +215,7 @@
     $user_infos[$id]['settings']=unserialize ($user_infos[$id]['settings']);
     return $user_infos[$id];
   }
-  
+
   function user_generate_info_string ($id, $cacheable=true) {
     $info=user_info_by_id ($id, $cacheable);
     if ($info['id']=='')
@@ -224,14 +224,14 @@
       '&nbsp;('.security_access_title ($info['access']).')'.
       '&nbsp;&nbsp;&nbsp;E-Mail: <a href="mailto:'.$info['email'].'">'.$info['email'].'</a>';
   }
-  
+
   function user_generate_short_info_string ($id, $cacheable=true) {
     $info=user_info_by_id ($id, $cacheable);
     if ($info['id']=='') return 'anonumoys (Гость)';
     return '<a href="'.config_get ('document-root').'/login/viewuser/?id='.$info['id'].'&redirect='.get_redirection ().'">'.
       $info['name'].' (<i>'.$info['login'].'</i>)</a>';
   }
-  
+
   function user_generate_viewlink ($id) { return config_get ('document-root').'/login/viewuser/?id='.$id.'&redirect='.get_redirection (); }
 }
 ?>

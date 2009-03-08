@@ -6,22 +6,22 @@
   include '../menu.php';
   $manage_menu->SetActive ('usergroup');
   $usergroup_menu->SetActive ('user');
-  
+
   global $group;
-  
+
   function get_filters () {
     global $group;
     return 'group='.$group;
   }
-  
+
   if ($action=='create') user_create_received ();
 
   // Printing da page
   print ($manage_menu->InnerHTML ());
   print ($usergroup_menu->InnerHTML ());
-  
+
   print ('${information}');
-  
+
 //  include 'list.php';
 
   if ($action=='edit')

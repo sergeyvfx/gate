@@ -2,7 +2,7 @@
   class CGWSecurityInformation extends CSecurityInformation {
     var $security_limits = array (
       'ALL'               => 'Все действия',
-    
+
       '{{{{GROUP0}}}}'    => 'Контесты',
       'CONTEST.MANAGE'    => 'Управление контестом',
       'CONTEST.CREATE'    => 'Создание контестов', 
@@ -20,10 +20,13 @@
       'CHECKERS.CREATE'   => 'Создание чекеров',
       'CHECKERS.EDIT'     => 'Редактирование чекеров',
       'CHECKERS.DELETE'   => 'Удаление чекеров',
-      
+
       '{{{{GROUP3}}}}'    => 'Решения участников',
       'SOLUTIONS.MANAGE'  => 'Управление решениями участников',
-      'SOLUTIONS.DELETE'  => 'Удаление решений участников'
+      'SOLUTIONS.DELETE'  => 'Удаление решений участников',
+
+      '{{{{GROUP4}}}}'      => 'Мониторы',
+      'MONITOR.MEGAMONITOR' => 'Построение общих мониторов'
     );
 
     function CGWSecurityInformation () { $this->SetClassName ('CGWSecurityInformation'); }

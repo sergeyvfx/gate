@@ -9,11 +9,11 @@
     return $res;
   }
   function prepare_pattern ($s) { return preg_replace ('/([\/\?\+\.\^\$])/', '\\\\\1', $s); }
-  
+
   function posted_html_string ($s) { return htmlspecialchars (stripslashes ($s)); }
-    
+
   function prepare_arg ($s) { return preg_replace ('/([\ \=;])/', '\\\\\1', $s); }
-  
+
   function ecranvars ($s) {
     $s=preg_replace ('/\${information}/'  , '$$\$123###-INFORMATION-###321$$$', $s);
     $s=preg_replace ('/\${document-root}/', '$$\$123###-DOCUMENT-ROOT-###321$$$', $s);
@@ -25,26 +25,26 @@
     $s=preg_replace ('/\$\$\$123###-DOCUMENT-ROOT-###321\$\$\$/', '${document-root}', $s);
     return $s;
   }
-  
+
   function setvars ($s) {
     global $VARS;
-    
+
     if (!$VARS) {
       $VARS=array ('document-root'=>config_get ('document-root'));
     }
-    
+
     foreach ($VARS as $k=>$v) {
       $s=preg_replace ('/\${'.prepare_pattern ($k).'}/', $v, $s);
     }
     return $s;
   }
-  
+
   function parseint ($s) {
     $r=preg_replace ('/(.*?)([0-9]*)(.*?)/si', '\2', $s);
     if ($r!='') return $r;
     return '0';
   }
-  
+
   function html2txt ($s) {
     $search = array ("'<script[^>]*?>.*?</script>'si",  // Strip javaScript
                  "'<[\/\!]*?[^<>]*?>'si",               // Strip HTML tags

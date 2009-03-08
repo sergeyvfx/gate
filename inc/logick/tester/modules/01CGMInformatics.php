@@ -337,6 +337,9 @@
       $this->gateway->AppendLIBHandler   (0, 'submit',     'PAGE_Submit');
       $this->gateway->AppendLIBHandler   (0, 'solutions',  'PAGE_Solutions');
 
+      if ($this->GetAllowed ('MONITOR.MEGAMONITOR'))
+        $this->gateway->AppendLIBHandler   (0, 'megamonitor', 'PAGE_Megamonitor');
+
       $this->problemsContainer=INFORMATICS_SpawnNewProblemsContainer ($this);
     }
 
@@ -715,7 +718,7 @@
 
       if (!$this->IsContestJudge ($contest_id) && (!WT_contest_running ($contest_id) && !WT_contest_finished ($contest_id)))
         return false;
-      
+
       return $this->Problem_IsAtContest ($problem_id, $contest_id);
     }
 
@@ -801,9 +804,9 @@
       $n=count ($fields);
       for ($i=0; $i<$n; $i++) {
         $f=$fields[$i];
-        
+
         if ($f['action']!='' && $f['action']!=$act) continue;
-        
+
         $v=$data[$f['name']];
         if (strtolower ($f['type'])=='custom')
         $v=array ('src'=>$f['src'], 'value'=>$v, 'check_value'=>$f['check_value']);
@@ -1139,6 +1142,12 @@
       $this->CPrintLn (stencil_formc ());
     }
 
+    function PAGE_Megamonitor () {
+      if (!$this->GetAllowed ('MONITOR.MEGAMONITOR')) return;
+      $this->gateway->AppendNavigation ('Построение общего монитора', '?page=megamonitor');
+      $this->InsertTemplate ('megamonitor', array ('lib'=>$this));
+    }
+
     function InitIface () {
       global $WT_contest_id;
       $manage=$this->IsContestJudge ();
@@ -1158,6 +1167,8 @@
         $this->gateway->AppendMainMenuItem ('Решения участников', '.?page=solutions',    'solutions');
       if ($this->GetAllowed ('PROBLEMS.MANAGE'))
         $this->gateway->AppendMainMenuItem ('Управление задачами', '.?page=prbmanager', 'prbmanager');
+      if ($this->GetAllowed ('MONITOR.MEGAMONITOR'))
+        $this->gateway->AppendMainMenuItem ('Мегамонитор', '.?page=megamonitor', 'megamonitor');
     }
 
     function IsContestJudge ($id=-1) {
