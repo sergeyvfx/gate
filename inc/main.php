@@ -1,9 +1,9 @@
 <?php if ($_main_included_!='#main_Included#') {$_main_included_='#main_Included#'; 
   $contentPage=null;
   
-  global $CORE;
-  $CORE=nil;
-  
+  global $CORE, $XPFS;
+  $CORE=$XPFS=nil;
+
   class CCore {
     var $PAGE;
     var $wiki=false, $URL='';
@@ -27,7 +27,7 @@
     }
 
     function CCore ($url='', $wiki=true) {
-      global $DOCUMENT_ROOT, $content_type, $CORE, $ipc;
+      global $DOCUMENT_ROOT, $content_type, $CORE, $ipc, $XPFS;
       debug_watchdog_clear ();
       if ($url=='') $url=config_get ('document-root');
 
@@ -45,6 +45,9 @@
 
       // Connect to database
       db_connect (config_get ('check-database'));
+      // Initialize XPFS
+      $XPFS = new XPFS ();
+      $XPFS->createVolume ();
       // Initialize content stuff
       content_initialize ();
       // Initialize wiki stuff

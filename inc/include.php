@@ -15,6 +15,7 @@
   include $DOCUMENT_ROOT.'/inc/builtin.php';
   include $DOCUMENT_ROOT.'/inc/template.php'; 
   include $DOCUMENT_ROOT.'/inc/stencil.php'; 
+  include $DOCUMENT_ROOT.'/inc/xpfs.php';
   include $DOCUMENT_ROOT.'/inc/main.php';
 }
 ?>
