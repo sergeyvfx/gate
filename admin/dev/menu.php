@@ -6,4 +6,5 @@
   $mandev_menu->AppendItem ('Наборы данных',    config_get ('document-root').'/admin/dev/dataset/',   'datasets');
   $mandev_menu->AppendItem ('Хранилища данных', config_get ('document-root').'/admin/dev/storages/',  'storages');
   $mandev_menu->AppendItem ('Шаблоны',          config_get ('document-root').'/admin/dev/templates/', 'templates');
+  $mandev_menu->AppendItem ('Браузер XPFS',     config_get ('document-root').'/admin/dev/xpfs/',      'xpfs');
 ?>
