@@ -39,3 +39,5 @@
 #content div.problem_filter input.txt { background: #fff !important; }
 #content div.problem_filter td { vertical-align: middle; }
 #content div.problem_filter .submitBtn { width: auto; }
+
+#content div.solutions_filter { margin-top: 6px; border: 1px #aaa solid; background: #ddd; padding: 6px 8px; }

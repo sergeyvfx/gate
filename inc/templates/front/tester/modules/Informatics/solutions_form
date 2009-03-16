@@ -2,6 +2,8 @@
   $lib=targ ('lib');
   $data=$lib->GetAllSolutions ();
   $n=count ($data);
+  $user_filter=$_GET['user_filter'];
+  $problem_filter=$_GET['problem_filter'];
 
   if (!$n) {
     print '<span class="contentSub2">На этот контест еще никто задач не сдавал</span>';
@@ -9,6 +11,9 @@
     $del=targ ('accDel');
     $perPage=opt_get ('WT_items_per_status_page');
     if ($perPage<=0) $perPage=10;
+
+    content_url_var_push_global ('problem_filter');
+    content_url_var_push_global ('user_filter');
 
     $page=new CVCPagintation ();
     $page->Init ('', 'pageid=pageid;bottomPages=false;skiponcepage=1;');
@@ -19,21 +24,44 @@
     content_url_var_push_global ('pageid');
     $full=content_url_get_full ();
 
-    $i=0;
+    $i=0; $total=0;
     while ($i<$n) {
       $c=0;
       $src='<table class="list" width="100%">'."\n";
       $src.='  '.$rules->SolutionsHeader ()."\n";
-      while ($c<$perPage && $i<$n) {
-        $r=$data[$i];
+      while ($c<$perPage && $i<$n) {        $r=$data[$i];
+        if (($problem_filter>0 && $r['problem_id']!=$problem_filter) ||
+            ($user_filter>0 && $r['user_id']!=$user_filter)) { $i++; continue; }
         $row=$rules->SolutionsRow (-1, $r, $n, $c, $perPage, $full, array ('delete'=>$del));
         $src.=$row."\n";
         $i++; $c++;
+        $total++;
       }
       $src.='</table>'."\n";
       $page->AppendPage ($src);
     }
 
     $page->Draw ();
+
+    if ($total==0)
+      println ('<div style="margin-top: 4px;"><span class="contentSub2">Указанному фильтру ничего не удовлетворяет</span></div>');
+
+    $users=$lib->GetUsersAtContest ();
+    $u='<option value="0">Все</option>'."\n";
+    for ($i=0, $n=count ($users); $i<$n; ++$i)
+      $u.='<option value="'.$users[$i]['id'].'"'.($user_filter==$users[$i]['id']?' selected':'').'>'.htmlspecialchars ($users[$i]['name']).'</option>'."\n";
+
+    $problems=$lib->GetProblemsAtContest ();
+    $p='<option value="0">Все</option>'."\n";
+    for ($i=0, $n=count ($problems); $i<$n; ++$i)
+      $p.='<option value="'.$problems[$i]['id'].'"'.($problem_filter==$problems[$i]['id']?' selected':'').'>'.core_alpha ($problems[$i]['letter']).'. '.htmlspecialchars ($problems[$i]['name']).'</option>'."\n";
+
+    println ('<div class="solutions_filter">');
+    println ('  <table class="clear" width="100%"><tr>');
+    println ('    <td>Решения участника:&nbsp;<select id="user_filter">'.$u.'</select></td>');
+    println ('    <td>Решения задачи:&nbsp;<select id="problem_filter">'.$p.'</select></td>');
+    println ('    <td style="text-align: right"><button style="width: 80px;" onclick="nav (\''.$full.'&user_filter=\'+getElementById (\'user_filter\').value+\'&problem_filter=\'+getElementById (\'problem_filter\').value);">Обновить</button></td>');
+    println ('  </tr></table>');
+    println ('</div>');
   }
 ?>

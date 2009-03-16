@@ -419,10 +419,11 @@
     //
 
     function GetProblemsAtContest ($contest_id=-1) {
-      global $WT_content_id;
-      if ($content_id<0) $content_id=$WT_contest_id;
+      global $WT_contest_id;
+      if ($contest_id<0) $contest_id=$WT_contest_id;
 
       $q=db_select ('tester_tasks', array ('*'), "`contest_id`=$contest_id", 'ORDER BY `letter`');
+
       $arr=array ();
       while ($r=db_row ($q)) {
         $t=$this->problemsContainer->GetById ($r['problem_id']);
