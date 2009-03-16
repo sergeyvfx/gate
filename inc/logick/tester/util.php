@@ -52,5 +52,13 @@
   function WT_ForceStatusAffective ($status) {
     return true;
   }
+
+  function WT_delete_solution_from_xpfs ($clause) {
+    global $XPFS;
+    $q=db_select ('tester_solutions', array ('id'), $clause);
+    while ($r=db_row ($q)) {
+      $XPFS->removeItem ('/tester/testing/'.$r['id']);
+    }
+  }
 }
 ?>

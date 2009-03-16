@@ -6,6 +6,7 @@
   class XPFS {
     var $ATTR_FILE = 1;
     var $ATTR_DIR  = 2;
+    var $_CACHE = array ();
 
     function XPFS () {
       $this->checkTables ();
@@ -13,20 +14,22 @@
 
     function checkTables () {
       if (config_get ('check-database')) {
-        db_create_table ('xpfs_volumes', array (
-          'name' => 'TEXT',
-        ));
+        if (!db_table_exists ('xpfs_volumes')) {
+          db_create_table ('xpfs_volumes', array (
+            'name' => 'TEXT',
+          ));
+        }
       }
     }
 
     function createVolume ($volume='') {
       global $XPFS_DEFAULT_VOLUME;
 
+      if ($volume=='') $volume=$XPFS_DEFAULT_VOLUME;
+
       if (db_count ('xpfs_volumes', '`name`="'.addslashes ($volume).'"') > 0) {
         return false;
       }
-
-      if ($volume=='') $volume=$XPFS_DEFAULT_VOLUME;
 
       $name=$volume;
       $volume='xpfs_volume_'.$volume;
@@ -91,44 +94,57 @@
 
     function getVolumeNode ($volume, $dir) {
       $id=1;
+      $res=array ('id'=>-1);
+
+      if (isset ($this->_CACHE['VolumeNode'][$volume][$dir]))
+        return $this->_CACHE['VolumeNode'][$volume][$dir];
 
       if ($dir!='/') {
         $name=basename ($dir);
         $parent=$this->getVolumeNode ($volume, dirname ($dir));
         $pid=$parent['id'];
 
-        if ($pid==-1) return array ('id'=>-1);
-
-        $q=db_select ('xpfs_volume_'.$volume, array ('id', 'name', 'pid', 'attr', 'access'), '`pid`='.$pid.' AND `name`="'.addslashes ($name).'"');
+        if ($pid!=-1)
+          $q=db_select ('xpfs_volume_'.$volume, array ('id', 'name', 'pid', 'attr', 'access'), '`pid`='.$pid.' AND `name`="'.addslashes ($name).'"');
       } else {
         $q=db_select ('xpfs_volume_'.$volume, array ('id', 'name', 'pid', 'attr', 'access'), '`id`='.$id);
       }
 
-      if (db_affected () == 0) return array ('id'=>-1);
+      if (db_affected ()>0) {
+        $arr=db_row_array ($q);
+        $res=$this->nodeDescrFromUnknownArr ($volume, $arr);
+      }
 
-      $arr=db_row_array ($q);
-      return $this->nodeDescrFromUnknownArr ($volume, $arr);
+      $this->_CACHE['VolumeNode'][$volume][$dir]=$res;
+
+      $this->_CACHE['NodeInfo'][$res['id']]=$res;
+      $this->_CACHE['NodeInfo'][$res['id']]['dir']=$dir;
+
+      return $res;
     }
 
-    function createNode ($path, $name, $access=0, $attr=0) {
+    function createNode ($path, $name, $access=0, $attr=0, $content="") {
       $p=$this->parsePath ($path);
-      return $this->createVolumeNode ($p['vol'], $p['dir'], $name, $access, $attr);
+      return $this->createVolumeNode ($p['vol'], $p['dir'], $name, $access, $attr, $content);
     }
 
-    function createVolumeNode ($volume, $dir, $name, $access=0, $attr=0) {
-      $self=$this->getVolumeNode ($volume, $dir.'/'.$name);
-      if ($self['id']>=0) return $self['id'];
+    function createVolumeNode ($volume, $dir, $name, $access=0, $attr=0, $content="") {
+      $full=$dir.($dir[strlen ($dir)-1]=='/'?'':'/').$name;
+      $self=$this->getVolumeNode ($volume, $full);
+      if ($self['id']>=0) return true;
 
       $parent=$this->getVolumeNode ($volume, $dir);
-      if ($parent['id']==-1) return -1;
+      if ($parent['id']==-1) return false;
 
       if (!isnumber ($access)) $access=0;
       if (!isnumber ($attr)) $attr=0;
 
-      db_insert ('xpfs_volume_'.$volume, array ('pid'=>$parent['id'], 'name'=>'"'.addslashes ($name).'"',
-        'access'=>$access, 'attr'=>$attr, 'mtime'=>time ()));
+      db_insert ('xpfs_volume_'.$volume, array ('pid'=>$parent['id'], 'name'=>db_string ($name),
+        'access'=>$access, 'attr'=>$attr, 'mtime'=>time (), 'data'=>db_string ($content)));
 
-      return db_last_insert ();;
+      unset ($this->_CACHE['VolumeNode'][$volume][$full]);
+
+      return true;
     }
 
     function renameNode ($node, $new_name) {
@@ -193,13 +209,13 @@
       return $r;
     }
 
-    function createFile ($path, $name, $access=0) {
+    function createFile ($path, $name, $access=0, $content="") {
       $p=$this->parsePath ($path);
-      return $this->createVolumeFile ($p['vol'], $p['dir'], $name, $access);
+      return $this->createVolumeFile ($p['vol'], $p['dir'], $name, $access, $content);
     }
 
-    function createVolumeFile ($volume, $dir, $name, $access=0) {
-      return $this->createVolumeNode ($volume, $dir, $name, $access, $this->ATTR_FILE);
+    function createVolumeFile ($volume, $dir, $name, $access=0, $content="") {
+      return $this->createVolumeNode ($volume, $dir, $name, $access, $this->ATTR_FILE, $content);
     }
 
     function createDirectory ($path, $name, $access=0) {
@@ -209,6 +225,13 @@
 
     function createVolumeDir ($volume, $dir, $name, $access=0) {
       return $this->createVolumeNode ($volume, $dir, $name, $access, $this->ATTR_DIR);
+    }
+
+    function createDirWithParents ($path, $access=0) {
+      if ($path=='/' || $path=='') return true;
+      if ($this->createDirWithParents (dirname ($path), $access)) {
+        return $this->createDirectory (dirname ($path), basename ($path), $access);
+      }
     }
 
     function readFile ($path) {
@@ -222,7 +245,8 @@
     }
 
     function readNodeContent ($node) {
-      if (!$this->isNodeAvaliable ($node)) return false;
+      if ($node['id']==-1) return '';
+      if (!$this->isNodeAvaliable ($node)) return '';
       $q=db_select ('xpfs_volume_'.$node['vol'], array ('data'), '`id`='.$node['id']);
       $arr=db_row ($q);
       return $arr['data'];
@@ -254,10 +278,15 @@
       return $this->removeNode ($node);
     }
 
-    function removeNode ($node) {
+    function removeNode ($node, $force=false) {
       if (!$this->isNodeAvaliable ($node)) return false;
-      if (db_count ('xpfs_volume_'.$node['vol'], '`pid`='.$node['id']) > 0) return false;
+      if (!$force && db_count ('xpfs_volume_'.$node['vol'], '`pid`='.$node['id']) > 0) return false;
       db_delete ('xpfs_volume_'.$node['vol'], '`id`='.$node['id']);
+
+      $dir=$this->_CACHE['NodeInfo'][$node['id']]['dir'];
+      unset ($this->_CACHE['VolumeNode'][$node['vol']][$dir]);
+      unset ($this->_CACHE['NodeAvaliable'][$node['id']]);
+      unset ($this->_CACHE['NodeInfo'][$node['id']]);
     }
 
     function removeRec ($path) {
@@ -276,21 +305,38 @@
       for ($i=0, $n=count ($listing); $i<$n; ++$i) {
         if (!$this->removeNodeRec ($listing[$i])) return false;
       }
-      $this->removeNode ($node);
+      $this->removeNode ($node, true);
       return true;
     }
 
     function getParentNode ($node) {
+      if (isset ($this->_CACHE['NodeInfo'][$node['pid']]))
+        return $this->_CACHE['NodeInfo'];
       $q=db_select ('xpfs_volume_'.$node['vol'], array ('*'), '`id`='.$node['pid']);
       $arr=db_row ($q);
-      return $this->nodeDescrFromUnknownArr ($node['vol'], $arr);
+      $res=$this->nodeDescrFromUnknownArr ($node['vol'], $arr);
+      $this->_CACHE['NodeInfo'][$node['pid']]=$res;
+      return $res;
     }
 
     function isNodeAvaliable ($node) {
-      if ($node['access']>user_access ()) return false;
-      if ($node['pid']<=0) return true;
-      $pnode=$this->getParentNode ($node);
-      return $this->isNodeAvaliable ($pnode);
+      $res=false;
+
+      if (isset ($this->_CACHE['NodeAvaliable'][$node['id']]))
+        return $this->_CACHE['NodeAvaliable'][$node['id']];
+
+      if ($node['access']<=user_access ()) {
+        if ($node['pid']<=0) {
+          $res=true;
+        } else {
+          $pnode=$this->getParentNode ($node);
+          $res=$this->isNodeAvaliable ($pnode);
+        }
+      }
+
+      $this->_CACHE['NodeAvaliable'][$node['id']]=$res;
+
+      return $res;
     }
 
     function setAttr ($path, $attr) {

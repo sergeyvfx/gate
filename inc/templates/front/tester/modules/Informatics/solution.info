@@ -5,6 +5,7 @@
   $detail   = targ ('detail');
 
   $p=$data['parameters'];
+  $mode=$_GET['mode'];
 
   function INFORMATICS_TestsInfoPrintable ($data) {
     $p=$data['parameters'];
@@ -13,24 +14,11 @@
     return true;
   }
 
-  if ($detail) { ?>
-<table width="100%">
-  <tr valign="top">
-    <td width="60%">
-<?php
-  }
-  groupo ('title=Исходный текст;');
-  print ('      <textarea class="block" rows="15" readonly>'.htmlspecialchars ($data['parameters']['src']).'</textarea>');
-  groupc ();
+  function additional_info ($lib, $data, $detail, $tests_per_line=10) {
+    if ($data['status']!=2)
+      $status='Идет тестирование...'; else
+      $status='Протестирован';
 
-if ($detail) { ?>
-    </td>
-    <td style="padding-left: 6px;">
-<?php
-  groupo ('title=Дополнительная информация;');
-  if ($data['status']!=2)
-    $status='Идет тестирование...'; else
-    $status='Протестирован';
 ?>
       <table width="100%">
         <tr>
@@ -48,7 +36,6 @@ if ($detail) { ?>
         </tr>
         <tr>
           <td>Результат</td>
-<!--          <td><?=WT_errors_string ($data['errors'], $data['parameters']['force_status']);?></td> -->
           <td><? $r=$lib->SpawnRulesLib (); print $r->TaskStatus ($data);?></td>
         </tr>
 <?php if ($data['errors']=='CR') { ?>
@@ -60,28 +47,92 @@ if ($detail) { ?>
 <?php   if (INFORMATICS_TestsInfoPrintable ($data)) { ?>
         <tr>
           <td colspan="2" style="padding: 4px 0 0 0;">Распечатка по тестам:<br>
-          <?=INFORMATICS_tests_info ($data['id'], $data['parameters']['TESTS']);?>
+          <?=INFORMATICS_tests_info ($data['id'], $data['parameters']['TESTS'], $tests_per_line);?>
         </tr>
 <?php   } else
         if ($data['errors']=='CE') { ?>
         <tr>
           <td colspan="2" style="padding: 4px 0 0 0;">
             Сообщения компилятора:<br>
-            <textarea class="block" rows="5" readonly><?=htmlspecialchars ($data['parameters']['COMPILER_MESSAGES'])?></textarea>
+            <center><textarea style="width: 98%;" rows="5" readonly><?=htmlspecialchars ($data['parameters']['COMPILER_MESSAGES'])?></textarea></center>
           </td>
         </tr>
 <?php   } ?>
 <?php } ?>
       </table>
-    </td>
 <?php
-  groupc ();
+  }
+
+  function default_solution_info ($lib, $data, $detail) {
+    if ($detail) { ?>
+<table width="100%">
+  <tr valign="top">
+    <td width="60%">
+<?php
+    }
+    groupo ('title=Исходный текст;');
+    print ('      <textarea class="block" rows="15" readonly>'.htmlspecialchars ($data['parameters']['src']).'</textarea>');
+    groupc ();
+
+if ($detail) { ?>
+    </td>
+    <td style="padding-left: 6px;">
+<?php
+    groupo ('title=Дополнительная информация;');
+    additional_info ($lib, $data, $detail);
+    groupc ();
 ?>
+    </td>
   </tr>
 </table>
 <?
+    }
   }
 
+  function detail_solution_info ($lib, $data, $detail) {
+    groupo ('title=<b>Общая информация:</b>');
+    additional_info ($lib, $data, $detail, 25);
+    groupc ();
+    groupo ('title=<b>Исходный текст:</b>');
+    print ('<center><textarea style="display: block; width: 98%;" rows="25" readonly>'.htmlspecialchars ($data['parameters']['src']).'</textarea></center>'."\n");
+    groupc ();
+
+    if ($lib->IsContestJudge ()) {
+      global $WT_errors, $XPFS;
+
+      $d=$XPFS->readFile ('/tester/testing/'.$data['id']);
+
+      if ($d!='') {
+        $d=db_unpack ($d);
+        $outputs=db_unpack ($d['outputs']);
+
+        groupo ('title=<b>Содиржимое входных и выходных файлов:</b>');
+        println ('<b>Внимание:</b> Содержимое файлов может быть отображено не полностью.<br>');
+        $tests=explode (' ', $data['parameters']['TESTS']);
+        for ($i=0, $n=count ($tests); $i<$n; ++$i) {
+          if ($i>0) print ("<br>\n");
+          if ($tests[$i]=='OK') $t='Тест пройден'; else $t=$WT_errors[$tests[$i]];
+          groupo ('title='.prepare_arg ('<b>Тест '.($i+1).'</b> ('.$t.')'));
+          println ('<b>Выходной файл проверяемого решения:</b><br>');
+          println (crlf2br (htmlspecialchars ($outputs[$i])).'<br>');
+          groupc ();
+        }
+        groupc ();
+      }
+    }
+  }
+
+  if ($mode=='detail')
+    detail_solution_info ($lib, $data, $detail); else
+    default_solution_info ($lib, $data, $detail);
+
+  $url=content_url_get_full ();
+
+  print '<div class="formPast">';
   if ($backlink!='')
-    print '<div class="formPast"><button class="block" onclick="nav (\''.$backlink.'\')">Назад</button></div>';
+    print '<button style="width: 150px;" onclick="nav (\''.$backlink.'\')">Назад</button>&nbsp;';
+
+  if ($mode!='detail')
+    print '<button style="width: 150px;" onclick="nav (\''.$url.'&action=view&mode=detail&id='.$_GET['id'].'&redirect='.$backlink.'\')"><b>Подробно</b></button>';
+  print '</div>';
 ?>

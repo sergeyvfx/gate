@@ -197,5 +197,9 @@
   }
 
   function swap ($a, $b) { $c=$a; $a=$b; $b=$c; }
+
+  function crlf2br ($s) {
+    return str_replace ("\n", '<br>', str_replace ("\r\n", '<br>', $s));
+  }
 }
 ?>
