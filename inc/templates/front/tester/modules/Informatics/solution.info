@@ -90,9 +90,11 @@ if ($detail) { ?>
   }
 
   function detail_solution_info ($lib, $data, $detail) {
-    groupo ('title=<b>Общая информация:</b>');
-    additional_info ($lib, $data, $detail, 25);
-    groupc ();
+    if ($detail) {
+      groupo ('title=<b>Общая информация:</b>');
+      additional_info ($lib, $data, $detail, 25);
+      groupc ();
+    }
     groupo ('title=<b>Исходный текст:</b>');
     print ('<center><textarea style="display: block; width: 98%;" rows="25" readonly>'.htmlspecialchars ($data['parameters']['src']).'</textarea></center>'."\n");
     groupc ();
@@ -132,7 +134,7 @@ if ($detail) { ?>
   if ($backlink!='')
     print '<button style="width: 150px;" onclick="nav (\''.$backlink.'\')">Назад</button>&nbsp;';
 
-  if ($mode!='detail')
+  if ($mode!='detail' && ($lib->IsContestJudge () || $detail))
     print '<button style="width: 150px;" onclick="nav (\''.$url.'&action=view&mode=detail&id='.$_GET['id'].'&redirect='.$backlink.'\')"><b>Подробно</b></button>';
   print '</div>';
 ?>
