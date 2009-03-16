@@ -123,7 +123,7 @@
       formo ('title=Редактирование файла "'.prepare_arg (htmlspecialchars ($name)).'"');
       print ('<form action="'.htmlspecialchars ($url).'&action=save&file='.htmlspecialchars ($name).'" method="POST">'."\n");
       print ('  <center><textarea style="width: 95%; height: 200px;" name="xpfs_content">'.htmlspecialchars ($data).'</textarea></center>'."\n");
-      print ('  <div style="margin-top: 6px;"><center><button type="submit" class="submitBtn"><b>Сохранить</b></button>&nbsp;<button class="submitBtn" onclick="nav(\''.addslashes (htmlspecialchars ($url)).'\');">Отменить</button></center></div>'."\n");
+      print ('  <div style="margin-top: 6px;"><center><button type="submit" class="submitBtn"><b>Сохранить</b></button>&nbsp;<button class="submitBtn" type="button" onclick="nav(\''.addslashes (htmlspecialchars ($url)).'\');">Отменить</button></center></div>'."\n");
       print ('</form>'."\n");
       formc ();
     }

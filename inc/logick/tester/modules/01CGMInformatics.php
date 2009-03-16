@@ -218,6 +218,7 @@
       while ($r=db_row ($q)) {
         $this->lib->Problem_Drop ($r['contest_id'], $id);
       }
+      WT_delete_solution_from_xpfs ("`problem_id`=$id");
       db_delete ('tester_solutions', "`problem_id`=$id");
       $this->FillData ();
       return true;
@@ -474,6 +475,7 @@
 
     function Solution_Remove ($solution_id) {
       if (!$this->GetAllowed ('SOLUTIONS.DELETE')) return;
+      WT_delete_solution_from_xpfs ("`id`=$solution_id");
       db_delete ('tester_solutions', "`id`=$solution_id");
     }
 
@@ -750,6 +752,7 @@
       $letter=$this->ProblemLetter ($contest_id, $problem_id);
       if ($letter<0 || $letter=='') return false;
       db_delete ('tester_tasks', "`contest_id`=$contest_id AND `problem_id`=$problem_id");
+      WT_delete_solution_from_xpfs ("`contest_id`=$contest_id AND `problem_id`=$problem_id");
       db_delete ('tester_solutions', "`contest_id`=$contest_id AND `problem_id`=$problem_id");
       db_query ("UPDATE `tester_tasks` SET `letter`=`letter`-1 WHERE `contest_id`=$contest_id AND `letter`>$letter");
     }
@@ -1250,20 +1253,20 @@
     return $INFORMATICS_problemsContainer;
   }
 
-  function INFORMATICS_tests_info ($pid, $tests) {
+  function INFORMATICS_tests_info ($pid, $tests, $perline=10) {
     $arr=explode (' ', $tests);
     $res='<table class="data">'."\n";
 
     $opened=false;
     $n=count ($arr); $i=0;
     while ($i<$n) {
-      $m=min (10, $n-$i);
+      $m=min ($perline, $n-$i);
       $res.='  <tr>'."\n    ";
       for ($j=0; $j<$m; $j++) {
         $res.='<th>'.($i+1).'</th>';
         $i++;
       }
-      for ($j=$m; $j<10; $j++)
+      for ($j=$m; $j<$perline; $j++)
         $res.='<td class="void"></td>';
       $res.='  </tr>'."\n";
       $i-=$m;
@@ -1272,7 +1275,7 @@
         $res.='<td'.(($arr[$i]=='OK')?(' style="background: #cfc"'):('')).'>'.$arr[$i].'</td>';
         $i++;
       }
-      for ($j=$m; $j<10; $j++)
+      for ($j=$m; $j<$perline; $j++)
         $res.='<td class="void"></td>';
       $res.='  </tr>'."\n";
     }

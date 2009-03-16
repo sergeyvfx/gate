@@ -201,7 +201,7 @@
     return arr_from_query ('SELECT `group_id` FROM `usergroup` WHERE `user_id`='.$id.'  GROUP BY `group_id`', 'group_id');
   }
   function user_get_by_id ($id) { return db_row_value ('user', "`id`=$id"); }
-  function user_access      () { global $user_access; return $user_access; }
+  function user_access      () { global $user_access; if ($user_access=='') return 0; return $user_access; }
   function user_access_root () { global $user_access; return $user_access>=ACCESS_ROOT; }
 
   function user_id    () { global $user_id; if ($user_id=='') return -1; return $user_id; }

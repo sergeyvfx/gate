@@ -1,16 +1,16 @@
 <?php if ($_WT_ipc_put_solution_included_!='###WT_IPC_PutSolution_Inclided###') { $_WT_ipc_put_solution_included_='###WT_IPC_PutSolution_Inclided###';
 
   function WT_PutSolution () {
-    global $id, $lid, $ERRORS, $POINTS;
-    
+    global $id, $lid, $ERRORS, $POINTS, $XPFS;
+
     $optional_params=array ('REPORT');
-    
+
     $update_params=array ('COMPILER_MESSAGES', 'TESTS');
-  
+
     if (!WT_IPC_CheckLogin ()) return;
 
-    if (!isset ($id) || !isset ($lid)) { print ('Void filename for WT_DeleteTask'); return; }
-    
+    if (!isset ($id) || !isset ($lid)) { print ('Void filename for WT_PutSOlution'); return; }
+
     $r=db_row_value ('tester_solutions', "`id`=$id AND `lid`=$lid");
     $p=unserialize ($r['parameters']);
 
@@ -25,6 +25,15 @@
       $p[$optional_params[$i]]=$GLOBALS[$optional_params[$i]];
 
     unset ($p['force_status']);
+
+    if (isset ($_GET['SOLUTION_OUTPUT'])) {
+      $path='/tester/testing/';
+
+      $XPFS->CreateDirWithParents ($path);
+
+      $data['outputs']=$_GET['SOLUTION_OUTPUT'];
+      $XPFS->createFile ($path, $id, 0, db_pack ($data));
+    }
 
     db_update ('tester_solutions', array ('status'=>2, 'points'=>$POINTS, 'errors'=>db_string ($ERRORS),
       'parameters'=>db_string (serialize ($p))),"`id`=$id AND `lid`=$lid");
