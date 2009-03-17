@@ -736,14 +736,14 @@
       // TODO:
       // Optimize this stupid checking for correct working with ignored solutions
       if (db_count ('tester_solutions', "(`ignored`=0) AND (`errors`<>\"CR\") $add AND (`user_id`=$user_id) AND (`contest_id`=$contest_id) AND (`problem_id`=$problem_id)")>=$contest['settings']['trycount']) {
-          add_info ('Невозможно послать задачу, так как превышен лимит попыток.');
+          add_info ('Невозможно послать решение задачи, так как превышен предел попыток.');
           return false;
       }
 
       if (db_count ('tester_disabled_problems', '(`contest_id`='.$contest_id.') AND (`problem_id`='.$problem_id.')')>0)
         return false;
 
-      if (!WT_contest_running ($contest_id) && !$manage) { add_info ('Невозможно послать задачу, так как контест завершен.'); return false; }
+      if (!WT_contest_running ($contest_id) && !$manage) { add_info ('Невозможно послать решение задачи, так как контест завершен.'); return false; }
       if (!$this->Problem_IsAtContest ($problem_id, $contest_id)) { if (!$silent) add_info ('Извините, но выбранная задача уже отсутсвует на контесте.'); return false; }
       return true;
     }
@@ -998,7 +998,7 @@
             if ($this->PutSolution ($WT_contest_id, user_id (), $_POST['problem_id'], WT_receive_compiler_from_selector (), stripslashes ($_POST['src'])))
               redirect ($url);
       }
-      $this->gateway->AppendNavigation ('Послать задачу', '.?page=submit');
+      $this->gateway->AppendNavigation ('Посылка решения задачи', '.?page=submit');
       if (WT_contest_running ($WT_contest_id) || $manage) {
         $this->CPrintLn (stencil_formo ());
         $list=$this->GetProblemsAtContest ($WT_contest_id);
@@ -1166,7 +1166,7 @@
       }
       if (($started || $finished || $manage) && $this->GetUserSolutionsCount ($WT_contest_id, user_id ()))
         $this->gateway->AppendMainMenuItem ('Статус',         '.?page=status',    'status');
-      if ($started || $manage) if ($c>0) $this->gateway->AppendMainMenuItem ('Послать задачу', '.?page=submit',    'submit');
+      if ($started || $manage) if ($c>0) $this->gateway->AppendMainMenuItem ('Послать решение', '.?page=submit',    'submit');
       if ($this->GetAllowed ('SOLUTIONS.MANAGE') && $this->GetAllSolutionsCount ($WT_contest_id))
         $this->gateway->AppendMainMenuItem ('Решения участников', '.?page=solutions',    'solutions');
       if ($this->GetAllowed ('PROBLEMS.MANAGE'))
