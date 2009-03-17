@@ -12,6 +12,7 @@
     $perPage=opt_get ('WT_items_per_status_page');
     if ($perPage<=0) $perPage=10;
 
+    $url=content_url_get_full ();
     content_url_var_push_global ('problem_filter');
     content_url_var_push_global ('user_filter');
 
@@ -60,7 +61,7 @@
     println ('  <table class="clear" width="100%"><tr>');
     println ('    <td>Решения участника:&nbsp;<select id="user_filter">'.$u.'</select></td>');
     println ('    <td>Решения задачи:&nbsp;<select id="problem_filter">'.$p.'</select></td>');
-    println ('    <td style="text-align: right"><button style="width: 80px;" onclick="nav (\''.$full.'&user_filter=\'+getElementById (\'user_filter\').value+\'&problem_filter=\'+getElementById (\'problem_filter\').value);">Обновить</button></td>');
+    println ('    <td style="text-align: right"><button style="width: 80px;" onclick="nav (\''.$url.'&user_filter=\'+getElementById (\'user_filter\').value+\'&problem_filter=\'+getElementById (\'problem_filter\').value);">Обновить</button></td>');
     println ('  </tr></table>');
     println ('</div>');
   }
