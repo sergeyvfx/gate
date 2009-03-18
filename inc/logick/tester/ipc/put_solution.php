@@ -22,7 +22,7 @@
 
     $n=count ($optional_params);
     for ($i=0; $i<$n; $i++)
-      $p[$optional_params[$i]]=$GLOBALS[$optional_params[$i]];
+      $p[$optional_params[$i]]=stripslashes ($GLOBALS[$optional_params[$i]]);
 
     unset ($p['force_status']);
 
