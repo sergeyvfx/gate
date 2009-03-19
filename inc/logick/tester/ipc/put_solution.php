@@ -31,7 +31,9 @@
 
       $XPFS->CreateDirWithParents ($path);
 
-      $data['outputs']=$_GET['SOLUTION_OUTPUT'];
+      $data=array ();
+      $data['outputs']=stripslashes ($_GET['SOLUTION_OUTPUT']);
+      $XPFS->removeItem ($path.'/'.$id);
       $XPFS->createFile ($path, $id, 0, db_pack ($data));
     }
 
