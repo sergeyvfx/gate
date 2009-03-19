@@ -124,7 +124,7 @@ if ($detail) { ?>
     }
   }
 
-  if ($mode=='detail')
+  if ($mode=='detail' && ($lib->IsContestJudge () || $detail))
     detail_solution_info ($lib, $data, $detail); else
     default_solution_info ($lib, $data, $detail);
 
