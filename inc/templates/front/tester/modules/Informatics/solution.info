@@ -41,7 +41,7 @@
 <?php if ($data['errors']=='CR') { ?>
         <tr valign="top">
           <td>Отчет</td>
-          <td><?=$data['parameters']['REPORT'];?></td>
+          <td><?=htmlspecialchars ($data['parameters']['REPORT']);?></td>
         </tr>
 <?php } ?>
 <?php   if (INFORMATICS_TestsInfoPrintable ($data)) { ?>
