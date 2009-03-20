@@ -375,6 +375,10 @@
       if (!$this->isNodeAvaliable ($node)) return false;
       db_update ('xpfs_volume_'.$node['vol'], array ($field=>$val), '`id`='.$node['id']);
     }
+
+    function updateNodeMTime ($node) {
+      db_update ('xpfs_volume_'.$node['vol'], array ('mtime'=>time ()), '`id`='.$node['id']);
+    }
   }
 }
 ?>

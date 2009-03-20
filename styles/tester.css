@@ -41,3 +41,6 @@
 #content div.problem_filter .submitBtn { width: auto; }
 
 #content div.solutions_filter { margin-top: 6px; border: 1px #aaa solid; background: #ddd; padding: 6px 8px; }
+
+#content table.tests_info a, #content table.tests_info a:link,
+#content table.tests_info a:visited, #content table.tests_info a:hover { color: #000; }

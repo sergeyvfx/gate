@@ -1,4 +1,4 @@
-<?php if ($_WT_util_included_!='###WT_UTIL_Inclided###') { $_WT_util_included_='###WT_UTL_Inclided###';
+<?php if ($_WT_util_included_!='###WT_UTIL_Inclided###') { $_WT_util_included_='###WT_UTIL_Inclided###';
 
   function WT_errors_string ($errors, $force, $first_abort=false, $summary='') {
     global $WT_errors;

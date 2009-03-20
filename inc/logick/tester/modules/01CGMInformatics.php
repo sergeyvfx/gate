@@ -320,6 +320,14 @@
         db_update ('tester_solutions', array ('errors'=>'""', 'points'=>'0', 'status'=>0), "`problem_id`=$id");
       }
     }
+
+    function GetTests ($id) {
+      $data=$this->GetByID ($id);
+      if ($data['id']!=$id) return null;
+      $tests_count=count (explode (' ', $data['settings']['tests']));
+      $data=db_unpack (WT_ReceiveIPCData ('/tester/tests', $id.'@0', 'informatics', array ('get_tests', $id, '1-'.$tests_count)));
+      return array ('tests'=>db_unpack ($data['tst']), 'answers'=>db_unpack ($data['ans']));
+    }
   }
 
   class CGMInformatics extends CGMVirtual {
@@ -1228,6 +1236,10 @@
         return format_date_time ($solution['timestamp']); else
         return Timer ($solution['timestamp']-$contest['settings']['timestamp']);
     }
+
+    function GetTestsForProblem ($problem_id) {
+      return $this->problemsContainer->GetTests ($problem_id);
+    }
   }
 
   function INFORMATICS_GenerateProblemEditorForm () {
@@ -1253,9 +1265,11 @@
     return $INFORMATICS_problemsContainer;
   }
 
-  function INFORMATICS_tests_info ($pid, $tests, $perline=10) {
+  function INFORMATICS_tests_info ($pid, $tests, $perline=10, $gen_links=false, $links_url='') {
     $arr=explode (' ', $tests);
-    $res='<table class="data">'."\n";
+    $res='<table class="data tests_info">'."\n";
+
+    if ($links_url=='') $links_url=content_url_get_full ();
 
     $opened=false;
     $n=count ($arr); $i=0;
@@ -1263,7 +1277,11 @@
       $m=min ($perline, $n-$i);
       $res.='  <tr>'."\n    ";
       for ($j=0; $j<$m; $j++) {
-        $res.='<th>'.($i+1).'</th>';
+        if ($gen_links) {
+          $link_pre='<a href="'.$links_url.'#test'.($i+1).'">';
+          $link_post='</a>';
+        }
+        $res.='<th>'.$link_pre.($i+1).$link_post.'</th>';
         $i++;
       }
       for ($j=$m; $j<$perline; $j++)
@@ -1272,7 +1290,11 @@
       $i-=$m;
       $res.='  <tr>'."\n    ";
       for ($j=0; $j<$m; $j++) {
-        $res.='<td'.(($arr[$i]=='OK')?(' style="background: #cfc"'):('')).'>'.$arr[$i].'</td>';
+        if ($gen_links) {
+          $link_pre='<a href="'.$links_url.'#test'.($i+1).'">';
+          $link_post='</a>';
+        }
+        $res.='<td'.(($arr[$i]=='OK')?(' style="background: #cfc"'):('')).'>'.$link_pre.$arr[$i].$link_post.'</td>';
         $i++;
       }
       for ($j=$m; $j<$perline; $j++)
