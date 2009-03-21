@@ -254,7 +254,9 @@
       if ($_FILES['TestsArchive']['name']!='' || $arr['checker']!=$set['checker']) {
 
         if ($_FILES['TestsArchive']['name']!='') {
+          global $XPFS;
           $arr['filename']=$this->StoreArchive ($id, $_FILES['TestsArchive']);
+          $XPFS->removeItem ('/tester/tests/'.$id.'0');
         }
 
         $uploaded=0;
