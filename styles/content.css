@@ -62,7 +62,7 @@ body {
 #content h2 a, #content h2 a:visited, #content h2 a:link  { font-size: 12pt; }
 #content h3 a, #content h3 a:visited, #content h3 a:link  { font-size: 10pt; }
 
-#content textarea       { font-family: "tahoma" "arial" "verdana"; font-size: 8pt; border: 1px #aaa solid; padding: 2px; }
+#content textarea       { font-family: "tahoma" "arial" "verdana"; font-size: 8pt; border: 1px #aaa solid; padding: 2px; color: #000; }
 #content textarea.block { display: block; width: 100%; }
 
 #content small, #content .shade table { font-family: "tahoma" "arial" "verdana"; font-size: 7pt; }
@@ -76,7 +76,7 @@ body {
   color: #000;
 }
 
-#content select       { border: 1px #aaa solid; font-family:  "tahoma" "arial" "verdana"; font-size: 8pt; }
+#content select       { border: 1px #aaa solid; font-family:  "tahoma" "arial" "verdana"; font-size: 8pt; color: #000; }
 #content select.small { font-size: 7pt; }
 
 #content form {margin: 0; padding: 0;}
