@@ -81,7 +81,7 @@ body {
 
 #content form {margin: 0; padding: 0;}
 
-#content button, #content submit.btn { border-width: 1px; font-size: 8pt; padding: 2px 0; }
+#content button, #content submit.btn { border-width: 1px; font-size: 8pt; padding: 2px 0; color: #000; }
 #content button.block { font-size: 8pt; padding: 2px 0; width: 100%; border-width: 1px; }
 #content button.alert       { background-color: #c91717; color: #fff; border-color: #7f0000; }
 #content button.alert:hover { background-color: #f00;  }
