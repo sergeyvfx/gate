@@ -12,7 +12,7 @@
     function DrawContentSettingsForm ($title, $field) {
       if ($title!='')
         println ("<b>$title:</b><br>");
-      
+
       $this->DrawImageLimits ($field.'_image');
       $this->DrawFileLimits ($field.'_file');
       return true;

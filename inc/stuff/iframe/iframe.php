@@ -54,10 +54,13 @@
     $val=preg_replace ("'(<img[\/\!]*?[^<>]*?)(src\s*=\s*\"?$root_patt([\w\+\-\:\/\%\\$\#\.\,]*)\"?)([^<>]*?>)'si", '\1src="\3"\4', $val);
 
     $images=iframe_get_images ($val);
-    for ($i=0, $n=count ($images); $i<$n; $i++) {
-      $storage=manage_storage_by_dir (dirname ($images[$i]));
+    $files=iframe_get_files ($val);
+
+    $f = combine_arrays ($images, $files);
+    for ($i=0, $n=count ($f); $i<$n; $i++) {
+      $storage=manage_storage_by_dir (dirname ($f[$i]));
       if ($storage) {
-        $storage->AcceptFile (filename ($images[$i]));
+        $storage->AcceptFile (filename ($f[$i]));
       }
     }
 
@@ -68,11 +71,12 @@
 
   function iframe_accept_content ($name, $old='') {
     $val=stripslashes ($_POST[$name]);
-    $val=iframe_accept_images ($val);
 
+    $val=preg_replace ("'(<a[\/\!]*?[^<>]*?)(href\s*=\s*\"?".config_get ('http-document-root')."([\w\+\-\:\/\%\$\#\.\,]*)\"?)([^<>]*?>)'si", '\1href="${document-root}\3"\4', $val);
     $val=preg_replace ("'(<a[\/\!]*?[^<>]*?)(href\s*=\s*\"?\\$\\%7Bdocument-root\\%7D([\w\+\-\:\/\%\$\#\.\,]*)\"?)([^<>]*?>)'si", '\1href="${document-root}\3"\4', $val);
-
     $val=preg_replace ('/\?\>/', '?&gt;', preg_replace ('/\<\?/', '&lt;?', $val));
+
+    $val=iframe_accept_images ($val);
 
     iframe_reaccept_content ($old, $val);
     return $val;
@@ -85,16 +89,22 @@
     $old_images=iframe_get_images ($old);
     $new_images=iframe_get_images ($new);
 
+    $old_files=iframe_get_files ($old);
+    $new_files=iframe_get_files ($new);
+
+    $old = combine_arrays ($old_images, $old_files);
+    $new = combine_arrays ($new_images, $new_files);
+
     $arr=array ();
-    for ($i=0, $n=count ($old_images); $i<$n; $i++) {
+    for ($i=0, $n=count ($old); $i<$n; $i++) {
       $found=false;
-      for ($j=0, $m=count ($new_images); $j<$m; $j++)
-        if ($old_images[$i]==$new_images[$j]) {
+      for ($j=0, $m=count ($new); $j<$m; $j++)
+        if ($old[$i]==$new[$j]) {
           $found=true;
           break;
         }
       if (!$found)
-        $arr[]=$old_images[$i];
+        $arr[]=$old[$i];
     }
 
     for ($i=0, $n=count ($arr); $i<$n; $i++) {

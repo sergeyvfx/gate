@@ -241,6 +241,9 @@ body {
 /* Image editor */
 #content #imageEdt iframe { display: block; height: 32px; width: 100%; }
 
+/* File editor */
+#content #fileEdt iframe { display: block; height: 32px; width: 100%; }
+
 /* Group boxes */
 #content div.group { margin: 8px 2px 2px 2px; padding: 0 6px 0 6px; border: 1px #aaa solid; background: transparent; _height: 1%; }
 #content div.group span.title  { padding: 0 6px; position: relative; top: -8px; font-size: 11px; }
@@ -299,3 +302,6 @@ BODY.dialog { background-color: #eee; padding: 0; }
 #content div.progressStart {float: left; background-color: #fff; width: 1px; height: 100%; font-size: 2px;}
 #content div.progressBar   {float: left; background-color: #bebef9; height: 4px; border-top: 1px #fff solid; border-bottom: 1px #7a7aef solid; font-size: 2px;}
 #content div.progressEnd   {float: left; background-color: #7a7aef; width: 1px; height: 100%; font-size: 2px;}
+
+#content div.file_pub { margin: 4px; display: inline; }
+#content div.file_pub img { margin: 2px 4px 2px 2px; vertical-align: middle; }

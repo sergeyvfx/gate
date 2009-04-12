@@ -1,5 +1,6 @@
 <?php if ($_CDCFile_!='#CDCFile_included#') {$_CDCFile_='#CDCFile_included#';
   $file_contentSettingsform_stuff_included=false;
+  $file_stuff_included = false;
   class CDCFile extends CDCVirtual {
     var $storage=nil;
 
@@ -70,7 +71,7 @@
     function UpdateLimitSetting ($arr, $title, $field, $sfield, $suff) {
       if ($_POST['cntset_'.$field.'_'.$suff])
         if (!isnumber ($_POST['cntset_'.$field.'_'.$suff.'_val'])) {
-          add_info ('Некорректное ограничение изображения в поле &laquo;'.$title.'&raquo;');
+          add_info ('Некорректное ограничение файла в поле &laquo;'.$title.'&raquo;');
           return false;
         } else $arr[$sfield]=$_POST['cntset_'.$field.'_'.$suff].$_POST['cntset_'.$field.'_'.$suff.'_val'];
       return true;
@@ -90,8 +91,44 @@
       return true;
     }
 
+    function IncludeStuff () {
+      global $file_stuff_included;
+      if ($file_stuff_included) return;
+      print ('
+        <script language="JavaScript" type="text/javascript">
+          function CDCFile_OnFileUpload (field, formname, url, val, mime, size) {
+            if (val=="") { hide (formname+"_"+field+"_infoBox"); } else {
+              var n=getElementById (formname+"_"+field+"_infoBox");
+              var mimen=elementByIdInTree (n, "mime");
+              var sizen=elementByIdInTree (n, "size");
+              mimen.innerHTML=mime;
+              sizen.innerHTML=size;
+              sb (formname+"_"+field+"_infoBox")
+            }
+            getElementById (formname+"_"+field).value=val;
+            getElementById (formname+"_"+field+"_url").value=url;
+          }
+
+          function CDCFile_ZerolizeForm (field, formname) {
+            hide (formname+"_"+field+"_infoBox")
+          }
+        </script>');
+      $file_stuff_included=true;
+    }
+
     function DrawEditorForm  ($field, $formname='', $init=true) {
-      println ('<input type="file" class="txt block" name="'.$formname.'_'.$field.'">');
+      $this->IncludeStuff ();
+      $arr=array ('field'    => $field,
+                  'value'    => $this->GetValue (),
+                  'formname' => $formname,
+                  'storage'  => $this->settings['storage'],
+                  'size'     => $this->settings['size']);
+      if ($this->GetValue ()!='') {
+        $this->SpawnStorage ();
+        $arr['file']=$this->storage->GetFullURL ($this->GetValue ());
+        $arr['params']=$this->storage->GetFileParams ($this->GetValue ());
+      }
+      print ($this->FromTemplate ('edit.form', $arr));
     }
 
     function NewContentSpawned      ($field, $content_id=-1)   { manage_storage_refcount_inc ($this->settings['storage']); }
@@ -106,16 +143,12 @@
       if ($r=='LESS')        return $field.' файла меньше '.parseint ($key).' '.$dimension.'.';
     } 
 
-    function ReceiveValue           ($field, $formname='') {
+    function ReceiveValue ($field, $formname='') {
+      CDCVirtual::ReceiveValue ($field, $formname);
       $this->SpawnStorage ();
-      $data=$_FILES[$formname.'_'.$field];
-      $r=$this->Comporator ($data['size'], $this->settings['size'], 'Размер', 1, 'байт');
-      if ($r!='') { add_info ($r); return false; }
-      $fn=$this->storage->Put ($data, user_id ());
-      $this->storage->Accept ($fn);
-      $this->val=$fn;
-      return true;
+      $this->storage->Accept ($this->GetValue ());
     }
+
     function DestroyValue () { $this->SpawnStorage (); $this->storage->Unlink ($this->GetValue ()); }
 
     function Value () { $this->SpawnStorage (); return $this->storage->GetFullURL ($this->GetValue ()); }

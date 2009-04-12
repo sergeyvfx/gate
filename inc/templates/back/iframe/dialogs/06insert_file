@@ -1,0 +1,31 @@
+<?php
+  $settings=targ ('settings');
+?>
+
+<div id="iframeEditor_<?=targ ('name');?>_dialog_insertFile" class="invisible">
+  <table class="dialog">
+    <tr>
+      <td class="title">Вставка файла</td>
+      <td>
+        <? img_button ('stock/confirm.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_accept\', \'insertFile\');', 'Вставить файл'); ?>
+        <? img_button ('stock/discard.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'dialog_cancel\', \'insertFile\');', 'Отменить'); ?>
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Краткий текст</td>
+      <td><input type="text" class="txt block" value="" id="iframeEditor_<?=targ ('name');?>_insertFileDialog_text"></td>
+    </tr>
+    <tr>
+      <td class="title">Файл</td>
+      <td>
+<?php
+  $c=new CDCFile ();
+  $c->Init ();
+  $c->SetSettings ($settings['file']);
+
+  $c->DrawEditorForm ('file', 'iframeEditor_'.targ ('name').'_dialog_insertFile')
+?>
+      </td>
+    </tr>
+  </table>
+</div>

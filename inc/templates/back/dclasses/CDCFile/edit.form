@@ -1,0 +1,49 @@
+<div id="fileEdt">
+<?php
+  if (!function_exists (file_oneLimitStr)) {
+    function file_oneLimitStr ($v,$t=0) {
+      $a=preg_replace ('/^([\=\<\>]+).*/', '\\1', $v);
+      $v=preg_replace ('/^([\=\<\>]+)/', '', $v);
+      $r='';
+      if ($t==0) $t='равна' ;else $t='равен';
+      if ($a=='<=') $r='меньше или '.$t; else
+      if ($a=='==') $r=$t;
+      if ($a=='>=') $r='больше или '.$t;
+      return $r.=' '.$v;
+    }
+  }
+
+  if (!function_exists (file_limitStr)) {
+    function file_limitStr () {
+      $s=targ ('size');
+      $r='';
+      if ($s!='') $r.='Размер длжен быть '.file_oneLimitStr ($s, 1).' байт';
+      return $r;
+    }
+  }
+
+  $file='';
+  $params=targ ('params');
+  if (targ ('file')!='')
+    $file=targ ('file');
+?>
+
+  <center>
+    <table class="clear">
+      <tr valign="top">
+        <td style="padding-left: 4px;">
+          <span class="shade"><small>
+            <table id="<?=targ ('formname');?>_<?=targ ('field');?>_infoBox"<?=((targ ('file')=='')?(' class="invisible clear"'):(' class="clear"'));?>>
+              <tr><td><b>MIME:</b></td><td id="mime"><?=$params['mime'];?></td></tr>
+              <tr><td><b>Размер:</b></td><td id="size"><?=$params['size'];?></td></tr>
+            </table>
+          </small></span>
+        </td>
+      </tr>
+    </table>
+  </center>
+  <input type="hidden" name="<?=targ ('formname')?>_<?=targ ('field');?>" id="<?=targ ('formname')?>_<?=targ ('field');?>" value="<?=targ ('value');?>">
+  <input type="hidden" name="<?=targ ('formname')?>_<?=targ ('field');?>_url" id="<?=targ ('formname')?>_<?=targ ('field');?>_url" value="<?=$file;?>">
+  <iframe frameborder="no" src="<?=config_get ('http-document-root')?>/inc/stuff/file/file.edit.php?storage=<?=urlencode (targ ('storage'));?>&size=<?=urlencode (targ ('size'))?>&field=<?=targ ('field');?>&user_id=<?=user_id ();?>&formname=<?=targ ('formname');?>&value=<?=targ ('value');?>"></iframe>
+  <div><?=file_limitStr ();?></div>
+</div>

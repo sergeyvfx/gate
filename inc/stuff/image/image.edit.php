@@ -40,7 +40,6 @@
 <?php } 
   }
 ?>
-<?=((browser_engine ()!='GECKO')?(' width="100%"'):(''));?>
   <body id="content" style="background: transparent">
     <form id="ipc_form" method="POST" action="<?=config_get ('http-document-root');?>/inc/stuff/image/image.edit.php?storage=<?=$storage?>&size=<?=urlencode ($size);?>&vlimit=<?=urlencode ($vlimit);?>&hlimit=<?=urlencode ($hlimit);?>&field=<?=$field;?>&field=<?=$field;?>&user_id=<?=$user_id;?>&formname=<?=$formname;?>&value=<?=$value?>" enctype="multipart/form-data">
       <table class="clear"><tr>

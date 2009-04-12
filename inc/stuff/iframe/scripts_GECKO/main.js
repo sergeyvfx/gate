@@ -194,4 +194,5 @@ function iframeEditor_GetSelectionParentNode (name, tagName) {
   include 'stuff/lblock.js'; print "\n";
   include 'stuff/image.js'; print "\n";
   include 'stuff/table.js'; print "\n";
+  include 'stuff/insert_file.js'; print "\n";
 ?>

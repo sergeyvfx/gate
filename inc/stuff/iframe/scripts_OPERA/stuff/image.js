@@ -16,8 +16,8 @@ function iframeEditor_imageDialogAccept (name) {
   }
 
   var img=iframeEditor_CreateElement (name, 'IMG');
-  img.src=document_root+url;
-  
+  img.src=http_host + url;
+
   iframeEditor_InsertNodeAtSelection (name, img);
 
   iframeEditor_UnlockSelection (name);

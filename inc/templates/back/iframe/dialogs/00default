@@ -46,6 +46,8 @@
         <? button ('Типографика',                    'iframeEditor_ExecAction (\''.targ ('name').'\', \'typography\', null);', 'Редактировать типографику'); ?>
         <? button_separator (); ?>
         <? button ('Блок', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'show_dialog\', \'lblock\');', 'Вставить информационный блок'); ?>
+        <? button_separator (); ?>
+        <? button ('Вставить файл', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'show_dialog\', \'insertFile\');', 'Вставить файл'); ?>
       </td>
     </tr>
     <tr>
