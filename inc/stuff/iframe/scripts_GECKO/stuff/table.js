@@ -8,6 +8,31 @@ function iframeEditor_tableDialogCancel (name) {
 }
 
 function iframeEditor_GetTable (editor) {return (iframeEditor_GetSelectionParentNode (editor, 'table'));}
+function iframeEditor_GetTableBody (editor) {return (iframeEditor_GetSelectionParentNode (editor, 'tbody'));}
+function iframeEditor_GetTableRow (editor) {return (iframeEditor_GetSelectionParentNode (editor, 'tr'));}
+function iframeEditor_GetTableCell (editor) {
+  var res = iframeEditor_GetSelectionParentNode (editor, 'td');
+
+  if (res) {
+    return res;
+  }
+
+  return iframeEditor_GetSelectionParentNode (editor, 'th');
+}
+
+function iframeEditor_UpdateTRClasses (table) {
+  var counter=0;
+  var tBody=table.getElementsByTagName ('TBODY')[0];
+  for (var i=0; i<tBody.rows.length; i++) {
+    var node=tBody.rows.item (i);
+    var child=node.cells.item (0);
+    var child1=node.cells.item (1);
+    if (child.tagName.toLowerCase ()=='th')
+      if (child1 && child1.tagName.toLowerCase ()=='th') continue;
+    if (counter%2==1) node.className='d'; else node.className='';
+    counter++;
+  }
+}
 
 function iframeEditor_tableDialogFree (name) {
   getElementById ('iframeEditor_'+name+'_tableDialog_title').value='';
@@ -76,4 +101,99 @@ function iframeEditor_action_table_delete (name) {
   if (table) table.parentNode.removeChild (table);
 }
 
+function iframeEditor_action_table_add_row (name) {
+  var cell=iframeEditor_GetTableCell (name);
+  var row=iframeEditor_GetTableRow (name);
+  var tBody=iframeEditor_GetTableBody (name);
+  var table=iframeEditor_GetTable (name);
+
+  if (!table || !row) {
+    return;
+  }
+
+  var newRow = iframeEditor_CreateElement (name, 'TR');
+
+  for (var i = 0; i < row.cells.length; i++) {
+    for (var j = 0; j < row.cells.item (i).colSpan; j++) {
+      var newCell = iframeEditor_CreateElement (name, row.cells.item(i).tagName);
+        newCell.innerHTML = (row.cells.item (i).tagName == 'TD') ? 'Ячейка' : 'Заголовок';
+        newRow.appendChild (newCell);
+    }
+  }
+
+  row = tBody.rows.item (row.rowIndex + 1);
+  if (row) {
+    tBody.insertBefore (newRow, row);
+  } else {
+    tBody.appendChild (newRow);
+  }
+
+  iframeEditor_UpdateTRClasses (table);
+}
+
+function iframeEditor_action_table_add_column (name) {
+  var cell = iframeEditor_GetTableCell (name);
+  var row = iframeEditor_GetTableRow (name);
+  var tBody = iframeEditor_GetTableBody (name);
+  var table = iframeEditor_GetTable (name);
+  var index = cell.cellIndex;
+
+  if (!table) {
+    return;
+  }
+
+  for (var i = 0; i < tBody.rows.length; i++) {
+    var cIndex = index, curRow = tBody.rows.item (i);
+
+    if (cIndex >= curRow.cells.length) {
+      cIndex=curRow.cells.length-1;
+    }
+
+    var newCell = iframeEditor_CreateElement (name, curRow.cells.item(cIndex).tagName);
+    newCell.innerHTML = (curRow.cells.item (cIndex).tagName == 'TD') ? 'Ячейка' : 'Заголовок';
+    before = curRow.cells.item (cell.cellIndex + 1);
+    if (before) {
+      curRow.insertBefore (newCell, before);
+    } else {
+      curRow.appendChild (newCell);
+    }
+  }
+
+  iframeEditor_UpdateTRClasses (table);
+}
+
+function iframeEditor_action_table_delete_row (name) {
+  var row = iframeEditor_GetTableRow (name);
+  var table = iframeEditor_GetTable (name);
+  var tBody = iframeEditor_GetTableBody (name);
+
+  if (!table || !row) {
+    return;
+  }
+
+  tBody.removeChild (row);
+  iframeEditor_UpdateTRClasses (table);
+}
+
+function iframeEditor_action_table_delete_column (name) {
+  var col=iframeEditor_GetTableCell (name);
+
+  if (col) {
+    var row = iframeEditor_GetTableRow (name);
+    var tBody=iframeEditor_GetTableBody (name);
+    var curRow; var index = col.cellIndex;
+
+    for (var i = 0; i < tBody.rows.length; i++) {
+      curRow = tBody.rows.item(i);
+      if (curRow.cells.length >= index + 1) {
+        curRow.deleteCell (index);
+      }
+    }
+  }
+}
+
 iframeEditor_RegisterAction ('table_delete', iframeEditor_action_table_delete);
+iframeEditor_RegisterAction ('table_add_row', iframeEditor_action_table_add_row);
+iframeEditor_RegisterAction ('table_add_column', iframeEditor_action_table_add_column);
+iframeEditor_RegisterAction ('table_delete_row', iframeEditor_action_table_delete_row);
+iframeEditor_RegisterAction ('table_delete_column', iframeEditor_action_table_delete_column);

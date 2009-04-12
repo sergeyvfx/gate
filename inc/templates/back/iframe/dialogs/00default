@@ -56,6 +56,12 @@
         <? button ('Вставить таблицу', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'show_dialog\', \'table\');', 'Вставить таблицу'); ?>
         <? button_separator (); ?>
         <? img_button ('stock/delete_table.gif',   'iframeEditor_ExecAction (\''.targ ('name').'\', \'table_delete\', null);',  'Удалить таблицу'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/add_row.gif',    'iframeEditor_ExecAction (\''.targ ('name').'\', \'table_add_row\', null);',     'Добавить строку в таблицу'); ?>
+        <? img_button ('stock/add_column.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'table_add_column\', null);',  'Добавить столбец в таблицу'); ?>
+        <? button_separator (); ?>
+        <? img_button ('stock/delete_row.gif',    'iframeEditor_ExecAction (\''.targ ('name').'\', \'table_delete_row\', null);',     'Удалить строку из таблицы'); ?>
+        <? img_button ('stock/delete_column.gif', 'iframeEditor_ExecAction (\''.targ ('name').'\', \'table_delete_column\', null);',  'Удалить столбец из таблицы'); ?>
       </td>
     </tr>
     <tr>
