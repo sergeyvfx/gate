@@ -110,6 +110,7 @@ if ($detail) { ?>
       if ($d!='') {
         $d=db_unpack ($d);
         $outputs=db_unpack ($d['outputs']);
+        $checker_outputs=db_unpack ($d['checker_outputs']);
 
         $tests_data=$lib->GetTestsForProblem ($data['problem_id']);
 
@@ -127,6 +128,11 @@ if ($detail) { ?>
           println (crlf2br (htmlspecialchars ($tests_data['answers'][$i+1])).'<br><br>');
           println ('<b>Выходной файл проверяемого решения:</b><br>');
           println (crlf2br (htmlspecialchars ($outputs[$i])).'<br>');
+
+          if (trim ($checker_outputs[$i]) != '') {
+            println ('<b>Сообщение чекера:</b><br>');
+            println (WT_colorize_checker_message (crlf2br (htmlspecialchars ($checker_outputs[$i]))).'<br>');
+          }
           groupc ();
         }
         groupc ();

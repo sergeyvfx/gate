@@ -60,5 +60,11 @@
       $XPFS->removeItem ('/tester/testing/'.$r['id']);
     }
   }
+
+  function WT_colorize_checker_message ($message) {
+    $s = preg_replace ('/^(WA|CR|PE)/', '<b>[<font style="color: #7f0000">\1</font>]</b>', $message);
+    $s = preg_replace ('/^(OK)/', '<b>[<font style="color: #007f00">\1</font>]</b>', $s);
+    return $s;
+  }
 }
 ?>

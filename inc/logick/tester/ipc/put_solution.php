@@ -26,13 +26,19 @@
 
     unset ($p['force_status']);
 
+    $data=array ();
+
     if (isset ($_GET['SOLUTION_OUTPUT'])) {
-      $path='/tester/testing/';
-
-      $XPFS->CreateDirWithParents ($path);
-
-      $data=array ();
       $data['outputs']=stripslashes ($_GET['SOLUTION_OUTPUT']);
+    }
+
+    if (isset ($_GET['CHECKER_OUTPUT'])) {
+      $data['checker_outputs']=stripslashes ($_GET['CHECKER_OUTPUT']);
+    }
+
+    if (count ($data) > 0) {
+      $path='/tester/testing/';
+      $XPFS->CreateDirWithParents ($path);
       $XPFS->removeItem ($path.'/'.$id);
       $XPFS->createFile ($path, $id, 0, db_pack ($data));
     }
