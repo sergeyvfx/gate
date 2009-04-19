@@ -60,6 +60,7 @@
       $s=$_SERVER['HTTP_USER_AGENT'];
       if (preg_match ('/MSIE/si', $s)) $browser_array['engine']='DONKEY'; else
       if (preg_match ('/OPERA/is', $s)) $browser_array['engine']='OPERA'; else
+      if (preg_match ('/AppleWebKit/is', $s)) $browser_array['engine']='OPERA'; else
       if (preg_match ('/GECKO/is', $s) || preg_match ('/MOZILLA/is', $s)) $browser_array['engine']='GECKO';
     }
     return $browser_array;

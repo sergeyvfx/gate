@@ -8,4 +8,3 @@
     <td colspan="3"><div class="frame_cnt"><?=targ ('content');?></div></td>
   </tr>
 </table>
-

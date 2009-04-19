@@ -138,11 +138,11 @@ body {
 #content table.frame .h a       { display: block; padding: 0 6px; text-decoration: none; }
 #content table.frame .h a:hover { text-decoration: none; }
 #content table.frame .h .t a:hover { position: relative; z-index: 10; height: 13px; border-bottom: 1px #fff solid; background: #fff; }
-#content table.frame .h .tc     { border: 0; width: 1px; white-space: nowrap; }
+#content table.frame .h .tc     { border: 0; _width: 1px; white-space: nowrap; }
 #content table.frame .h div     { position: relative; z-index: 1; top: 1px; height: 13px; white-space: nowrap; background: #e4e4e4 url(../pics/theme/frame.tab.d.gif) 0 0 repeat-x; }
-#content table.frame .h .tc div { border: 1px #f93 solid; border-bottom: 0; -moz-border-radius-topleft: 6px; background: #fff; font-weight: bold; position: relative; z-index: 10; height: 14px; }
+#content table.frame .h .tc div { inline; border: 1px #f93 solid; border-bottom: 0; -moz-border-radius-topleft: 6px; background: #fff; font-weight: bold; position: relative; z-index: 10; height: 14px; }
 
-#content table.frame .h .t      { border: 0; width: 1px; white-space: nowrap; }
+#content table.frame .h .t      { border: 0; _width: 1px; white-space: nowrap; }
 #content table.frame .h .t div  { border: 1px #aaa solid; border-bottom2: 0; }
 
 #content table.frame .h .s     { background-color: #f7f7f7; }
