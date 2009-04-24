@@ -1,58 +1,86 @@
-<?php if ($_WT_datareceiver_included_!='###WT_DataReceiver_Inclided###') { $_WT_datareceiver_included_='###WT_DataReceiver_Inclided###';
+<?php
+  /**
+   * Gate - Wiki engine and web-interface for WebTester Server
+   *
+   * Receiver for data from server
+   *
+   * Copyright (c) 2008-2009 Sergey I. Sharybin <g.ulairi@gmail.com>
+   *
+   * This program can be distributed under the terms of the GNU GPL.
+   * See the file COPYING.
+   */
 
-  function WT_CleanupIPCCacheStorage ($storage) {
-    global $XPFS;
+  global $IFACE;
 
-    $now=time ();
-    $lifetime=config_get ('WT-Cache-Lifetime');
-
-    $listing=$XPFS->lsDir ($storage);
-    for ($i=0, $n=count ($listing); $i<$n; ++$i) {
-      $node=$listing[$i];
-      if ($now-$node['mtime']>$lifetime)
-        $XPFS->removeNode ($node);
-    }
+  if ($IFACE != "SPAWNING NEW IFACE" || $_GET['IFACE'] != '') {
+    print ('HACKERS?');
+    die;
   }
 
-  function WT_ReceiveIPCData ($storage, $unique, $cmd, $args=array (), $authRoot=true, $preCommands=array ()) {
-    global $XPFS;
+  if ($_WT_datareceiver_included_ != '###WT_DataReceiver_Inclided###') {
+    $_WT_datareceiver_included_ = '###WT_DataReceiver_Inclided###';
 
-    $res=null;
+    function WT_CleanupIPCCacheStorage ($storage) {
+      global $XPFS;
 
-    $node=$XPFS->getNode ($storage.'/'.$unique);
-    if ($node['id']>=0) {
-      /* Return data from cache */
-      $XPFS->updateNodeMTime ($node);
-      $res=$XPFS->readNodeContent ($node);
-    } else {
-      /* Receive data and store in cache */
-      $wt=new WebTester ();
+      $now = time ();
+      $lifetime = config_get ('WT-Cache-Lifetime');
 
-      if ($authRoot) $wt->AuthRoot ();
+      $listing = $XPFS->lsDir ($storage);
 
-      $cmds=$preCommands;
-      $cmds[]=array ('cmd'=>$cmd, 'args'=>$args);
+      for ($i = 0, $n = count ($listing); $i < $n; ++$i) {
+        $node = $listing[$i];
 
-      $err=false;
-      for ($i=0, $n=count ($cmds); $i<$n; ++$i) {
-        $c=$cmds[$i];
-        $b=$wt->SendCommand ($c['cmd'], $c['args']);
-        $b=$wt->ParseBuf ($b, &$state);
-        if ($state!='+OK') { $err=true; break; }
-      }
-
-      if (!$err) {
-        $XPFS->createDirWithParents ($storage);
-        $XPFS->createFile ($storage, $unique, 0, $b);
-
-        $res=$b;
+        if ($now-$node['mtime'] > $lifetime) {
+          $XPFS->removeNode ($node);
+        }
       }
     }
 
-    WT_CleanupIPCCacheStorage ($storage);
+    function WT_ReceiveIPCData ($storage, $unique, $cmd, $args = array (),
+                                $authRoot = true, $preCommands = array ()) {
+      global $XPFS;
 
-    return $res;
+      $res = null;
+
+      $node = $XPFS->getNode ($storage.'/'.$unique);
+
+      if ($node['id'] >= 0) {
+        /* Return data from cache */
+        $XPFS->updateNodeMTime ($node);
+        $res = $XPFS->readNodeContent ($node);
+      } else {
+        /* Receive data and store in cache */
+        $wt = new WebTester ();
+
+        if ($authRoot) {
+          $wt->AuthRoot ();
+        }
+
+        $cmds = $preCommands;
+        $cmds[] = array ('cmd' => $cmd, 'args' => $args);
+
+        $err = false;
+        for ($i = 0, $n = count ($cmds); $i < $n; ++$i) {
+          $c = $cmds[$i];
+          $b = $wt->SendCommand ($c['cmd'], $c['args']);
+          $b = $wt->ParseBuf ($b, &$state);
+          if ($state != '+OK') {
+            $err = true; break;
+          }
+        }
+
+        if (!$err) {
+          $XPFS->createDirWithParents ($storage);
+          $XPFS->createFile ($storage, $unique, 0, $b);
+
+          $res = $b;
+        }
+      }
+
+      WT_CleanupIPCCacheStorage ($storage);
+
+      return $res;
+    }
   }
-
-}
 ?>

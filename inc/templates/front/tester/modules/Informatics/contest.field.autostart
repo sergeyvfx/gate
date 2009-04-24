@@ -1,13 +1,15 @@
 <?php
-  if ($cman==0) {
-  $data=targ ('data');
+  if ($cman == 0) {
+  $data = targ ('data');
 ?>
 
 <script language="JavaScript" type="text/JavaScript">
   function on_contest_autostart_toggle (sender) {
-    if (sender.checked)
-      sender.parentNode.nextSibling.className=''; else
-      sender.parentNode.nextSibling.className='invisible';
+    if (sender.checked) {
+      sender.parentNode.nextSibling.className='';
+    } else {
+      sender.parentNode.nextSibling.className = 'invisible';
+    }
   }
 </script>
 
@@ -17,7 +19,7 @@
   <div id="hr"></div>
   <div>
 <?php
-  $date=new CDCDate ();
+  $date = new CDCDate ();
   $date->Init ();
   $date->SetValue ($data['settings']['autostart.date']);
   $date->DrawEditorForm ('contest_autostart_date');
@@ -25,11 +27,13 @@
   </div>
   <div style="margin-top: 2px">
 <?php
-  $time=new CDCTime ();
+  $time = new CDCTime ();
   $time->Init ();
   $time->SetValue ($data['settings']['autostart.time']);
   $time->DrawEditorForm ('contest_autostart_time');
 ?>
   </div>
 </div>
-<?php } ?>
+<?php
+  }
+?>

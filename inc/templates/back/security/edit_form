@@ -1,8 +1,12 @@
-<?php $data=targ ('data'); ?>
+<?php
+  $data = targ ('data');
+?>
 <div id="securForm">
-  <? if (targ ('canInherit')) { ?>
+<?php if (targ ('canInherit')) { ?>
   <input type="checkbox" class="cb" name="<?=targ ('name');?>_inherit" id="<?=targ ('name');?>_inherit" onclick="sef_on_inherit_click ('<?=targ ('name');?>');" value="1" <?=(($data['inherit'])?(' checked'):(''));?>>Переносить права доступа от предка
-<? } ?>
+<?php
+  }
+?>
     <div id="<?=targ ('name');?>_data" style="display: <?=(($data['inherit'])?('none'):('block'));?>">
     <? if (targ ('canInherit')) { ?><div id="hr"></div><? } ?>
     <table width="100%">
@@ -13,19 +17,23 @@
           Ограничить:
           <select class="block" id="<?=targ ('name');?>_limit">
 <?php
-  $limits=targ ('limits');
-  $opened=false;
+  $limits = targ ('limits');
+  $opened = false;
   foreach ($limits as $k=>$v) {
     if (preg_match ('/^\{\{\{\{GROUP[0-9]+\}\}\}\}$/', $k)) {
-      if ($opened) println ('            </optgroup>');
+      if ($opened) {
+        println ('            </optgroup>');
+      }
       println ('            <optgroup label="'.htmlspecialchars ($v).'">');
-      $opened=true;
+      $opened = true;
     } else {
 ?>
             <option value="<?=$k;?>"><?=$v;?></option>
-<?php } 
+<?php }
   }
-  if ($opened) println ('            </optgroup>');
+  if ($opened) {
+    println ('            </optgroup>');
+  }
 ?>
           </select>
           <div id="hr"></div>
@@ -50,9 +58,9 @@
             Пользователь:
             <select class="block" id="<?=targ ('name');?>_AllowUser_user">
   <?php
-    $list=user_authorized_list (-1);
-    for ($i=0; $i<count ($list); $i++) {
-      $u=$list[$i];
+    $list = user_authorized_list (-1);
+    for ($i = 0; $i < count ($list); $i++) {
+      $u = $list[$i];
   ?>
               <option value="<?=$u['id'];?>"><?=$u['login'];?>&nbsp;(<?=$u['name'];?>)</option>
   <?php } ?>
@@ -62,9 +70,9 @@
             Пользователь:
             <select class="block" id="<?=targ ('name');?>_DenyUser_user">
   <?php
-    $list=user_authorized_list (-1);
-    for ($i=0; $i<count ($list); $i++) {
-      $u=$list[$i];
+    $list = user_authorized_list (-1);
+    for ($i = 0; $i < count ($list); $i++) {
+      $u = $list[$i];
   ?>
               <option value="<?=$u['id'];?>"><?=$u['login'];?>&nbsp;(<?=$u['name'];?>)</option>
   <?php } ?>
@@ -74,9 +82,9 @@
             Группа:
             <select class="block" id="<?=targ ('name');?>_AllowGroup_group">
   <?php
-    $list=group_list ();
-    for ($i=0; $i<count ($list); $i++) {
-      $g=$list[$i];
+    $list = group_list ();
+    for ($i = 0; $i < count ($list); $i++) {
+      $g = $list[$i];
   ?>
               <option value="<?=$g['id'];?>"><?=$g['name'];?></option>
   <?php } ?>
@@ -86,9 +94,9 @@
             Группа:
             <select class="block" id="<?=targ ('name');?>_DenyGroup_group">
   <?php
-    $list=group_list ();
-    for ($i=0; $i<count ($list); $i++) {
-      $g=$list[$i];
+    $list = group_list ();
+    for ($i = 0; $i < count ($list); $i++) {
+      $g = $list[$i];
   ?>
               <option value="<?=$g['id'];?>"><?=$g['name'];?></option>
   <?php } ?>
@@ -106,15 +114,17 @@
   sef_init ('<?=targ ('name');?>');
   sef_set_active_action_cfg_form ('<?=targ ('name');?>', 'AllowAll');
 <?php
-  $data=targ ('data');
-  foreach ($data as $limit=>$lData) {
-    $order=$lData['order'];
-    $acts=$lData['acts'];
-    for ($i=0; $i<count ($acts); $i++) {
-      $act=$acts[$i]['act'];
-      $val=$acts[$i]['val'];
+  $data = targ ('data');
+  foreach ($data as $limit => $lData) {
+    $order = $lData['order'];
+    $acts = $lData['acts'];
+    for ($i = 0; $i < count ($acts); $i++) {
+      $act = $acts[$i]['act'];
+      $val = $acts[$i]['val'];
 ?>
-  var pars=new Array (); pars['val']='<?=$val;?>'; sef_action_add ('<?=targ ('name');?>', '<?=$limit;?>', '<?=$order;?>', '<?=$act;?>', pars);
+  var pars = new Array ();
+  pars['val']='<?=$val;?>';
+  sef_action_add ('<?=targ ('name');?>', '<?=$limit;?>', '<?=$order;?>', '<?=$act;?>', pars);
 <?php
     }
   }

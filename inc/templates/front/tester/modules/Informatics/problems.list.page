@@ -7,53 +7,54 @@
   $rejudge = targ ('acc.rejudge');
 
   content_url_var_push_global ('filter');
-  $showActs=$delete|$edit|$rejudge;
-  $full=content_url_get_full ();
-
+  $showActs = $delete|$edit|$rejudge;
+  $full = content_url_get_full ();
 ?>
 
 <script language="JavaScript" type="text/javascript">
-  var last_id=-1;
-  var sub=<?=(($action!='' & $id!='')?('true'):('false'));?>;
+  var last_id = -1;
+  var sub = <?=(($action!='' & $id!='')?('true'):('false'));?>;
 <?php if (browser_engine ()=='GECKO') { ?>
-
   function GECKO_update_row (row) {
-    var dummy=document.createElement ('TR');
-    var dummy_td=document.createElement ('TD');
-    dummy_td.style.padding='0';
-    dummy_td.style.border='0';
-    dummy_td.style.margin='0';
-    dummy_td.style.height='0';
+    var dummy = document.createElement ('TR');
+    var dummy_td = document.createElement ('TD');
+    dummy_td.style.padding = '0';
+    dummy_td.style.border = '0';
+    dummy_td.style.margin = '0';
+    dummy_td.style.height = '0';
     dummy.appendChild (dummy_td);
 
     row.parentNode.appendChild (dummy);
 
-    row.style.height='1px';
+    row.style.height = '1px';
 
     setTimeout ( (function (row) { return function () { row.parentNode.removeChild (dummy); }; })(row), 1);
 
-    row.className=row.className.replace (/last/, 'last2').replace (/last(2+)/, 'last2');
+    row.className = row.className.replace (/last/, 'last2').replace (/last(2+)/, 'last2');
   }
-
 <?php } ?>
+
   function rejudge_callback (id, response) {
-    if (response!='+OK') {
+    if (response != '+OK') {
       alert ('Ошибка сброса статуса решений на эту задачу.');
     } else {
       var row;
-      if (last_id>0) {
-        row=getElementById ('problem_'+last_id+'_row');
-        if (!sub)
-          row.className=row.className.replace (/\s?active/, ''); else
-          row.className=row.className.replace (/\s?subactive/, '');
+      if (last_id > 0) {
+        row = getElementById ('problem_' + last_id + '_row');
+        if (!sub) {
+          row.className = row.className.replace (/\s?active/, '');
+        } else {
+          row.className = row.className.replace (/\s?subactive/, '');
+        }
       }
-      row=getElementById ('problem_'+id+'_row');
+      row = getElementById ('problem_' + id + '_row');
       if (!row.className.match (/active/)) {
-        row.className+=((sub)?(' subactive'):(' active'));
-        if (isGecko)
+        row.className += ((sub)?(' subactive'):(' active'));
+        if (isGecko) {
           setTimeout ( (function () { return function () { GECKO_update_row (row); }; })(row), 1);
+        }
       }
-      last_id=id;
+      last_id = id;
     }
   }
 
@@ -70,19 +71,34 @@
     <?php if ($showActs) { ?><th class="last" width="96">&nbsp;</th><?php } ?>
   </tr>
 <?php
-  $data=targ ('data');
-  $page=targ ('page');
-  $perpage=targ ('perpage');
-  $n=count ($data);
-  for ($i=0; $i<$n; $i++) { $it=$data[$i];
-    $class='';
-    if ($i==$n-1) $class='last';
-    if ($it['settings']['disabled']) continue;
-    if ($id==$it['id'] && $action!='') $class.=(($class!='')?(' '):('')).'active';
-    $note='';
-    if (!$it['uploaded'])
-      $note='Закачивание на сервер...'; else {
-        if ($it['settings']['ERR']!='OK') $note='Ошибка закачивания&nbsp;&nbsp;<a href="JavaScript:alert (\''.htmlspecialchars (preg_replace ('/\n/', '\\n', $it['settings']['DESC'])).'\');">Подробнее...</a>';
+  $data = targ ('data');
+  $page = targ ('page');
+  $perpage = targ ('perpage');
+  $n = count ($data);
+
+  for ($i = 0; $i < $n; $i++) {
+    $it = $data[$i];
+    $class = '';
+
+    if ($i == $n - 1) {
+      $class='last';
+    }
+
+    if ($it['settings']['disabled']) {
+      continue;
+    }
+
+    if ($id == $it['id'] && $action != '') {
+      $class .= (($class != '') ? (' ') : ('')).'active';
+    }
+
+    $note = '';
+    if (!$it['uploaded']) {
+      $note = 'Закачивание на сервер...';
+    } else {
+        if ($it['settings']['ERR'] != 'OK') {
+          $note='Ошибка закачивания&nbsp;&nbsp;<a href="JavaScript:alert (\''.htmlspecialchars (preg_replace ('/\n/', '\\n', $it['settings']['DESC'])).'\');">Подробнее...</a>';
+        }
       }
   ?>
   <tr<?=(($class!='')?(' class="'.$class.'"'):(''));?> id="problem_<?=$it['id'];?>_row">

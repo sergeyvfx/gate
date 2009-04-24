@@ -1,33 +1,64 @@
 <div id="imageEdt">
 <?php
   if (!function_exists (oneLimitStr)) {
-    function oneLimitStr ($v,$t=0) {
-      $a=preg_replace ('/^([\=\<\>]+).*/', '\\1', $v);
-      $v=preg_replace ('/^([\=\<\>]+)/', '', $v);
-      $r='';
-      if ($t==0) $t='равна' ;else $t='равен';
-      if ($a=='<=') $r='меньше или '.$t; else
-      if ($a=='==') $r=$t;
-      if ($a=='>=') $r='больше или '.$t;
-      return $r.=' '.$v;
+    function oneLimitStr ($v, $t = 0) {
+      $a = preg_replace ('/^([\=\<\>]+).*/', '\\1', $v);
+      $v = preg_replace ('/^([\=\<\>]+)/', '', $v);
+      $r = '';
+
+      if ($t == 0) {
+        $t = 'равна';
+      } else {
+        $t = 'равен';
+      }
+
+      if ($a == '<=') {
+        $r = 'меньше или '.$t;
+      } else if ($a == '==') {
+        $r = $t;
+      } else if ($a == '>=') {
+        $r = 'больше или '.$t;
+      }
+
+      return $r .= ' '.$v;
     }
   }
 
   if (!function_exists (limitStr)) {
     function limitStr () {
-      $h=targ ('hlimit');
-      $v=targ ('vlimit');
-      $s=targ ('size');
-      $r='';
-      if ($h!='') $r.='ширина должна быть '.oneLimitStr ($h).' пикселям';
-      if ($v!='') $r.=(($r!='')?(', '):('')).'высота должна быть '.oneLimitStr ($v).' пикселям';
-      if ($s!='') $r.=(($r!='')?(', '):('')).'размер длжен быть '.oneLimitStr ($s, 1).' байт';
-      if ($r!='')
+      $h = targ ('hlimit');
+      $v = targ ('vlimit');
+      $s = targ ('size');
+      $r = '';
+
+      if ($h != '') {
+        $r .= 'ширина должна быть '.oneLimitStr ($h).' пикселям';
+      }
+
+      if ($v != '') {
+        $r .= (($r!='')?(', '):('')).'высота должна быть '.
+          oneLimitStr ($v).' пикселям';
+      }
+
+      if ($s != '') {
+        $r .= (($r!='')?(', '):('')).'размер длжен быть '.
+          oneLimitStr ($s, 1).' байт';
+      }
+
+      if ($r != '') {
         $r=' Кроме того '.$r.'.';
+      }
+
       return $r;
     }
   }
-  $img=config_get ('document-root').'/pics/clear.gif'; $params=targ ('params'); if (targ ('img')!='') $img=targ ('img');?>
+  $img = config_get ('document-root').'/pics/clear.gif';
+  $params = targ ('params');
+
+  if (targ ('img') != '') {
+    $img = targ ('img');
+  }
+?>
   <center>
     <table class="clear">
       <tr valign="top">

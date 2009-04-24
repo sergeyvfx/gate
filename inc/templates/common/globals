@@ -1,9 +1,9 @@
-<?
-  $engine=browser_engine ();
+<?php
+  $engine = browser_engine ();
 ?>
-  var http_host="<?=config_get ('proto');?>://<?=config_get ('http-host');?>";
-  var document_root="<?=config_get ('http-document-root');?>";
-  var engine="<?=$engine;?>";
-  var isGecko=<?=(($engine=='GECKO')?('true'):('false'));?>;
-  var isMSIE=<?=(($engine=='DONKEY')?('true'):('false'));?>;
-  var force_url='';
+  var http_host = "<?=config_get ('proto');?>://<?=config_get ('http-host');?>";
+  var document_root = "<?=config_get ('http-document-root');?>";
+  var engine = "<?=$engine;?>";
+  var isGecko = <?=(($engine=='GECKO')?('true'):('false'));?>;
+  var isMSIE = <?=(($engine=='DONKEY')?('true'):('false'));?>;
+  var force_url = '';

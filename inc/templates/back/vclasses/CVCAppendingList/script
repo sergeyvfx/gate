@@ -1,36 +1,64 @@
-function alist_use_item (alist, tag) { eval ('window.alist_'+alist+'_item_'+tag+'_used=true;'); }
-function alist_unuse_item (alist, tag) { eval ('window.alist_'+alist+'_item_'+tag+'_used=null;'); }
-function alist_item_used (alist, tag) { return eval ('window.alist_'+alist+'_item_'+tag+'_used!=null'); }
+function alist_use_item (alist, tag) {
+  eval ('window.alist_' + alist + '_item_' + tag + '_used=true;');
+}
+
+function alist_unuse_item (alist, tag) {
+  eval ('window.alist_' + alist + '_item_' + tag + '_used=null;');
+}
+
+function alist_item_used (alist, tag) {
+  return eval ('window.alist_' + alist + '_item_' + tag + '_used!=null');
+}
+
 function alist_delete_entry (alist, tag) {
-  node=getElementById ('alist_'+alist+'_item_'+tag);
+  node = getElementById ('alist_' + alist + '_item_' + tag);
   alist_unuse_item (alist, tag);
   remove_node (node);
 }
+
 function alist_append_entry (alist, title, tag) {
-  var container=getElementById ('alist_'+alist+'_cnt');
-  if (alist_item_used (alist, tag)) return;
+  var container = getElementById ('alist_' + alist + '_cnt');
+
+  if (alist_item_used (alist, tag)) {
+    return;
+  }
+
   alist_use_item (alist, tag);
-  container.innerHTML+='<span id="alist_'+alist+'_item_'+tag+'">'+title+'&nbsp;&nbsp;<small>[<a href="JavaScript:alist_delete_entry (\''+alist+'\', \''+tag+'\');"><img alt="Удалить элемент" title="Удалить элемент" src="<?=config_get ('document-root');?>/pics/minus_s.gif"></a>]</small></span>';
+  container.innerHTML += '<span id="alist_' + alist + '_item_' + tag + '">' +
+    title + '&nbsp;&nbsp;<small>[<a href="JavaScript:alist_delete_entry (\'' + alist +
+      '\', \'' + tag + '\');"><img alt="Удалить элемент" title="Удалить элемент" src="<?=config_get ('document-root');?>/pics/minus_s.gif"></a>]</small></span>';
 }
+
 function alist_append (alist) {
-  var select=getElementById ('alist_'+alist+'_item');
-  var tag=select.value;
-  var title=select_title_by_value (select, tag);
-  if (tag=='') return;
+  var select = getElementById ('alist_' + alist + '_item');
+  var tag = select.value;
+  var title = select_title_by_value (select, tag);
+
+  if (tag == '') {
+    return;
+  }
+
   alist_append_entry (alist, title, tag);
 }
+
 function alist_prepare_post_data (alist) {
-  var r='';
-  var select=getElementById ('alist_'+alist+'_item');
-  for (var i=0; i<select.childNodes.length; i++) {
-    var item=select.childNodes.item (i);
-    if (item.tagName && item.tagName.toLowerCase ()=='option') {
-      tag=item.value;
+  var r = '';
+  var select = getElementById ('alist_' + alist + '_item');
+
+  for (var i = 0; i < select.childNodes.length; i++) {
+    var item = select.childNodes.item (i);
+
+    if (item.tagName && item.tagName.toLowerCase () == 'option') {
+      tag = item.value;
       if (alist_item_used (alist, tag)) {
-        if (r!='') r+="\n";
-        r+=tag;
+        if (r != '') {
+          r += "\n";
+        }
+
+        r += tag;
       }
     }
   }
-  getElementById ('alist_'+alist+'_items').value=r;
+
+  getElementById ('alist_' + alist + '_items').value = r;
 }

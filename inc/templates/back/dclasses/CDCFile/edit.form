@@ -1,31 +1,41 @@
 <div id="fileEdt">
 <?php
   if (!function_exists (file_oneLimitStr)) {
-    function file_oneLimitStr ($v,$t=0) {
-      $a=preg_replace ('/^([\=\<\>]+).*/', '\\1', $v);
-      $v=preg_replace ('/^([\=\<\>]+)/', '', $v);
-      $r='';
-      if ($t==0) $t='равна' ;else $t='равен';
-      if ($a=='<=') $r='меньше или '.$t; else
-      if ($a=='==') $r=$t;
-      if ($a=='>=') $r='больше или '.$t;
-      return $r.=' '.$v;
+    function file_oneLimitStr ($v, $t = 0) {
+      $a = preg_replace ('/^([\=\<\>]+).*/', '\\1', $v);
+      $v = preg_replace ('/^([\=\<\>]+)/', '', $v);
+      $r = '';
+      if ($t == 0) {
+        $t = 'равна';
+      } else {
+        $t = 'равен';
+      }
+
+      if ($a == '<=') {
+        $r = 'меньше или '.$t;
+      } else if ($a == '==') {
+        $r = $t;
+      } else if ($a == '>=') {
+        $r = 'больше или '.$t;
+      }
+
+      return $r .= ' '.$v;
     }
   }
 
   if (!function_exists (file_limitStr)) {
     function file_limitStr () {
-      $s=targ ('size');
-      $r='';
-      if ($s!='') $r.='Размер длжен быть '.file_oneLimitStr ($s, 1).' байт';
+      $s = targ ('size');
+      $r = '';
+      if ($s!='') $r .= 'Размер длжен быть '.file_oneLimitStr ($s, 1).' байт';
       return $r;
     }
   }
 
-  $file='';
-  $params=targ ('params');
-  if (targ ('file')!='')
-    $file=targ ('file');
+  $file = '';
+  $params = targ ('params');
+  if (targ ('file') != '')
+    $file = targ ('file');
 ?>
 
   <center>

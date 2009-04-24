@@ -1,13 +1,33 @@
 <?php
-  if ($PHP_SELF!='') {print ('HACKERS?'); die;}
+  /**
+   * Gate - Wiki engine and web-interface for WebTester Server
+   *
+   * Storage editing form generator
+   *
+   * Copyright (c) 2008-2009 Sergey I. Sharybin <g.ulairi@gmail.com>
+   *
+   * This program can be distributed under the terms of the GNU GPL.
+   * See the file COPYING.
+   */
+
+  if ($PHP_SELF != '') {
+    print ('HACKERS?');
+    die;
+  }
+
   global $id;
-  $d=manage_spawn_storage ($id);
+  $d = manage_spawn_storage ($id);
   formo ('title=Информация о хранилище данных;');
 ?>
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
-    var name=getElementById ('name').value;
-    if (qtrim (name)=='') {alert ('Нельзя сменить имя типа данных на пустое.'); return false;}
+    var name = getElementById ('name').value;
+
+    if (qtrim (name) == '') {
+      alert ('Нельзя сменить имя типа данных на пустое.');
+      return false;
+    }
+
     frm.submit ();
   }
 </script>

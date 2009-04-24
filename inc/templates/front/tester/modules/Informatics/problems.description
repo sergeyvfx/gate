@@ -1,10 +1,11 @@
 <?php
   global $redirect;
-  $data=targ ('data');
-  $s=$data['settings'];
-  $editbtn=targ ('editbtn');
+  $data = targ ('data');
+  $s = $data['settings'];
+  $editbtn = targ ('editbtn');
   formo ('title='.prepare_arg ($data['name']).';');
 ?>
+
 <table width="100%"><tr><td>
   <table class="right" style="margin: 0  0 6px 6px;" >
     <tr>
@@ -21,12 +22,25 @@
       </td>
     </tr>
   </table>
-<?php print ($data['description']); ?>
+<?php
+  print ($data['description']);
+?>
 </td></tr></table>
-<?php $backlink=targ ('backlink'); if ($backlink=='') $backlink=$redirect; if ($backlink!='' || $editbtn) { ?>
+<?php
+  $backlink = targ ('backlink');
+
+  if ($backlink == '') {
+    $backlink = $redirect;
+  }
+
+  if ($backlink != '' || $editbtn) {
+?>
   <div class="formPast">
-    <? if ($backlink!='') { ?><button class="submitBtn<?=((!$editbtn)?(' block'):(''));?>" onclick="nav ('<?=$backlink;?>');">Назад</button><?php } ?>
-    <? if ($editbtn)      { ?><button class="submitBtn<?=(($backlink=='')?(' block'):(''));?>" onclick="nav ('?page=prbmanager&action=edit&id=<?=$data['id'];?>&redirect=<?=WT_validate_ipc_link (get_redirection (true, true));?>');">Редактировать</button><?php } ?>
+    <?php if ($backlink!='') { ?><button class="submitBtn<?=((!$editbtn)?(' block'):(''));?>" onclick="nav ('<?=$backlink;?>');">Назад</button><?php } ?>
+    <?php if ($editbtn)      { ?><button class="submitBtn<?=(($backlink=='')?(' block'):(''));?>" onclick="nav ('?page=prbmanager&action=edit&id=<?=$data['id'];?>&redirect=<?=WT_validate_ipc_link (get_redirection (true, true));?>');">Редактировать</button><?php } ?>
   </div>
-<?php } ?>
-<?php formc (); ?>
+<?php
+  }
+
+  formc ();
+?>

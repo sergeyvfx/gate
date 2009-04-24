@@ -1,7 +1,7 @@
 <table class="iframe" id="iframeEditor_<?=targ ('name');?>">
   <tr>
     <td class="dialogContainer">
-<?
+<?php
   tpl_linkage ('./dialogs', targs ());
 ?>
     </td>

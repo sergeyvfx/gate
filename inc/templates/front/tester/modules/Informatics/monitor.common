@@ -1,27 +1,32 @@
 <script language="JavaScript" type="text/javascript">
-  var monitor_full_wnd=null;
-  var monitor_auto_refresh=false;
+  var monitor_full_wnd = null;
+  var monitor_auto_refresh = false;
 
   function monitor_update () {
-    var w=monitor_full_wnd;
+    var w = monitor_full_wnd;
 
-    if (!w || !w.document)
+    if (!w || !w.document) {
       return;
+    }
 
-    var m=w.document.getElementById ('monitor');
+    var m = w.document.getElementById ('monitor');
 
     CONTENT_open (m, '/tester/?ipc=monitor', w);
 
-    if (monitor_auto_refresh)
+    if (monitor_auto_refresh) {
       setTimeout (monitor_update, 5000);
+    }
   }
 
   function monitor_toggle_autorefresh () {
-    var link=monitor_full_wnd.document.getElementById ('mar');
-    monitor_auto_refresh=!monitor_auto_refresh;
-    if (monitor_auto_refresh)
-      link.innerHTML='Отключить автоматическое обновление'; else
-      link.innerHTML='Автоматическое обновление';
+    var link = monitor_full_wnd.document.getElementById ('mar');
+    monitor_auto_refresh = !monitor_auto_refresh;
+
+    if (monitor_auto_refresh) {
+      link.innerHTML = 'Отключить автоматическое обновление';
+    } else {
+      link.innerHTML = 'Автоматическое обновление';
+    }
 
     setTimeout (monitor_update, 5000);
   }
@@ -30,10 +35,10 @@
     var params='scrollbars=no,fullscreen=yes,status=no,toolbar=no,resizable=yes,menubar=no,directories=no';
     var wnd=open ('', '', params);
 
-    monitor_full_wnd=wnd;
+    monitor_full_wnd = wnd;
 
-    var head=wnd.document.getElementsByTagName('HEAD');
-    var body=wnd.document.body;
+    var head = wnd.document.getElementsByTagName('HEAD');
+    var body = wnd.document.body;
 
     var s_sheet1 = wnd.document.createElement("link");
     s_sheet1.setAttribute ('rel','stylesheet'); s_sheet1.setAttribute ('type','text/css');
@@ -55,11 +60,11 @@
 
     body.style.height='100%';
 
-    var src=getElementById ('monitor').innerHTML;
-    wnd.onresize=function () { var w=this; var m=w.document.getElementById ('monitor'), d=core_WindowDimensions (w); m.style.height=(d.Y-32)+'px'; return true; };
-    wnd.gate=window;
+    var src = getElementById ('monitor').innerHTML;
+    wnd.onresize = function () { var w=this; var m=w.document.getElementById ('monitor'), d=core_WindowDimensions (w); m.style.height=(d.Y-32)+'px'; return true; };
+    wnd.gate = window;
 
-    body.innerHTML+='<table class="clear" style="width: 100%;">'+
+    body.innerHTML += '<table class="clear" style="width: 100%;">'+
         '<tr><td><div id="monitor">'+src+'</div></td></tr>'+
         '<tr><td style="height: 24px;"><div class="cats" style="margin-top: 4px; margin-bottom: 0;"><span>Быстрые ссылки:</span><a href="JavaScript:window.gate.monitor_update ();">Обновить</a>'+
           '::<a href="JavaScript:window.gate.monitor_toggle_autorefresh ();" id="mar">Автоматическое обновление</a></div></td></tr>'
@@ -70,8 +75,8 @@
 
   function validateMonitorWidth( ) {
     var monitors = document.getElementsByName ('monitor');
-    for (i=0, n=monitors.length; i<n; ++i) {
-      monitor=monitors[i];
+    for (i = 0, n = monitors.length; i < n; ++i) {
+      monitor = monitors[i];
       monitor.style.width = '200px';
       window.setTimeout (function (_monitor) { return function () { _monitor.style.width=_monitor.parentNode.offsetWidth-14+'px' }; } (monitor), 10);
     }
@@ -80,11 +85,12 @@
 
 <?php
   function setContestId ($arr, $contest_id) {
-    for ($i=0, $n=count ($arr); $i<$n; ++$i)
-      $arr[$i]['contest_id']=$contest_id;
+    for ($i = 0, $n = count ($arr); $i < $n; ++$i) {
+      $arr[$i]['contest_id'] = $contest_id;
+    }
   }
 
-function color_div ($perc) {
+  function color_div ($perc) {
     return '';
     $t=preg_replace ('/^([0-9]+).*/', '\1', $perc);
     $c='ffc';

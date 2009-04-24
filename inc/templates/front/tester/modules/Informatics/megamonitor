@@ -1,126 +1,141 @@
 <?php
-  $lib=targ ('lib');
+  $lib = targ ('lib');
 
   redirector_add_skipvar ('action', 'build');
 
-  function showSettingsForm ($groups_used=array (), $contests_used=array ()) {
+  function showSettingsForm ($groups_used = array (),
+                             $contests_used = array ()) {
+    $contests = WT_spawn_new_contest_container ();
+    $contests = $contests->GetList ();
+    $groups = group_list ();
 
-    $contests=WT_spawn_new_contest_container ();
-    $contests=$contests->GetList ();
-    $groups=group_list ();
-
-    $it_groups=array ();
-    for ($i=0, $n=count ($groups); $i<$n; ++$i) {
-      $g=$groups[$i];
-      $it_groups[]=array ('tag'=>$g['id'], 'title'=>$g['name']);
+    $it_groups = array ();
+    for ($i = 0, $n = count ($groups); $i < $n; ++$i) {
+      $g = $groups[$i];
+      $it_groups[] = array ('tag' => $g['id'], 'title' => $g['name']);
     }
-    $it_groups[]=array ('tag'=>0, 'title'=>'Все группы');
+    $it_groups[] = array ('tag' => 0, 'title' => 'Все группы');
 
-    $it_list=array ();
-    for ($i=0, $n=count ($contests); $i<$n; ++$i) {
-      $c=$contests[$i];
-      if ($c['lid'] != 0) continue;
-      $it_list[]=array ('title'=>$c['name'], 'tag'=>$c['id']);
+    $it_list = array ();
+    for ($i = 0, $n = count ($contests); $i < $n; ++$i) {
+      $c = $contests[$i];
+
+      if ($c['lid'] != 0) {
+        continue;
+      }
+
+      $it_list[] = array ('title' => $c['name'], 'tag' => $c['id']);
     }
-    $it_list[]=array ('tag'=>0, 'title'=>'Все контесты');
+    $it_list[] = array ('tag' => 0, 'title' => 'Все контесты');
 
-    print ('<form action="./?page=megamonitor&action=build" method="post" onsubmit="alist_prepare_post_data (\'contests\'); alist_prepare_post_data (\'groups\');">');
-    print ('  <div style="padding: 0 0 4px 0;">Список контестов. по которым будет построен общий монитор:</div>');
+    println ('<form action="./?page=megamonitor&action=build" method="post" onsubmit="alist_prepare_post_data (\'contests\'); alist_prepare_post_data (\'groups\');">');
+    println ('  <div style="padding: 0 0 4px 0;">Список контестов. по которым будет построен общий монитор:</div>');
 
-    $contests_list=new CVCAppendingList ();
+    $contests_list = new CVCAppendingList ();
     $contests_list->Init ('contests');
     $contests_list->SetItems ($it_list);
     $contests_list->SetItemsUsed ($contests_used);
     $contests_list->Draw ();
 
-    print ('  <div style="padding: 12px 0 4px 0;">Список групп. по которым будет построен общий монитор:</div>');
-    $groups_list=new CVCAppendingList ();
+    println ('  <div style="padding: 12px 0 4px 0;">Список групп. по которым будет построен общий монитор:</div>');
+    $groups_list = new CVCAppendingList ();
     $groups_list->Init ('groups');
     $groups_list->SetItems ($it_groups);
     $groups_list->SetItemsUsed ($groups_used);
     $groups_list->Draw ();
 
-    print ('<div class="formPast"><div id="hr"></div><button type="submit" class="block submitBtn">Построить монитор</button></div>');
-    print ('</form>');
+    println ('<div class="formPast"><div id="hr"></div><button type="submit" class="block submitBtn">Построить монитор</button></div>');
+    println ('</form>');
   }
 
   function mergeArrays ($to, $from, $usage) {
-    for ($i=0, $n=count ($from); $i<$n; ++$i) {
-      if ($usage[$from[$i]['id']]) continue;
-      $to[]=$from[$i];
-      $usage[$from[$i]['id']]=true;
+    for ($i = 0, $n = count ($from); $i < $n; ++$i) {
+      if ($usage[$from[$i]['id']]) {
+        continue;
+      }
+
+      $to[] = $from[$i];
+      $usage[$from[$i]['id']] = true;
     }
   }
 
   function mergeContestData ($to, $from, $contest) {
-    for ($i=0, $n=count ($from); $i<$n; ++$i) {
-      $from[$i]['contest_id']=$contest;
-      $to[]=$from[$i];
+    for ($i = 0, $n = count ($from); $i < $n; ++$i) {
+      $from[$i]['contest_id'] = $contest;
+      $to[] = $from[$i];
     }
   }
 
   function buildMegamonitor () {
-    $lib=targ ('lib');
+    $lib = targ ('lib');
 
-    $contests=receiveDataFromAList ('contests');
-    $groups=receiveDataFromAList ('groups');
-    $sgroups=$groups;
-    $scontests=$contests;
+    $contests = receiveDataFromAList ('contests');
+    $groups = receiveDataFromAList ('groups');
+    $sgroups = $groups;
+    $scontests = $contests;
 
-    $users_usage=array ();
-    $problems_usage=array ();
-    $sols_usage=array ();
+    $users_usage = array ();
+    $problems_usage = array ();
+    $sols_usage = array ();
 
-    $sols=array ();
-    $users=array ();
-    $judges=array ();
-    $problems=array ();
-    $wanted_users=array ();
+    $sols = array ();
+    $users = array ();
+    $judges = array ();
+    $problems = array ();
+    $wanted_users = array ();
 
-    $all_groups=false;
-
-    foreach ($groups as $group)
-      if ($group==0) $all_groups=true;
-
-    if (!$all_groups)
-      foreach ($groups as $group) {
-        $tmp_users=user_authorized_list ($group);
-        for ($i=0, $n=count ($tmp_users); $i<$n; ++$i)
-          $wanted_users[$tmp_users[$i]['id']]=true;
+    $all_groups = false;
+    foreach ($groups as $group) {
+      if ($group == 0) {
+        $all_groups = true;
       }
+    }
+
+    if (!$all_groups) {
+      foreach ($groups as $group) {
+        $tmp_users = user_authorized_list ($group);
+        for ($i = 0, $n = count ($tmp_users); $i < $n; ++$i) {
+          $wanted_users[$tmp_users[$i]['id']] = true;
+        }
+      }
+    }
 
     foreach ($contests as $contest) {
-      if ($contest==0) {
-        $list=WT_spawn_new_contest_container ();
-        $list=$list->GetList ();
+      if ($contest == 0) {
+        $list = WT_spawn_new_contest_container ();
+        $list = $list->GetList ();
 
-        $contests=array ();
-        for ($i=0, $n=count ($list); $i<$n; ++$i) {
-          if ($list[$i]['lid']!=0) continue;
-          $contests[]=$list[$i]['id'];
+        $contests = array ();
+        for ($i = 0, $n = count ($list); $i < $n; ++$i) {
+          if ($list[$i]['lid'] != 0) {
+            continue;
+          }
+
+          $contests[] = $list[$i]['id'];
         }
         break;
       }
     }
 
-    $contests_by_lib=array ();
+    $contests_by_lib = array ();
 
     foreach ($contests as $contest) {
-      $c=WT_contest_by_id ($contest);
+      $c = WT_contest_by_id ($contest);
 
-      $contests_by_lib[$c['settings'][rules]][]=$contest;
+      $contests_by_lib[$c['settings'][rules]][] = $contest;
 
-      $tmp_users=$lib->GetUsersAtContest ($contest);
-      $p=$lib->GetProblemsAtContest ($contest);
-      $s=$lib->GetAllSolutions ($contest);
+      $tmp_users = $lib->GetUsersAtContest ($contest);
+      $p = $lib->GetProblemsAtContest ($contest);
+      $s = $lib->GetAllSolutions ($contest);
 
       if ($all_groups) {
-        $u=$tmp_users;
+        $u = $tmp_users;
       } else {
-        $u=array ();
-        for ($i=0, $n=count ($tmp_users); $i<$n; ++$i) {
-          if ($wanted_users[$tmp_users[$i]['id']])
-            $u[]=$tmp_users[$i];
+        $u = array ();
+        for ($i = 0, $n = count ($tmp_users); $i < $n; ++$i) {
+          if ($wanted_users[$tmp_users[$i]['id']]) {
+            $u[] = $tmp_users[$i];
+          }
         }
       }
 
@@ -129,31 +144,35 @@
       mergeContestData (&$sols[$c['settings'][rules]], $s, $contest);
     }
 
-    if (count ($users) == 0 || count ($contests)==0) {
+    if (count ($users) == 0 || count ($contests) == 0) {
       info ('Общий монитор с указанными группами и контестами является пустым');
     } else {
-      $s=array ('0'=>acm, '1'=>'kirov');
-      $names=array ('0'=>'ACM', '1'=>'Кировские правила');
+      $s = array ('0' => 'acm', '1' => 'kirov');
+      $names = array ('0'=>'ACM', '1'=>'Кировские правила');
 
       $lib->InsertTemplate ('monitor.common', array ());
 
-      foreach ($s as $lid=>$suff) {
-        if (count ($users[$lid])==0 || count ($contests_by_lib[$lid])==0) continue;
+      foreach ($s as $lid => $suff) {
+        if (count ($users[$lid]) == 0 || count ($contests_by_lib[$lid]) == 0) {
+          continue;
+        }
+
         $lib->CPrintLn ('<b>Монитор с контестами, проводимыми по прамилам "'.$names[$lid].'":</b>');
-        $lib->InsertTemplate ('monitor.'.$suff, array ('lib'=>$lib, 'user_id'=>-1, 'solutions'=>$sols[$lid],
-          'users'=>$users[$lid], 'judges'=>$judges, 'problems'=>$problems[$lid], 'contests'=>$contests_by_lib[$lid]));
+        $lib->InsertTemplate ('monitor.'.$suff, array ('lib' => $lib, 'user_id' => -1,
+          'solutions' => $sols[$lid], 'users' => $users[$lid], 'judges' => $judges,
+          'problems' => $problems[$lid], 'contests' => $contests_by_lib[$lid]));
         $lib->CPrintLn ('<br>');
       }
     }
 
-    print ('<div style="margin-top: 6px">');
+    println ('<div style="margin-top: 6px">');
     dd_formo ('title=Построение общего монитора');
     showSettingsForm ($sgroups, $scontests);
     dd_formc ();
-    print ('</div>');
+    println ('</div>');
   }
 
-  if ($_GET['action']=='build') {
+  if ($_GET['action'] == 'build') {
     buildMegamonitor ();
   } else {
     formo ();

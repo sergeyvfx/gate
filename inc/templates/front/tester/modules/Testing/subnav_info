@@ -1,22 +1,26 @@
 <?php
   global $page, $WT_contest_id;
 
-  $data=targ ('data');
-  $lib=targ ('lib');
+  $data = targ ('data');
+  $lib = targ ('lib');
 
-  $s=$data['settings'];
+  $s = $data['settings'];
 
-  $status=WT_contest_status_string ($data);
+  $status = WT_contest_status_string ($data);
 
-  if (trim (preg_replace ('/\&nbsp\;/', '', $status))!='')
-    print '<div><b>Статус контеста:</b> '.$status.'</div>';
+  if (trim (preg_replace ('/\&nbsp\;/', '', $status)) != '')
+    println ('<div><b>Статус контеста:</b> '.$status.'</div>');
 
   if ($lib->Test_Obtained ()) {
     if ($s['timelimit']) {
-      $sol=$lib->Test_GetCurrent ();
-      $t=$sol['timestamp'];
-      if (!$t) $t=time ();
-      print ('<div><b>Статус решения:</b> Осталось '.Timer ($t+$s['timelimit']*60-time ()).'</div>');
+      $sol = $lib->Test_GetCurrent ();
+      $t = $sol['timestamp'];
+
+      if (!$t) {
+        $t = time ();
+      }
+
+      println ('<div><b>Статус решения:</b> Осталось '.Timer ($t+$s['timelimit']*60-time ()).'</div>');
     }
   }
 ?>

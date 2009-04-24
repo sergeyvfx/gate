@@ -2,14 +2,17 @@
   <tr class="h">
     <td class="sp"><img src="<?=config_get ('document-root');?>/pics/clear.gif" class="sep16" alt=""></td>
 <?php
-    $tabs=targ ('tabs');
-    $colspan=2;
-    for ($i=0; $i<count ($tabs); $i++) {
+    $tabs = targ ('tabs');
+    $colspan = 2;
+
+    for ($i = 0; $i < count ($tabs); $i++) {
       $colspan++;
-      $tab=unserialize_params ($tabs[$i]);
+      $tab = unserialize_params ($tabs[$i]);
+
       if ($tab['separator']) {
         println ('    <td class="sp"><img src="'.config_get ('document-root').'/pics/clear.gif" class="sep16" alt=""></td>');
       }
+
       else {
         $colspan++;
 ?>

@@ -1,13 +1,17 @@
 <?php
-  $data=targ ('data');
+  $data = targ ('data');
 ?>
 <div>Архив с условиями:</div>
-<?php if ($data['settings']['archive']!='') { ?>
+<?php
+  if ($data['settings']['archive'] != '') {
+?>
 <div style="padding: 2px 0;">
   <input type="checkbox" name="noarchive" value="1" class="cb">Убрать архив с условиемяи
 </div>
 <div id="hr"></div>
-<?php } ?>
+<?php
+  }
+?>
 <div style="padding: 2px 0;">
   <input type="file" class="file block" name="archive">
 </div>

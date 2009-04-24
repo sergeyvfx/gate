@@ -1,5 +1,7 @@
 Страница / Нижний колонтитул
-<?php $info=client_info (); ?>
+<?php
+  $info = client_info ();
+?>
 <div id="footer" style="padding-bottom: 4px;">
   <center>
     <small>

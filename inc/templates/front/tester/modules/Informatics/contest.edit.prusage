@@ -3,7 +3,8 @@
 
   content_url_var_push_global ('filter');
 
-  $data=targ ('data'); $lib=targ ('lib');
+  $data = targ ('data');
+  $lib = targ ('lib');
 
   redirector_add_skipvar ('act', 'up');
   redirector_add_skipvar ('act', 'down');
@@ -12,21 +13,21 @@
   redirector_add_skipvar ('act', 'drop');
   redirector_add_skipvar ('pid', '');
 
-  $arr=$lib->GetProblemsAtContest ($data['id']);
-  $n=count ($arr);
+  $arr = $lib->GetProblemsAtContest ($data['id']);
+  $n = count ($arr);
 
   $delete  = $lib->GetAllowed ('PROBLEMS.DELETE');
   $rejudge = $lib->GetAllowed ('PROBLEMS.REJUDGE');
 
-  if ($n<=0) {
+  if ($n <= 0) {
 ?>
 <span class="contentSub">Нет задач на контесте</span>
 <?php
   } else {
-    $dis=array ();
-    $q=db_select ('tester_disabled_problems', array ('problem_id'), '`contest_id`='.$data['id']);
-    while ($r=db_row ($q)) {
-      $dis[$r['problem_id']]=true;
+    $dis = array ();
+    $q = db_select ('tester_disabled_problems', array ('problem_id'), '`contest_id`='.$data['id']);
+    while ($r = db_row ($q)) {
+      $dis[$r['problem_id']] = true;
     }
   ?>
 <script language="JavaScript" type="text/JavaScript">
@@ -52,17 +53,18 @@
 </script>
 <table class="list">
 <?php
-  $full=content_url_get_full ();
-  for ($i=0; $i<$n; $i++) { $it=$arr[$i];
-    $class='';
-    $class.=(($i==$n-1)?((($class!='')?(' '):('')).'last'):(''));
-    $class.=(($n!=1 && $i==0)?((($class!='')?(' '):('')).'first'):(''));
-    $class.=(($act=='view' && $uid==$it['id'])?( (($class!='')?(' '):('')).'active'):(''));
-    $class=($class!='')?(' class="'.$class.'"'):('');
+  $full = content_url_get_full ();
+  for ($i = 0; $i < $n; $i++) {
+    $it = $arr[$i];
+    $class = '';
+    $class .= (($i==$n-1)?((($class!='')?(' '):('')).'last'):(''));
+    $class .= (($n!=1 && $i==0)?((($class!='')?(' '):('')).'first'):(''));
+    $class .= (($act=='view' && $uid==$it['id'])?( (($class!='')?(' '):('')).'active'):(''));
+    $class = ($class!='')?(' class="'.$class.'"'):('');
 
-    $comment=$it['settings']['comment'];
-    $comment=(($comment!='')?(' title="'.$comment.'"'):(''));
-    $s=$it['settings'];
+    $comment = $it['settings']['comment'];
+    $comment = (($comment!='')?(' title="'.$comment.'"'):(''));
+    $s = $it['settings'];
   ?>
   <tr<?=$class;?>>
     <td width="16"><input type="checkbox" onclick="toggle_problem_usage (this, <?=$it['id'];?>); return false;"<?=((!isset ($dis[$it['id']]))?(' checked'):(''));?>></td>

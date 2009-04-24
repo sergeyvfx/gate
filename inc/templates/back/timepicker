@@ -1,55 +1,78 @@
 <?php
-  $v=targ ('value');
-  if ($TIME_Initialized!='!!done!!') {
-  if ($v=='') {
-    $v='00:00';
+  $v = targ ('value');
+
+  if ($TIME_Initialized != '!!done!!') {
+
+  if ($v == '') {
+    $v = '00:00';
   }
 
-  $h=preg_replace ('/^([0-9][0-9]):([0-9][0-9])$/', '\1', $v);
-  $m=preg_replace ('/^([0-9][0-9]):([0-9][0-9])$/', '\2', $v);
+  $h = preg_replace ('/^([0-9][0-9]):([0-9][0-9])$/', '\1', $v);
+  $m = preg_replace ('/^([0-9][0-9]):([0-9][0-9])$/', '\2', $v);
 ?>
 <script language="JavaScript" type="text/javascript">
 
-var time_focused=new Array (); 
+var time_focused = new Array (); 
 
 function time_update_postval (name) {
-  getElementById (name).value=getElementById (name+'_h').value+':'+getElementById (name+'_m').value;
+  getElementById (name).value = getElementById (name + '_h').value +
+    ':' + getElementById (name + '_m').value;
 }
 
 function time_onfocus (name, sender) {
-  var h=getElementById (name+'_h');
-  var m=getElementById (name+'_m');
+  var h = getElementById (name + '_h');
+  var m = getElementById (name + '_m');
 
-  if (sender!=h) time_onblur (name, h);
-  if (sender!=m) time_onblur (name, m);
+  if (sender != h) {
+    time_onblur (name, h);
+  }
 
-  time_focused[name]=sender;
-  sender.style.background='#00007f';
-  sender.style.color='#fff';
+  if (sender != m) {
+    time_onblur (name, m);
+  }
+
+  time_focused[name] = sender;
+  sender.style.background = '#00007f';
+  sender.style.color = '#fff';
 }
 
 function time_onblur (name, sender) {
-  sender.style.background='';
-  sender.style.color='';
+  sender.style.background = '';
+  sender.style.color = '';
 }
 
 function time_edit (name, dir) {
-  var h=getElementById (name+'_h');
-  if (!time_focused[name]) return;
+  var h = getElementById (name + '_h');
+
+  if (!time_focused[name]) {
+    return;
+  }
+
   time_onfocus (name, time_focused[name]);
 
-  var val=new Number (time_focused[name].value), maxval;
-  if (isNaN (val)) val=0;
-  val+=dir;
+  var val = new Number (time_focused[name].value), maxval;
 
-  if (time_focused[name]==h)
-    maxval=23; else
-    maxval=59;
+  if (isNaN (val)) {
+    val = 0;
+  }
 
-  if (val>maxval) val=maxval;
-  if (val<0) val=0;
+  val += dir;
 
-  time_focused[name].value=((val<10)?('0'+val):(val));
+  if (time_focused[name] == h) {
+    maxval = 23;
+  } else {
+    maxval = 59;
+  }
+
+  if (val > maxval) {
+    val = maxval;
+  }
+
+  if (val < 0) {
+    val = 0;
+  }
+
+  time_focused[name].value = ((val < 10) ? ('0' + val):(val));
   time_update_postval (name);
 }
 
@@ -58,7 +81,7 @@ function time_down (name) { time_edit (name, -1); }
 
 </script>
 <?php
-    $TIME_Initialized='!!done!!';
+    $TIME_Initialized = '!!done!!';
   }
 ?>
 

@@ -1,9 +1,12 @@
 Статьи / Заглавная страница / Левый колонтитул
 <?php
   global $login, $passwd;
-  if ($login!='' && user_authorize (stripslashes ($login), stripslashes ($passwd))) {
+
+  if ($login != '' && user_authorize (stripslashes ($login),
+    stripslashes ($passwd))) {
     redirect (config_get ('http-document-root'));
   }
+
   if (!user_authorized ()) {
 ?>
 <form action="." method="POST">

@@ -1,40 +1,64 @@
 <?php
   global $id;
-  $manage=targ ('accManage');
-  $del=targ ('accDel');
-  $arr=targ ('data');
-  $current_contest=targ ('current_contest');
-  $n=count ($arr);
-  if (!$n)
-    print ('<span class="contentSub2">Нет контестов для участия или редактирования</span>'); else {
+  $manage = targ ('accManage');
+  $del = targ ('accDel');
+  $arr = targ ('data');
+  $current_contest = targ ('current_contest');
+  $n = count ($arr);
+
+  if (!$n) {
+    print ('<span class="contentSub2">Нет контестов для участия или редактирования</span>');
+  } else {
     print ('<table class="list">');
     print ('  <tr class="h"><th class="n first">№</th><th>Название</th><th colspan="2" width="40" class="last">&nbsp;</th></tr>');
-    $llid=-1; $counter=1;
-    for ($i=0; $i<$n; $i++) {
-      $d=$arr[$i];
-      if ($d['lid']!=$llid) {
-        $lib=WT_spawn_new_library ($d['lid']);
+    $llid = -1;
+    $counter = 1;
+
+    for ($i = 0; $i < $n; $i++) {
+      $d = $arr[$i];
+      if ($d['lid'] != $llid) {
+        $lib = WT_spawn_new_library ($d['lid']);
         print ('  <tr class="common"><td colspan="4"><div><span>Контесты модуля '.$lib->GetModuleName ().'</span></div></td></tr>');
-        $llid=$d['lid'];
-        $counter=1;
+        $llid = $d['lid'];
+        $counter = 1;
       }
-      $active=false; $subactive=false;
-      if ($id==$d['id']) $active=true;
-      if ($d['id']==$current_contest['id'])
-        if (isset ($id) && $id!=$d['id']) $subactive=true; else $active=true;
-      $last=($i==$n-1)?('last'):('');
-      $class=$last.(($active)?(' active'):('')).(($subactive)?(' subactive'):(''));
-      if ($class!='')$class=' class="'.$class.'"';
-      $status='&nbsp;';
-      $status=WT_contest_status_string ($d);
-      $actions='';
+
+      $active = false;
+      $subactive = false;
+
+      if ($id == $d['id']) {
+        $active = true;
+      }
+
+      if ($d['id'] == $current_contest['id']) {
+        if (isset ($id) && $id != $d['id']) {
+          $subactive = true;
+        } else {
+          $active = true;
+        }
+      }
+
+      $last = ($i == $n - 1) ? ('last') : ('');
+      $class = $last.(($active)?(' active'):('')).(($subactive)?(' subactive'):(''));
+
+      if ($class != '') {
+        $class = ' class="'.$class.'"';
+      }
+
+      $status = '&nbsp;';
+      $status = WT_contest_status_string ($d);
+      $actions = '';
       if ($manage) {
-        $actions.=stencil_ibtnav ('prefs.gif',   '.?page=contest&action=manage&id='.$d['id'],  'Управление');
-        $actions.=stencil_ibtnav ('stop.gif',    '.?page=contest&action=stop&id='.$d['id'],    'Остановить');
-        $actions.=stencil_ibtnav ('run.gif',     '.?page=contest&action=start&id='.$d['id'],   'Запустить');
-        $actions.=stencil_ibtnav ('restart.gif', '.?page=contest&action=restart&id='.$d['id'], 'Перезапустить');
+        $actions .= stencil_ibtnav ('prefs.gif',   '.?page=contest&action=manage&id='.$d['id'],  'Управление');
+        $actions .= stencil_ibtnav ('stop.gif',    '.?page=contest&action=stop&id='.$d['id'],    'Остановить');
+        $actions .= stencil_ibtnav ('run.gif',     '.?page=contest&action=start&id='.$d['id'],   'Запустить');
+        $actions .= stencil_ibtnav ('restart.gif', '.?page=contest&action=restart&id='.$d['id'], 'Перезапустить');
       }
-      if ($del)    $actions.=stencil_ibtnav ('cross.gif', '.?page=contest&action=delete&id='.$d['id'], 'Удалить', 'Удалить этот контест?');
+
+      if ($del) {
+        $actions .= stencil_ibtnav ('cross.gif', '.?page=contest&action=delete&id='.$d['id'], 'Удалить', 'Удалить этот контест?');
+      }
+
       print ('  <tr'.$class.'><td class="n">'.($counter++).'.</td><td><a href=".?page=contest&changeto='.$d['id'].'">'.$d['name'].'</a></td><td width="15%">'.$status.'</td><td align="right" width="120">'.$actions.'</td></tr>');
     }
     print ('</table>');

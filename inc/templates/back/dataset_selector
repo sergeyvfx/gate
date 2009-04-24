@@ -1,10 +1,20 @@
 <?php
   global $manage_dataset_selector_suffed;
-  $prefix=targ ('prefix'); if ($prefix) $prefix.='_';
-  $suffix=targ ('suffix'); if ($suffix) $suffix='_'.$suffix;
-  $active=targ ('active');
+
+  $prefix = targ ('prefix');
+  if ($prefix) {
+    $prefix .= '_';
+  }
+
+  $suffix = targ ('suffix'); {
+    if ($suffix) {
+      $suffix = '_'.$suffix;
+    }
+  }
+
+  $active = targ ('active');
   if (!$manage_dataset_selector_suffed)  {
-    $manage_dataset_selector_suffed=true; ?>
+    $manage_dataset_selector_suffed = true; ?>
     <script language="JavaScript" type="text/javascript">
       var manage_dataset_selector_values = new Array ();
       function manage_dataset_selector_update (prefix, suffix) {
@@ -15,9 +25,11 @@
       }
     </script>
 <?php  }
-  $list=manage_dataset_get_list ();
-  $n=count ($list);
-  if ($active<0 && $n) $active=$list[0]->GetID ();
+  $list = manage_dataset_get_list ();
+  $n = count ($list);
+  if ($active < 0 && $n) {
+    $active = $list[0]->GetID ();
+  }
 ?>
   <script langiage="JavaScript" type="text/javascript">manage_dataset_selector_values['<?=$prefix?>dataset_selector<?=$suffix;?>']=<?=$active;?>;</script>
 <select class="block" id="<?=$prefix;?>dataset_selector<?=$suffix;?>" name="<?=$prefix;?>dataset_selector<?=$suffix;?>" onchange="manage_dataset_selector_update ('<?=$prefix;?>', '<?=$suffix;?>');">
@@ -28,10 +40,15 @@
 <?php  } ?>
 </select>
 <?php
-  $formname=targ ('prefix');
-  if (targ ('suffix')!='') $formname.=targ ('suffix');
-  for ($i=0; $i<$n; $i++) {
-    $c=$list[$i]; ?>
+  $formname = targ ('prefix');
+
+  if (targ ('suffix')!='') {
+    $formname .= targ ('suffix');
+  }
+
+  for ($i = 0; $i < $n; $i++) {
+    $c = $list[$i];
+?>
   <div id="<?=$prefix?>manage_dataset_<?=$c->GetID ();?>_settings<?=$suffix;?>"<?=(($active!=$c->GetID ())?(' class="invisible"'):(''));?>>
     <?=$c->DrawSettingsForm ($formname);?>
   </div>

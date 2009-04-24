@@ -1,17 +1,24 @@
 Статьи / Заглавная страница / Список новостей
 <?php
-  $data=$pIFACE->GetList ();
-  $n=count ($data);
-  $tpl=manage_template_by_name ('Статьи / Заглавная страница / Список новостей / Коротко о новости');
+  $data = $pIFACE->GetList ();
+  $n = count ($data);
+  $tpl = manage_template_by_name ('Статьи / Заглавная страница / Список новостей / Коротко о новости');
   $script=$tpl->GetText ();
-  if ($n>0) {
+  if ($n > 0) {
 ?>
 <div id="news">
 <?php
-  $j=max ($n-opt_get ('last_news_count'), 0);
-  for ($i=$n-1; $i>=$j; $i--) { $r=$data[$i]; tpl_srcp ($script, $r); }
+  $j = max ($n-opt_get ('last_news_count'), 0);
+  for ($i = $n - 1; $i >= $j; $i--) {
+    $r = $data[$i];
+    tpl_srcp ($script, $r);
+  }
 ?>
 </div>
-<?php } else { ?>
+<?php
+  } else {
+?>
   <span class="contentsub">Нет новостей</span>
-<?php } ?>
+<?php
+  }
+?>

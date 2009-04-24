@@ -1,17 +1,49 @@
 <?php
-  if ($PHP_SELF!='') {print ('HACKERS?'); die;}
+  /**
+   * Gate - Wiki engine and web-interface for WebTester Server
+   *
+   * Setting creation form
+   *
+   * Copyright (c) 2008-2009 Sergey I. Sharybin <g.ulairi@gmail.com>
+   *
+   * This program can be distributed under the terms of the GNU GPL.
+   * See the file COPYING.
+   */
+
+  if ($PHP_SELF!='') {
+    print ('HACKERS?');
+    die;
+  }
+
   dd_formo ('title=Добавить опцию;');
 ?>
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
-    var section=getElementById ('section').value;
-    var name=getElementById ('name').value;
-    var ident=getElementById ('ident').value;
-    var classname=getElementById ('classname').value;
-    if (qtrim (section)=='') {alert ('Имя секции не может быть пустым.'); return false;}
-    if (qtrim (name)=='') {alert ('Имя создаваемой опции не может быть пустым.'); return false;}
-    if (!isalphanum (ident)) {alert ('Имя идентификатора может состоять лишь из букв латинского алфавита и цифр.'); return false;}
-    if (qtrim (classname)=='') {alert ('Не указан тип создаваемой опции.'); return false;}
+    var section   = getElementById ('section').value;
+    var name      = getElementById ('name').value;
+    var ident     = getElementById ('ident').value;
+    var classname = getElementById ('classname').value;
+
+    if (qtrim (section) == '') {
+      alert ('Имя секции не может быть пустым.');
+      return false;
+    }
+
+    if (qtrim (name) == '') {
+      alert ('Имя создаваемой опции не может быть пустым.');
+      return false;
+    }
+
+    if (!isalphanum (ident)) {
+      alert ('Имя идентификатора может состоять лишь из букв латинского алфавита и цифр.');
+      return false;
+    }
+
+    if (qtrim (classname) == '') {
+      alert ('Не указан тип создаваемой опции.');
+      return false;
+    }
+
     frm.submit ();
   }
 </script>
@@ -25,12 +57,14 @@
   Тип:
   <select id="classname" name="classname" class="block">
 <?php
-  $items=manage_settings_class_get_registered ();
-  for ($i=0; $i<count ($items); $i++) {
-    $it=$items[$i];
+  $items = manage_settings_class_get_registered ();
+  for ($i = 0; $i < count ($items); $i++) {
+    $it = $items[$i];
 ?>
     <option value="<?=$it['class']?>"<?=(($_POST['classname']==$it['class'])?(' selected'):(''));?>><?=$it['pseudonym'];?></option>
-<?php } ?>
+<?php
+  }
+?>
   </select>
   <div class="formPast">
     <button class="submitBtn block" type="submit">Создать</button>

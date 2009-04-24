@@ -1,18 +1,25 @@
-<? $s=targ ('settings'); ?>
+<?php
+  $s = targ ('settings');
+?>
 <div class="alist" id="alist_<?=targ ('name');?>">
   <div id="alist_<?=targ ('name');?>_cnt" class="cnt"<?=(($s['height']!='')?(' style="height: '.$s['height'].'"'):(''))?>></div>
   <input name="alist_<?=targ ('name');?>_items" id="alist_<?=targ ('name');?>_items" value="" type="hidden">
 <?php
-  $assoc=array ();
-  $items=targ ('items');
-  for ($i=0; $i<count ($items); $i++) $assoc[$items[$i]['tag']]=$items[$i]['title'];
-  $itemsUsed=targ ('itemsUsed');
-  if (count ($itemsUsed)>0) {
+  $assoc = array ();
+  $items = targ ('items');
+
+  for ($i = 0; $i < count ($items); $i++) {
+    $assoc[$items[$i]['tag']] = $items[$i]['title'];
+  }
+
+  $itemsUsed = targ ('itemsUsed');
+  if (count ($itemsUsed) > 0) {
 ?>
   <script language="JavaScript" type="text/javascript">
 <?php
-    for ($i=0; $i<count ($itemsUsed); $i++) {
-      $tag=$itemsUsed[$i]; $title=$assoc[$itemsUsed[$i]];
+    for ($i = 0; $i < count ($itemsUsed); $i++) {
+      $tag = $itemsUsed[$i];
+      $title = $assoc[$itemsUsed[$i]];
 ?>
     alist_append_entry ('<?=targ ('name');?>', '<?=$title;?>', '<?=$tag;?>');
 <?php } ?>
@@ -22,8 +29,8 @@
     <td width="100%">
       <select class="block" id="alist_<?=targ ('name');?>_item">
 <?
-  for ($i=0; $i<count ($items); $i++) {
-    $it=$items[$i];
+  for ($i = 0; $i < count ($items); $i++) {
+    $it = $items[$i];
 ?>
         <option value="<?=$it['tag'];?>"><?=$it['title'];?></option>
 <? } ?>

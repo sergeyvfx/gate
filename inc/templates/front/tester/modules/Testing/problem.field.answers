@@ -1,54 +1,68 @@
 <?php
-  $lib=targ ('lib');
-  $data=targ ('data');
-  $s=$data['settings'];
+  $lib = targ ('lib');
+  $data = targ ('data');
+  $s = $data['settings'];
 ?>
 <div style="padding-bottom: 2px;">
   <center><b>Варианты ответов</b></center>
 </div>
+
 <script language="JavaScript" type="text/JavaScript">
   function AddAnswer (text, correct, static, skipUpdate) {
-    var cnt=getElementById ('anscnt');
-    if (cnt==null) return;
-    
-    var tr=document.createElement ('TR');
-    
-    if (typeof text=='undefined') text='';
-    if (typeof correct=='undefined') correct=false;
-    if (typeof static=='undefined') static=false;
-      
-    var n=cnt.childNodes.length-1;
+    var cnt = getElementById ('anscnt');
+
+    if (cnt == null) {
+      return;
+    }
+
+    var tr = document.createElement ('TR');
+
+    if (typeof text == 'undefined') {
+      text = '';
+    }
+
+    if (typeof correct == 'undefined') {
+      correct = false;
+    }
+
+    if (typeof static == 'undefined') {
+      static = false;
+    }
+
+    var n = cnt.childNodes.length - 1;
 
     // Number
-    var td=document.createElement ('TD');
-    td.innerHTML=n+1+'.';
-    td.className='n';
+    var td = document.createElement ('TD');
+    td.innerHTML = n + 1 + '.';
+    td.className = 'n';
     tr.appendChild (td);
-    
+
     // Text
-    td=document.createElement ('TD');
-    td.innerHTML='<input type="text" class="txt block" value="'+text+'" name="ans_text_'+n+'">';
+    td = document.createElement ('TD');
+    td.innerHTML = '<input type="text" class="txt block" value="' + text + '" name="ans_text_' + n + '">';
     tr.appendChild (td);
 
     // Correct
-    td=document.createElement ('TD');
-    td.style.textAlign='center';
-    td.innerHTML='<input type="checkbox" style="position: relative; top: 0;" name="ans_correct_'+n+'"'+((correct)?(' checked'):(''))+'>';
+    td = document.createElement ('TD');
+    td.style.textAlign = 'center';
+    td.innerHTML = '<input type="checkbox" style="position: relative; top: 0;" name="ans_correct_'+n+'"'+
+      ((correct) ? (' checked'):(''))+'>';
     tr.appendChild (td);
 
     // Static
-    td=document.createElement ('TD');
+    td = document.createElement ('TD');
     td.style.textAlign='center';
-    td.innerHTML='<input type="checkbox" style="position: relative; top: 0;" name="ans_static_'+n+'"'+((static)?(' checked'):(''))+'>';
+    td.innerHTML = '<input type="checkbox" style="position: relative; top: 0;" name="ans_static_' +
+      n + '"' + ((static)?(' checked'):(''))+'>';
     tr.appendChild (td);
 
     // Actions
-    td=document.createElement ('TD');
+    td = document.createElement ('TD');
     td.style.textAlign='center';
-    td.innerHTML='<img class="btn" src="<?=config_get ('document-root')?>/pics/cross.gif" onclick="DeleteAnswer ('+n+')">';
+    td.innerHTML = '<img class="btn" src="<?=config_get ('document-root')?>/pics/cross.gif" onclick="DeleteAnswer ('+n+')">';
     tr.appendChild (td);
 
-    tr.id='ans_row_'+n;
+    tr.id = 'ans_row_' + n;
 
     if (typeof skipUpdate=='undefined' || !skipUpdate) {
       cnt.childNodes[n].className='';
@@ -61,31 +75,41 @@
   }
 
   function DeleteAnswer (n) {
-    var row=getElementById ('ans_row_'+n);
+    var row = getElementById ('ans_row_' + n);
 
-    if (!confirm ('Удалить этот вариант ответа?'))
+    if (!confirm ('Удалить этот вариант ответа?')) {
       return false;
+    }
 
-    var parent=row.parentNode;
+    var parent = row.parentNode;
     parent.removeChild (row);
 
     Update ();
-    
+
     getElementById ('anscount').value--;
   }
-  
-  function Update () {
-    var cnt=getElementById ('anscnt');
-    if (cnt==null) return;
-    for (var i=1, n=cnt.childNodes.length; i<n; i++) {
-      var row=cnt.childNodes[i];
-      if (i==n-1) row.className='last'; else row.className='';
 
-      row.id='ans_row_'+(i-1);
-      row.childNodes[0].innerHTML=i+'.';
-      row.childNodes[1].childNodes[0].name='ans_text_'+(i-1);
-      row.childNodes[2].childNodes[0].name='ans_correct_'+(i-1);
-      row.childNodes[3].childNodes[0].name='ans_static_'+(i-1);
+  function Update () {
+    var cnt = getElementById ('anscnt');
+
+    if (cnt == null) {
+      return;
+    }
+
+    for (var i = 1, n = cnt.childNodes.length; i < n; i++) {
+      var row = cnt.childNodes[i];
+
+      if (i == n - 1) {
+        row.className = 'last';
+      } else {
+        row.className = '';
+      }
+
+      row.id = 'ans_row_' + (i - 1);
+      row.childNodes[0].innerHTML = i + '.';
+      row.childNodes[1].childNodes[0].name = 'ans_text_' + (i - 1);
+      row.childNodes[2].childNodes[0].name = 'ans_correct_' +(i - 1);
+      row.childNodes[3].childNodes[0].name = 'ans_static_' + (i - 1);
       row.childNodes[4].childNodes[0].onclick=function (_i) { return function () { DeleteAnswer (_i); }; } (i-1);
     }
   }
@@ -112,8 +136,8 @@
 <script language="JavaScript" type="text/JavaScript">
   function fillAnswers () {
 <?php
-  $ans=$s['ans'];
-  for ($i=0; $i<$s['anscount']; $i++) {
+  $ans = $s['ans'];
+  for ($i = 0; $i < $s['anscount']; $i++) {
     println ('AddAnswer ("'.$ans[$i]['text'].'", '.(($ans[$i]['correct'])?('true'):('false')).', '.(($ans[$i]['static'])?('true'):('false')).', true);');
   }
   println ('Update ();');

@@ -1,5 +1,5 @@
 <?php
-  $settings=targ ('settings');
+  $settings = targ ('settings');
 ?>
 
 <div id="iframeEditor_<?=targ ('name');?>_dialog_insertFile" class="invisible">
@@ -19,7 +19,7 @@
       <td class="title">Файл</td>
       <td>
 <?php
-  $c=new CDCFile ();
+  $c = new CDCFile ();
   $c->Init ();
   $c->SetSettings ($settings['file']);
 

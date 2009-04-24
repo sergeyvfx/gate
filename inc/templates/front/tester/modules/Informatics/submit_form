@@ -1,12 +1,13 @@
 <?php
-  $contest=targ ('contest');
-  $data=targ ('data');
-  $problems=targ ('list');
-  
-  $dis=array ();
-  $q=db_select ('tester_disabled_problems', array ('problem_id'), '`contest_id`='.$contest['id']);
-  while ($r=db_row ($q)) $dis[$r['problem_id']]=true;
+  $contest = targ ('contest');
+  $data = targ ('data');
+  $problems = targ ('list');
 
+  $dis = array ();
+  $q = db_select ('tester_disabled_problems', array ('problem_id'), '`contest_id`='.$contest['id']);
+  while ($r = db_row ($q)) {
+    $dis[$r['problem_id']] = true;
+  }
 ?>
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
@@ -23,19 +24,23 @@
       <td>
         <select class="block" name="problem_id" id="_problem">
 <?php
-  $n=count ($problems);
-  for ($i=0; $i<$n; $i++) {
-    $it=$problems[$i];
-    if ($dis[$it['id']]) continue;
-    $letter=$data->problemsContainer->GetProblemLetter (-1, $it['id']);
-  ?>
+  $n = count ($problems);
+  for ($i = 0; $i < $n; $i++) {
+    $it = $problems[$i];
+
+    if ($dis[$it['id']]) {
+      continue;
+    }
+
+    $letter = $data->problemsContainer->GetProblemLetter (-1, $it['id']);
+?>
           <option value="<?=$it['id'];?>"><?=$letter;?>. <?=htmlspecialchars ($it['name']);?></option>
 <?php } ?>
         </select>
       </td>
       <td width="90" style="padding-left: 54px;">Компилятор</td>
       <td width="40%">
-<? WT_draw_compiler_selector ($contest['settings']['compilers']); ?>
+<?php WT_draw_compiler_selector ($contest['settings']['compilers']); ?>
       </td>
     </tr>
     <tr>

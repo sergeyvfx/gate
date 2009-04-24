@@ -1,7 +1,7 @@
 <?php
-    $filter=$_GET['filter'];
+    $filter = $_GET['filter'];
     content_url_var_pop ('filter');
-    $url=content_url_get_full ();
+    $url = content_url_get_full ();
     content_url_var_push_global ('filter');
 ?>
 

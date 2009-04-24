@@ -24,7 +24,7 @@
     <td width="40%" style="padding-right: 4px;">
       <div class="lblock"><div class="title tblue"></div><div class="content">
 <?php
-  $tpl=manage_template_by_name ('Статьи / Заглавная страница / Левый колонтитул');
+  $tpl = manage_template_by_name ('Статьи / Заглавная страница / Левый колонтитул');
   print ($tpl->GetText ());
 ?>
         </div>
@@ -41,7 +41,7 @@
 <?php  } else { $pIFACE=$news->GetData (); ?>
         <h2 style="margin-top: 2px;">Последние <a href="<?=config_get ('document-root');?>/articles/news">новости</a>:</h2>
 <?php
-  $tpl=manage_template_by_name ('Статьи / Заглавная страница / Список новостей');
+  $tpl = manage_template_by_name ('Статьи / Заглавная страница / Список новостей');
   $pIFACE->OverwriteDisplayScript ($tpl->GetText ());
   $pIFACE->Editor_DrawContent ();
 } ?>

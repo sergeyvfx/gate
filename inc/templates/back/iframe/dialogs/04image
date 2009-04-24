@@ -1,5 +1,5 @@
 <?php
-  $settings=targ ('settings');
+  $settings = targ ('settings');
 ?>
 
 <div id="iframeEditor_<?=targ ('name');?>_dialog_image" class="invisible">

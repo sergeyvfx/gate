@@ -1,12 +1,30 @@
-<?php if ($PHP_SELF!='') {print 'HACKERS?'; die;} 
+<?php
+  /**
+   * Gate - Wiki engine and web-interface for WebTester Server
+   *
+   * Main handlers for login page
+   *
+   * Copyright (c) 2008-2009 Sergey I. Sharybin <g.ulairi@gmail.com>
+   *
+   * This program can be distributed under the terms of the GNU GPL.
+   * See the file COPYING.
+   */
+
+  if ($PHP_SELF!='') {
+    print 'HACKERS?';
+    die;
+  }
+
   global $login, $passwd, $redirect;
-  $authorized=false;
-  if (trim ($login)!='') {
+  $authorized = false;
+
+  if (trim ($login) != '') {
     if (user_authorize (stripslashes ($login), stripslashes ($passwd))) {
-      $authorized=true;
+      $authorized = true;
       redirect ();
     }
   }
+
   if (!$authorized) {
     add_body_handler ('onload', 'getElementById ("login").focus');
 ?>
@@ -47,4 +65,6 @@
     </div>
     </div>
 </form>
-<?php } ?>
+<?php
+  }
+?>

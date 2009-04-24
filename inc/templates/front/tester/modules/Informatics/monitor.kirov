@@ -1,152 +1,193 @@
 <?php
-  $lib=targ ('lib');
-  $contest_id=targ ('contest_id');
-  $user_id=targ ('user_id');
-  $contests_ids=targ ('contests');
+  $lib = targ ('lib');
+  $contest_id = targ ('contest_id');
+  $user_id = targ ('user_id');
+  $contests_ids = targ ('contests');
 
   // Statistics preinicialization
-  $stats_info=array (
-      array ('title'=>'Пытавшихся участников',    'id'=>'tries_users'),
-      array ('title'=>'Решивших участников',      'id'=>'ok_users', 'perc'=>1), // %
-      array ('title'=>'Зачтено решений',          'id'=>'ok_submits'),
-      array ('title'=>'Не зачтено',               'id'=>'nonok_submits'),
-      array ('title'=>'Процент успешных попыток', 'id'=>'ok_perc', 'perc'=>1)
+  $stats_info = array (
+      array ('title' => 'Пытавшихся участников',    'id' => 'tries_users'),
+      array ('title' => 'Решивших участников',      'id' => 'ok_users', 'perc' => 1),
+      array ('title' => 'Зачтено решений',          'id' => 'ok_submits'),
+      array ('title' => 'Не зачтено',               'id' => 'nonok_submits'),
+      array ('title' => 'Процент успешных попыток', 'id' => 'ok_perc', 'perc' => 1)
     );
-  $stats_data=array ();
-  $stats_cache=array ();
+  $stats_data = array ();
+  $stats_cache = array ();
 
-  $redirect=get_redirection ();
+  $redirect = get_redirection ();
 
-  $sols=targ ('solutions');
-  if (!isset ($sols)) $sols=$lib->GetAllSolutions ($contest_id);
+  $sols = targ ('solutions');
+  if (!isset ($sols)) {
+    $sols = $lib->GetAllSolutions ($contest_id);
+  }
 
-  $users=targ ('users');
-  if (!isset ($users)) $users=$lib->GetUsersAtContest ($contest_id);
+  $users = targ ('users');
+  if (!isset ($users)) {
+    $users = $lib->GetUsersAtContest ($contest_id);
+  }
 
-  $judges=targ ('judges');
-  if (!isset ($judges)) $judges=$lib->GetJudgesAtContest ($contest_id);
+  $judges = targ ('judges');
+  if (!isset ($judges)) {
+    $judges = $lib->GetJudgesAtContest ($contest_id);
+  }
 
-  $problems=targ ('problems');
-  if (!isset ($problems)) $problems=$lib->GetProblemsAtContest ($contest_id);
+  $problems = targ ('problems');
+  if (!isset ($problems)) {
+    $problems = $lib->GetProblemsAtContest ($contest_id);
+  }
 
-  $judge_assoc=array ();
-  $n=count ($judges);
-  for ($i=0; $i<$n; $i++)
-    $judge_assoc[$judges[$i]['id']]=true;
+  $judge_assoc = array ();
+  $n = count ($judges);
+  for ($i = 0; $i < $n; $i++) {
+    $judge_assoc[$judges[$i]['id']] = true;
+  }
 
   if (isset ($contests_ids)) {
-    $contests=array ();
-    for ($i=0, $n=count ($contests_ids); $i<$n; ++$i) {
-      $id=$contests_ids[$i];
-      $contests[$id]=WT_contest_by_id ($id);
+    $contests = array ();
+    for ($i = 0, $n = count ($contests_ids); $i < $n; ++$i) {
+      $id = $contests_ids[$i];
+      $contests[$id] = WT_contest_by_id ($id);
     }
   } else {
-    $contests=array ($contest_id => WT_contest_by_id ($contest_id));
+    $contests = array ($contest_id => WT_contest_by_id ($contest_id));
     setContestId (&$sols, $contest_id);
     setContestId (&$problems, $contest_id);
   }
 
   // Parse solutions
-  $data=array ();
-  $n=count ($sols);
+  $data = array ();
+  $n = count ($sols);
 
-  $max_problems=0;
+  $max_problems = 0;
 
-  $timestamps=array ();
-  $skip_ce=array ();
+  $timestamps = array ();
+  $skip_ce = array ();
   foreach ($contests as $id => $d) {
-    $base[$id]=$contests[$id]['settings']['timestamp'];
-    $penalty[$id]=$contests[$id]['settings']['penalty'];
-    $timestamps[$id]=-1;
+    $base[$id] = $contests[$id]['settings']['timestamp'];
+    $penalty[$id] = $contests[$id]['settings']['penalty'];
+    $timestamps[$id] = -1;
 
-    if ($contests[$id]['settings']['freezetime']>0 && !$contest[$id]['settings']['unfrozen'] && !$lib->IsContestJudge ($id))
-      $timestamps[$id]=$contests[$id]['settings']['timestamp']+$contests[$id]['settings']['duration']*60-$contests[$id]['settings']['freezetime']*60;
+    if ($contests[$id]['settings']['freezetime'] > 0 &&
+      !$contest[$id]['settings']['unfrozen'] && !$lib->IsContestJudge ($id)) {
+      $timestamps[$id] = $contests[$id]['settings']['timestamp'] +
+        $contests[$id]['settings']['duration'] * 60 -
+        $contests[$id]['settings']['freezetime'] * 60;
+    }
 
-    $skip_ce[$id]=$contest['settings']['ignore_ce'];
+    $skip_ce[$id] = $contest['settings']['ignore_ce'];
   }
 
-for ($i=$n-1; $i>=0; $i--) {
-    $s=$sols[$i];
-    $c_id=$s['contest_id'];
-    if ($s['status']!=2 || $s['ignored'] || $s['errors']=='CR' || ($skip_ce && $s['errors']=='CE')) continue;
-    if ($timestamps[$c_id]>0 && $s['timestamp']>$timestamps[$c_id]) continue;
+  for ($i = $n - 1; $i >= 0; $i--) {
+    $s = $sols[$i];
+    $c_id = $s['contest_id'];
 
-    $uid=$s['user_id'];
-    $pid=$s['problem_id'];
+    if ($s['status'] != 2 || $s['ignored'] || $s['errors'] == 'CR' ||
+      ($skip_ce && $s['errors']=='CE')) {
+      continue;
+    }
+
+    if ($timestamps[$c_id] > 0 && $s['timestamp'] > $timestamps[$c_id]) {
+      continue;
+    }
+
+    $uid = $s['user_id'];
+    $pid = $s['problem_id'];
 
     if (!isset ($judge_assoc[$uid])) {
       // Count of users tried to send problem
       if (!$stats_cache[$c_id][$pid]['tries_users'][$uid]) {
         $stats_data[$c_id][$pid]['tries_users']++;
-        $stats_cache[$c_id][$pid]['tries_users'][$uid]=true;
+        $stats_cache[$c_id][$pid]['tries_users'][$uid] = true;
       }
 
-      if ($s['errors']=='OK') {
+      if ($s['errors'] == 'OK') {
         if (!$stats_cache[$c_id][$pid]['ok_users'][$uid]) {
           $stats_data[$c_id][$pid]['ok_submits']++;
-          $stats_cache[$c_id][$pid]['ok_users'][$uid]=true;
+          $stats_cache[$c_id][$pid]['ok_users'][$uid] = true;
         }
-      } else
+      } else {
         $stats_data[$c_id][$pid]['nonok_submits']++;
+      }
     }
 
     $data[$uid][$c_id][$pid]['try']++;
-    $n=$s['points']-($data[$uid][$c_id][$pid]['try']-1)*$penalty[$c_id];
-    if ($n<0) $n=0;
-    $data[$uid][$c_id][$pid]['points']=max ($data[$uid][$c_id][$pid]['points'], $n);
-    $data[$uid][$c_id][$pid]['total']=max ($data[$uid][$c_id][$pid]['total'], $s['points']);
+    $n = $s['points'] - ($data[$uid][$c_id][$pid]['try'] - 1) * $penalty[$c_id];
 
-    if ($s['errors']=='OK')
-      $data[$uid][$c_id][$pid]['acc']=true;
+    if ($n < 0) {
+      $n = 0;
+    }
+
+    $data[$uid][$c_id][$pid]['points'] = max ($data[$uid][$c_id][$pid]['points'], $n);
+    $data[$uid][$c_id][$pid]['total'] = max ($data[$uid][$c_id][$pid]['total'], $s['points']);
+
+    if ($s['errors'] == 'OK') {
+      $data[$uid][$c_id][$pid]['acc'] = true;
+    }
   }
 
   // Sorting da data
-  $user_count=count ($users);
-  $problems_count=count ($problems);
-  $max_total=0;
+  $user_count = count ($users);
+  $problems_count= c ount ($problems);
+  $max_total = 0;
 
-  for ($i=0; $i<$user_count; $i++) {
-    if ($judge_assoc[$users[$i]['id']]) continue;
-    $u=$users[$i];
-    $uid=$u['id'];
-    $data[$uid]['total']=0;
-    for ($j=0; $j<$problems_count; $j++) {
-      $p=$problems[$j];
-      $c_id=$p['contest_id'];
-      $pid=$p['id'];
-      $t=$data[$uid][$c_id][$pid];
-      $data[$uid]['total']+=$t['points'];
+  for ($i = 0; $i < $user_count; $i++) {
+    if ($judge_assoc[$users[$i]['id']]) {
+      continue;
     }
-    $max_total=max ($max_total, $data[$uid]['total']);
+
+    $u = $users[$i];
+    $uid = $u['id'];
+    $data[$uid]['total'] = 0;
+
+    for ($j = 0; $j < $problems_count; $j++) {
+      $p = $problems[$j];
+      $c_id = $p['contest_id'];
+      $pid = $p['id'];
+      $t = $data[$uid][$c_id][$pid];
+      $data[$uid]['total'] += $t['points'];
+    }
+    $max_total = max ($max_total, $data[$uid]['total']);
   }
 
-  $n=count ($users);
-  foreach ($stats_data as $c_id=>$w) {
-    foreach ($w as $pid=>$v) {
-      $stats_data[$c_id][$pid]['ok_perc']=floor (($stats_data[$c_id][$pid]['ok_submits']/($stats_data[$c_id][$pid]['nonok_submits']+$stats_data[$c_id][$pid]['ok_submits']))*100);
-      $stats_data[$c_id][$pid]['ok_users']=floor (($stats_data[$c_id][$pid]['ok_submits']/($n-$deltan))*100);
+  $n = count ($users);
+  foreach ($stats_data as $c_id => $w) {
+    foreach ($w as $pid => $v) {
+      $stats_data[$c_id][$pid]['ok_perc'] = floor (($stats_data[$c_id][$pid]['ok_submits'] / ($stats_data[$c_id][$pid]['nonok_submits'] + $stats_data[$c_id][$pid]['ok_submits'])) * 100);
+      $stats_data[$c_id][$pid]['ok_users'] = floor (($stats_data[$c_id][$pid]['ok_submits'] / ($n-$deltan)) * 100);
     }
   }
 
   function KIROV_Monitor_Comparator ($data, $a, $b) {
-    $r1=$data[$a['id']]; $r2=$data[$b['id']];
-    if ($r1['total']>$r2['total']) return 1; else
-    if ($r1['total']<$r2['total']) return -1; else {
+    $r1 = $data[$a['id']];
+    $r2 = $data[$b['id']];
+
+    if ($r1['total'] > $r2['total']) {
+      return 1;
+    } else if ($r1['total'] < $r2['total']) {
+      return -1;
+    } else {
         return strcmp ($b['name'], $a['name']);
     }
   }
 
   // Sorting da data
-  $user_count=count ($users);
-  for ($i=0; $i<$user_count; $i++)
-    for ($j=0; $j<$user_count-1; $j++) {
-      if (KIROV_Monitor_Comparator (&$data, $users[$j], $users[$j+1])<0)
-        swap (&$users[$j], &$users[$j+1]);
+  $user_count = count ($users);
+  for ($i = 0; $i < $user_count; $i++) {
+    for ($j = 0; $j < $user_count - 1; $j++) {
+      if (KIROV_Monitor_Comparator (&$data, $users[$j], $users[$j + 1]) < 0) {
+        swap (&$users[$j], &$users[$j + 1]);
+      }
     }
-  
-  $contests_titles=count ($contests)>1;
-  if ($contests_titles) $th_rowspan=' rowspan="2"'; else $th_colspan='';
-  $prev_cid=-1;
+  }
+
+  $contests_titles = count ($contests) > 1;
+  if ($contests_titles) {
+    $th_rowspan = ' rowspan="2"';
+  } else {
+    $th_colspan='';
+  }
+  $prev_cid = -1;
 ?>
 
   <div id="monitor" style="_position: relative;" name="monitor">
@@ -156,20 +197,20 @@ for ($i=$n-1; $i>=0; $i--) {
         <th<?=$th_rowspan;?>>Участник</th>
 <?php
   if ($contests_titles) {
-    $counts=array ();
-    for ($i=0; $i<$problems_count; $i++) {
+    $counts = array ();
+    for ($i = 0; $i<$problems_count; $i++) {
       ++$counts[$problems[$i]['contest_id']];
     }
-    for ($i=0, $n=count ($contests_ids); $i<$n; ++$i) {
-      $id=$contests_ids[$i];
-      $c=$contests[$id];
-      print ('<th class="contest" colspan="'.($counts[$c['id']]*3).'"><a href="./?action=manage&id='.$id.'"><acronym title="Перейти к редактированию контеста">'.htmlspecialchars ($c['name']).'</acronym></a></th>');
+    for ($i = 0, $n = count ($contests_ids); $i < $n; ++$i) {
+      $id = $contests_ids[$i];
+      $c = $contests[$id];
+      print ('<th class="contest" colspan="'.($counts[$c['id']] * 3).'"><a href="./?action=manage&id='.$id.'"><acronym title="Перейти к редактированию контеста">'.htmlspecialchars ($c['name']).'</acronym></a></th>');
     }
     print ('<th class="total div" rowspan="2">Всего</th></tr><tr>');
   }
 
-  for ($i=0; $i<$problems_count; $i++) {
-    $it=$problems[$i];
+  for ($i = 0; $i < $problems_count; $i++) {
+    $it = $problems[$i];
 ?>
         <th class="prb" colspan="3">
           <a href=".?page=problems&act=view&id=<?=$it['id'];?>&redirect=<?=$redirect?>"><acronym title="<?=htmlspecialchars ($it['name']);?>">Задача <?=core_alpha ($it['letter']);?></acronym></a><br>
@@ -181,36 +222,50 @@ for ($i=$n-1; $i>=0; $i--) {
         <?=(!$contests_titles ? '<th class="total div">Всего</th>':'');?>
       </tr>
 <?php
-  $place=0; $prev_total=$max_total+1; $place_delta=0;
-  for ($i=0; $i<$user_count; $i++) {
-    if ($judge_assoc[$users[$i]['id']]) continue;
-      $u=$users[$i];
-      $uid=$u['id'];
-      $class='';
-      if ($i%2==0) $class='l';
-      if ($user_id==$u['id']) $class.=(($class!='')?(' '):('')).'act';
+  $place = 0;
+  $prev_total = $max_total + 1;
+  $place_delta = 0;
 
-      if ($data[$uid]['total']<$prev_total)
-        {
-          $place+=$place_delta+1;
-          $place_delta=0;
-        } else $place_delta++;
+  for ($i = 0; $i < $user_count; $i++) {
+    if ($judge_assoc[$users[$i]['id']]) {
+      continue;
+    }
+
+    $u = $users[$i];
+    $uid = $u['id'];
+    $class = '';
+
+    if ($i % 2 == 0) {
+      $class = 'l';
+    }
+
+    if ($user_id == $u['id']) {
+      $class.=(($class!='')?(' '):('')).'act';
+    }
+
+    if ($data[$uid]['total']<$prev_total) {
+      $place += $place_delta + 1;
+      $place_delta = 0;
+    } else {
+      $place_delta++;
+    }
 ?>
       <tr<?=(($class!='')?(' class="'.$class.'"'):(''));?>>
         <td class="first"><?=$place;?></td>
         <td class="user"><a href="<?=user_generate_viewlink ($u['id']);?>"><?=$u['name'];?></a></td>
 <?php
-    for ($j=0; $j<$problems_count; $j++) {
-      $p=$problems[$j];
-      $c_id=$p['contest_id'];
-      $pid=$p['id'];
-      $t=$data[$uid][$c_id][$pid];
-      $ok=$t['acc'];
+    for ($j = 0; $j < $problems_count; $j++) {
+      $p = $problems[$j];
+      $c_id = $p['contest_id'];
+      $pid = $p['id'];
+      $t = $data[$uid][$c_id][$pid];
+      $ok = $t['acc'];
 
-      $oko=''; $okc='';
+      $oko = '';
+      $okc = '';
       if ($ok) {
-        $oko='<b>';
-        $okc='</b>';
+        $oko ='<b>';
+        $okc ='</b>';
       }
 ?>
         <td class="l"><?=$oko;?><?=((isset ($t['points']))?($t['points']):('0'));?><?=$okc;?></td><td class="m"><?=$oko;?><?=((isset ($t['total']))?($t['total']):('0'));?><?=$okc;?></td><td class="r"><?=$oko;?><?=((isset ($t['try']))?($t['try']):('0'));?><?=$okc;?></td>
@@ -220,28 +275,36 @@ for ($i=$n-1; $i>=0; $i--) {
         <td class="total div"><b><?=$data[$uid]['total'];?></b></td>
       </tr>
 <?php
-    $prev_total=$data[$uid]['total'];
+    $prev_total = $data[$uid]['total'];
   }
 ?>
 
       <tr class="stat"><th class="h" colspan="2">Статистика</th>
 <?php
-    for ($j=0; $j<$problems_count; $j++) {
-      $it=$problems[$j];
+    for ($j = 0; $j < $problems_count; $j++) {
+      $it = $problems[$j];
 ?>
       <th class="prb" colspan="3"><?=color_div ($stats_data[$it['id']]['ok_perc']);?><a href=".?page=problems&act=view&id=<?=$it['id'];?>&redirect=<?=$redirect?>"><acronym title="<?=htmlspecialchars ($it['name']);?>">Задача <?=core_alpha ($it['letter']);?></acronym></a></th>
 <?php    }
 ?><th class="div">&nbsp;</th></tr>
 <?php
-  for ($i=0, $n=count ($stats_info); $i<$n; $i++) {
-    $s=$stats_info[$i];
-    print ('<tr class="stat'.(($i%2==0)?(' l'):('')).'"><td class="h" colspan="2">'.$s['title'].'</td>');
-    for ($j=0; $j<$problems_count; $j++) {
-      $it=$problems[$j];
-      $c_id=$it['contest_id'];
-      $t=$stats_data[$c_id][$it['id']][$s['id']];
-      if ($t=='') $t=0;
-      if ($s['perc']) $t.='%';
+  for ($i = 0, $n = count ($stats_info); $i < $n; $i++) {
+    $s = $stats_info[$i];
+    print ('<tr class="stat'.(($i % 2 == 0)?(' l'):('')).'"><td class="h" colspan="2">'.$s['title'].'</td>');
+
+    for ($j = 0; $j < $problems_count; $j++) {
+      $it = $problems[$j];
+      $c_id = $it['contest_id'];
+      $t = $stats_data[$c_id][$it['id']][$s['id']];
+
+      if ($t == '') {
+        $t = 0;
+      }
+
+      if ($s['perc']) {
+        $t .= '%';
+      }
+
       print ('<td colspan="3">'.$t.'</td>');
     }
     print ('<td class="div">&nbsp;</td></tr>');

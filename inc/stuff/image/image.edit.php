@@ -1,7 +1,21 @@
 <?php
-  global $_FILES, $storage, $size, $hlimit, $vlimit, $field, $user_id, $formname, $value;
+  /**
+   * Gate - Wiki engine and web-interface for WebTester Server
+   *
+   * Image editing
+   *
+   * Copyright (c) 2008-2009 Sergey I. Sharybin <g.ulairi@gmail.com>
+   *
+   * This program can be distributed under the terms of the GNU GPL.
+   * See the file COPYING.
+   */
+
+  global $_FILES, $storage, $size, $hlimit, $vlimit, $field,
+    $user_id, $formname, $value;
+
   include '../../../globals.php';
   include $DOCUMENT_ROOT.'/inc/include.php';
+
   db_connect ();
 ?>
 <html>
@@ -25,14 +39,14 @@
 <?php    
   } else
   if (isset ($_FILES['uploading'])) {
-    $data=$_FILES['uploading'];
-    $err=validate_image ($data, $size, $hlimit, $vlimit);
-    if ($err=='') {
-      $s=manage_spawn_storage ($storage);
-      $fn=$s->Put ($data, $user_id);
-      $value=$fn;
-      $full=$s->GetFullURL ($fn);
-      $p=$s->GetFileParams ($value);
+    $data = $_FILES['uploading'];
+    $err = validate_image ($data, $size, $hlimit, $vlimit);
+    if ($err == '') {
+      $s = manage_spawn_storage ($storage);
+      $fn = $s->Put ($data, $user_id);
+      $value = $fn;
+      $full = $s->GetFullURL ($fn);
+      $p = $s->GetFileParams ($value);
     ?>
     <script language="JavaScript">window.parent.CDCImage_OnImageUpload ('<?=$field;?>', '<?=$formname;?>', '<?=$full;?>', '<?=$fn;?>', '<?=$p['height'];?>', '<?=$p['width'];?>', '<?=$p['mime'];?>');</script>
 <?php    } else { ?>
@@ -49,3 +63,4 @@
     </form>
   </body>
 </html>
+

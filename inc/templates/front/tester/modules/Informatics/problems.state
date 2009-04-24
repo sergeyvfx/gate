@@ -1,7 +1,11 @@
 <?php
-  $d=targ ('data');
+  $d = targ ('data');
 
-  if (!$d['uploaded']) print 'Закачивание на сервер...'; else
-    if ($d['ERR']=='OK') print 'Закачивание успешно завершено'; else
-      print 'Ошибка закачивания на сервер: '.$d['DESC'];
+  if (!$d['uploaded']) {
+    print 'Закачивание на сервер...';
+  } else if ($d['ERR'] == 'OK') {
+    print 'Закачивание успешно завершено';
+  } else {
+    print 'Ошибка закачивания на сервер: '.$d['DESC'];
+  }
 ?>

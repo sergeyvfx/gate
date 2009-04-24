@@ -1,20 +1,31 @@
 <?php
-  $value=tpl_arg ('value');
+  $value = tpl_arg ('value');
 
-//  $CORE->PAGE->AddScript ('language=JavaScript;type=text/javascript', "\n".tpl ('back/dialogs', array (), false));
   $CORE->PAGE->AddScriptFile ('dialogs.js');
   add_body_handler ('onunload', 'CloseDialogs');
 ?>
 
 <script language="JavaScript" type="text/JavaScript">
-
   function TestsAutomate (count, maxpoints) {
-    var widget=getElementById ('ProblemSettings_tests');
+    var widget = getElementById ('ProblemSettings_tests');
 
-    var points=Math.floor (maxpoints/count);
-    var str='';
-    for (i=maxpoints-points*count; i<count; i++) {if (str!='') str+=' '; str+=points;}
-    for (i=0; i<maxpoints-points*count; i++) {if (str!='') str+=' '; str+=points+1;}
+    var points = Math.floor (maxpoints/count);
+    var str = '';
+
+    for (i = maxpoints - points * count; i < count; i++) {
+      if (str != '') {
+        str += ' ';
+      }
+      str += points;
+    }
+
+    for (i = 0; i < maxpoints - points * count; i++) {
+      if (str != '') {
+        str+=' ';
+      }
+
+      str += points + 1;
+    }
 
     widget.value=str;
 
@@ -24,31 +35,34 @@
   function OnTestsOk (wnd) {
     var count     = wnd.document.getElementById ('count').value;
     var maxpoints = wnd.document.getElementById ('maxpoints').value;
-    
+
     TestsAutomate (count, maxpoints);
-    
+
     return true;
   }
 
   function OnTestsCancel (wnd) { return true; }
-  
+
   function RecalcTests () {
-    var widget=getElementById ('ProblemSettings_tests');
-    var string=widget.value;
+    var widget = getElementById ('ProblemSettings_tests');
+    var string = widget.value;
 
-    string=string.replace (/(\ )+/g, ' ').replace (/(\ )*$/, '');
+    string = string.replace (/(\ )+/g, ' ').replace (/(\ )*$/, '');
 
-    var arr=string.split (" ");
-    var points=new Number (0);
+    var arr = string.split (" ");
+    var points = new Number (0);
 
-    for (var i=0; i<arr.length; i++)
-      points+=new Number (arr[i]);
+    for (var i = 0; i < arr.length; i++) {
+      points += new Number (arr[i]);
+    }
 
-    var count=arr.length;
-    if (qtrim (string)=='') count=0;
+    var count = arr.length;
+    if (qtrim (string) == '') {
+      count = 0;
+    }
 
-    getElementById ('count').innerHTML=count;
-    getElementById ('MaxPoints').innerHTML=points;
+    getElementById ('count').innerHTML = count;
+    getElementById ('MaxPoints').innerHTML = points;
   }
 
   var TestsAutomate_HTML = 'Количество тестов:<br><input type="text" class="txt block" id="count"><br>Стоимость задачи (без учета бонуса)<br><input type="text" class="txt block" id="maxpoints"><br>';

@@ -1,20 +1,22 @@
 <?php
   global $id;
-  $data=targ ('data');
-  $lib=targ ('lib');
+  $data = targ ('data');
+  $lib = targ ('lib');
 
-  $arr=group_list ();
-  $n=count ($arr);
-  $glist=array ();
+  $arr = group_list ();
+  $n = count ($arr);
+  $glist = array ();
 
-  for ($i=0; $i<$n; $i++)
-    $glist[]=array ('title'=>$arr[$i]['name'], 'tag'=>$arr[$i]['id']);
+  for ($i = 0; $i < $n; $i++) {
+    $glist[] = array ('title' => $arr[$i]['name'], 'tag' => $arr[$i]['id']);
+  }
 
-  settings_formo (content_url_get_full ().'&act=savegroups', 'POST', 'onsubmit="alist_prepare_post_data (\'usergroup\'); alist_prepare_post_data (\'judgegroup\');"');
+  settings_formo (content_url_get_full ().'&act=savegroups', 'POST',
+    'onsubmit="alist_prepare_post_data (\'usergroup\'); alist_prepare_post_data (\'judgegroup\');"');
 
   groupo ('title=Группы пользователей;');
 
-  $list=new CVCAppendingList ();
+  $list = new CVCAppendingList ();
   $list->Init ('usergroup');
   $list->SetItems ($glist);
   $list->SetItemsUsed ($lib->Contest_GetUserGroup ($id));
@@ -25,7 +27,7 @@
 
   groupo ('title=Группы жюри;');
 
-  $list=new CVCAppendingList ();
+  $list = new CVCAppendingList ();
   $list->Init ('judgegroup');
   $list->SetItems ($glist);
   $list->SetItemsUsed ($lib->Contest_GetJudgeGroup ($id));

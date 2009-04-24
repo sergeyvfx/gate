@@ -1,19 +1,20 @@
 <?php
   global $CORE, $WT_contest_id, $act, $id, $redirect;
-  $lib=targ ('lib');
+  $lib = targ ('lib');
 
-  $full=content_url_get_full ();
-  $arr=$lib->GetProblemsAtContest ($WT_contest_id);
-  $n=count ($arr);
+  $full = content_url_get_full ();
+  $arr = $lib->GetProblemsAtContest ($WT_contest_id);
+  $n = count ($arr);
 
-  if ($n==0) {
+  if ($n == 0) {
     println ('<span class="contentSub2">Нет задач для просмотра</span>');
   } else {
-    $c=WT_contest_by_id ($WT_contest_id);
-    $j=$lib->IsContestJudge ();
+    $c = WT_contest_by_id ($WT_contest_id);
+    $j = $lib->IsContestJudge ();
     if ($c['settings']['archive']!='' && (!$c['settings']['archive.blocked'] || $j)) {
-      if ($j)
+      if ($j) {
         file_allow_encrypted ($c['settings']['archive']);
+      }
       $lib->AppendQuickLink ('Архив с задачами', files_get_encrypted_link ($c['settings']['archive']));
     }
 ?>
@@ -22,20 +23,20 @@
 var last_desc_id=<?=(($id!='' && $id>0)?($id):('-1'));?>;
 
 function show_desc (id) {
-  if (last_desc_id>=0) {
-    var last=getElementById ('desc_'+last_desc_id);
-    var name=last.innerHTML;
-    last.innerHTML='<a id="desc_lbl_'+last_desc_id+'" href="JavaScript:show_desc ('+last_desc_id+');">'+name+'</a>';
-    last.className='';
+  if (last_desc_id >= 0) {
+    var last = getElementById ('desc_'+last_desc_id);
+    var name = last.innerHTML;
+    last.innerHTML = '<a id="desc_lbl_'+last_desc_id+'" href="JavaScript:show_desc (' + last_desc_id + ');">'+name+'</a>';
+    last.className = '';
   }
 
-  var cur=getElementById ('desc_lbl_'+id), cparent=cur.parentNode;
-  var name=cur.innerHTML;
+  var cur = getElementById ('desc_lbl_' + id), cparent = cur.parentNode;
+  var name = cur.innerHTML;
 
-  cparent.className='arr';
-  cparent.innerHTML=name;
+  cparent.className = 'arr';
+  cparent.innerHTML = name;
 
-  last_desc_id=id;
+  last_desc_id = id;
 
   setForceURL (document_root+'/tester/?page=problems&act=view&id='+id<?=(($redirect!='')?('+\'&redirect='.urlencode ($redirect).'\''):(''));?>);
 
@@ -47,28 +48,42 @@ function show_desc (id) {
 <?php
     function draw_list ($title, $id, $lib, $arr, $dis_data, $dis, $break=false) {
       global $id;
-      $n=count ($arr);
+      $n = count ($arr);
 
-      $print=false;
-      for ($i=0; $i<$n; $i++) {
-        if (isset ($dis_data[$arr[$i]['id']]) != $dis) continue;
-        $print=true;
+      $print = false;
+      for ($i = 0; $i < $n; $i++) {
+        if (isset ($dis_data[$arr[$i]['id']]) != $dis) {
+          continue;
+        }
+        $print = true;
       }
-      if (!$print) return false;
 
-      if ($break)
+      if (!$print) {
+        return false;
+      }
+
+      if ($break) {
         print '<br>';
+      }
 
       println (stencil_contentso ('title='.$title.';id='.$id));
       println ('<table width="100%">');
 
-      for ($i=0; $i<$n; $i++) {
-        if (isset ($dis_data[$arr[$i]['id']]) != $dis) continue;
-        $active=$id==$arr[$i]['id'];
-        $style='';
-        if ($lib->Problem_Accepted ($arr[$i]['id'])) $style='background: #efe; border: 1px #777 dotted;'; else
-        if ($lib->Problem_Tried ($arr[$i]['id'])) $style='background: #fee; border: 1px #777 dotted;';
-        $style.='padding: 1px 4px;';
+      for ($i = 0; $i < $n; $i++) {
+        if (isset ($dis_data[$arr[$i]['id']]) != $dis) {
+          continue;
+        }
+
+        $active = $id == $arr[$i]['id'];
+        $style = '';
+
+        if ($lib->Problem_Accepted ($arr[$i]['id'])) {
+          $style = 'background: #efe; border: 1px #777 dotted; ';
+        } else if ($lib->Problem_Tried ($arr[$i]['id'])) {
+          $style = 'background: #fee; border: 1px #777 dotted; ';
+        }
+
+        $style .= 'padding: 1px 4px;';
         println ('<tr><td'.(($style!='')?(' style="'.$style.'"'):('')).'>'.core_alpha ($arr[$i]['letter']).
           '. <span id="desc_'.$arr[$i]['id'].'" '.(($active)?(' class="arr"'):('')).'>'.((!$active)?('<a id="desc_lbl_'.$arr[$i]['id'].'" href="JavaScript:show_desc('.$arr[$i]['id'].');">'):('')).$arr[$i]['name'].
           ((!$active)?('</a>'):('')).'</span></td></tr>');
@@ -79,23 +94,27 @@ function show_desc (id) {
       return true;
     }
 
-    $dis=array ();
-    $q=db_select ('tester_disabled_problems', array ('problem_id'), '`contest_id`='.$WT_contest_id);
-    while ($r=db_row ($q)) $dis[$r['problem_id']]=true;
+    $dis = array ();
+    $q = db_select ('tester_disabled_problems', array ('problem_id'), '`contest_id`='.$WT_contest_id);
+    while ($r = db_row ($q)) {
+      $dis[$r['problem_id']] = true;
+    }
 
     println ('<table width="100%"><tr valign="top"><td width="220">');
-    $break=false;
-    if (draw_list ('Доступные задачи', 'problems_contents', $lib, $arr, $dis, false))
-      $break=true;
+    $break = false;
+    if (draw_list ('Доступные задачи', 'problems_contents', $lib, $arr, $dis, false)) {
+      $break = true;
+    }
     draw_list ('Заблокированные задачи', 'disabled_problems_contents', $lib, $arr, $dis, true, $break);
     println ('</td><td><div id="problemDescBrowser" class="AJAXContainer">');
-    if ($act=='view') {
-      if ($lib->Problem_Accessible ($id))
-        println ($lib->Problem_DescriptionForm ($id)); else
+    if ($act == 'view') {
+      if ($lib->Problem_Accessible ($id)) {
+        println ($lib->Problem_DescriptionForm ($id));
+      } else {
         println ('<span class="contentSub">Извините, но эта задача недоступна для Вас</span>');
+      }
     } else {
-      //$this->CPrintLn ('&nbsp;');
-      $tpl=manage_template_by_name ('Олимпиады / Informatics / Список задач');
+      $tpl = manage_template_by_name ('Олимпиады / Informatics / Список задач');
       println ($tpl->GetText ());
     }
     println ('</div></td></tr></table>');

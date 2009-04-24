@@ -1,14 +1,29 @@
 <?php
-  global $DOCUMENT_ROOT;
+  /**
+   * Gate - Wiki engine and web-interface for WebTester Server
+   *
+   * Some main global definitions
+   *
+   * Copyright (c) 2008-2009 Sergey I. Sharybin <g.ulairi@gmail.com>
+   *
+   * This program can be distributed under the terms of the GNU GPL.
+   * See the file COPYING.
+   */
 
-  $relative='gate';
+  global $DOCUMENT_ROOT, $IFACE;
 
-  $s=$_SERVER['DOCUMENT_ROOT'];
+  $IFACE = 'SPAWNING NEW IFACE';
 
-  if (substr ($s, strlen ($s)-strlen ($relative)-1, strlen ($relative))==$relative)
-    $relative='';
+  /* Relative directory name */
+  $relative = 'gate';
 
-  $DOCUMENT_ROOT=$_SERVER['DOCUMENT_ROOT'].$relative;
+  $s = $_SERVER['DOCUMENT_ROOT'];
 
-  $DOCUMENT_ROOT=preg_replace ('/\/*$/', '', $DOCUMENT_ROOT);
+  /* Get full path where scripts aer stored */
+  if (substr ($s, strlen ($s)-strlen ($relative)-1, strlen ($relative)) == $relative) {
+    $relative = '';
+  }
+
+  $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'].$relative;
+  $DOCUMENT_ROOT = preg_replace ('/\/*$/', '', $DOCUMENT_ROOT);
 ?>

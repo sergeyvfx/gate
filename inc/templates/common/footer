@@ -1,4 +1,4 @@
-<?
-  $dummy=manage_template_by_name ('Страница / Нижний колонтитул');
+<?php
+  $dummy = manage_template_by_name ('Страница / Нижний колонтитул');
   $dummy->Draw ();
 ?>

@@ -1,5 +1,5 @@
 <?php
-  $self=targ ('self');
+  $self = targ ('self');
 ?>
 
 <script language="JavaScript" type="text/javascript">function check (frm) { sef_prepare_post_data (\'WT_security\'); frm.submit (); } </script>
@@ -11,7 +11,7 @@
 
   groupo ('title=Настройка хранилищ данных;');
 
-  $iframe=new CDCIFrame ();
+  $iframe = new CDCIFrame ();
   $iframe->Init ();
   $iframe->SetSettings ($self->content_settings['iframe']);
 

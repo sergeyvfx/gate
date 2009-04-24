@@ -4,59 +4,65 @@
   redirector_add_skipvar ('act');
   redirector_add_skipvar ('id');
 
-  $lib=targ ('lib');
+  $lib = targ ('lib');
 
-  $href=content_url_get_full ().'&action=checkers';
+  $href = content_url_get_full ().'&action=checkers';
 
   $delete = $lib->GetAllowed ('CHECKERS.DELETE');
   $create = $lib->GetAllowed ('CHECKERS.CREATE');
   $edit   = $lib->GetAllowed ('CHECKERS.EDIT');
 
-  if ($act=='create') {
+  if ($act == 'create') {
     global $name, $src;
     if ($create) {
-      $compiler=WT_receive_compiler_from_selector ();
-      $s=array ('src'=>stripslashes ($src), 'compiler_id'=>$compiler);
-      if (trim ($name)=='' || $compiler=='')
-        info ('Пропущено обязательное поле.'); else
-        db_insert ('tester_checkers', array ('name'=>db_html_string (stripslashes ($name)), 'settings'=>db_string (serialize ($s))));
-    } else
+      $compiler = WT_receive_compiler_from_selector ();
+      $s = array ('src' => stripslashes ($src),
+                  'compiler_id' => $compiler);
+      if (trim ($name) == '' || $compiler == '') {
+        info ('Пропущено обязательное поле.');
+      } else {
+        db_insert ('tester_checkers', array ('name' => db_html_string (stripslashes ($name)),
+                                             'settings' => db_string (serialize ($s))));
+      }
+    } else {
       info ('Отказано в доступе.');
-  } else
-  if ($act=='save') {
+    }
+  } else if ($act == 'save') {
     if ($edit) {
       global $name, $src;
-      $compiler=WT_receive_compiler_from_selector ();
+      $compiler = WT_receive_compiler_from_selector ();
 
-      if (trim ($name)=='' || $compiler=='')
-        info ('Пропущено обязательное поле.'); else
-        {
-          $data=db_row_value ('tester_checkers', "`id`=$id");
-          $data['settings']=unserialize ($data['settings']);
-          $s=$data['settings'];
+      if (trim ($name) == '' || $compiler == '') {
+        info ('Пропущено обязательное поле.');
+      } else {
+        $data = db_row_value ('tester_checkers', "`id`=$id");
+        $data['settings'] = unserialize ($data['settings']);
+        $s=$data['settings'];
 
-          if (stripslashes ($src)!=$s['src'] || $compiler!=$s['compiler_id'])
-            $data['uploaded']=0;
-
-          $s['src']=stripslashes ($src);
-          $s['compiler_id']=$compiler;
-
-          db_update ('tester_checkers', array ('name'=>db_string (stripslashes ($name)), 'settings'=>db_string (serialize ($s)), 'uploaded'=>$data['uploaded']), "`id`=$id");
+        if (stripslashes ($src)!=$s['src'] || $compiler!=$s['compiler_id']) {
+          $data['uploaded'] = 0;
         }
-    
-      $act='';
+
+        $s['src'] = stripslashes ($src);
+        $s['compiler_id'] = $compiler;
+
+        db_update ('tester_checkers', array ('name' => db_string (stripslashes ($name)),
+                                             'settings' => db_string (serialize ($s)),
+                                             'uploaded' => $data['uploaded']), "`id`=$id");
+      }
+      $act = '';
     }
-  } else
-  if ($act=='delete') {
+  } else if ($act == 'delete') {
     if ($delete) {
       db_delete ('tester_checkers', "`id`=$id");
-    } else
+    } else {
       info ('Отказано в доступе.');
+    }
   }
 
-  if ($act=='edit' && $edit) {
-    $data=db_row_value ('tester_checkers', "`id`=$id");
-    $data['settings']=unserialize ($data['settings']);
+  if ($act == 'edit' && $edit) {
+    $data = db_row_value ('tester_checkers', "`id`=$id");
+    $data['settings'] = unserialize ($data['settings']);
     formo ('title=Редактирование чекера;');
 ?>
     <script language="JavaScript" type="text/JavaScript">
@@ -82,38 +88,52 @@
 <?php
     formc ();
   } else {
-    $q=db_select ('tester_checkers', array ('*'), '', 'ORDER BY `name`');
+    $q = db_select ('tester_checkers', array ('*'), '', 'ORDER BY `name`');
     formo ('title=Список чекеров;');
-    if (db_affected ()>0) {
+
+    if (db_affected () > 0) {
       println ('<table class="list smb">');
       println ('  <tr class="h"><th class="n first">№</th><th>Название</th><th width="30%">Примечание</th><th width="100" class="last">&nbsp;</th></tr>');
-      $i=0; $n=db_affected ();
-      
-      while ($r=db_row ($q)) {
-        $s=unserialize ($r['settings']);
+      $i = 0;
+      $n = db_affected ();
 
-        $actions='';
-        $note='';
-        
-        if (!$r['uploaded'])
-          $note='Закачивание на сервер...'; else {
-            if ($s['ERR']=='OK') $note=''; else {
-              if ($s['ERR']=='CE') $note='Ошибка компиляции'; else
+      while ($r = db_row ($q)) {
+        $s = unserialize ($r['settings']);
+
+        $actions = '';
+        $note = '';
+
+        if (!$r['uploaded']) {
+          $note = 'Закачивание на сервер...';
+        } else {
+          if ($s['ERR'] == 'OK') {
+            $note='';
+          } else {
+            if ($s['ERR']=='CE') {
+              $note='Ошибка компиляции';
+            } else {
                 $note='Ошибка закачивания';
-              $note.='&nbsp;&nbsp;<a href="JavaScript:alert (\''.htmlspecialchars (preg_replace ("/\n/", '\\n', $s['DESC'])).'\');">Подробнее...</a>';
             }
+            $note .= '&nbsp;&nbsp;<a href="JavaScript:alert (\''.htmlspecialchars (preg_replace ("/\n/", '\\n', $s['DESC'])).'\');">Подробнее...</a>';
           }
+        }
 
-        if ($edit)   $actions.=stencil_ibtnav ('edit.gif' ,$href.'&act=edit&id='.$r['id'], 'Редактировать');
-        if ($delete) $actions.=stencil_ibtnav ('cross.gif' ,$href.'&act=delete&id='.$r['id'], 'Удалить', 'Удалить этот чекер?');
+        if ($edit) {
+          $actions .= stencil_ibtnav ('edit.gif' ,$href.'&act=edit&id='.$r['id'], 'Редактировать');
+        }
+
+        if ($delete) {
+          $actions .= stencil_ibtnav ('cross.gif' ,$href.'&act=delete&id='.$r['id'], 'Удалить', 'Удалить этот чекер?');
+        }
 ?>
         <tr<?=(($i==$n-1)?(' class="last"'):(''));?>><td class="n"><?=($i+1);?>.</td><td><a href="<?=$href?>&act=edit&id=<?=$r['id'];?>"><?=$r['name'];?></a></td><td><?=$note;?></td><td align="right"><?=$actions;?></td></tr>
 <?php
         $i++;
       }
       println ("</table>");
-    } else
+    } else {
       print '<span class="contentSub2">Нет чекеров для редактирования</span>';
+    }
     formc ();
 
     if ($lib->GetAllowed ('CHECKERS.CREATE')) {

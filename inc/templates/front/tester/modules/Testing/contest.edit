@@ -1,41 +1,45 @@
 <?php
-  if (browser_engine ()!='DONKEY')
-    print ('<div id="editor" style="margin-top: -6px; padding-top: 6px;">'); else
-    print ('<div id="editor" style="_height: 1%;">');
+  if (browser_engine () != 'DONKEY') {
+    println ('<div id="editor" style="margin-top: -6px; padding-top: 6px;">');
+  } else {
+    println ('<div id="editor" style="_height: 1%;">');
+  }
 
-  $redirection=get_redirection ();
-  $data=targ ('data');
-  $lib=targ ('lib');
+  $redirection = get_redirection ();
+  $data = targ ('data');
+  $lib = targ ('lib');
 
   // General settings form
-  $f=new CVCForm ();
-  $f->Init ('ContestSettings', 'method=POST;action=.?action\=save&id\='.$data['id'].';titlewidth=160;backlink=.?page\=contest;'.$s);
+  $f = new CVCForm ();
+  $f->Init ('ContestSettings', 'method=POST;action=.?action\=save&id\='.$data['id'].
+    ';titlewidth=160;backlink=.?page\=contest;'.$s);
 
-  $f->AppendTextField     ('Название контеста',  'name', $data['name'], true);
-  $f->AppendTextField     ('Продолжительность (мин.)<br><small>&nbsp;&nbsp;&nbsp;Ноль эквивалентен бесконечности</small>', 'duration',   $data['settings']['duration'],   false);
-  $f->AppendTextField     ('Ограничение по времени (мин.)<br><small>&nbsp;&nbsp;&nbsp;Ноль эквивалентен бесконечности</small>', 'timelimit',   $data['settings']['timelimit'],   false);
-  $f->AppendTextField     ('Количество попыток<br><small>&nbsp;&nbsp;&nbsp;Ноль эквивалентен бесконечности</small>',  'trycount', $data['settings']['trycount'], false);
+  $f->AppendTextField ('Название контеста',  'name', $data['name'], true);
+  $f->AppendTextField ('Продолжительность (мин.)<br><small>&nbsp;&nbsp;&nbsp;Ноль эквивалентен бесконечности</small>', 'duration',   $data['settings']['duration'],   false);
+  $f->AppendTextField ('Ограничение по времени (мин.)<br><small>&nbsp;&nbsp;&nbsp;Ноль эквивалентен бесконечности</small>', 'timelimit',   $data['settings']['timelimit'],   false);
+  $f->AppendTextField ('Количество попыток<br><small>&nbsp;&nbsp;&nbsp;Ноль эквивалентен бесконечности</small>',  'trycount', $data['settings']['trycount'], false);
 
-  $autostart=array ('src'=>tpl ('front/tester/modules/Testing/contest.field.autostart', targs ()), 'title'=>'Автозапуск<br><small>Запустить контест автоматически в указанное время</small>');
+  $autostart = array ('src' => tpl ('front/tester/modules/Testing/contest.field.autostart',
+    targs ()), 'title' => 'Автозапуск<br><small>Запустить контест автоматически в указанное время</small>');
   $f->AppendCustomField ($autostart);
 
   // Contest edit tab control
-  $t=new CVCTabCtrl ();
+  $t = new CVCTabCtrl ();
   $t->Init ('cman', 'url='.$url.';');
   $t->StartNewPage ('title=Основные;');
-  print ($f->OuterHTML ());
+  println ($f->OuterHTML ());
   $t->FinishPage ();
 
   $t->StartNewPage ('title=Задачи;');
-  print ($lib->Template ('contest.edit.problems', array ('data'=>$data, 'lib'=>$lib)));
+  println ($lib->Template ('contest.edit.problems', array ('data' => $data, 'lib' => $lib)));
   $t->FinishPage ();
 
   $t->StartNewPage ('title=Группы;');
-  print ($lib->Template ('contest.edit.groups', array ('data'=>$data, 'lib'=>$lib)));
+  println ($lib->Template ('contest.edit.groups', array ('data' => $data, 'lib' => $lib)));
   $t->FinishPage ();
 
   $t->StartNewPage ('title=Компиляторы;');
-  print ($lib->Template ('contest.edit.compilers', array ('data'=>$data, 'lib'=>$lib)));
+  println ($lib->Template ('contest.edit.compilers', array ('data' => $data, 'lib' => $lib)));
   $t->FinishPage ();
 
   $t->Draw ();
