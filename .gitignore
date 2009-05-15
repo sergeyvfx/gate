@@ -3,3 +3,4 @@ resources
 articles
 inc/logick/tester/config/ipc.php
 inc/logick/tester/config/wt.php
+devel

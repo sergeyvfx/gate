@@ -36,16 +36,21 @@
         $onhide = ' '.$onhide;
       }
 
+      $expanded = $s['expanded'];
+
       return ('<div class="dd_form"><div id="title" class="dd_title">'.
               '<table><tr><td><img src="'.config_get ('document-root').
               '/pics/arrdown_green.gif" id="show" '.
               'onclick="dd_form_expand (this);'.$onexpand.
-              '" alt="Развернуть" title="Развернуть">'.
+              '" alt="Развернуть" title="Развернуть" '.
+                ($expanded ? ' style="display: none;"' : '') .'>'.
               '<img src="'.config_get ('document-root').
-              '/pics/arrup_red.gif" style="display: none;" id="hide" '.
+              '/pics/arrup_red.gif" '.
+              ( $expanded ? '' : 'style="display: none;"').' id="hide" '.
               'onclick="dd_form_hide (this);'.$onhide.'" alt="Свернуть" '.
               'title="Свернуть"></td><td>'.$s['title'].'</td></tr>'.
-              '</table></div><div class="dd_content" id="content">');
+              '</table></div><div class="dd_content" id="content"'.
+              (($expanded) ? (' style="display: block;"') : ('')).'>');
     }
 
     function stencil_dd_formc () {
