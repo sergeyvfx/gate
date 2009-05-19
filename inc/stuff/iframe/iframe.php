@@ -111,7 +111,7 @@
       $val = stripslashes ($_POST[$name]);
 
       $val = preg_replace ("'(<a[\/\!]*?[^<>]*?)(href\s*=\s*\"?".config_get ('http-document-root')."([\w\+\-\:\/\%\$\#\.\,]*)\"?)([^<>]*?>)'si", '\1href="${document-root}\3"\4', $val);
-      $val = preg_replace ("'(<a[\/\!]*?[^<>]*?)(href\s*=\s*\"?\\$\\%7Bdocument-root\\%7D([\w\+\-\:\/\%\$\#\.\,]*)\"?)([^<>]*?>)'si", '\1href="${document-root}\3"\4', $val);
+      $val = preg_replace ("'(<a[\/\!]*?[^<>]*?)(href\s*=\s*\"?(http\\:\\/\\/)?\\$\\%7Bdocument-root\\%7D([\w\+\-\:\/\%\$\#\.\,]*)\"?)([^<>]*?>)'si", '\1href="${document-root}\4"\5', $val);
       $val = preg_replace ('/\?\>/', '?&gt;', preg_replace ('/\<\?/', '&lt;?', $val));
 
       $val = iframe_accept_images ($val);
