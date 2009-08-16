@@ -1457,6 +1457,13 @@
         content_url_var_push_global ('filter');
         $pages->Init ('PAGES', 'pageid=pageid;bottomPages=false;skiponcepage=true;');
 
+        $last = ceil ($n / $problemsPerPage);
+        if ($_GET['pageid'] < 0) {
+          $pageid = 0;
+        } else if ($_GET['pageid'] >= $last) {
+          $_GET['pageid'] = $last - 1;
+        }
+
         while ($i < $n) {
           $c = 0;
           $arr = array ();
