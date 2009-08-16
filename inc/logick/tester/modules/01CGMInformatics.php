@@ -540,7 +540,7 @@
 
         for ($i = 0, $n = count ($this->data); $i < $n; ++$i) {
           if (preg_match ("/$filter/i", $this->data[$i]['name']) ||
-              preg_match ("/$filter/", $this->data[$i]['settings']['comment'])) {
+              preg_match ("/$filter/i", $this->data[$i]['settings']['comment'])) {
             $res[] = $this->data[$i];
           }
         }
@@ -1437,7 +1437,7 @@
         $edit    = $this->GetAllowed ('PROBLEMS.EDIT');
         $rejudge = $this->GetAllowed ('PROBLEMS.REJUDGE');
 
-        $list = $this->problemsContainer->GetList ($_GET['filter']);
+        $list = $this->problemsContainer->GetList (stripslashes ($_GET['filter']));
 
         $n = count ($list);
         if ($n == 0) {
@@ -1454,6 +1454,7 @@
         $page = $i = 0;
 
         $pages = new CVCPagintation();
+        content_url_var_push_global ('filter');
         $pages->Init ('PAGES', 'pageid=pageid;bottomPages=false;skiponcepage=true;');
 
         while ($i < $n) {
@@ -1466,15 +1467,19 @@
             $i++;
           }
 
-          $src = $this->Template ('problems.list.page',
-                                  array ('lib' => $this,
-                                         'data' => $arr,
-                                         'page' => $page,
-                                         'perpage' => $problemsPerPage,
-                                         'acc.manage' => $manage,
-                                         'acc.delete' => $delete,
-                                         'acc.edit' => $edit,
-                                         'acc.rejudge' => $rejudge));
+          if (($page == $_GET['pageid']) || ($page == 0 && $_GET['pageid'] == '')) {
+            $src = $this->Template ('problems.list.page',
+                                    array ('lib' => $this,
+                                           'data' => $arr,
+                                           'page' => $page,
+                                           'perpage' => $problemsPerPage,
+                                           'acc.manage' => $manage,
+                                           'acc.delete' => $delete,
+                                           'acc.edit' => $edit,
+                                           'acc.rejudge' => $rejudge));
+          } else {
+            $src = '';
+          }
 
           $pages->AppendPage ($src);
           $page++;

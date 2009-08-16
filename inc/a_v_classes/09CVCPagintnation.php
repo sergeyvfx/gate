@@ -23,8 +23,8 @@
       var $pages = array ();
       var $defaultStencil = array (
         'outer' => '<div class="pagintation">Страницы: $(items)</div>',
-        'item' => '<a href="$(href)">$(title)</a>',
-        'activeItem' => '<a href="$(href)" class="active">[$(title)]</a>'
+        'item' => ' <a href="$(href)">$(title)</a>',
+        'activeItem' => ' <a href="$(href)" class="active">[$(title)]</a>'
       );
       var $topStencil;
       var $bottomStencil;
