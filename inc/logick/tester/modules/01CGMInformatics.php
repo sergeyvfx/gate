@@ -1468,11 +1468,13 @@
           $c = 0;
           $arr = array ();
 
+          $first = $list[$i];
           while ($c < $problemsPerPage && $i < $n) {
             $arr[] = $list[$i];
             $c++;
             $i++;
           }
+          $last = $list[$i - 1];
 
           if (($page == $_GET['pageid']) || ($page == 0 && $_GET['pageid'] == '')) {
             $src = $this->Template ('problems.list.page',
@@ -1488,7 +1490,9 @@
             $src = '';
           }
 
-          $pages->AppendPage ($src);
+          $pages->AppendPage ($src,
+            htmlspecialchars ($first['name']) .
+              (($last['name']) ? (' .. ' . htmlspecialchars ($last['name'])) : ('')));
           $page++;
         }
 
