@@ -323,7 +323,19 @@
       function Init () { $this->FillData (); }
 
       function FillData () {
+        $t = db_query ('SELECT `tags`.`problem_id`, `dict`.`tag` '.
+          'FROM `tester_problem_tags` AS `tags`, `tester_tags_dict` AS `dict` '.
+          'WHERE `tags`.`tag_id`=`dict`.`id` ORDER BY `dict`.`tag`');
+        $raw_tags = arr_from_ret_query ($t);
+        $tags = array ();
+
+        for ($i = 0, $n = count ($raw_tags); $i < $n; ++$i) {
+          $tags[$raw_tags[$i]['problem_id']][] = $raw_tags[$i]['tag'];
+        }
+
+        $raw_tags = array ();
         $this->data = array ();
+
         $q = db_select ('tester_problems', array ('id', 'lid', 'settings',
                                                   'name', 'uploaded'),
                         '`lid`=0', 'ORDER BY `lid`, `name`');
@@ -331,12 +343,7 @@
         while ($r = db_row ($q)) {
           $arr = $r;
           $arr['settings'] = unserialize ($r['settings']);
-
-          $t = db_query ('SELECT `dict`.`id`, `dict`.`tag` '.
-            'FROM `tester_problem_tags` AS `tags`, `tester_tags_dict` AS `dict` '.
-            'WHERE `tags`.`problem_id`='.$r['id'].
-            ' AND `tags`.`tag_id`=`dict`.`id` ORDER BY `dict`.`tag`');
-          $arr['tags'] = arr_from_ret_query ($t, 'tag');
+          $arr['tags'] = $tags[$r['id']];
           $this->data[] = $arr;
         }
       }
