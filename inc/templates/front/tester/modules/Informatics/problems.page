@@ -45,6 +45,85 @@ function show_desc (id) {
 }
 
 </script>
+
+<script language="JavaScript" type="text/javascript">
+  function on_tag_add_click(sender) {
+    var inpform = getElementById ('tag_inp_form');
+    var tag_name = elementByIdInTree (inpform, 'tag_name');
+    inpform.style.display = 'block';
+    tag_name.value = '';
+    sender.style.display = 'none';
+    tag_name.focus ();
+  }
+
+  function add_tag_callback(response, problem_id) {
+    if (response != '+OK') {
+      alert ('Произошла ошибка добавления метки к задаче');
+    } else {
+      var inpform = getElementById ('tag_inp_form');
+      var tag_name = elementByIdInTree (inpform, 'tag_name');
+      var trimmed = qtrim (tag_name.value);
+
+      var tags_table = getElementById ('problem_tags');
+      var tags_tbody = null;
+
+      for (var i = 0, n = tags_table.childNodes.length; i < n; ++i) {
+        if (tags_table.childNodes[i].tagName &&
+            tags_table.childNodes[i].tagName.toLowerCase () == 'tbody') {
+          tags_tbody = tags_table.childNodes[i];
+          break;
+        }
+      }
+
+      var newRow = document.createElement ('TR');
+      var newTd = document.createElement ('TD');
+      newTd.innerHTML = '<span>' + htmlspecialchars (trimmed) + '</span>' +
+        '<img src="' + document_root + '/pics/minus_s.gif" onclick="remove_tag(this, ' + problem_id + ')">';
+      newRow.appendChild (newTd);
+      tags_tbody.appendChild (newRow);
+
+      tag_name.value = '';
+    }
+  }
+
+  function do_add_tag(problem_id) {
+    var inpform = getElementById ('tag_inp_form');
+    var tag_name = elementByIdInTree (inpform, 'tag_name');
+    var trimmed = qtrim (tag_name.value);
+    if (trimmed == '') {
+      return;
+    }
+
+    IPC_Send_Command ('/tester/', 'ipc=cmd_problem_add_tag&id=' + problem_id +
+      '&tag=' + escapeURLVal (trimmed), function (response) { add_tag_callback (response, problem_id); });
+  }
+
+  function on_tagname_keypress(event, problem_id) {
+    var evt = event || window.event;
+    if (evt && evt.keyCode == 13) {
+      do_add_tag (problem_id);
+    }
+  }
+
+  function remove_tag_callback(sender, problem_id, response) {
+    if (response != '+OK') {
+      alert ('Произошла ошибка удаления метки');
+    } else {
+      var row = sender.parentNode.parentNode;
+      row.parentNode.removeChild (row);
+    }
+  }
+
+  function remove_tag(sender, problem_id) {
+    if (true || confirm ('Удалить выбранную метку?')) {
+      var tag = htmlspecialchars_decode (sender.parentNode.childNodes[0].innerHTML);
+      IPC_Send_Command ('/tester/', 'ipc=cmd_problem_rm_tag&id=' + problem_id +
+        '&tag=' + escapeURLVal (tag), function (response) { remove_tag_callback (sender, problem_id, response); });
+    }
+  }
+</script>
+
+
 <?php
     function draw_list ($title, $id, $lib, $arr, $dis_data, $dis, $break=false) {
       global $id;

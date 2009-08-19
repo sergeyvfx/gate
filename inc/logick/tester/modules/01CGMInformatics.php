@@ -765,8 +765,50 @@
                                            $this->GetContent ()));
       }
 
+      function IPC_Problem_AddTag ($problem_id, $tag) {
+        return $this->AddTagToProblem ($problem_id, $tag);
+      }
+
+      function IPC_Problem_RemoveTag ($problem_id, $tag) {
+        return $this->RemoveTagFromProblem ($problem_id, $tag);
+      }
+
       //////
       // Problems' stuff
+
+      function AddTagToProblem ($problem_id, $tag) {
+        if (!$this->GetAllowed ('PROBLEMS.EDIT')) {
+          return false;
+        }
+        $tag_id=db_field_value ('tester_tags_dict', 'id',
+                                '`tag`="' . addslashes ($tag) . '"');
+        if (!isnumber ($tag_id)) {
+          db_insert ('tester_tags_dict', array ('tag' => db_string ($tag)));
+          $tag_id = db_last_insert ();
+        }
+
+        if (db_count ('tester_problem_tags',
+                      "`problem_id`=$problem_id AND `tag_id`=$tag_id") == 0) {
+          db_insert ('tester_problem_tags', array ('problem_id' => $problem_id,
+                                                   'tag_id'     => $tag_id));
+        }
+
+        return true;
+      }
+
+      function RemoveTagFromProblem ($problem_id, $tag) {
+        if (!$this->GetAllowed ('PROBLEMS.EDIT')) {
+          return false;
+        }
+
+        $tag_id = db_field_value ('tester_tags_dict', 'id',
+                                  '`tag`="' . addslashes ($tag) . '"');
+        if (isnumber ($tag_id)) {
+          db_delete ('tester_problem_tags', "`problem_id`=$problem_id AND `tag_id`=$tag_id");
+        }
+
+        return true;
+      }
 
       function GetProblemsAtContest ($contest_id = -1) {
         global $WT_contest_id;

@@ -31,13 +31,12 @@
         return;
       }
 
-      $tag_id = db_field_value ('tester_tags_dict', 'id',
-                                '`tag`="' . addslashes ($tag) . '"');
-      if (isnumber ($tag_id)) {
-        db_delete ('tester_problem_tags', "`problem_id`=$id AND `tag_id`=$tag_id");
+      $gw = WT_spawn_new_gateway ();
+      if ($gw->current_lib->IPC_Problem_RemoveTag ($id, $tag)) {
+        print ('+OK');
+      } else {
+        print ('-ERR');
       }
-
-      print ('+OK');
     }
 
     ipc_register_function ('cmd_problem_rm_tag', WT_ProblemRemoveTag);

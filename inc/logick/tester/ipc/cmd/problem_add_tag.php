@@ -31,20 +31,12 @@
         return;
       }
 
-      $tag_id=db_field_value ('tester_tags_dict', 'id',
-                              '`tag`="' . addslashes ($tag) . '"');
-      if (!isnumber ($tag_id)) {
-        db_insert ('tester_tags_dict', array ('tag' => db_string ($tag)));
-        $tag_id = db_last_insert ();
+      $gw = WT_spawn_new_gateway ();
+      if ($gw->current_lib->IPC_Problem_AddTag ($id, $tag)) {
+        print ('+OK');
+      } else {
+        print ('-ERR');
       }
-
-      if (db_count ('tester_problem_tags',
-                    "`problem_id`=$id AND `tag_id`=$tag_id") == 0) {
-        db_insert ('tester_problem_tags', array ('problem_id' => $id,
-                                                 'tag_id'     => $tag_id));
-      }
-
-      print ('+OK');
     }
 
     ipc_register_function ('cmd_problem_add_tag', WT_ProblemAddTag);
