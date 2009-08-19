@@ -257,8 +257,17 @@ function core_WindowDimensions (w) {
 
 function getKeyCode(event) {
   return window.event ? window.event.keyCode : (event.keyCode ? event.keyCode : (event.which ? event.which : null));
-};
+}
+
 function escapeURLVal(val) {
   //return val.replace (/\&/g, '&quot;');
-  return escape (val) . replace (/\+/, '%2B');
-};
+  return encodeURI (val) . replace (/\+/, '%2B') . replace (/\&/, '%26');
+}
+
+function htmlspecialchars(s) {
+  return s.replace (/\&/g, '&amp;').replace (/\</g, '&lt;').replace (/\>/g, '&gt;');
+}
+
+function htmlspecialchars_decode(s) {
+  return s.replace (/\&amp;/g, '&').replace (/\&lt;/g, '<').replace (/\&gt;/g, '>');
+}

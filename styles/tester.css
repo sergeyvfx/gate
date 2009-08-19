@@ -44,3 +44,10 @@
 
 #content table.tests_info a, #content table.tests_info a:link,
 #content table.tests_info a:visited, #content table.tests_info a:hover { color: #000; }
+
+#content div.problem_tags { margin-top: 4px; }
+#content div.problem_tags img { vertical-align: middle; margin-left: 4px; cursor: pointer; }
+#content div.problem_tags div.cnt * { font-size: 7pt; }
+#content div.problem_tags div.cnt div.actpub { margin-top: 4px; text-align: center; }
+#content div.problem_tags div.cnt div.actpub div.inpform { display: none; text-align: center; }
+#content div.problem_tags div.cnt div.actpub button { height: auto; width: 32px; font-size: 7pt; }
