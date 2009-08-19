@@ -334,7 +334,8 @@
 
           $t = db_query ('SELECT `dict`.`id`, `dict`.`tag` '.
             'FROM `tester_problem_tags` AS `tags`, `tester_tags_dict` AS `dict` '.
-            'WHERE `tags`.`tag_id`=`dict`.`id` ORDER BY `dict`.`tag`');
+            'WHERE `tags`.`problem_id`='.$r['id'].
+            ' AND `tags`.`tag_id`=`dict`.`id` ORDER BY `dict`.`tag`');
           $arr['tags'] = arr_from_ret_query ($t, 'tag');
           $this->data[] = $arr;
         }
