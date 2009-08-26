@@ -1,0 +1,30 @@
+<div class="tagcloud">
+<?php
+  $title = targ ('title');
+  $jshandler = targ ('jshandler');
+  $userdata = targ ('userdata');
+
+  if (trim ($title) != '') {
+?>
+  <div class="cloud_title"><?=$title?></div>
+<?php
+  }
+
+  $tags = targ ('tags');
+  $onclick='';
+  for ($i = 0, $n = count ($tags); $i < $n; ++$i) {
+    $tag = $tags[$i];
+    $href = '#';
+    if ($jshandler) {
+      $onclick = ' onclick="' . $jshandler . ' (\'' . $tag . '\'' .
+        ($userdata ? ", $userdata" : '') . ')"';
+    }
+?>
+  <a href="<?=$href;?>"<?=$onclick;?>><?=$tag;?></a>
+<?php
+    if ($i != $n - 1) {
+      print (',');
+    }
+  }
+?>
+</div>

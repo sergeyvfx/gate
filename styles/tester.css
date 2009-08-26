@@ -51,3 +51,4 @@
 #content div.problem_tags div.cnt div.actpub { margin-top: 4px; text-align: center; }
 #content div.problem_tags div.cnt div.actpub div.inpform { display: none; text-align: center; }
 #content div.problem_tags div.cnt div.actpub button { height: auto; width: 32px; font-size: 7pt; }
+#content div.problem_tags div.cnt div.actpub div.inpform div.tagcloud { margin-top: 4px; width: 155px; margin-bottom: 4px; }

@@ -626,6 +626,40 @@
         return array ('tests' => db_unpack ($data['tst']),
                       'answers' => db_unpack ($data['ans']));
       }
+
+      function AddTagToProblem ($problem_id, $tag) {
+        $tag_id=db_field_value ('tester_tags_dict', 'id',
+                                '`tag`="' . addslashes ($tag) . '"');
+        if (!isnumber ($tag_id)) {
+          db_insert ('tester_tags_dict', array ('tag' => db_string ($tag)));
+          $tag_id = db_last_insert ();
+        }
+
+        if (db_count ('tester_problem_tags',
+                      "`problem_id`=$problem_id AND `tag_id`=$tag_id") == 0) {
+          db_insert ('tester_problem_tags', array ('problem_id' => $problem_id,
+                                                   'tag_id'     => $tag_id));
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      function RemoveTagFromProblem ($problem_id, $tag) {
+        $tag_id = db_field_value ('tester_tags_dict', 'id',
+                                  '`tag`="' . addslashes ($tag) . '"');
+        if (isnumber ($tag_id)) {
+          db_delete ('tester_problem_tags', "`problem_id`=$problem_id AND `tag_id`=$tag_id");
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      function GetAllTags () {
+        $t = db_query ('SELECT `tag` FROM `tester_tags_dict` ORDER BY `tag`');
+        return arr_from_ret_query ($t, 'tag');
+      }
     }
 
     ////////
@@ -780,34 +814,14 @@
         if (!$this->GetAllowed ('PROBLEMS.EDIT')) {
           return false;
         }
-        $tag_id=db_field_value ('tester_tags_dict', 'id',
-                                '`tag`="' . addslashes ($tag) . '"');
-        if (!isnumber ($tag_id)) {
-          db_insert ('tester_tags_dict', array ('tag' => db_string ($tag)));
-          $tag_id = db_last_insert ();
-        }
-
-        if (db_count ('tester_problem_tags',
-                      "`problem_id`=$problem_id AND `tag_id`=$tag_id") == 0) {
-          db_insert ('tester_problem_tags', array ('problem_id' => $problem_id,
-                                                   'tag_id'     => $tag_id));
-        }
-
-        return true;
+        return $this->problemsContainer->AddTagToProblem ($problem_id, $tag);
       }
 
       function RemoveTagFromProblem ($problem_id, $tag) {
         if (!$this->GetAllowed ('PROBLEMS.EDIT')) {
           return false;
         }
-
-        $tag_id = db_field_value ('tester_tags_dict', 'id',
-                                  '`tag`="' . addslashes ($tag) . '"');
-        if (isnumber ($tag_id)) {
-          db_delete ('tester_problem_tags', "`problem_id`=$problem_id AND `tag_id`=$tag_id");
-        }
-
-        return true;
+        return $this->problemsContainer->RemoveTagFromProblem ($problem_id, $tag);
       }
 
       function GetProblemsAtContest ($contest_id = -1) {
@@ -1362,7 +1376,8 @@
         $res = $this->Template ('problems.description',
                                 array ('data' => $arr,
                                        'backlink' => $backlink,
-                                       'editbtn' => $edit));
+                                       'editbtn' => $edit,
+                                       'lib' => $this));
         return $res;
       }
 

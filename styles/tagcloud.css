@@ -1,0 +1,3 @@
+#content div.tagcloud { background: #eee; padding: 6px; border: 1px #aaa solid; text-align: justify; }
+#content div.tagcloud a { margin: 2px 4px; }
+#content div.tagcloud div.cloud_title { margin-bottom: 6px ; color: #333; }

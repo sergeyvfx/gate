@@ -6,6 +6,8 @@
   $arr = $lib->GetProblemsAtContest ($WT_contest_id);
   $n = count ($arr);
 
+  $CORE->AddStyle ('tagcloud');
+
   if ($n == 0) {
     println ('<span class="contentSub2">Нет задач для просмотра</span>');
   } else {
@@ -46,6 +48,9 @@ function show_desc (id) {
 
 </script>
 
+<?php
+  if ($lib->GetAllowed ('PROBLEMS.EDIT')) {
+?>
 <script language="JavaScript" type="text/javascript">
   function on_tag_add_click(sender) {
     var inpform = getElementById ('tag_inp_form');
@@ -56,14 +61,10 @@ function show_desc (id) {
     tag_name.focus ();
   }
 
-  function add_tag_callback(response, problem_id) {
+  function add_tag_callback(response, tag, problem_id) {
     if (response != '+OK') {
       alert ('Произошла ошибка добавления метки к задаче');
     } else {
-      var inpform = getElementById ('tag_inp_form');
-      var tag_name = elementByIdInTree (inpform, 'tag_name');
-      var trimmed = qtrim (tag_name.value);
-
       var tags_table = getElementById ('problem_tags');
       var tags_tbody = null;
 
@@ -77,13 +78,20 @@ function show_desc (id) {
 
       var newRow = document.createElement ('TR');
       var newTd = document.createElement ('TD');
-      newTd.innerHTML = '<span>' + htmlspecialchars (trimmed) + '</span>' +
+      newTd.innerHTML = '<span>' + htmlspecialchars (tag) + '</span>' +
         '<img src="' + document_root + '/pics/minus_s.gif" onclick="remove_tag(this, ' + problem_id + ')">';
       newRow.appendChild (newTd);
       tags_tbody.appendChild (newRow);
 
+      var inpform = getElementById ('tag_inp_form');
+      var tag_name = elementByIdInTree (inpform, 'tag_name');
       tag_name.value = '';
     }
+  }
+
+  function add_specified_tag(tag, problem_id) {
+    IPC_Send_Command ('/tester/', 'ipc=cmd_problem_add_tag&id=' + problem_id +
+      '&tag=' + escapeURLVal (tag), function (response) { add_tag_callback (response, tag, problem_id); });
   }
 
   function do_add_tag(problem_id) {
@@ -94,8 +102,7 @@ function show_desc (id) {
       return;
     }
 
-    IPC_Send_Command ('/tester/', 'ipc=cmd_problem_add_tag&id=' + problem_id +
-      '&tag=' + escapeURLVal (trimmed), function (response) { add_tag_callback (response, problem_id); });
+    add_specified_tag (trimmed, problem_id);
   }
 
   function on_tagname_keypress(event, problem_id) {
@@ -121,7 +128,15 @@ function show_desc (id) {
         '&tag=' + escapeURLVal (tag), function (response) { remove_tag_callback (sender, problem_id, response); });
     }
   }
+
+  function on_tagcloud_selected(tag, problem_id) {
+    add_specified_tag (tag, problem_id);
+  }
 </script>
+
+<?php
+  }
+?>
 
 
 <?php

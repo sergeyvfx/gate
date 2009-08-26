@@ -4,6 +4,7 @@
   $s = $data['settings'];
   $editbtn = targ ('editbtn');
   formo ('title='.prepare_arg ($data['name']).';');
+  $lib = targ ('lib');
 ?>
 
 <table width="100%"><tr><td>
@@ -30,8 +31,10 @@
 <?php
   $tags = $data['tags'];
   $n = count ($tags);
+  $tags_assoc = array ();
 
   for ($i = 0; $i < $n; ++$i) {
+    $tags_assoc[$tags[$i]] = true;
 ?>
                <tr><td><span><?=htmlspecialchars ($tags[$i]);?></span><img src="<?=config_get ('document-root');?>/pics/minus_s.gif" onclick="remove_tag(this, <?=$data['id']?>)"></td></tr>
 <?php
@@ -42,10 +45,26 @@
             <div class="actpub">
               <div class="inpform" id="tag_inp_form">
                 <center>
+<?php
+  $all_tags = $lib->problemsContainer->GetAllTags ();
+  $aval_tags = array ();
+
+  for ($i = 0, $n = count ($all_tags); $i < $n; ++$i) {
+    if (!$tags_assoc[$all_tags[$i]]) {
+      $aval_tags[] = $all_tags[$i];
+    }
+  }
+
+  if (count ($aval_tags)) {
+    $cloud = new CVCTagCloud ();
+    $cloud->Init ($aval_tags, 'title=Доступные метки;jshandler=on_tagcloud_selected;userdata=' . $data['id']);
+    $cloud->Draw ();
+  }
+?>
                   <table class="clear">
                     <tr>
                       <td><input type="text" class="txt" value="" id="tag_name" onkeypress="on_tagname_keypress(event, <?=$data['id']?>)"></td>
-                      <td><button class="small" onclick="do_add_tag(<?=$data['id']?>)">+</button></td>
+                      <td>&nbsp;&nbsp;<a href="#" class="small" onclick="do_add_tag(<?=$data['id']?>)">доб</a></td>
                     </tr>
                   </table>
                 </center>

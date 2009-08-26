@@ -17,8 +17,8 @@
     die;
   }
 
-  if ($_CVCRegnum_ != '#CVCRegnum_Included#') {
-    $_CVCContent_ = '#CVCRegnum_Included#';
+  if ($_CVCCaptcha_ != '#CVCCaptcha_Included#') {
+    $_CVCaptcha_ = '#CVCCaptcha_Included#';
 
     class CVCCaptcha extends CVCVirtual {
       function CVCCaptcha () { $this->SetClassName ('CVCCaptcha'); }
