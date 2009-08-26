@@ -323,7 +323,19 @@
       function Init () { $this->FillData (); }
 
       function FillData () {
+        $t = db_query ('SELECT `tags`.`problem_id`, `dict`.`tag` '.
+          'FROM `tester_problem_tags` AS `tags`, `tester_tags_dict` AS `dict` '.
+          'WHERE `tags`.`tag_id`=`dict`.`id` ORDER BY `dict`.`tag`');
+        $raw_tags = arr_from_ret_query ($t);
+        $tags = array ();
+
+        for ($i = 0, $n = count ($raw_tags); $i < $n; ++$i) {
+          $tags[$raw_tags[$i]['problem_id']][] = $raw_tags[$i]['tag'];
+        }
+
+        $raw_tags = array ();
         $this->data = array ();
+
         $q = db_select ('tester_problems', array ('id', 'lid', 'settings',
                                                   'name', 'uploaded'),
                         '`lid`=0', 'ORDER BY `lid`, `name`');
@@ -331,6 +343,7 @@
         while ($r = db_row ($q)) {
           $arr = $r;
           $arr['settings'] = unserialize ($r['settings']);
+          $arr['tags'] = $tags[$r['id']];
           $this->data[] = $arr;
         }
       }
@@ -540,7 +553,7 @@
 
         for ($i = 0, $n = count ($this->data); $i < $n; ++$i) {
           if (preg_match ("/$filter/i", $this->data[$i]['name']) ||
-              preg_match ("/$filter/", $this->data[$i]['settings']['comment'])) {
+              preg_match ("/$filter/i", $this->data[$i]['settings']['comment'])) {
             $res[] = $this->data[$i];
           }
         }
@@ -752,8 +765,50 @@
                                            $this->GetContent ()));
       }
 
+      function IPC_Problem_AddTag ($problem_id, $tag) {
+        return $this->AddTagToProblem ($problem_id, $tag);
+      }
+
+      function IPC_Problem_RemoveTag ($problem_id, $tag) {
+        return $this->RemoveTagFromProblem ($problem_id, $tag);
+      }
+
       //////
       // Problems' stuff
+
+      function AddTagToProblem ($problem_id, $tag) {
+        if (!$this->GetAllowed ('PROBLEMS.EDIT')) {
+          return false;
+        }
+        $tag_id=db_field_value ('tester_tags_dict', 'id',
+                                '`tag`="' . addslashes ($tag) . '"');
+        if (!isnumber ($tag_id)) {
+          db_insert ('tester_tags_dict', array ('tag' => db_string ($tag)));
+          $tag_id = db_last_insert ();
+        }
+
+        if (db_count ('tester_problem_tags',
+                      "`problem_id`=$problem_id AND `tag_id`=$tag_id") == 0) {
+          db_insert ('tester_problem_tags', array ('problem_id' => $problem_id,
+                                                   'tag_id'     => $tag_id));
+        }
+
+        return true;
+      }
+
+      function RemoveTagFromProblem ($problem_id, $tag) {
+        if (!$this->GetAllowed ('PROBLEMS.EDIT')) {
+          return false;
+        }
+
+        $tag_id = db_field_value ('tester_tags_dict', 'id',
+                                  '`tag`="' . addslashes ($tag) . '"');
+        if (isnumber ($tag_id)) {
+          db_delete ('tester_problem_tags', "`problem_id`=$problem_id AND `tag_id`=$tag_id");
+        }
+
+        return true;
+      }
 
       function GetProblemsAtContest ($contest_id = -1) {
         global $WT_contest_id;
@@ -1437,7 +1492,7 @@
         $edit    = $this->GetAllowed ('PROBLEMS.EDIT');
         $rejudge = $this->GetAllowed ('PROBLEMS.REJUDGE');
 
-        $list = $this->problemsContainer->GetList ($_GET['filter']);
+        $list = $this->problemsContainer->GetList (stripslashes ($_GET['filter']));
 
         $n = count ($list);
         if ($n == 0) {
@@ -1454,29 +1509,45 @@
         $page = $i = 0;
 
         $pages = new CVCPagintation();
+        content_url_var_push_global ('filter');
         $pages->Init ('PAGES', 'pageid=pageid;bottomPages=false;skiponcepage=true;');
+
+        $last = ceil ($n / $problemsPerPage);
+        if ($_GET['pageid'] < 0) {
+          $pageid = 0;
+        } else if ($_GET['pageid'] >= $last) {
+          $_GET['pageid'] = $last - 1;
+        }
 
         while ($i < $n) {
           $c = 0;
           $arr = array ();
 
+          $first = $list[$i];
           while ($c < $problemsPerPage && $i < $n) {
             $arr[] = $list[$i];
             $c++;
             $i++;
           }
+          $last = $list[$i - 1];
 
-          $src = $this->Template ('problems.list.page',
-                                  array ('lib' => $this,
-                                         'data' => $arr,
-                                         'page' => $page,
-                                         'perpage' => $problemsPerPage,
-                                         'acc.manage' => $manage,
-                                         'acc.delete' => $delete,
-                                         'acc.edit' => $edit,
-                                         'acc.rejudge' => $rejudge));
+          if (($page == $_GET['pageid']) || ($page == 0 && $_GET['pageid'] == '')) {
+            $src = $this->Template ('problems.list.page',
+                                    array ('lib' => $this,
+                                           'data' => $arr,
+                                           'page' => $page,
+                                           'perpage' => $problemsPerPage,
+                                           'acc.manage' => $manage,
+                                           'acc.delete' => $delete,
+                                           'acc.edit' => $edit,
+                                           'acc.rejudge' => $rejudge));
+          } else {
+            $src = '';
+          }
 
-          $pages->AppendPage ($src);
+          $pages->AppendPage ($src,
+            htmlspecialchars ($first['name']) .
+              (($last['name']) ? (' .. ' . htmlspecialchars ($last['name'])) : ('')));
           $page++;
         }
 

@@ -18,10 +18,51 @@
             <tr><td>Ограничение по времени</td><td align="center">:</td><td><?=$s['timelimit'];?>&nbsp;сек</td></tr>
             <tr><td>Ограничение по памяти</td><td align="center">:</td><td><?=$s['memorylimit'];?>&nbsp;Мб</td></tr>
           </table>
-          <?php lblockc (); ?>
+        <?php lblockc (); ?>
+<?php
+  if ($editbtn) {
+?>
+        <div class="problem_tags">
+        <?php lblocko ('color=green;title=Метки'); ?>
+          <div class="cnt">
+            <table class="tags" id="problem_tags">
+              <tbody>
+<?php
+  $tags = $data['tags'];
+  $n = count ($tags);
+
+  for ($i = 0; $i < $n; ++$i) {
+?>
+               <tr><td><span><?=htmlspecialchars ($tags[$i]);?></span><img src="<?=config_get ('document-root');?>/pics/minus_s.gif" onclick="remove_tag(this, <?=$data['id']?>)"></td></tr>
+<?php
+  }
+?>
+              </tbody>
+            </table>
+            <div class="actpub">
+              <div class="inpform" id="tag_inp_form">
+                <center>
+                  <table class="clear">
+                    <tr>
+                      <td><input type="text" class="txt" value="" id="tag_name" onkeypress="on_tagname_keypress(event, <?=$data['id']?>)"></td>
+                      <td><button class="small" onclick="do_add_tag(<?=$data['id']?>)">+</button></td>
+                    </tr>
+                  </table>
+                </center>
+              </div>
+              <a href="#" onclick="on_tag_add_click(this);">Добавить метки</a>
+            </div>
+          </div>
+        <?php lblockc (); ?>
+        </div>
+<?php
+  }
+?>
+
       </td>
     </tr>
   </table>
+
 <?php
   print ($data['description']);
 ?>

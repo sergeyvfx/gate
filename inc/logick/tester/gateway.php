@@ -138,6 +138,20 @@
                                   'problem_id'    => 'INT'
                                 ));
         }
+
+        if (!db_table_exists ('tester_tags_dict')) {
+          db_create_table_safe ('tester_tags_dict', array (
+                                  'id'  => 'INT  NOT NULL PRIMARY KEY AUTO_INCREMENT',
+                                  'tag' => 'TEXT'
+                                ));
+        }
+
+        if (!db_table_exists ('tester_problem_tags')) {
+          db_create_table_safe ('tester_problem_tags', array (
+                                  'problem_id' => 'INT',
+                                  'tag_id'     => 'INT'
+                                ));
+        }
       }
 
       function InitMenus () {

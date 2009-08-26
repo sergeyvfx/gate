@@ -23,8 +23,8 @@
       var $pages = array ();
       var $defaultStencil = array (
         'outer' => '<div class="pagintation">Страницы: $(items)</div>',
-        'item' => '<a href="$(href)">$(title)</a>',
-        'activeItem' => '<a href="$(href)" class="active">[$(title)]</a>'
+        'item' => ' <a href="$(href)" title="$(hint)">$(title)</a>',
+        'activeItem' => ' <a href="$(href)" title="$(hint)" class="active">[$(title)]</a>'
       );
       var $topStencil;
       var $bottomStencil;
@@ -74,8 +74,9 @@
         $this->bottomStencil = $this->CopyStencil ($s);
       }
 
-      function AppendPage ($src) {
-        $this->pages[] = array ('src' => $src, 'count' => $this->settings['perpage']);
+      function AppendPage ($src, $hint = '') {
+        $this->pages[] = array ('src' => $src, 'count' => $this->settings['perpage'],
+                                'hint' => $hint);
       }
 
       function AppendItem ($src) {
@@ -123,7 +124,8 @@
             $st = $itActiveStencil;
           }
 
-          $itemTmp = preg_replace ('/\$\(title\)/', $i + 1, $st);
+          $itemTmp = preg_replace ('/\$\(hint\)/', $this->pages[$i]['hint'], $st);
+          $itemTmp = preg_replace ('/\$\(title\)/', $i + 1, $itemTmp);
           $itemTmp = preg_replace ('/\$\(href\)/', $urlprefix.$pageid.
                                      '='.$i, $itemTmp);
           $items.=$itemTmp;
