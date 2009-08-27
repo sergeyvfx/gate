@@ -26,8 +26,7 @@
         <div class="problem_tags">
         <?php lblocko ('color=green;title=Метки'); ?>
           <div class="cnt">
-            <table class="tags" id="problem_tags">
-              <tbody>
+            <div class="tags" id="problem_tags">
 <?php
   $tags = $data['tags'];
   $n = count ($tags);
@@ -36,12 +35,11 @@
   for ($i = 0; $i < $n; ++$i) {
     $tags_assoc[$tags[$i]] = true;
 ?>
-               <tr><td><span><?=htmlspecialchars ($tags[$i]);?></span><img src="<?=config_get ('document-root');?>/pics/minus_s.gif" onclick="remove_tag(this, <?=$data['id']?>)"></td></tr>
+               <div><span><?=htmlspecialchars ($tags[$i]);?></span><img src="<?=config_get ('document-root');?>/pics/minus_s.gif" onclick="remove_tag(this, <?=$data['id']?>)"></div>
 <?php
   }
 ?>
-              </tbody>
-            </table>
+            </div>
             <div class="actpub">
               <div class="inpform" id="tag_inp_form">
                 <center>
@@ -57,7 +55,7 @@
 
   if (count ($aval_tags)) {
     $cloud = new CVCTagCloud ();
-    $cloud->Init ($aval_tags, 'title=Доступные метки;jshandler=on_tagcloud_selected;userdata=' . $data['id']);
+    $cloud->Init ('ProblemTags', $aval_tags,'title=Доступные метки;jshandler=on_tagcloud_selected;userdata=' . $data['id']);
     $cloud->Draw ();
   }
 ?>

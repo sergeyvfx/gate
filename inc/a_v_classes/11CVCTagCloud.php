@@ -25,11 +25,12 @@
 
       function CVCTagCloud () { $this->SetClassName ('CVCTagCloud'); }
 
-      function Init ($tags = array (), $settings = '') {
+      function Init ($name, $tags = array (), $settings = '') {
         $params = unserialize_params ($settings);
         $this->SetSettings (combine_arrays ($this->GetSettings (), $params));
 
         $this->tags = $tags;
+        $this->name = $name;
       }
 
       function InnerHTML () {
@@ -38,10 +39,15 @@
         if (!isset ($taglist_stuff_included)) {
           $CORE->AddStyle ('tagcloud');
           $taglist_stuff_included = true;
+
+          $CORE->AddScript ( 'language=JavaScript;',
+                            $this->FromTemplate ('script', array (), false));
         }
 
         return $this->FromTemplate ('widget',
-                                    array ('tags'      => $this->tags,
+                                    array (
+                                           'name'      => $this->name,
+                                           'tags'      => $this->tags,
                                            'title'     => $this->settings['title'],
                                            'jshandler' => $this->settings['jshandler'],
                                            'userdata'  => $this->settings['userdata'],

@@ -1,9 +1,13 @@
-<div class="tagcloud">
 <?php
+  $name=targ ('name');
   $title = targ ('title');
   $jshandler = targ ('jshandler');
   $userdata = targ ('userdata');
-
+?>
+<div class="tagcloud" id="tagcloud_<?=$name;?>">
+  <input type="hidden" id="tagcloud_<?=$name;?>_jshandler" value="<?=addslashes ($jshandler);?>">
+  <input type="hidden" id="tagcloud_<?=$name;?>_userdata" value="<?=addslashes ($userdata);?>">
+<?php
   if (trim ($title) != '') {
 ?>
   <div class="cloud_title"><?=$title?></div>
@@ -20,7 +24,7 @@
         ($userdata ? ", $userdata" : '') . ')"';
     }
 ?>
-  <a href="<?=$href;?>"<?=$onclick;?>><?=$tag;?></a>
+    <a href="<?=$href;?>"<?=$onclick;?>><?=htmlspecialchars ($tag);?></a>
 <?php
     if ($i != $n - 1) {
       print (',');

@@ -1,0 +1,139 @@
+function tagcloud_get_root(name) {
+  return getElementById ('tagcloud_' + name);
+}
+
+function tagcloud_tags_count(name) {
+  var root = tagcloud_get_root (name);
+  var result = 0;
+
+  for (var i =0, n = root.childNodes.length; i < n; ++i) {
+    var c = root.childNodes[i];
+
+    if (c.tagName && c.tagName.toLowerCase () == 'a') {
+      ++result;
+    }
+  }
+
+  return result;
+}
+
+function tagcloud_jshandler(name) {
+  var root = tagcloud_get_root (name);
+  return elementByIdInTree (root, 'tagcloud_' + name + '_jshandler').value;
+}
+
+function tagcloud_userdata(name) {
+  var root = tagcloud_get_root (name);
+  return elementByIdInTree (root, 'tagcloud_' + name + '_userdata').value;
+}
+
+function tagcloud_add_tag(name, tag) {
+  var root = tagcloud_get_root (name);
+
+  if (!root) {
+    return;
+  }
+
+  if (tagcloud_tags_count (name)) {
+    root.appendChild (document.createTextNode (','));
+  }
+
+  var jshandler = tagcloud_jshandler (name);
+  var userdata = tagcloud_userdata (name);
+
+  var href = document.createElement ('A');
+  href.appendChild (document.createTextNode (tag));
+  root.appendChild (href);
+
+  if (jshandler) {
+    href.href = '#';
+    href.onclick = function (tag, handler, data) { return function () {
+                                                eval (handler + '("' + htmlspecialchars (tag) + '" ' +
+                                                      (data ? ', ' + data : '') + ')');
+                                              }
+                                              } (tag, jshandler, userdata);
+  }
+
+  tagcloud_resort (name);
+}
+
+function tagcloud_remove_tag(name, tag) {
+  var root = tagcloud_get_root (name);
+
+  var t = htmlspecialchars (tag);
+  var lastComa = null;
+
+  for (var i = 0, n = root.childNodes.length; i < n; ++i) {
+    var c = root.childNodes[i];
+
+    if (c.nodeType == 3 && c.nodeValue.match (/\,/)) {
+      lastComa = c;
+    }
+
+    if (c.tagName && c.tagName.toLowerCase () == 'a') {
+      if (t == c.innerHTML) {
+        /* Delete node with tag */
+        c.parentNode.removeChild (c);
+
+        /* Remove node with coma */
+        if (lastComa) {
+          lastComa.parentNode.removeChild (lastComa);
+        } else {
+          --n;
+          while (i < n) {
+            var c = root.childNodes[i];
+            if (c.nodeType == 3 && c.nodeValue.match (/\,/)) {
+              c.parentNode.removeChild (c);
+              break;
+            }
+            ++i;
+          }
+        }
+
+        break;
+      }
+    }
+  }
+}
+
+function tagcloud_resort(name) {
+  var root = tagcloud_get_root (name);
+  var tags = [];
+
+  /* Gather tags and remove separators */
+  var i = 0, n = root.childNodes.length;
+  while (i < n) {
+    var c = root.childNodes[i];
+
+    if (c.nodeType == 3) {
+      c.parentNode.removeChild (c);
+      --i;
+      --n;
+    }
+
+    if (c.tagName && c.tagName.toLowerCase () == 'a') {
+      tags.push (c);
+      c.parentNode.removeChild (c);
+      --i;
+      --n;
+    }
+
+    ++i;
+  }
+
+  /* Sort tags */
+  tags.sort (function (a, b) {
+               if (a.innerHTML < b.innerHTML) return -1;
+               if (a.innerHTML > b.innerHTML) return 1;
+               return 0;
+             });
+
+  /* Add sorted tags to DOM tree */
+  for (var i = 0, n = tags.length; i < n; ++i) {
+    root.appendChild (tags[i]);
+
+    if (i != n -1) {
+      root.appendChild (document.createTextNode (','));
+    }
+  }
+}
