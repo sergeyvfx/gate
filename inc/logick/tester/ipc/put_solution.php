@@ -39,8 +39,8 @@
       $p = unserialize ($r['parameters']);
 
       for ($i = 0; $i < count ($update_params); $i++) {
-        if (isset ($_GET[$update_params[$i]])) {
-          $p[$update_params[$i]] = stripslashes ($_GET[$update_params[$i]]);
+        if (isset ($_POST[$update_params[$i]])) {
+          $p[$update_params[$i]] = stripslashes ($_POST[$update_params[$i]]);
         }
       }
 
@@ -58,12 +58,12 @@
 
       $data = array ();
 
-      if (isset ($_GET['SOLUTION_OUTPUT'])) {
-        $data['outputs'] = stripslashes ($_GET['SOLUTION_OUTPUT']);
+      if (isset ($_POST['SOLUTION_OUTPUT'])) {
+        $data['outputs'] = stripslashes ($_POST['SOLUTION_OUTPUT']);
       }
 
-      if (isset ($_GET['CHECKER_OUTPUT'])) {
-        $data['checker_outputs'] = stripslashes ($_GET['CHECKER_OUTPUT']);
+      if (isset ($_POST['CHECKER_OUTPUT'])) {
+        $data['checker_outputs'] = stripslashes ($_POST['CHECKER_OUTPUT']);
       }
 
       if (count ($data) > 0) {
