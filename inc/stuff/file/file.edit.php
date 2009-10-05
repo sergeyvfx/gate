@@ -21,7 +21,7 @@
     $s->Unlink ($value);
     $value='';
 ?>
-    <script language="JavaScript">window.parent.CDCFile_OnFileUpload ('<?=$field;?>', '<?=$formname;?>', '', '');</script>
+    <script language="JavaScript" type="text/javascript">window.parent.CDCFile_OnFileUpload ('<?=$field;?>', '<?=$formname;?>', '', '');</script>
 <?php
   } else
   if (isset ($_FILES['uploading'])) {
@@ -34,9 +34,9 @@
       $full=$s->GetFullURL ($fn);
       $p=$s->GetFileParams ($value);
     ?>
-    <script language="JavaScript">window.parent.CDCFile_OnFileUpload ('<?=$field;?>', '<?=$formname;?>', '<?=$full;?>', '<?=$fn;?>', '<?=$p['mime'];?>', '<?=$p['size'];?>');</script>
+    <script language="JavaScript" type="text/javascript">window.parent.CDCFile_OnFileUpload ('<?=$field;?>', '<?=$formname;?>', '<?=$full;?>', '<?=$fn;?>', '<?=$p['mime'];?>', '<?=$p['size'];?>');</script>
 <?php    } else { ?>
-    <script language="JavaScript">alert ('<?=$err;?>');</script>
+    <script language="JavaScript" type="text/javascript">alert ('<?=$err;?>');</script>
 <?php } 
   }
 ?>

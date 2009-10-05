@@ -1,4 +1,6 @@
 <?php
+  global $cman;
+
   if ($cman == 0) {
   $data = targ ('data');
 ?>

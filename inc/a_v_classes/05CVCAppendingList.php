@@ -47,7 +47,7 @@
         global $CORE, $appending_list_script_printed;
 
         if (!isset ($appending_list_script_printed)) {
-          $CORE->AddScript ( 'language=JavaScript;',
+          $CORE->AddScript ( 'language=JavaScript;type=text/JavaScript',
                             $this->FromTemplate ('script', array (), false));
           $appending_list_script_printed = true;
         }
