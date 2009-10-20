@@ -22,22 +22,31 @@
 
     function sock_connect ($server, $port, $timeout = 0) {
       if (!$timeout)
-        @ $sock=fsockopen ($server, $port); else
-        @ $sock=fsockopen ($server, $port, &$errno, &$errstr, $timeout);
+        @ $sock = fsockopen ($server, $port); else
+        @ $sock = fsockopen ($server, $port, &$errno, &$errstr, $timeout);
       return $sock;
     }
 
     function sock_write ($sock, $buf, $len)    {
-      fwrite ($sock, $buf, $len);
+      @fwrite ($sock, $buf, $len);
     }
 
     function sock_read ($sock, $len, $all = false) {
+      if (!$sock) {
+        return '';
+      }
+
       return fread ($sock, $len);
     }
 
-    function sock_read_all  ($sock, $len) {
+    function sock_read_all  ($sock, $len, $notEmpty = false) {
+      if (!$sock) {
+        return '';
+      }
+
       $s = '';
       $first = true;
+      $estimated = 100;
 
       while (true) {
         if ($first) {
@@ -45,9 +54,13 @@
         }
 
         usleep (50000);
-        $t = fread ($sock, $len);
+        @ $t = fread ($sock, $len);
 
         if ($t == '') {
+          if ($notEmpty && $first && $estimated > 0) {
+            --$estimated;
+            continue;
+          }
           break;
         }
 
@@ -58,7 +71,7 @@
     }
 
     function sock_set_blocking ($socket, $val) {
-      set_socket_blocking ($socket, $val);
+      @ set_socket_blocking ($socket, $val);
     }
   }
 ?>
