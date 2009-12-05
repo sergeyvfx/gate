@@ -1,6 +1,6 @@
 body {
   margin: 0; padding: 2px 4px 4px 4px;
-  font-family: "tahoma" "arial" "verdana"; font-size: 8pt;
+  font-family: "tahoma", "arial", "verdana"; font-size: 8pt;
   background: #f7f7f7;
 }
 
@@ -48,36 +48,36 @@ body {
 #content ul    { margin: 0; padding: 0 0 0 40px; }
 #content ul li { list-style: url('../pics/ul_marker.gif'); margin: 0; padding: 0; }
 
-#content a, #content a:visited, #content a:link { font-family: "tahoma" "arial" "verdana"; font-size: 8pt; text-decoration: underline; color: #0000cf; }
+#content a, #content a:visited, #content a:link { font-family: "tahoma", "arial", "verdana"; font-size: 8pt; text-decoration: underline; color: #0000cf; }
 #content a:hover { color: #00f; text-decoration: none; }
 #content a img   { border: 0; }
 #content a.act   { color: #00007f; font-weight: bold; }
 #content a.small { font-size: 7pt; }
 
-#content h1 { font-family: "tahoma" "arial" "verdana"; font-size: 14pt; margin: 14px 0 5px 5px; }
-#content h2 { font-family: "tahoma" "arial" "verdana"; font-size: 12pt; font-weight: bold; margin: 12px 0 4px 5px; }
-#content h3 { font-family: "tahoma" "arial" "verdana"; font-size: 10pt; margin: 12px 0 4px 5px; }
+#content h1 { font-family: "tahoma", "arial", "verdana"; font-size: 14pt; margin: 14px 0 5px 5px; }
+#content h2 { font-family: "tahoma", "arial", "verdana"; font-size: 12pt; font-weight: bold; margin: 12px 0 4px 5px; }
+#content h3 { font-family: "tahoma", "arial", "verdana"; font-size: 10pt; margin: 12px 0 4px 5px; }
 
 #content h1 a, #content h1 a:visited, #content h1 a:link  { font-size: 14pt; }
 #content h2 a, #content h2 a:visited, #content h2 a:link  { font-size: 12pt; }
 #content h3 a, #content h3 a:visited, #content h3 a:link  { font-size: 10pt; }
 
-#content textarea       { font-family: "tahoma" "arial" "verdana"; font-size: 8pt; border: 1px #aaa solid; padding: 2px; color: #000; }
+#content textarea       { font-family: "tahoma", "arial", "verdana"; font-size: 8pt; border: 1px #aaa solid; padding: 2px; color: #000; }
 #content textarea.block { display: block; width: 100%; }
 
-#content small, #content .shade table { font-family: "tahoma" "arial" "verdana"; font-size: 7pt; }
+#content small, #content .shade table { font-family: "tahoma", "arial", "verdana"; font-size: 7pt; }
 
 #content input.cb   { margin: 3px 3px 0 3px; padding: 0;  }
 #content input.radio { position: relative; top: 2px;  cursor: pointer; }
 
 #content input.txt, input.file, #content input.passwd {
   border: 1px #aaa solid; padding: 1px 2px;
-  font-family: "tahoma" "arial" "verdana"; font-size: 8pt;
+  font-family: "tahoma", "arial", "verdana"; font-size: 8pt;
   color: #000;
   background: #fff;
 }
 
-#content select       { border: 1px #aaa solid; font-family:  "tahoma" "arial" "verdana"; font-size: 8pt; color: #000; }
+#content select       { border: 1px #aaa solid; font-family:  "tahoma", "arial", "verdana"; font-size: 8pt; color: #000; }
 #content select.small { font-size: 7pt; }
 
 #content form {margin: 0; padding: 0;}

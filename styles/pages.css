@@ -51,5 +51,5 @@
 #content table.info td { border: 1px #aaa solid; padding: 1px 4px; vertical-align: top; background: #f0f0f0; white-space: nowrap; }
 #content table.info tr.l td { background: #fff; }
 
-#content span.source, #content div.source { background: #eee; border: 1px #777 dotted; padding: 6px 8px; font-family: "lucida console" "dejavu sans mono" "monospace" }
+#content span.source, #content div.source { background: #eee; border: 1px #777 dotted; padding: 6px 8px; font-family: "lucida console", "dejavu sans mono", "monospace" }
 #content span.source { padding: 1px 4px; margin: 4px; white-space: nowrap; }
