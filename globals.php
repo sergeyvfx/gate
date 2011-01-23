@@ -24,6 +24,6 @@
     $relative = '';
   }
 
-  $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'].$relative;
+  $DOCUMENT_ROOT = $s.$relative;
   $DOCUMENT_ROOT = preg_replace ('/\/*$/', '', $DOCUMENT_ROOT);
 ?>
