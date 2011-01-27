@@ -93,6 +93,7 @@
     }
 
     function content_id_by_path ($path) {
+      $path = preg_replace('/\\\\/', '/', $path);
       $parent = dirname ($path);
 
       if ($path == '') {
