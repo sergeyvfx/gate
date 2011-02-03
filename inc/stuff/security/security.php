@@ -204,11 +204,14 @@
         if (!db_table_exists ('user')) {
           db_create_table ('user', array (
             'id'         => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
-            'name'       => 'TEXT',
             'login'      => 'TEXT',
+            'surname'    => 'TEXT',
+            'name'       => 'TEXT',
+            'patronymic' => 'TEXT',
             'password'   => 'TEXT',
             'access'     => 'INT',
             'email'      => 'TEXT',
+            'phone'      => 'TEXT DEFAULT ""',
             'authorized' => 'BOOL',
             'timestamp'  => 'INT DEFAULT 0',
             'last_act'   => 'INT DEFAULT 0',
@@ -217,6 +220,9 @@
 
           db_insert ('user', array ('name' => '"root"',
                                     'login' => '"root"',
+                                    'surname' => '"root"',
+                                    'name' => '"root"',
+                                    'patronymic' => '"root"',
                                     'password' =>'MD5("root#RANDOM_SEED#assword")',
                                     'access' => '7',
                                     'authorized' => '1',

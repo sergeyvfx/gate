@@ -45,15 +45,22 @@
     while ($i < $n) {
       $c = 0;
       $pageSrc = '<table class="list">'."\n";
-      $pageSrc .= '<tr class="h"><th class="n first">№</th><th width="20%">Логин</th><th width="20%">Имя</th><th width="20%">E-Mail</th><th>Уровень доступа</th><th width="48" class="last">&nbsp;</th></tr>'."\n";
+      $pageSrc .= '<tr class="h"><th class="n first">№</th>
+        <th width="10%">Логин</th>
+        <th width="15%">Фамилия</th>
+        <th width="10%">Имя</th>
+        <th width="10%">Отчество</th>
+        <th width="15%">E-Mail</th>
+        <th width="15%">Телефон</th>
+        <th>Уровень доступа</th><th width="48" class="last">&nbsp;</th></tr>'."\n";
 
       while ($c < $perPage && $i < $n) {
         $it = $list[$i];
         $d = !user_is_system ($it['id']);
         $pageSrc .= '<tr'.(($i==$n-1 || $c==$perPage-1)?(' class="last"'):('')).'><td class="n">'.($i+1).'.</td>'.
           '<td><a href=".?action=edit&id='.$it['id'].'&'.get_filters ().$pageid.'">'.$it['login'].'</a></td>'.
-          '<td>'.$it['name'].'</td><td><a href="mailto:'.$it['email'].'" title="Отправить письмо">'.$it['email'].'</a></td>'.
-          '<td>'.security_access_title ($it['access']).'</td>'.
+          '<td>'.$it['surname'].'</td><td>'.$it['name'].'</td><td>'.$it['surname'].'</td><td><a href="mailto:'.$it['email'].'" title="Отправить письмо">'.$it['email'].'</a></td>'.
+          '<td>'.$it['phone'].'</td><td>'.security_access_title ($it['access']).'</td>'.
           '<td align="right">'.stencil_ibtnav ('edit.gif', '?action=edit&id='.$it['id'].'&'.get_filters ().$pageid, 'Изменить элемент').
           stencil_ibtnav (($d)?('cross.gif'):('cross_d.gif'), ($d)?('?action=delete&id='.$it['id'].'&'.get_filters ().$pageid):(''), 'Удалить этот элемент', 'Удалить этот элемент?').
           '</td></tr>'."\n";

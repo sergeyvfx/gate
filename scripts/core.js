@@ -11,9 +11,16 @@
 
 
 function dn () {}
-function nav (url) { if (url == '') url = '/'; document.location = url; }
-function cfrm (s) { return window.confirm (s); }
-function cnav (c,url) { if (cfrm (c)) nav (url); }
+function nav (url) {
+  if (url == '') url = '/';
+  document.location = url;
+}
+function cfrm (s) {
+  return window.confirm (s);
+}
+function cnav (c,url) {
+  if (cfrm (c)) nav (url);
+}
 
 function isalphanum (s) {
   if (s.length == 0) {
@@ -23,8 +30,12 @@ function isalphanum (s) {
   return s.replace (/[A-z0-9_]+/gi, '').length == 0;
 }
 
-function qtrim(s)  { return s.replace(/^(\s*)/,"$`").replace(/(\s*)$/,"$'"); }
-function qhtrim(s) { return s.replace(/^(\s*)/,"$`").replace(/(\s*)$/,"$'").replace (/(\<br\>)/gi, ''); }
+function qtrim(s)  {
+  return s.replace(/^(\s*)/,"$`").replace(/(\s*)$/,"$'");
+}
+function qhtrim(s) {
+  return s.replace(/^(\s*)/,"$`").replace(/(\s*)$/,"$'").replace (/(\<br\>)/gi, '');
+}
 
 function isnumber (s) {
   if (s.length == 0) {
@@ -57,7 +68,9 @@ function elementByIdInTree (node, id) {
   return 0;
 }
 
-function getElementById (id) { return document.getElementById (id); }
+function getElementById (id) {
+  return document.getElementById (id);
+}
 
 function checkDir (s) {
   if (s.length == 0) {
@@ -81,7 +94,18 @@ function check_email (str) {
   }
 
   result = str;
-  result = result.replace (/^([A-Za-z0-9_\.]+)@(([A-Za-z0-9_]+\.?)+)$/g, '');
+  result = result.replace (/^([a-zA-Z0-9_]|\-|\.)+@(([a-z0-9_]|\-)+\.)+[a-z]{2,6}$/g, '');
+
+  return result.length == 0;
+}
+
+function check_phone (str) {
+  if (str.length == 0) {
+    return true;
+  }
+
+  result = str;
+  result = result.replace(/^\+[0-9]{11}$/g, '');
 
   return result.length == 0;
 }
@@ -99,10 +123,18 @@ function show_msg (id, type, text) {
   node.innerHTML = text;
 }
 
-function set_display (id, val) {getElementById (id).style.display=val;}
-function hide (id) { set_display (id, 'none'); }
-function sb (id)   { set_display (id, 'block'); }
-function si (id)   { set_display (id, 'inline'); }
+function set_display (id, val) {
+  getElementById (id).style.display=val;
+}
+function hide (id) {
+  set_display (id, 'none');
+}
+function sb (id)   {
+  set_display (id, 'block');
+}
+function si (id)   {
+  set_display (id, 'inline');
+}
 
 ////////////
 // Ajax stuff
@@ -121,7 +153,9 @@ function ipc_send_request (addr, post, callback) {
     http_request.open ('POST', document_root + addr, true);
 
   http_request.setRequestHeader ('Content-Type', 'application/x-www-form-urlencoded');
-  http_request.onreadystatechange = function() { callback (http_request); };
+  http_request.onreadystatechange = function() {
+    callback (http_request);
+  };
   http_request.send (post);
 }
 
@@ -150,7 +184,7 @@ function core_GetPageScroll (wnd) {
     Y = wnd.pageYOffset;
   } else {
     if ((wnd.document.compatMode) &&
-        (wnd.document.compatMode == 'CSS1Compat')) {
+      (wnd.document.compatMode == 'CSS1Compat')) {
       X = wnd.document.documentElement.scrollLeft;
       Y = wnd.document.documentElement.scrollTop;
     } else {
@@ -159,12 +193,18 @@ function core_GetPageScroll (wnd) {
     }
   }
 
-  return {scrollX:X, scrollY:Y};
+  return {
+    scrollX:X,
+    scrollY:Y
+  };
 }
 
 function core_ElementPosition (self) {
   var node = self;
-  var res = {x:0, y:0};
+  var res = {
+    x:0,
+    y:0
+  };
 
   while (node.tagName.toLowerCase () != 'body') {
     var pos = node.style.position.toLowerCase ();
@@ -176,16 +216,50 @@ function core_ElementPosition (self) {
   return res;
 }
 
-function core_ElementRectangle (element)     { var pos = core_ElementPosition (element); return {x:pos.x, y:pos.y, w:element.clientWidth, h:element.clientHeight}; }
-function core_PointInRectangle (x,y,rec)     { return (x >= rec.x && x <= rec.x + rec.w && y >= rec.y && y <= rec.y+rec.h); }
-function core_PointInElement (x, y, element) { var rec = core_ElementRectangle (element); return core_PointInRectangle (x,y,rec); }
+function core_ElementRectangle (element)     {
+  var pos = core_ElementPosition (element);
+  return {
+    x:pos.x,
+    y:pos.y,
+    w:element.clientWidth,
+    h:element.clientHeight
+  };
+}
 
-var core_MouseCoords = {x:0, y:0};
-function core_StoreMousePos (event) { core_MouseCoords = {x:event.clientX, y:event.clientY}; }
-function core_GetMouseCoords ()     { return core_MouseCoords; }
+function core_PointInRectangle (x,y,rec)     {
+  return (x >= rec.x && x <= rec.x + rec.w && y >= rec.y && y <= rec.y+rec.h);
+}
 
-function math_Sign (a) { if (a > 0) return 1; if (a < 0) return -1; return 0; }
-function math_Dest (x1,y1,x2,y2) { return Math.sqrt ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)); }
+function core_PointInElement (x, y, element) {
+  var rec = core_ElementRectangle (element);
+  return core_PointInRectangle (x,y,rec);
+}
+
+var core_MouseCoords = {
+  x:0,
+  y:0
+};
+
+function core_StoreMousePos (event) {
+  core_MouseCoords = {
+    x:event.clientX,
+    y:event.clientY
+  };
+}
+  
+function core_GetMouseCoords ()     {
+  return core_MouseCoords;
+}
+
+function math_Sign (a) {
+  if (a > 0) return 1;
+  if (a < 0) return -1;
+  return 0;
+}
+
+function math_Dest (x1,y1,x2,y2) {
+  return Math.sqrt ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
 
 function atoi (str) {
   var i, n, res, ch;
@@ -195,9 +269,18 @@ function atoi (str) {
 
   for (i = 0; i < n; i++) {
     c=s.charAt(i);
-    if (c == '0') res = res + '0'; else if (c == '1') res = res + '1'; else if (c == '2') res = res + '2'; else
-    if (c == '3') res = res + '3'; else if (c == '4') res = res + '4'; else if (c == '5') res = res + '5'; else
-    if (c == '6') res = res + '6'; else if (c == '7') res = res + '7'; else if (c == '8') res = res + '8'; else
+    if (c == '0') res = res + '0';
+    else if (c == '1') res = res + '1';
+    else if (c == '2') res = res + '2';
+    else
+    if (c == '3') res = res + '3';
+    else if (c == '4') res = res + '4';
+    else if (c == '5') res = res + '5';
+    else
+    if (c == '6') res = res + '6';
+    else if (c == '7') res = res + '7';
+    else if (c == '8') res = res + '8';
+    else
     if (c == '9') res = res + '9'; else break;
   }
 
@@ -218,11 +301,19 @@ function select_title_by_value (node, val) {
   return '';
 }
 
-function remove_node (node) { if (node.parentNode) node.parentNode.removeChild (node); }
+function remove_node (node) {
+  if (node.parentNode) node.parentNode.removeChild (node);
+}
 
-function isEditEmpty (id) { var node = getElementById (id); if (node == null) return true; return qtrim (node.value) == ''; }
+function isEditEmpty (id) {
+  var node = getElementById (id);
+  if (node == null) return true;
+  return qtrim (node.value) == '';
+}
 
-function setForceURL (val) { force_url=val; }
+function setForceURL (val) {
+  force_url=val;
+}
 function processForceURL () {
   if (force_url != '') {
     nav (force_url);
@@ -252,7 +343,10 @@ function core_WindowDimensions (w) {
     y = w.document.body.clientHeight;
   }
 
-  return {X:x,Y:y};
+  return {
+    X:x,
+    Y:y
+  };
 }
 
 function getKeyCode(event) {
