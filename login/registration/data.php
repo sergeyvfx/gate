@@ -154,7 +154,7 @@ ${information}
 </script>
 
 <?php
-  global $redirect, $action, $name, $login, $email, $passwd;
+  global $redirect, $action, $surname, $name, $patronymic, $login, $email, $phone, $passwd;
 
   function register () {
   global $agree, $email, $keystring;
