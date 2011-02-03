@@ -9,12 +9,13 @@
  * This program can be distributed under the terms of the GNU GPL.
  * See the file COPYING.
  */
+
 if ($PHP_SELF != '') {
   print 'HACKERS?';
   die;
 }
 ?>
-<div id="navigator"><a href="<?= config_get('document-root') ?>/login">Вход в систему</a>Регистрация</div>
+<div id="navigator"><a href="<?=config_get ('document-root')?>/login">Вход в систему</a>Регистрация</div>
 ${information}
 <script language="JavaScript" type="text/JavaScript">
   function check_passwd () {
@@ -23,11 +24,11 @@ ${information}
     var widget   = getElementById ('passwd_msg');
 
     if (passwd == '' && confirm == '') {
-      widget.innerHTML='<span style="color: #600000">Пароль не может быть пустым</span>';
+    widget.innerHTML = '';
       return;
     }
 
-    if (passwd == confirm && !passwd == '')
+  if (passwd == confirm)
       widget.innerHTML='<span style="color: #006000">Успешное подтверждение пароля</span>'; else
         widget.innerHTML='<span style="color: #600000">Ошибка подтверждения пароля</span>';
   }
@@ -96,8 +97,8 @@ ${information}
       return false;
     }
 
-    if (passwd.length > <?= opt_get('max_user_passwd_len'); ?>) {
-      alert ('Пароль создаваемого пользователя может содержать не более <?= opt_get('max_user_passwd_len'); ?> символов.');
+  if (passwd.length > <?=opt_get ('max_user_passwd_len');?>) {
+    alert ('Пароль создаваемого пользователя может содержать не более <?=opt_get ('max_user_passwd_len');?> символов.');
       return false;
     }
 
@@ -127,13 +128,12 @@ ${information}
 
   function check_login () {
     var login = getElementById ('login').value;
-    
     if (!isalphanum (login) || qtrim (login) == '') {
       show_msg ('login_check_res', 'err', 'Логин создаваемого пользователя может состоять лишь из букв латинского алфавита и цифр и не может быть пустым.');
       return false;
     }
 
-    if (qtrim (login).length > <?= opt_get('max_user_login_len'); ?>) {
+  if (qtrim (login).length > <?=opt_get ('max_user_login_len');?>) {
       show_msg ('login_check_res', 'err', 'Логин пользователя может содержать не более 14 символов.');
       return false;
     }
@@ -154,16 +154,22 @@ ${information}
 </script>
 
 <?php
-global $redirect, $action, $surname, $name, $patronymic, $login, $email, $phone, $passwd;
+  global $redirect, $action, $name, $login, $email, $passwd;
 
-function register() {
+  function register () {
   global $agree, $email, $keystring;
 
-  // FIXME  проверка капчи не работает. Разобраться почему
-//  if ($_SESSION['CAPTCHA_Keystring'] == '' || strtolower($keystring) != $_SESSION['CAPTCHA_Keystring']) {
-//    add_info('Вы не прошли тест Тьюринга на подтверждение того, что вы не бот.');
-//    return false;
-//  }
+  require_once('../../inc/stuff/captcha/recaptchalib.php');
+  $privatekey = config_get('recaptcha-private-key');
+  $resp = recaptcha_check_answer ($privatekey,
+                                $_SERVER["REMOTE_ADDR"],
+                                $_POST["recaptcha_challenge_field"],
+                                $_POST["recaptcha_response_field"]);
+
+  if (!$resp->is_valid) {
+    add_info('Вы не прошли тест Тьюринга на подтверждение того, что вы не бот.');
+    return false;
+  }
 
   if ($email == config_get('null-email')) {
     add_info('Недопустимый адрес электронной почты.');
@@ -200,7 +206,7 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"></td></tr>' .
     '<tr><td>Подтверждение</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
     '</table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Код с картинки</td><td style="padding: 0 2px;"><div>' . $rn->OuterHTML() . '</div><input type="text" class="txt block" name="keystring" value=""></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;" width="100%"><div>' . $rn->OuterHTML() . '</div></td></tr></table>'));
 $f->AppendCUstomField(array('src' => '<center><input type="checkbox" class="cb" value="1" name="agree" id="agree">Я согласен с <a href="' . config_get('document-root') . '/articles/rules" target="blank">правилами</a> этого ресурса</center>'));
 
 if ($action == 'register') {

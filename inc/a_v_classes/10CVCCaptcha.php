@@ -34,7 +34,9 @@
       function SetDefaultSettings() { $this->SetClassName ('CVCCaptcha'); }
 
       function InnerHTML () {
-        return '<img src="'.config_get ('document-root').'/inc/stuff/captcha/data.php">';
+        require_once('../../inc/stuff/captcha/recaptchalib.php');
+        $publickey = config_get('recaptcha-public-key');
+        return '<script type="text/javascript"> var RecaptchaOptions = {  theme : \'white\', lang: \'ru\' }; </script>' . recaptcha_get_html($publickey);
       }
     }
 

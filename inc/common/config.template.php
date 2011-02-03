@@ -44,6 +44,9 @@
     config_set ('db-codepage', 'utf8');
     config_set ('db-name', 'gate');
 
+    config_set ('recaptcha-private-key', '');
+    config_set ('recaptcha-public-key', '');
+
     config_set ('storage-root', '/storage');
     config_set ('storage-digits', 4);
     config_set ('storage-lifetime', 30*60);
