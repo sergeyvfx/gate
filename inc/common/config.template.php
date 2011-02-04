@@ -65,7 +65,17 @@
     // Timeout for aproving authorization
     config_set ('confirm_authorize_timeout', 3*24*60*60);
 
-    config_set ('bot-email', 'noreply@school9.perm.ru');
+    /**
+     * Система поддерживает два варианта отправки почты:
+     *  1. Используя локальные сервер (default)
+     *  2. Используя smtp
+     */
+    config_set('email-smtp', true);
+    config_set('email-smtp-host', 'smtp.mail.ru');
+    config_set('email-username', 'user@mail.ru');
+    config_set('email-password', 'password');
+
+    config_set ('bot-email', 'user@mail.ru');
     config_set ('null-email', 'noreply@localhost');
 
     config_set ('time-zone', '0500');

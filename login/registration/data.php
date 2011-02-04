@@ -187,9 +187,7 @@ ${information}
     return false;
   }
 
-// FIXME Раскомментировать когда поправим багу с отправкой e-mail.
-//  return user_create_received(false);
-  return user_create_received(true);
+  return user_create_received(false);
 }
 
 $f = new CVCForm ();
@@ -223,7 +221,6 @@ if ($action == 'register') {
   } else {
     $id = user_id_by_login(stripslashes($login));
     $reglink = config_get('http-document-root') . '/login/registration/confirm/?id=' . $id . '&hash=' . md5(stripslashes($login) . '##VERY_RANDOM_SEED##' . stripslashes($email) . '##' . $id);
-    //FIXME Посмотреть что можно сделать чтобы отправка email была с внешнего сервера
     sendmail_tpl(stripslashes($email), 'Регистрация в системе ' . config_get('site-name'), 'registration', array('login' => stripslashes($login),
         'passwd' => stripslashes($passwd), 'reglink' => $reglink));
     add_info('Новый пользователь был успешно добавлен в базу, но в данный момент он неактивирован и вход в систему от его имени пока невозможен. ' .

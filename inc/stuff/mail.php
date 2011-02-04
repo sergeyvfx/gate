@@ -9,6 +9,7 @@
    * This program can be distributed under the terms of the GNU GPL.
    * See the file COPYING.
    */
+  require_once ("Mail.php");
 
   global $IFACE;
 
@@ -29,8 +30,24 @@
       }
 
       $src = '<html><head>'.$css.'</head><body>'.$body.'</body></html>';
-      mail ($addr, $subject, $src, 'From: '.config_get ('bot-email')."\n".
-        'Content-Type: text/html; charset="UTF-8" ');
+
+      if (config_get('email-smtp')) {
+        $host = config_get('email-smtp-host');
+        $username = config_get('email-username');
+        $password = config_get('email-password');
+        $smtp = Mail::factory("smtp", array('host' => $host,
+                    'auth' => true,
+                    'username' => $username,
+                    'password' => $password));
+        $headers = array('From' => config_get('bot-email'),
+            'To' => $addr,
+            'Subject' => $subject,
+            'Content-Type' => 'text/html; charset="UTF-8"');
+        $smtp->send($addr, $headers, $src);
+      } else {
+        mail($addr, $subject, $src, 'From: ' . config_get('bot-email') . "\n" .
+                'Content-Type: text/html; charset="UTF-8" ');
+      }
     }
 
     function sendmail_tpl ($addr, $subject, $tpl, $params = array ()) {
