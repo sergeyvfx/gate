@@ -130,12 +130,11 @@ if ($_sec_user_included_ != '#sec_user_Included#') {
    */
   function user_check_fields($surname, $name, $patronymic, $login, $email, $phone, $passwd, $check_login = true, $skipId = -1) {
     // Get settings
-    $max_login_len = opt_get('max_user_login_len');
-    $max_surname_len = opt_get('max_user_surname_len');
-    $max_name_len = opt_get('max_user_name_len');
-    $max_patronymic_len = opt_get('max_user_patronymic_len');
-    $max_phone_len = opt_get('max_user_phone_len');
-    $max_passwd_len = opt_get('max_user_passwd_len');
+    $max_login_len = opt_get('max_login_len');
+    $max_surname_len = opt_get('max_surname_len');
+    $max_name_len = opt_get('max_name_len');
+    $max_patronymic_len = opt_get('max_patronymic_len');
+    $max_passwd_len = opt_get('max_passwd_len');
 
     if ($check_login && !isalphanum($login)) {
       add_info('Логин пользователя может состоять лишь из латинских букв и цифр.');
@@ -180,12 +179,6 @@ if ($_sec_user_included_ != '#sec_user_Included#') {
     if (user_registered_with_email($email, $skipId)) {
       add_info('Этот адрес электронной почты уже используется. ' .
               'Пожалуйста, укажите другой.');
-      return false;
-    }
-
-    if (mb_strlen($phone) > $max_phone_len) {
-      add_info('Телефон пользователя может содержать не более ' .
-              $max_phone_len . ' символов.');
       return false;
     }
 
@@ -270,17 +263,21 @@ if ($_sec_user_included_ != '#sec_user_Included#') {
     return false;
   }
 
-  function user_update($id, $name, $email, $access, $groups = array(), $passwd = '') {
-    if (!user_check_fields(CORRECT_LOGIN, $name, $passwd, $email,
-                    false, $id)) {
+  function user_update($id, $surname, $name, $patronymic, $email, $phone, $access, $groups = array(), $passwd = '') {
+     if (!user_check_fields($surname, $name, $patronymic, CORRECT_LOGIN, $email, $phone, $passwd, false, $id)) {
       return false;
     }
 
     $info = user_get_by_id($id);
     $name = htmlspecialchars(addslashes($name));
     $email = addslashes($email);
-    $update = array('name' => "\"$name\"", 'email' => "\"$email\"",
-        'access' => "access");
+
+    $update = array('surname' => '"' . htmlspecialchars(addslashes($surname)) . '"',
+        'name' => '"' . htmlspecialchars(addslashes($name)) . '"',
+        'patronymic' => '"' . htmlspecialchars(addslashes($patronymic)) . '"',
+        'email' => '"' . addslashes($email) . '"',
+        'phone' => '"' . addslashes($phone) . '"',
+        'access' => '"' . addslashes($access) . '"');
 
     if ($passwd != '') {
       $update['password'] = 'MD5("' .
@@ -295,10 +292,14 @@ if ($_sec_user_included_ != '#sec_user_Included#') {
   }
 
   function user_update_received($id) {
+    $surname = stripslashes(trim($_POST['surname']));
     $name = stripslashes(trim($_POST['name']));
+    $patronymic = stripslashes(trim($_POST['patronymic']));
     $passwd = stripslashes($_POST['passwd']);
     $passwd_confirm = stripslashes($_POST['passwd_confirm']);
     $email = stripslashes($_POST['email']);
+    $phone = stripslashes($_POST['phone']);
+    $acgroup = stripslashes($_POST['acgroup']);
 
     if ($passwd != '' && $passwd != $passwd_confirm) {
       add_info('Ошибка подтверждения пароля.');
@@ -309,8 +310,8 @@ if ($_sec_user_included_ != '#sec_user_Included#') {
     $groups->Init('groups');
     $groups->ReceiveItemsUsed();
 
-    if (user_update($id, $name, $email, $_POST['acgroup'],
-                    $groups->GetItemsUsed(), $passwd)) {
+    if (user_update($id, $surname, $name, $patronymic, $email, $phone,
+            $acgroup, $groups->GetItemsUsed(), $passwd)) {
       $_POST = array();
     }
   }

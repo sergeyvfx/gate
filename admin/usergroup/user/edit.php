@@ -17,8 +17,9 @@
   formo ('title=Редактирование пользователя;');
 
   $glist = security_groups ();
-  $max_login_len  = opt_get ('max_user_login_len');
+  $max_surname_len = opt_get ('max_surname_len');
   $max_name_len   = opt_get ('max_user_name_len');
+  $max_patronymic_len = opt_get ('max_patronymic_len');
   $max_passwd_len = opt_get ('max_user_passwd_len');
   $user = user_get_by_id ($id);
 ?>
@@ -31,11 +32,37 @@
 <?php
   }
 ?>
+  function check_passwd () {
+    var passwd  = getElementById ('passwd').value;
+    var confirm = getElementById ('passwd_confirm').value;
+    var widget   = getElementById ('passwd_msg');
+
+    if (passwd == '' && confirm == '') {
+      widget.innerHTML = '';
+      return;
+    }
+
+    if (passwd == confirm)
+      widget.innerHTML='<span style="color: #006000">Успешное подтверждение пароля</span>'; else
+        widget.innerHTML='<span style="color: #600000">Ошибка подтверждения пароля</span>';
+  }
+
   function check (frm) {
+    var surname = getElementById('surname').value;
     var name   = getElementById ('name').value;
+    var patronymic = getElementById('patronymic').value;
     var passwd = getElementById ('passwd').value;
     var passwd_confirm = getElementById ('passwd_confirm').value;
-    var name = getElementById ('name').value;
+
+    if (qtrim (surname) == '') {
+      alert ('Фамилия создаваемого пользователя не может быть пустой.');
+      return false;
+    }
+
+    if (qtrim (surname).length > <?=$max_surname_len;?>) {
+      alert ('Фамилия создаваемого пользователя может содержать не более <?=$max_surname_len;?> символов.');
+      return false;
+    }
 
     if (qtrim (name) == '') {
       alert ('Имя пользователя не может быть пустым.');
@@ -47,8 +74,23 @@
       return false;
     }
 
+    if (qtrim (patronymic)=='') {
+      alert ('Отчество создаваемого пользователя не может быть пустым.');
+      return false;
+    }
+
+    if (qtrim (patronymic).length > <?=$max_patronymic_len;?>) {
+      alert ('Отчество создаваемого пользователя может содержать не более <?=$max_patronymic_len;?> символов.');
+      return false;
+    }
+
     if (!check_email (getElementById ('email').value)) {
-      alert ('Адрес электронной не является корректным.');
+      alert ('Адрес электронной почты не является корректным.');
+      return false;
+    }
+
+    if (!check_phone (getElementById('phone').value)) {
+      alert ('Указанный телефон не является корректным.');
       return false;
     }
 
@@ -87,19 +129,24 @@
 </script>
 
 <form action=".?action=save&id=<?=$id;?>&<?=get_filters ();?><?=(($page!='')?('&page='.$page):(''));?>" method="POST" onsubmit="check (this); return false;">
-  Логин пользователя:
+  Логин:
   <div><?=$user['login'];?></div>
   <div id="hr"></div>
-  Имя пользователя:
+  Фамилия:
+  <input type="text" id="surname" name="surname" value="<?=htmlspecialchars ($user['surname']);?>" class="txt block"><div id="hr"></div>
+  Имя:
   <input type="text" id="name" name="name" value="<?=htmlspecialchars ($user['name']);?>" class="txt block"><div id="hr"></div>
-  Пароль пользователя
+  Отчество:
+  <input type="text" id="patronymic" name="patronymic" value="<?=htmlspecialchars ($user['patronymic']);?>" class="txt block"><div id="hr"></div>
+  Пароль:
   <input type="password" id="passwd" name="passwd" value="" class="passwd block"><div id="hr"></div>
-  Подтверждение пароля
-  <input type="password" id="passwd_confirm" name="passwd_confirm" value="" class="passwd block"><div id="hr"></div>
+  Подтверждение пароля:
+  <input type="password" onblur="check_passwd ();" id="passwd_confirm" name="passwd_confirm" value="" class="passwd block"><div id="passwd_msg"></div><div id="hr"></div>
   Адрес электронной почты<span> :: <a href="JavaScript:dn();" onclick="getElementById ('email').value='<?=config_get ('null-email');?>';" title="Пользователь, не имеющий собственной почты"><?=config_get ('null-email');?></a></span>
-  <input type="text" id="email" name="email" value="<?=htmlspecialchars ($user['email']);?>" class="txt block">
-  <button class="block" type="button" onclick="check_frm_email ();" style="margin-top: 4px;">Проверить</button>
+  <input type="text" onblur="check_frm_email ();" id="email" name="email" value="<?=htmlspecialchars ($user['email']);?>" class="txt block">
   <div id="email_check_res" style="display: none;"></div><div id="hr"></div>
+  Телефон:
+  <input type="text" id="phone" name="phone" value="<?=htmlspecialchars ($user['phone']);?>" class="txt block"><div id="hr"></div>
   Уровень доступа:
   <select class="block" onchange="updateGDesc (this);" name="acgroup">
 <?php
