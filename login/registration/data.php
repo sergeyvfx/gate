@@ -14,6 +14,12 @@ if ($PHP_SELF != '') {
   print 'HACKERS?';
   die;
 }
+
+  $max_login_len = opt_get('max_login_len');
+  $max_surname_len = opt_get('max_surname_len');
+  $max_name_len = opt_get('max_name_len');
+  $max_patronymic_len = opt_get('max_patronymic_len');
+  $max_passwd_len = opt_get('max_passwd_len');
 ?>
 <div id="navigator"><a href="<?=config_get ('document-root')?>/login">Вход в систему</a>Регистрация</div>
 ${information}
@@ -57,18 +63,18 @@ ${information}
       return false;
     }
 
-    if (qtrim (surname).length > <?= opt_get('max_user_surname_len'); ?>) {
-      alert ('Фамилия создаваемого пользователя может содержать не более <?= opt_get('max_user_surname_len'); ?> символов.');
+    if (qtrim (surname).length > <?=$max_surname_len;?>) {
+      alert ('Фамилия создаваемого пользователя может содержать не более <?=$max_surname_len;?> символов.');
       return false;
     }
 
-    if (qtrim (name).length > <?= opt_get('max_user_name_len'); ?>) {
-      alert ('Имя создаваемого пользователя может содержать не более <?= opt_get('max_user_name_len'); ?> символов.');
+    if (qtrim (name).length > <?=$max_name_len; ?>) {
+      alert ('Имя создаваемого пользователя может содержать не более <?=$max_name_len;?> символов.');
       return false;
     }
 
-    if (qtrim (patronymic).length > <?= opt_get('max_user_patronymic_len'); ?>) {
-      alert ('Отчество создаваемого пользователя может содержать не более <?= opt_get('max_user_patronymic_len'); ?> символов.');
+    if (qtrim (patronymic).length > <?=$max_patronymic_len;?>) {
+      alert ('Отчество создаваемого пользователя может содержать не более <?=$max_patronymic_len;?> символов.');
       return false;
     }
 
@@ -77,8 +83,8 @@ ${information}
       return false;
     }
 
-    if (qtrim (login).length > <?= opt_get('max_user_login_len'); ?>) {
-      alert ('Логин создаваемого пользователя может содержать не более <?= opt_get('max_user_login_len'); ?> символов.');
+    if (qtrim (login).length > <?=$max_login_len;?>) {
+      alert ('Логин создаваемого пользователя может содержать не более <?=$max_login_len;?> символов.');
       return false;
     }
 
@@ -97,8 +103,8 @@ ${information}
       return false;
     }
 
-  if (passwd.length > <?=opt_get ('max_user_passwd_len');?>) {
-    alert ('Пароль создаваемого пользователя может содержать не более <?=opt_get ('max_user_passwd_len');?> символов.');
+  if (passwd.length > <?=$max_passwd_len;?>) {
+    alert ('Пароль создаваемого пользователя может содержать не более <?=$max_passwd_len;?> символов.');
       return false;
     }
 
@@ -133,7 +139,7 @@ ${information}
       return false;
     }
 
-  if (qtrim (login).length > <?=opt_get ('max_user_login_len');?>) {
+  if (qtrim (login).length > <?=$max_login_len;?>) {
       show_msg ('login_check_res', 'err', 'Логин пользователя может содержать не более 14 символов.');
       return false;
     }

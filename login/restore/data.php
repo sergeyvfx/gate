@@ -14,6 +14,7 @@
     print 'HACKERS?';
     die;
   }
+  //FIXME Исправить капчу в странице восстановления пароля
 ?>
 <div id="navigator"><a href="<?=config_get ('document-root');?>/login">Вход в систему</a>Восстановление пароля</div>
 ${information}
@@ -41,7 +42,7 @@ function check () {
     return false;
   }
 
-  if (qtrim (login).length><?=opt_get ('max_user_login_len');?>) {
+  if (qtrim (login).length><?=opt_get ('max_login_len');?>) {
     alert ('Логин пользователя может содержать не более 14 символов.');
     return false;
   }

@@ -19,9 +19,11 @@
 
   dd_formo ('title=Создать пользователя;');
   $glist = security_groups ();
-  $max_login_len  = opt_get ('max_user_login_len');
-  $max_name_len   = opt_get ('max_user_name_len');
-  $max_passwd_len = opt_get ('max_user_passwd_len');
+  $max_login_len  = opt_get ('max_login_len');
+  $max_name_len   = opt_get ('max_name_len');
+  $max_passwd_len = opt_get ('max_passwd_len');
+  $max_surname_len = opt_get('max_surname_len');
+  $max_patronymic_len = opt_get('max_patronymic_len');
 ?>
 <script language="JavaScript" type="text/javascript">
   var gDesc = new Array ();
@@ -67,8 +69,8 @@
       return false;
     }
 
-    if (qtrim (surname).length > <?= opt_get('max_user_surname_len'); ?>) {
-      alert ('Фамилия создаваемого пользователя может содержать не более <?= opt_get('max_user_surname_len'); ?> символов.');
+    if (qtrim (surname).length > <?=$max_surname_len;?>) {
+      alert ('Фамилия создаваемого пользователя может содержать не более <?=$max_surname_len?> символов.');
       return false;
     }
 
@@ -87,13 +89,13 @@
       return false;
     }
 
-    if (qtrim (patronymic).length > <?= opt_get('max_user_patronymic_len'); ?>) {
-      alert ('Отчество создаваемого пользователя может содержать не более <?= opt_get('max_user_patronymic_len'); ?> символов.');
+    if (qtrim (patronymic).length > <?=$max_patronymic_len?>) {
+      alert ('Отчество создаваемого пользователя может содержать не более <?=$max_user_patronymic_len?> символов.');
       return false;
     }
 
     if (!check_email (getElementById ('email').value)) {
-      alert ('Адрес электронной не является корректным.');
+      alert ('Адрес электронной почты не является корректным.');
       return false;
     }
 
@@ -161,7 +163,7 @@
   }
 </script>
 <form action=".?action=create&<?=get_filters ();?><?=(($page!='')?('&page='.$page):(''));?>" method="POST" onsubmit="check (this); return false;">
-  Логин пользователя:
+  Логин:
   <input type="text" onblur="check_login ();" id="login" name="login" value="<?=htmlspecialchars (stripslashes ($_POST['login']));?>" class="txt block">
   <div id="login_check_res" style="display: none;"></div>
 <!--  <div id="hr"></div>-->
