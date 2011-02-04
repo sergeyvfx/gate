@@ -261,6 +261,7 @@
           manage_template_register_iterator ($fn);
         } else {
           $data = get_file ($DOCUMENT_ROOT.$fn);
+          $data = preg_replace ("/\r/", '', $data);
           $name = preg_replace ('/^(.*)\n(.*\n)*/', '\1', $data);
           $data = preg_replace ('/^(.*)\n((.*\n)*)/', '\2', $data);
           $c = manage_spawn_template (-1, $name, $data);
