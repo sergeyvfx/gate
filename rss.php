@@ -18,6 +18,7 @@
   wiki_initialize ();
   manage_initialize ();
   security_initialize ();
+  school_initialize ();
   ipc_initialize ();
   service_initialize ();
   editor_initialize ();
