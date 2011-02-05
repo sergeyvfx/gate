@@ -1,0 +1,56 @@
+<?php
+  /**
+   * Gate - Wiki engine and web-interface for WebTester Server
+   *
+   * Security checking stuff
+   *
+   * Copyright (c) 2008-2009 Sergey I. Sharybin <g.ulairi@gmail.com>
+   *
+   * This program can be distributed under the terms of the GNU GPL.
+   * See the file COPYING.
+   */
+
+  global $IFACE;
+
+  if ($IFACE != "SPAWNING NEW IFACE" || $_GET['IFACE'] != '') {
+    print ('HACKERS?');
+    die;
+  }
+
+    function school_initialize () {
+      if (config_get ('check-database')) {
+        db_create_table_safe ('school', array (
+            'id'         => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+            'name'      => 'TEXT',
+            'status_id'    => 'INT',
+            'index'       => 'TEXT',
+            'region_id' => 'INT',
+            'district_id'   => 'INT',
+            'place_id'     => 'INT',
+            'street'      => 'TEXT',
+            'home_number'      => 'TEXT',
+            'building' => 'TEXT',
+            'appartments'  => 'TEXT',
+          ));
+
+         db_create_table_safe ('status', array (
+                                'id'         => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+                                'name'       => 'TEXT',
+                             ));
+        db_create_table_safe ('region', array (
+                                'id'         => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+                                'name'    => 'TEXT',
+                             ));
+        db_create_table_safe ('district', array (
+                                'id'         => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+                                'name'    => 'TEXT',
+                             ));
+        db_create_table_safe ('place', array (
+                                'id'         => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+                                'region_id'         => 'INT',
+                                'status_id'         => 'INT',
+                                'name'    => 'TEXT',
+                             ));
+      }
+  }
+?>

@@ -29,6 +29,7 @@
     include $DOCUMENT_ROOT.'/inc/logick/wiki/include.php';
     include $DOCUMENT_ROOT.'/inc/stuff/include.php';
     include $DOCUMENT_ROOT.'/inc/stuff/security/include.php';
+    include $DOCUMENT_ROOT.'/inc/stuff/school_admin/include.php';
     include $DOCUMENT_ROOT.'/inc/stencil/include.php';
     include $DOCUMENT_ROOT.'/inc/linkage.php';
     include $DOCUMENT_ROOT.'/inc/settings.php';
