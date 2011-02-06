@@ -82,7 +82,7 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Квартира</td><td><input id="flat" name="flat" type="text" class="txt block" value="' . htmlspecialchars($sc['flat']) . '"></td></tr></table>'));
 ?>
 
-<div id="navigator">Мой профиль >> Учебное заведение</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/login/profile/" ?>">Мой профиль</a>Учебное заведение</div>
 ${information}
 <div class="form">
   <div class="content">

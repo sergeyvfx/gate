@@ -153,7 +153,7 @@ $f->AppendCustomField(array('title' => '<input type="checkbox" class="cb pointer
   }
 </script>
 
-<div id="navigator">Мой профиль >> Основные сведения</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/login/profile/" ?>">Мой профиль</a>Основные сведения</div>
 ${information}
 <div class="form">
   <div class="content">

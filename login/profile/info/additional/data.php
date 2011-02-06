@@ -101,7 +101,7 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
   }
 </script>
 
-<div id="navigator">Мой профиль >> Дополнительная информация</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/login/profile/" ?>">Мой профиль</a>Дополнительная информация</div>
 ${information}
 <div class="form">
   <div class="content">

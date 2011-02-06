@@ -21,7 +21,7 @@ include $DOCUMENT_ROOT . '/login/profile/inc/menu.php';
 $profile_menu->SetActive('settings');
 ?>
 
-<div id="navigator">Мой профиль >> Настройки</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/login/profile/" ?>">Мой профиль</a>Настройки</div>
 ${information}
 <div class="form">
   <div class="content">
