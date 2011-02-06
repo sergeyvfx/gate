@@ -230,6 +230,7 @@
                                     'email' => '"postmaster@localhost"'));
         }
 
+      if (!db_table_exists('group')) {
         db_create_table_safe ('group', array (
                                 'id'         => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
                                 'name'       => 'TEXT',
@@ -242,6 +243,11 @@
                                 'user_id'    => 'INT',
                                 'group_id'   => 'INT'
                              ));
+        group_create("Администраторы");
+        group_create("Модераторы");
+        group_create("Ответственные", true);
+        group_create("Жюри");
+      }
       }
     }
 

@@ -45,8 +45,13 @@
     }
 
     function group_get_by_id ($id) { return db_row_value ('group', "`id`=$id"); }
+    function group_get_by_name ($name) { return db_row_value ('group', "`name`=$name"); }
 
     function group_delete ($id) {
+      if ($id < 5) {
+        add_info('Невозможно удалить эту группу, так как она является системной.');
+        return false;
+      }
       db_delete ('group', "`id`=$id");
       db_delete ('usergroup', "`group_id`=$id");
       hook_call ('CORE.Security.OnGroupDelete');

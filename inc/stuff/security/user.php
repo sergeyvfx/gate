@@ -360,6 +360,13 @@ if ($_sec_user_included_ != '#sec_user_Included#') {
     return true;
   }
 
+  function is_user_in_group($uid, $gid) {
+    if (db_count('usergroup', "`user_id`=$uid AND `group_id`=$gid") > 0) {
+      return true;
+    }
+    return false;
+  }
+
   function user_delete_from_group($uid, $gid) {
     if (db_count('usergroup', "`user_id`=$uid AND `group_id`=$gid") == 0) {
       return false;

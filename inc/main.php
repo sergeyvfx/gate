@@ -87,7 +87,7 @@
         manage_initialize ();
         security_initialize ();
         school_initialize();
-        schooladmin_initialize ();
+        responsible_initialize ();
         ipc_initialize ();
 
         service_initialize ();
