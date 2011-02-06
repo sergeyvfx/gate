@@ -17,5 +17,3 @@
 . [url href="$document_root/articles/FAQ"]ЧаВо[/url]
 . [url href="$document_root/articles/rules"]Правила[/url]
 . [url href="$document_root/articles/about"]О проекте[/url]
-+ Администрирование
-. [url href="/phpmyadmin/"]phpMyAdmin[/url]
