@@ -18,9 +18,9 @@
 
   $glist = security_groups ();
   $max_surname_len = opt_get ('max_surname_len');
-  $max_name_len   = opt_get ('max_user_name_len');
+  $max_name_len   = opt_get ('max_name_len');
   $max_patronymic_len = opt_get ('max_patronymic_len');
-  $max_passwd_len = opt_get ('max_user_passwd_len');
+  $max_passwd_len = opt_get ('max_passwd_len');
   $user = user_get_by_id ($id);
 ?>
 <script language="JavaScript" type="text/javascript">
