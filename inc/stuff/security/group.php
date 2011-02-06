@@ -45,7 +45,7 @@
     }
 
     function group_get_by_id ($id) { return db_row_value ('group', "`id`=$id"); }
-    function group_get_by_name ($name) { return db_row_value ('group', "`name`=$name"); }
+    function group_get_by_name ($name) { $name = db_string($name); return db_row_value ('group', "`name`=$name"); }
 
     function group_delete ($id) {
       if ($id < 5) {
