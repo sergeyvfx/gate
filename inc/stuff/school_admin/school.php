@@ -24,9 +24,9 @@
             'name'      => 'TEXT',
             'status_id'    => 'INT',
             'index'       => 'TEXT',
-            'region_id' => 'INT',
-            'district_id'   => 'INT',
-            'place_id'     => 'INT',
+            'region' => 'TEXT',
+            'district'   => 'TEXT',
+            'place_id'     => 'TEXT',
             'street'      => 'TEXT',
             'home_number'      => 'TEXT',
             'building' => 'TEXT',
@@ -52,5 +52,9 @@
                                 'name'    => 'TEXT',
                              ));
       }
+  }
+
+    function school_get_by_id($id) {
+    return db_row_value('school', "`id`=$id");
   }
 ?>

@@ -66,7 +66,41 @@
      '<div id="email_check_res" style="display: none;"></div>'));
    }
 
-  $f->AppendCustomField (array ('title'=>'<input type="checkbox" class="cb pointer" value="1" onclick="fchpasswd (this);" id="chpasswd" name="chpasswd_val"><span class="pointer" onclick="var e=getElementById (\'chpasswd\'); e.checked=!e.checked; fchpasswd (e);">Сменить пароль</span>', 
+   if (check_admin(user_id())){
+       $sc_u = school_admin_get_by_id($u['id']);
+       $sc = school_get_by_id($sc_u['school_id']);
+//       if ($sc_u == false)
+//           create_school_admin()
+       $f->AppendLabelField ('доп Email', '', $sc_u['second_mail']);
+       $f->AppendLabelField ('доп телефон', '', $sc_u['second_phone']);
+       $f->AppendCustomField (array ('src'=>'<table class="clear" width="100%"><tr><td width="30%">Название</td><td><input id="schoolname" name="schoolname" type="text" class="txt block" value="'.htmlspecialchars ($sc['name']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Статус</td><td><input id="status" name="status" type="text" class="txt block" value="'.htmlspecialchars ($sc['status_id']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Индекс</td><td><input id="index" name="index" type="text" class="txt block" value="'.htmlspecialchars ($sc['index']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Регион</td><td><input id="region" name="region" type="text" class="txt block" value="'.htmlspecialchars ($sc['region_id']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Район</td><td><input id="district" name="disctrict" type="text" class="txt block" value="'.htmlspecialchars ($sc['district_id']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Населенный пункт</td><td><input id="place" name="place" type="text" class="txt block" value="'.htmlspecialchars ($sc['place_id']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Улица</td><td><input id="street" name="street" type="text" class="txt block" value="'.htmlspecialchars ($sc['street']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Дом</td><td><input id="home" name="home" type="text" class="txt block" value="'.htmlspecialchars ($sc['home_number']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Корпус</td><td><input id="building" name="building" type="text" class="txt block" value="'.htmlspecialchars ($sc['building']).'"></td></tr>'.
+           '<tr height="10"><td></td><td></td></tr>'.
+           '<tr><td width="30%">Квартира</td><td><input id="apartments" name="apartments" type="text" class="txt block" value="'.htmlspecialchars ($sc['appartments']).'"></td></tr>'.
+           '</table>'));
+       $f->AppendLabelField ('Откуда узнали о конкурсе', '', $sc_u['comment']);
+       //$f->AppendCustomField
+   }
+
+  $f2 = new CVCForm ();
+  $f2->Init ('', 'action=.?action\=save'.(($redirect!='')?('&redirect='.prepare_arg ($redirect).';backlink='.prepare_arg ($redirect)):('')).';method=POST;add_check_func=check;');
+
+  $f2->AppendCustomField (array ('title'=>'<input type="checkbox" class="cb pointer" value="1" onclick="fchpasswd (this);" id="chpasswd" name="chpasswd_val"><span class="pointer" onclick="var e=getElementById (\'chpasswd\'); e.checked=!e.checked; fchpasswd (e);">Сменить пароль</span>',
     'src'=>'<div id="passwd_block" class="invisible">'.
     '<table class="clear" width="100%"><tr><td width="85">Новый пароль</td><td style="padding-bottom: 2px;"><input type="password" class="txt block" id="passwd" name="passwd" onkeyup="check_passwd ();" onchange="check_passwd ();"></td></tr>'.
     '<tr><td>Подтверждение</td><td style="padding-top: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm" onkeyup="check_passwd ();" onchange="check_passwd ();"></td></tr>'.
