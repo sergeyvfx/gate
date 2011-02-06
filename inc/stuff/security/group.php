@@ -48,7 +48,7 @@
     function group_get_by_name ($name) { $name = db_string($name); return db_row_value ('group', "`name`=$name"); }
 
     function group_delete ($id) {
-      if ($id < 5) {
+      if ($id < 6) {
         add_info('Невозможно удалить эту группу, так как она является системной.');
         return false;
       }

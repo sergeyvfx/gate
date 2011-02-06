@@ -247,6 +247,7 @@
         group_create("Модераторы");
         group_create("Ответственные", true);
         group_create("Жюри");
+        group_create("Бухгалтеры");
       }
       }
     }
