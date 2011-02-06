@@ -86,8 +86,7 @@
         // Initialie manage stuff
         manage_initialize ();
         security_initialize ();
-        school_initialize();
-        responsible_initialize ();
+        tipsling_initialize();
         ipc_initialize ();
 
         service_initialize ();
