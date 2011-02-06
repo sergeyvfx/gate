@@ -18,5 +18,6 @@ $info_menu->Init('andevMenu', 'type=hor;colorized=true;sublevel=1;border=thin;')
 $info_menu->AppendItem('Основные сведения', config_get('document-root') . '/login/profile/info/main/', 'main');
 if (is_responsible(user_id())) {
   $info_menu->AppendItem('Учебное заведение', config_get('document-root') . '/login/profile/info/school/', 'school');
+  $info_menu->AppendItem('Дополнительная информация', config_get('document-root') . '/login/profile/info/additional/', 'additional');
 }
 ?>
