@@ -93,12 +93,9 @@ if ($_team_included_ != '#team_Included#') {
     $payment_id = stripslashes(trim($_POST['payment_id']));
     //TODO Make it more universally
     $contest_id = 1;
-    //TODO Gen proper number
-    $number = '1.1';
-    $r = responsible_get_by_id(user_id());
-    //TODO This should work after fill responsible table
-    $responsible_id = $r['id'];
-    $responsible_id = 1;
+    $c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
+    $number = $grade . '.' . $c;
+    $responsible_id = user_id();
     $is_payment = 0;
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
                     $teacher_full_name, $pupil1_full_name, $pupil2_full_name,
@@ -110,23 +107,19 @@ if ($_team_included_ != '#team_Included#') {
     return false;
   }
 
-  function team_update($id, $number, $responsible_id, $contest_id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment) {
+  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment) {
     //TODO Some check
     if (!team_check_fields()) {
       return false;
     }
 
-    $number = db_string($number);
     $grade = db_string($grade);
     $teacher_full_name = db_string($teacher_full_name);
     $pupil1_full_name = db_string($pupil1_full_name);
     $pupil2_full_name = db_string($pupil2_full_name);
     $pupil3_full_name = db_string($pupil3_full_name);
 
-    $update = array('number' => db_string($number),
-        'responsible_id' => $responsible_id,
-        'contest_id' => $contest_id,
-        'payment_id' => $payment_id,
+    $update = array('payment_id' => $payment_id,
         'grade' => $grade,
         'teacher_full_name' => $teacher_full_name,
         'pupil1_full_name' => $pupil1_full_name,
@@ -139,7 +132,7 @@ if ($_team_included_ != '#team_Included#') {
     return true;
   }
 
-  function team_update_received($id) {
+  function team_update_received($id, $is_payment = 0) {
     // Get post data
     $grade = stripslashes(trim($_POST['grade']));
     $teacher_full_name = stripslashes(trim($_POST['teacher_full_name']));
@@ -147,16 +140,10 @@ if ($_team_included_ != '#team_Included#') {
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
-    $number = '1.1';
-    $r = responsible_get_by_id(user_id());
-    //TODO This should work after fill responsible table
-    $responsible_id = $r['id'];
-    $responsible_id = 1;
-    $is_payment = 0;
 
-    if (team_update($id, $number, $responsible_id, $contest_id, $payment_id,
-                    $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name,
-                    $pupil3_full_name, $is_payment)) {
+    if (team_update($id, $payment_id, $grade, $teacher_full_name,
+                    $pupil1_full_name, $pupil2_full_name, $pupil3_full_name,
+                    $is_payment)) {
       $_POST = array();
     }
   }

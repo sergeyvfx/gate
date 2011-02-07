@@ -46,10 +46,12 @@ if (count($list) > 0) {
       $it = $list[$i];
       //TODO Check is contest running or archive
       $d = 1;
+      $ps = $it['is_payment'];
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
       '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">' . $it['number'] . '</a></td>' .
       '<td>' . $it['teacher_full_name'] . '</td><td>' . $it['pupil1_full_name'] . '</td>' .
-      '<td>' . $it['pupil2_full_name'] . '<td>' . $it['pupil3_full_name'] . '</td><td>' . $it['is_payment'] . '</td>' .
+      '<td>' . $it['pupil2_full_name'] . '<td>' . $it['pupil3_full_name'] . '</td>' .
+      '<td>' . (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>')) . '</td>' .
       '<td align="right">' .
         stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить информацию о команде') .
         stencil_ibtnav(($d) ? ('cross.gif') : ('cross_d.gif'), ($d) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), 'Удалить команду', 'Удалить эту команду?') .

@@ -48,8 +48,7 @@ ${information}
         team_delete($id);
       }
       //BUG When you get team_list, you should show only teams for current contest
-      $r = responsible_get_by_id(user_id());
-      $list = team_list($r['id']);
+      $list = team_list(user_id());
       include 'list.php';
 
       include 'create_form.php';
