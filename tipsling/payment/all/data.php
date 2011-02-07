@@ -13,28 +13,27 @@ if ($PHP_SELF != '') {
 }
 
 if (!user_authorized ()) {
-  header('Location: /../../../login');
+  header('Location: ../../../login');
 }
 
 if (!is_bookkeeper(user_id())) {
   print (content_error_page(403));
   return;
 }
-
-global $DOCUMENT_ROOT;
-include $DOCUMENT_ROOT . '/tipsling/menu.php';
-include '../menu.php';
-$contest_menu->SetActive('payment');
-$payment_menu->SetActive('all');
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/payment" ?>">Платежи</a>Все платежи</div>
 ${information}
 <div class="form">
   <div class="content">
-<?php
-$contest_menu->Draw();
-$payment_menu->Draw();
-//$f->Draw();
-?>
+    <?php
+    global $DOCUMENT_ROOT;
+    include $DOCUMENT_ROOT . '/tipsling/menu.php';
+    include '../menu.php';
+    $contest_menu->SetActive('payment');
+    $payment_menu->SetActive('all');
+    $contest_menu->Draw();
+    $payment_menu->Draw();
+    on_construction();
+    ?>
   </div>
 </div>

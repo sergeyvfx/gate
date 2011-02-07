@@ -13,23 +13,22 @@ if ($PHP_SELF != '') {
 }
 
 if (!user_authorized ()) {
-  header('Location: /../../../login');
+  header('Location: ../../../login');
 }
-
-global $DOCUMENT_ROOT;
-include $DOCUMENT_ROOT . '/tipsling/menu.php';
-include '../menu.php';
-$contest_menu->SetActive('team');
-$team_menu->SetActive('all');
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Все команды</div>
 ${information}
 <div class="form">
   <div class="content">
-<?php
-$contest_menu->Draw();
-$team_menu->Draw();
-//$f->Draw();
-?>
+    <?php
+    global $DOCUMENT_ROOT;
+    include $DOCUMENT_ROOT . '/tipsling/menu.php';
+    include '../menu.php';
+    $contest_menu->SetActive('team');
+    $team_menu->SetActive('all');
+    $contest_menu->Draw();
+    $team_menu->Draw();
+    on_construction ();
+    ?>
   </div>
 </div>

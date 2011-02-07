@@ -14,7 +14,7 @@ if ($PHP_SELF != '') {
 }
 
 if (!user_authorized ()) {
-  header('Location: /../../login');
+  header('Location: ../../login');
 } else {
   header('Location: my');
 }
