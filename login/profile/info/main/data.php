@@ -40,7 +40,7 @@ if ($action == 'save') {
   $arr['patronymic'] = db_string($patronymic);
   $arr['phone'] = db_string($phone);
 
-
+  //FIXME Think about email
   if ($u['email'] != '' && !check_email($email)) {
     add_info('Указанный E-Mail не выглядит корректным');
   } else if (user_registered_with_email($email, user_id())) {

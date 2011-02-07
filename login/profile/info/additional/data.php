@@ -37,8 +37,12 @@ if ($action == 'save') {
 
   $r = responsible_get_by_id(user_id());
 
-  //TODO Add check of phone
+  if ($phone!='' && !check_phone($phone))
+    add_info ('Указанный телефон не выглядит корректным.');
+  else
+    $arr['phone']=db_string($phone);
 
+  //FIXME Think about email
   if ($r['email'] != '' && !check_email($email)) {
     add_info('Указанный E-Mail не выглядит корректным');
   } else if (user_registered_with_email($email, user_id())) {
@@ -46,19 +50,22 @@ if ($action == 'save') {
   } else {
     $arr['email'] = db_string($email);
   }
+
+  $arr['comment']=db_string($comment);
+
   //TODO Add saving data
-//  if (count($arr) > 0) {
-//    db_update('user', $arr, '`id`=' . user_id ());
-//  }
+  if (count($arr) > 0) {
+    db_update('responsible', $arr, '`user_id`=' . user_id ());
+  }
 }
 
 $r = responsible_get_by_id(user_id());
 
 $f = new CVCForm ();
 $f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Дополнительный E-mail:</td><td><input id="email" name="email" onblur="check_frm_email ();" type="text" class="txt block" value="' . htmlspecialchars($u['email']) . '"></td></tr></table><div id="email_check_res" style="display: none;"></div>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Дополнительный телефон:</td><td><input id="phone" name="phone" onblur="check_frm_phone ();" type="text" class="txt block" value="' . htmlspecialchars($sc['phone']) . '"></td></tr></table><div id="phone_check_res" style="display: none;"></div>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Откуда Вы узнали о конкурсе?</td><td><input id="comment" name="comment" type="text" class="txt block" value="' . htmlspecialchars($sc['comment']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Дополнительный E-mail:</td><td><input id="email" name="email" onblur="check_frm_email ();" type="text" class="txt block" value="' . htmlspecialchars($r['email']) . '"></td></tr></table><div id="email_check_res" style="display: none;"></div>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Дополнительный телефон:</td><td><input id="phone" name="phone" onblur="check_frm_phone ();" type="text" class="txt block" value="' . htmlspecialchars($r['phone']) . '"></td></tr></table><div id="phone_check_res" style="display: none;"></div>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Откуда Вы узнали о конкурсе?</td><td><input id="comment" name="comment" type="text" class="txt block" value="' . htmlspecialchars($r['comment']) . '"></td></tr></table>'));
 ?>
 
 <script language="JavaScript" type="text/JavaScript">

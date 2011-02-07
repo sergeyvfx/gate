@@ -154,6 +154,7 @@
     function isalphanum ($s)    { return preg_match ('/^[0-9A-Za-z_]+$/', $s); }
     function check_folder ($s)  { return preg_match ('/^[0-9A-Za-z_\-]+$/', $s); }
     function check_email ($str) { return preg_match ('/^([A-Za-z0-9_\.]+)@(([A-Za-z0-9_]+\.?)+)$/', $str); }
+    function check_phone ($str) { return preg_match ('/^\+[0-9]{11}$/', $str);}
 
     function check_dir ($s) {
       if (strlen ($s) == 0) {
