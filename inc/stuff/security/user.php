@@ -357,6 +357,12 @@ if ($_sec_user_included_ != '#sec_user_Included#') {
     db_insert('usergroup', array('user_id' => $uid, 'group_id' => $gid));
     db_update('group', array('refcount' => '`refcount`+1'), '`id`=' . $gid);
 
+    //FIXME Dirty hack
+    $g = group_get_by_name("Ответственные");
+    if ($gid == $g['id']) {
+      db_insert('responsible', array('user_id' => $uid));
+    }
+
     return true;
   }
 
@@ -374,6 +380,12 @@ if ($_sec_user_included_ != '#sec_user_Included#') {
 
     db_delete('usergroup', "`user_id`=$uid AND `group_id`=$gid");
     db_update('group', array('refcount' => '`refcount`-1'), '`id`=' . $gid);
+
+    //FIXME Dirty hack
+    $g = group_get_by_name("Ответственные");
+    if ($gid == $g['id']) {
+      db_delete('responsible', "`user_id`=$uid");
+    }
   }
 
   function user_delete_from_groups($uid) {

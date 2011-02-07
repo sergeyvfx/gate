@@ -19,10 +19,10 @@ function responsible_initialize() {
   if (config_get('check-database')) {
     db_create_table_safe('responsible', array(
         'user_id' => 'INT',
-        'school_id' => 'INT',
-        'email' => 'TEXT',
-        'phone' => 'TEXT',
-        'comment' => 'TEXT',
+        'school_id' => 'INT DEFAULT -1',
+        'email' => 'TEXT DEFAULT ""',
+        'phone' => 'TEXT DEFAULT ""',
+        'comment' => 'TEXT DEFAULT ""',
     ));
   }
 }
