@@ -44,6 +44,17 @@ function school_initialize() {
     db_insert('school_status', array ('name' => '"Частная команда"'));
     db_insert('school_status', array ('name' => '"ВУЗ"'));
     }
+
+    if (!db_table_exists ('city_status')) {
+    db_create_table('city_status', array(
+        'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+        'name' => 'TEXT'));
+    db_insert('city_status', array ('name' => '"Город"'));
+    db_insert('city_status', array ('name' => '"Поселок городского типа"'));
+    db_insert('city_status', array ('name' => '"Село"'));
+    db_insert('city_status', array ('name' => '"Деревня"'));
+    }
+
     db_create_table_safe('country', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
         'name' => 'TEXT'));
