@@ -13,28 +13,47 @@ if ($PHP_SELF != '') {
 }
 
 if (!user_authorized ()) {
-  header('Location: /../../../login');
+  header('Location: ../../../login');
 }
 
 if (!is_responsible(user_id())) {
   print (content_error_page(403));
   return;
 }
-
-global $DOCUMENT_ROOT;
-include $DOCUMENT_ROOT . '/tipsling/menu.php';
-include '../menu.php';
-$contest_menu->SetActive('team');
-$team_menu->SetActive('my');
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Мои команды</div>
 ${information}
 <div class="form">
   <div class="content">
-<?php
-$contest_menu->Draw();
-$team_menu->Draw();
-//$f->Draw();
-?>
+    <?php
+    global $DOCUMENT_ROOT, $action, $id;
+    include $DOCUMENT_ROOT . '/tipsling/menu.php';
+    include '../menu.php';
+    $contest_menu->SetActive('team');
+    $team_menu->SetActive('my');
+
+    if ($action == 'create') {
+      team_create_received();
+    }
+
+    $contest_menu->Draw();
+    $team_menu->Draw();
+
+    if ($action == 'edit') {
+      include 'edit.php';
+    } else {
+      if ($action == 'save') {
+        team_update_received($id);
+      } else if ($action == 'delete') {
+        team_delete($id);
+      }
+      //BUG When you get team_list, you should show only teams for current contest
+      $r = responsible_get_by_id(user_id());
+      $list = team_list($r['id']);
+      include 'list.php';
+
+      include 'create_form.php';
+    }
+    ?>
   </div>
 </div>

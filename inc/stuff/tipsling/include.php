@@ -24,5 +24,6 @@ if ($_tipsling_Included_ != '#tipsling_Included#') {
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/responsible.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/bookkeeper.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/main.php';
+  include $DOCUMENT_ROOT . '/inc/stuff/tipsling/team.php';
 }
 ?>

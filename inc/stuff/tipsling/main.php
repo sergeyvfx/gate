@@ -21,7 +21,7 @@ function tipsling_initialize() {
   if (config_get('check-database')) {
     db_create_table_safe('team', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
-        'school_id' => 'INT',
+        'number' => 'TEXT',
         'responsible_id' => 'INT',
         'contest_id' => 'INT',
         'payment_id' => 'INT',
@@ -42,7 +42,7 @@ function tipsling_initialize() {
       db_create_table_safe('contest', array(
           'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
           'name' => 'TEXT'));
-      db_insert ('contest', array('name' => 'Тризформашка-2011'));
+      db_insert ('contest', array('name' => '"Тризформашка-2011"'));
     }
   }
 }
