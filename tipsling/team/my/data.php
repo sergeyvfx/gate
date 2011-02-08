@@ -47,11 +47,16 @@ ${information}
       } else if ($action == 'delete') {
         team_delete($id);
       }
-      //BUG When you get team_list, you should show only teams for current contest
-      $list = team_list(user_id());
-      include 'list.php';
+      $r = responsible_get_by_id(user_id());
+      if ($r['school_id'] > 0 || user_is_system(user_id())) {
+        //BUG When you get team_list, you should show only teams for current contest
+        $list = team_list(user_id());
+        include 'list.php';
 
-      include 'create_form.php';
+        include 'create_form.php';
+      } else {
+        info ('Вы должны сначала заполнить информацию о учебном заведении <a href="' . config_get('document-root') .  '/login/profile/info/school/">здесь</a>.');
+      }
     }
     ?>
   </div>
