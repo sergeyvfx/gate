@@ -57,7 +57,7 @@ if ($action == 'save') {
   
   if ($country>0)
     $arr['country_id'] = (int)$country;
-  else
+  else if ($country_name!='')
   {
       $country_name = stripslashes($country_name);
       $country_fields = array();
@@ -68,7 +68,7 @@ if ($action == 'save') {
 
   if ($region>0)
     $arr['region_id'] = (int)$region;
-  else
+  else if ($region_name!='')
   {
       $region_name = stripslashes($region_name);
       $region_fields = array();
@@ -79,7 +79,7 @@ if ($action == 'save') {
 
   if ($area>0)
     $arr['area_id'] = (int)$area;
-  else
+  else if ($area_name!='')
   {
       $area_name = stripslashes($area_name);
       $area_fields = array();
@@ -90,7 +90,7 @@ if ($action == 'save') {
 
   if ($city>0)
     $arr['city_id'] = (int)$city;
-  else
+  else if ($city_name!='')
   {
       $city_name = stripslashes($city_name);
       $city_fields = array();
@@ -106,8 +106,17 @@ if ($action == 'save') {
   $arr['flat'] = db_string($flat);
 
   //save info about school
+  //$f->AppendCustomField(array('src' => '<input type="text" value="'.$r['school_id'].'>'));
   if (count($arr) > 0)
-      db_update('school', $arr, '`id`=' . $sc['id']);
+    if ($r['school_id']!='')
+        db_update('school', $arr, '`id`=' . $sc['id']);
+    else
+    {
+        db_insert('school', $arr);
+        $arr=array();
+        $arr['school_id'] = (int)db_max('school', 'id');
+        db_update('responsible', $arr, '`user_id`='.$r['user_id']);
+    }
 
   //save city status
   $arr= array();
@@ -147,7 +156,7 @@ if ($countries!=''){
     $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна</td><td><select id="country" name="country" class="block" onchange="other_country()">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: none; margin-top:3px"></div></td><tr></table>'));
 } else {
     $countries .='<option value="-1">Другая</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна</td><td><select id="country" name="country" class="block" onchange="other_country()">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: block; margin-top:3px"><input id="region_name" name="region_name" type="text" class="txt block"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна</td><td><select id="country" name="country" class="block" onchange="other_country()">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: block; margin-top:3px"><input id="country_name" name="country_name" type="text" class="txt block"></div></td><tr></table>'));
 }
 
 //find all region
