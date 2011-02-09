@@ -21,7 +21,7 @@ if ($PHP_SELF != '') {
   $max_patronymic_len = opt_get('max_patronymic_len');
   $max_passwd_len = opt_get('max_passwd_len');
 ?>
-<div id="navigator"><a href="<?=config_get ('document-root')?>/login">Вход в систему</a>Регистрация</div>
+<div id="snavigator"><a href="<?=config_get ('document-root')?>/login">Вход в систему</a>Регистрация</div>
 ${information}
 <script language="JavaScript" type="text/JavaScript">
   function check_passwd () {

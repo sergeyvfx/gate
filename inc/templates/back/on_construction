@@ -1,4 +1,3 @@
-<div id="navigator">Раздел недоступен</div>
 <center>
   <img src="<?=config_get ('document-root');?>/pics/construction.gif">
 </center>
