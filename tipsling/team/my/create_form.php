@@ -33,7 +33,15 @@ dd_formo('title=Добавить команду;');
     Класс участников:
     <input type="text" id="grade" name="grade" value="<?= htmlspecialchars(stripslashes($_POST['grade'])); ?>" class="txt block"><div id="hr"></div>
     Полное имя учителя:
-    <input type="text" id="teacher_full_name" name="teacher_full_name" value="<?= htmlspecialchars(stripslashes($_POST['teacher_full_name'])); ?>" class="txt block"><div id="hr"></div>
+    <?php
+    $teacher_full_name = htmlspecialchars(stripslashes($_POST['teacher_full_name']));
+    if ($teacher_full_name == '') {
+      $u = user_get_by_id(user_id());
+      $teacher_full_name = $u['surname'] . ' ' . $u['name'] .
+      (($u['patronymic'] == '') ? ('') : (' ' . $u['patronymic']));
+    }
+    print('<input type="text" id="teacher_full_name" name="teacher_full_name" value="' . $teacher_full_name . '" class="txt block"><div id="hr"></div>');
+    ?>
     Полное имя 1-го участника:
     <input type="text" id="pupil1_full_name" name="pupil1_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil1_full_name'])); ?>" class="txt block"><div id="hr"></div>
     Полное имя 2-го участника:
