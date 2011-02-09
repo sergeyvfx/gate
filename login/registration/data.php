@@ -208,7 +208,7 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="phone" name="phone" value="' . htmlspecialchars(stripslashes($phone)) . '"></td></tr>'.
     '<tr><td><i>Например: +79091234567</i></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"></td></tr>' .
-    '<tr><td>Подтверждение</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
+    '<tr><td>Подтверждение пароля</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
     '</table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;" width="100%"><div>' . $rn->OuterHTML() . '</div></td></tr></table>'));
 $f->AppendCUstomField(array('src' => '<center><input type="checkbox" class="cb" value="1" name="agree" id="agree">Я согласен с <a href="' . config_get('document-root') . '/articles/rules" target="blank">правилами</a> этого ресурса</center>'));
