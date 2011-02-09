@@ -79,6 +79,20 @@ function school_get_by_id($id) {
   return db_row_value('school', "`id`=$id");
 }
 
+function school_get_region_name($id) {
+  $s = school_get_by_id($id);
+  $rid = $s['region_id'];
+  $r = db_row_value('region', "`id`=$rid");
+  return $r['name'];
+}
+
+function school_get_city_name($id) {
+  $s = school_get_by_id($id);
+  $cid = $s['city_id'];
+  $c = db_row_value('city', "`id`=$cid");
+  return $c['name'];
+}
+
 function school_status_get_by_id($id) {
   return db_row_value('school_status', "`id`=$id");
 }

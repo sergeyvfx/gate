@@ -28,7 +28,8 @@ ${information}
     $team_menu->SetActive('all');
     $contest_menu->Draw();
     $team_menu->Draw();
-    on_construction ();
+    $list = team_list();
+    include 'list.php';
     ?>
   </div>
 </div>
