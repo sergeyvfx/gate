@@ -19,24 +19,46 @@ $team = team_get_by_id($id);
 ?>
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
-    //TODO some check
+    var grade  = getElementById ('grade').value;
+    var teacher_full_name = getElementById('teacher_full_name').value;
+    var pupil1_full_name   = getElementById ('pupil1_full_name').value;
+
+    if (qtrim(grade)==''){
+      alert('Укажите класс команды')
+      return;
+    }
+
+    if (!isnumber(grade)){
+      alert('Класс должен быть числом')
+      return;
+    }
+
+    if (qtrim(teacher_full_name)==''){
+      alert('ФИО учителя не может быть пустым');
+      return;
+    }
+
+    if (qtrim(pupil1_full_name)==''){
+      alert('ФИО первого участника не может быть пустым');
+      return;
+    }
     frm.submit ();
   }
 </script>
 
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
-  Класс:
-  <input type="text" id="grade" name="grade" value="<?= htmlspecialchars($team['grade']); ?>" class="txt block" <?=($team['is_payment']) ? ('disabled') : ('')?>><div id="hr"></div>
-  Полное имя учителя:
+  Класс: <span class="error">*</span>
+  <input type="text" id="grade" name="grade" value="<?= htmlspecialchars($team['grade']); ?>" class="txt block" <?= ($team['is_payment']) ? ('disabled') : ('') ?>><div id="hr"></div>
+  Полное имя учителя: <span class="error">*</span>
   <input type="text" id="teacher_full_name" name="teacher_full_name" value="<?= htmlspecialchars($team['teacher_full_name']); ?>" class="txt block"><div id="hr"></div>
-  Полное имя 1-го участника:
+  Полное имя 1-го участника: <span class="error">*</span>
   <input type="text" id="pupil1_full_name" name="pupil1_full_name" value="<?= htmlspecialchars($team['pupil1_full_name']); ?>" class="txt block"><div id="hr"></div>
   Полное имя 2-го участника:
   <input type="text" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars($team['pupil2_full_name']); ?>" class="txt block"><div id="hr"></div>
   Полное имя 3-го участника:
   <input type="text" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars($team['pupil3_full_name']); ?>" class="txt block"><div id="hr"></div>
   Платеж:
-  <select id="payment_id" name="payment_id" class="block" <?=($team['is_payment']) ? ('disabled="disabled"') : ('')?>>
+  <select id="payment_id" name="payment_id" class="block" <?= ($team['is_payment']) ? ('disabled="disabled"') : ('') ?>>
     <option value="-1"></option>
     <?php
     $payments = payment_list(user_id());
@@ -47,7 +69,7 @@ $team = team_get_by_id($id);
       }
       $amount = $amount . ' руб.';
     ?>
-      <option value="<?= $p['id'] ?>" <?=($team['payment_id'] == $p['id']) ? ('selected') : ('')?>><?= $p['date'] . ' ' . $p['cheque_number'] . ' ' . $amount ?></option>
+      <option value="<?= $p['id'] ?>" <?= ($team['payment_id'] == $p['id']) ? ('selected') : ('') ?>><?= $p['date'] . ' ' . $p['cheque_number'] . ' ' . $amount ?></option>
     <?php
     }
     ?>

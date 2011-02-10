@@ -18,11 +18,11 @@ dd_formo('title=Добавить платеж;');
 ?>
 <script language="JavaScript" type="text/javascript">
   function check(frm) {
-    var date = getElementById ('date').value;
-    var cheque_number = getElementById('cheque_number').value;
-    var payer_full_name   = getElementById ('payer_full_name').value;
-    var amount = getElementById('amount').value;
-    var comment = getElementById('comment').value;
+    var date = qtrim(getElementById ('date').value);
+    var cheque_number = qtrim(getElementById('cheque_number').value);
+    var payer_full_name   = qtrim(getElementById ('payer_full_name').value);
+    var amount = qtrim(getElementById('amount').value);
+    var comment = qtrim(getElementById('comment').value);
 
     if (date == '') {
       alert("Поле \"Дата\" обязательно для заполнения");

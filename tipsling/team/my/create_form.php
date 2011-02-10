@@ -21,8 +21,6 @@ dd_formo('title=Добавить команду;');
     var grade  = getElementById ('grade').value;
     var teacher_full_name = getElementById('teacher_full_name').value;
     var pupil1_full_name   = getElementById ('pupil1_full_name').value;
-    var pupil2_full_name = getElementById('pupil2_full_name').value;
-    var pupil3_full_name = getElementById ('pupil3_full_name').value;
 
     if (qtrim(grade)==''){
       alert('Укажите класс команды')
@@ -30,7 +28,7 @@ dd_formo('title=Добавить команду;');
     }
 
     if (!isnumber(grade)){
-      alert('класс должен быть числом')
+      alert('Класс должен быть числом')
       return;
     }
 
@@ -40,19 +38,18 @@ dd_formo('title=Добавить команду;');
     }
 
     if (qtrim(pupil1_full_name)==''){
-      alert('ФИО первого ученика не может быть пустым');
+      alert('ФИО первого участника не может быть пустым');
       return;
     }
 
-    //TODO Check fields on errors
     frm.submit ();
   }
 </script>
 <div>
   <form action=".?action=create&page=<?= $page ?>" method="POST" onsubmit="check (this); return false;">
-    <span class="error">*</span>Класс участников:
+    Класс участников: <span class="error">*</span>
     <input type="text" id="grade" name="grade" value="<?= htmlspecialchars(stripslashes($_POST['grade'])); ?>" class="txt block"><div id="hr"></div>
-    <span class="error">*</span>Полное имя учителя:
+    Полное имя учителя: <span class="error">*</span>
     <?php
     $teacher_full_name = htmlspecialchars(stripslashes($_POST['teacher_full_name']));
     if ($teacher_full_name == '') {
@@ -62,7 +59,7 @@ dd_formo('title=Добавить команду;');
     }
     print('<input type="text" id="teacher_full_name" name="teacher_full_name" value="' . $teacher_full_name . '" class="txt block"><div id="hr"></div>');
     ?>
-    <span class="error">*</span>Полное имя 1-го участника:
+    Полное имя 1-го участника: <span class="error">*</span>
     <input type="text" id="pupil1_full_name" name="pupil1_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil1_full_name'])); ?>" class="txt block"><div id="hr"></div>
     Полное имя 2-го участника:
     <input type="text" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil2_full_name'])); ?>" class="txt block"><div id="hr"></div>

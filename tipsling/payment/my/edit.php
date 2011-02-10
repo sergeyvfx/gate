@@ -19,10 +19,10 @@ $payment = payment_get_by_id($id);
 ?>
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
-    var date = getElementById ('date').value;
-    var cheque_number = getElementById('cheque_number').value;
-    var payer_full_name   = getElementById ('payer_full_name').value;
-    var amount = getElementById('amount').value;
+    var date = qtrim(getElementById ('date').value);
+    var cheque_number = qtrim(getElementById('cheque_number').value);
+    var payer_full_name   = qtrim(getElementById ('payer_full_name').value);
+    var amount = qtrim(getElementById('amount').value);
 
     if (date == '') {
       alert("Поле \"Дата\" обязательно для заполнения");
