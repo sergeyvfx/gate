@@ -216,7 +216,7 @@ if ($_team_included_ != '#team_Included#') {
   }
 
   function teams_count_is_payment($id) {
-    return db_count('teams', '`payment_id`=' . $id . 'AND `is_payment`=1');
+    return db_count('team', '`payment_id`=' . $id . ' AND `is_payment`=1');
   }
 
 }

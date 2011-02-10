@@ -44,8 +44,11 @@ if (count($list) > 0) {
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
       //TODO Check is contest running or archive
-      //TODO Check is payment confirm
+      $tc = teams_count_is_payment($it['id']);
       $d = 1;
+      if ($tc > 0) {
+        $d = 0;
+      }
       $amount = $it['amount'];
       if (!preg_match('/\./', $amount)) {
         $amount = $amount . '.00';
@@ -56,8 +59,8 @@ if (count($list) > 0) {
       '<td>' . $it['cheque_number'] . '</td>' .
       '<td>' . $it['payer_full_name'] . '<td align="right">' . $amount . '</td>' .
       '<td align="right">' .
-        (($d) ? stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить информацию о платеже') : ('')) .
-        (($d) ? stencil_ibtnav('cross.gif', '?action=delete&id=' . $it['id'] . '&' . $pageid, 'Удалить платеж', 'Удалить этот платеж?') : ('')) .
+        stencil_ibtnav((($d) ? 'edit.gif' : 'edit_d.gif'), (($d) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : ''), 'Изменить информацию о платеже') .
+        stencil_ibtnav((($d) ? 'cross.gif' : 'cross_d.gif'), (($d) ? '?action=delete&id=' . $it['id'] . '&' . $pageid : ''), 'Удалить платеж', 'Удалить этот платеж?') .
       '</td></tr>' . "\n";
       $c++;
       $i++;
