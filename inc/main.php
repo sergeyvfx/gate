@@ -122,6 +122,7 @@
           foreach (config_get ('default-scripts') as $k) {
             $this->AddScriptFile ($k);
           }
+          $this->PAGE->AddScript ('language=JavaScript;type=text/javascript', "\n".tpl ('common/googleanalytics', array (), false));
         }
       }
 
