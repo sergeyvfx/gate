@@ -107,7 +107,7 @@ if ($_team_included_ != '#team_Included#') {
     return false;
   }
 
-  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment) {
+  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number) {
     //TODO Some check
     if (!team_check_fields()) {
       return false;
@@ -125,7 +125,8 @@ if ($_team_included_ != '#team_Included#') {
         'pupil1_full_name' => $pupil1_full_name,
         'pupil2_full_name' => $pupil2_full_name,
         'pupil3_full_name' => $pupil3_full_name,
-        'is_payment' => $is_payment);
+        'is_payment' => $is_payment,
+        'number' => $number);
 
     db_update('team', $update, "`id`=$id");
 
@@ -140,10 +141,17 @@ if ($_team_included_ != '#team_Included#') {
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
+    $team = team_get_by_id($id);
+    if ($team['grade'] != $grade) {
+      //TODO Make it more universally
+      $contest_id = 1;
+      $c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
+      $number = $grade . '.' . $c;
+    }
 
     if (team_update($id, $payment_id, $grade, $teacher_full_name,
                     $pupil1_full_name, $pupil2_full_name, $pupil3_full_name,
-                    $is_payment)) {
+                    $is_payment, $number)) {
       $_POST = array();
     }
   }
@@ -171,7 +179,7 @@ if ($_team_included_ != '#team_Included#') {
   }
 
   function teams_count_is_payment($id) {
-    return db_count('teams', '`payment_id`='. $id . 'AND `is_payment`=1');
+    return db_count('teams', '`payment_id`=' . $id . 'AND `is_payment`=1');
   }
 
 }
