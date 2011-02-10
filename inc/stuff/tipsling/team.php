@@ -170,5 +170,9 @@ if ($_team_included_ != '#team_Included#') {
     return db_row_value('team', "`id`=$id");
   }
 
+  function teams_count_is_payment($id) {
+    return db_count('teams', '`payment_id`='. $id . 'AND `is_payment`=1');
+  }
+
 }
 ?>

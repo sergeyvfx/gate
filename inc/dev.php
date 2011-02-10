@@ -57,12 +57,12 @@
             'used'       => 'INT DEFAULT 0',
             'settings'   => 'TEXT DEFAULT ""'
           ));
-          //TODO Изменить страницу системных настроек в соответствии с БД
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Максимальная длина логина пользователя"', 'ident'=>'"max_login_len"', 'class'=>'"CSCNumber"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:2:"14";}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Максимальная длина фамилии пользователя"', 'ident'=>'"max_surname_len"', 'class'=>'"CSCNumber"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:2:"32";}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Максимальная длина имени пользователя"',  'ident'=>'"max_name_len"', 'class'=>'"CSCNumber"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:2:"32";}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Максимальная длина отчества пользователя"',  'ident'=>'"max_patronymic_len"', 'class'=>'"CSCNumber"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:2:"32";}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Максимальная длина пароля пользователя"', 'ident'=>'"max_passwd_len"', 'class'=>'"CSCNumber"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:2:"16";}').'"', 'used'=>'1'));
+          db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Максимальная длина комментария"', 'ident'=>'"max_comment_len"', 'class'=>'"CSCNumber"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:3:"150";}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Количество записей на странице &laquo;Пользователи и группы&raquo;"', 'ident'=>'"user_count"', 'class'=>'"CSCNumber"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:2:"15";}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Блокировать сайт"',  'ident'=>'"site_lock"', 'class'=>'"CSCCheckBox"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";b:0;}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Стартовый каталог"', 'ident'=>'"start_root"', 'class'=>'"CSCText"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:1:"/";}').'"',  'used'=>'1'));

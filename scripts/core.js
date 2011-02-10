@@ -45,6 +45,14 @@ function isnumber (s) {
   return s.replace (/^[0-9]+$/g, '').length == 0;
 }
 
+function isRealNumber (s) {
+  if (s.length == 0) {
+    return false;
+  }
+
+  return s.replace(/^[0-9]+((\.|\,)[0-9]{2}){0,1}$/g, '').length == 0;
+}
+
 function isSignedNumber (s) {
   if (s.length == 0) {
     return false;
