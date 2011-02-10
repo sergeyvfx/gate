@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Gate - Wiki engine and web-interface for WebTester Server
  *
@@ -14,9 +13,16 @@ if ($PHP_SELF != '') {
 }
 
 formo('title=Список зарегистрированных команд;');
-
+?>
+<script language="JavaScript" type="text/javascript">
+  function update () {
+    var sort=getElementById ('sortGroup').value;
+    nav ('.?sort='+sort);
+  }
+</script>
+<?php
 if (count($list) > 0) {
-  global $page;
+  global $page, $sort;
 
   $perPage = opt_get('user_count');
   if ($perPage <= 0) {
@@ -41,7 +47,7 @@ if (count($list) > 0) {
         <th width="10%">Населенный пункт</th>
         <th width="15%">Учитель</th>
         <th width="25%">Участники</th>
-        <th>Статус платежа</th>';//<th width="48" class="last">&nbsp;</th></tr>' . "\n";
+        <th>Статус платежа</th>'; //<th width="48" class="last">&nbsp;</th></tr>' . "\n";
 
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
@@ -56,19 +62,19 @@ if (count($list) > 0) {
       $city = school_get_city_name($r['school_id']);
       $teacher = $it['teacher_full_name'];
       $pupils = $it['pupil1_full_name'] .
-                (($it['pupil2_full_name'] == '') ? ('') : (', ' . $it['pupil2_full_name'])) .
-                (($it['pupil3_full_name'] == '') ? ('') : (', ' . $it['pupil3_full_name']));
+              (($it['pupil2_full_name'] == '') ? ('') : (', ' . $it['pupil2_full_name'])) .
+              (($it['pupil3_full_name'] == '') ? ('') : (', ' . $it['pupil3_full_name']));
       $payment = (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>'));
 
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n">' . $number . '</td>' .
-      '<td>' . $school_name . '</td>' .
-      '<td>' . $region . '</td>' .
-      '<td>' . $city . '</td>' .
-      '<td>' . $teacher . '</td>' .
-      '<td>' . $pupils . '</td>' .
-      '<td>' . $payment . '</td>' .
-      '</tr>' . "\n";
+              '<td class="n">' . $number . '</td>' .
+              '<td>' . $school_name . '</td>' .
+              '<td>' . $region . '</td>' .
+              '<td>' . $city . '</td>' .
+              '<td>' . $teacher . '</td>' .
+              '<td>' . $pupils . '</td>' .
+              '<td>' . $payment . '</td>' .
+              '</tr>' . "\n";
       $c++;
       $i++;
     }
@@ -79,6 +85,21 @@ if (count($list) > 0) {
 } else {
   info('Пока что ни одна команда не зарегистрировалась.');
 }
-
+?>
+<div class="f">
+  <form action="." method="POST" onsubmit="update (); return false;" onkeypress="if (event.keyCode==13) update ();">
+    <b>Варианты сортировки:</b>
+    <table width="100%"><tr>
+        <td>
+          <select id="sortGroup" onchange="update()">
+            <option value="1" <?=($sort == 1) ? ('selected') : ('')?>>По номеру команды</option>
+            <option value="2" <?=($sort == 2) ? ('selected') : ('')?>>По региону + номеру команды</option>
+            <option value="3" <?=($sort == 3) ? ('selected') : ('')?>>По региону + населенному пункту + названию учебного заведения + номеру команды</option>
+          </select>
+        </td>
+      </tr></table>
+  </form>
+</div>
+<?php
 formc ();
 ?>

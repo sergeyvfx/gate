@@ -19,18 +19,42 @@ if ($_team_included_ != '#team_Included#') {
   $_team_included_ = '#team_Included#';
   $user_infos = array();
 
-  function team_list($responsible_id = -1) {
+  function team_list($responsible_id = -1, $sort = 1) {
     if ($responsible_id == '') {
       $responsible_id = -1;
     }
 
-    if ($responsible_id < 0) {
-      return arr_from_query('SELECT * FROM `team` ORDER BY `number`');
+    if ($sort == '') {
+      $sort = 1;
     }
 
-    return arr_from_query('SELECT `team`.* FROM `team` ' .
-            'WHERE `team`.`responsible_id`=' . $responsible_id .
-            ' ORDER BY `number`');
+    if ($sort == 1) {
+      $sort = "ORDER BY team.number";
+    } elseif ($sort == 2) {
+      $sort = "ORDER BY region.name, team.number";
+    } elseif ($sort == 3) {
+      $sort = "ORDER BY region.name, city.name, school.name, team.number";
+    }
+
+    if ($responsible_id < 0) {
+      $where = '';
+    } else {
+      $where = " team.responsible_id=" . $responsible_id . " AND\n";
+    }
+
+    $sql = "SELECT\n"
+            . " team.*\n"
+            . "FROM\n"
+            . " team, region, responsible, school, city\n"
+            . "WHERE\n"
+            . $where
+            . " team.responsible_id=responsible.user_id AND\n"
+            . " responsible.school_id = school.id AND\n"
+            . " region.id = school.region_id AND\n"
+            . " city.id = school.city_id\n"
+            . $sort;
+
+    return arr_from_query($sql);
   }
 
   /**

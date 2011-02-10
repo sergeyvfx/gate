@@ -15,6 +15,8 @@ if ($PHP_SELF != '') {
 if (!user_authorized ()) {
   header('Location: ../../../login');
 }
+
+global $sort;
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Все команды</div>
 ${information}
@@ -28,7 +30,7 @@ ${information}
     $team_menu->SetActive('all');
     $contest_menu->Draw();
     $team_menu->Draw();
-    $list = team_list();
+    $list = team_list('', $sort);
     include 'list.php';
     ?>
   </div>
