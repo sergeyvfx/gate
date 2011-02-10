@@ -39,7 +39,7 @@ if ($_payment_included_ != '#payment_Included#') {
     if ($update) {
       $tc = teams_count_is_payment($id);
       $b = group_get_by_name("Бухгалтеры");
-      if ($tc > 0 && is_user_in_group(user_id(), $b['id'])) {
+      if ($tc > 0 && !is_user_in_group(user_id(), $b['id'])) {
         add_info("Данный платеж не доступен для редактирования");
         return false;
       }
