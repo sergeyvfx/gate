@@ -26,7 +26,7 @@ $team = team_get_by_id($id);
 
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
   Класс:
-  <input type="text" id="grade" name="grade" value="<?= htmlspecialchars($team['grade']); ?>" class="txt block"><div id="hr"></div>
+  <input type="text" id="grade" name="grade" value="<?= htmlspecialchars($team['grade']); ?>" class="txt block" <?=($team['is_payment']) ? ('disabled') : ('')?>><div id="hr"></div>
   Полное имя учителя:
   <input type="text" id="teacher_full_name" name="teacher_full_name" value="<?= htmlspecialchars($team['teacher_full_name']); ?>" class="txt block"><div id="hr"></div>
   Полное имя 1-го участника:
@@ -36,7 +36,7 @@ $team = team_get_by_id($id);
   Полное имя 3-го участника:
   <input type="text" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars($team['pupil3_full_name']); ?>" class="txt block"><div id="hr"></div>
   Платеж:
-  <select id="payment_id" name="payment_id" class="block">
+  <select id="payment_id" name="payment_id" class="block" <?=($team['is_payment']) ? ('disabled="disabled"') : ('')?>>
     <option value="-1"></option>
     <?php
     $payments = payment_list(user_id());
@@ -47,7 +47,7 @@ $team = team_get_by_id($id);
       }
       $amount = $amount . ' руб.';
     ?>
-      <option value="<?= $p['id'] ?>"><?= $p['date'] . ' ' . $p['cheque_number'] . ' ' . $amount ?></option>
+      <option value="<?= $p['id'] ?>" <?=($team['payment_id'] == $p['id']) ? ('selected') : ('')?>><?= $p['date'] . ' ' . $p['cheque_number'] . ' ' . $amount ?></option>
     <?php
     }
     ?>

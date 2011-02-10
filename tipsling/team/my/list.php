@@ -45,8 +45,8 @@ if (count($list) > 0) {
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
       //TODO Check is contest running or archive
-      $d = 1;
       $ps = $it['is_payment'];
+      $d = !$ps;
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
       '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">' . $it['number'] . '</a></td>' .
       '<td>' . $it['teacher_full_name'] . '</td><td>' . $it['pupil1_full_name'] . '</td>' .
