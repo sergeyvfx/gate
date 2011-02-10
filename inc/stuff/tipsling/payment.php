@@ -96,7 +96,7 @@ if ($_payment_included_ != '#payment_Included#') {
     // Checking has been passed
     $cheque_number = db_string($cheque_number);
     $payer_full_name = db_string($payer_full_name);
-    $date = db_string(date( 'Y-m-d H:i:s', strtotime($date)));
+    $date = db_string(date('Y-m-d H:i:s', strtotime($date)));
     $amount = str_replace(',', '.', $amount);
     $comment = db_string($comment);
     db_insert('payment', array('responsible_id' => $responsible_id,
@@ -126,7 +126,6 @@ if ($_payment_included_ != '#payment_Included#') {
     return false;
   }
 
-
   function payment_update($id, $date, $cheque_number, $payer_full_name, $amount, $comment) {
 
     if (!payment_check_fields($date, $cheque_number, $payer_full_name, $amount, $comment, true, $id)) {
@@ -135,7 +134,7 @@ if ($_payment_included_ != '#payment_Included#') {
 
     $cheque_number = db_string($cheque_number);
     $payer_full_name = db_string($payer_full_name);
-    $date = db_string(date( 'Y-m-d H:i:s', strtotime($date)));
+    $date = db_string(date('Y-m-d H:i:s', strtotime($date)));
     $amount = str_replace(',', '.', $amount);
     $comment = db_string($comment);
 
@@ -165,12 +164,21 @@ if ($_payment_included_ != '#payment_Included#') {
   }
 
   function payment_can_delete($id) {
-    //TODO Some check here
-    /*
-      if (smth_wrong) {
-      add_info('bla-bla');
+    $p = payment_get_by_id($id);
+    $tc = teams_count_is_payment($id);
+    $b = group_get_by_name("Бухгалтеры");
+    if ($p['responsible_id'] == user_id()) {
+      //Its our payment, all is good
+      if (tc > 0) {
+        add_info("Данный платеж не доступен для удаления");
+        return false;
       }
-     */
+      return true;
+    }
+    if (!is_user_in_group(user_id(), $b['id'])) {
+      add_info("Вы не имеете прав для удаления данного платежа");
+      return false;
+    }
     return true;
   }
 
@@ -185,5 +193,6 @@ if ($_payment_included_ != '#payment_Included#') {
   function payment_get_by_id($id) {
     return db_row_value('payment', "`id`=$id");
   }
+
 }
 ?>
