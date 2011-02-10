@@ -156,6 +156,7 @@
     function check_email ($str) { return preg_match ('/^([A-Za-z0-9_\.]+)@(([A-Za-z0-9_]+\.?)+)$/', $str); }
     function check_phone ($str) { return preg_match ('/^\+[0-9]{11}$/', $str);}
     function isRealNumber ($str) { return preg_match ('/^[0-9]+((\.|\,)[0-9]{2}){0,1}$/', $str);}
+    function isIntNumber ($str) {return preg_match ('/^[0-9]+/', $str);}
 
     function check_dir ($s) {
       if (strlen ($s) == 0) {

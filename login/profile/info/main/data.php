@@ -21,6 +21,7 @@ include $DOCUMENT_ROOT . '/login/profile/inc/menu.php';
 include '../menu.php';
 $profile_menu->SetActive('info');
 $info_menu->SetActive('main');
+$err_string='';
 
 if ($action == 'save') {
   global $email, $surname, $name, $patronymic, $phone, $chpasswd_val;
@@ -35,8 +36,14 @@ if ($action == 'save') {
   $u = user_get_by_id(user_id());
 
   //TODO Add checking surname, name, patromynic and phone
-  $arr['surname'] = db_string($surname);
-  $arr['name'] = db_string($name);
+  if ($surname=='')
+    $err_string = 'Фамилия';
+  else
+    $arr['surname'] = db_string($surname);
+  if ($name=='')
+      $err_string=$err_string==''?'Имя':$err_string.', Имя';
+  else
+    $arr['name'] = db_string($name);
   $arr['patronymic'] = db_string($patronymic);
   $arr['phone'] = db_string($phone);
 
@@ -56,7 +63,7 @@ if ($action == 'save') {
       $arr['password'] = 'MD5("' . addslashes(user_password_hash(user_login(), stripslashes($passwd))) . '")';
   }
 
-  if (count($arr) > 0) {
+  if ($err_string=='') {
     db_update('user', $arr, '`id`=' . user_id ());
     if (isset($arr['password'])) {
       user_authorize(user_login(), stripslashes($passwd));
@@ -70,12 +77,12 @@ $f = new CVCForm ();
 $f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
 
 $f->AppendLabelField('Логин', '', $u['login']);
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия</td><td><input id="surname" name="surname" type="text" class="txt block" value="' . htmlspecialchars($u['surname']) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя</td><td><input id="name" name="name" type="text" class="txt block" value="' . htmlspecialchars($u['name']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия<span class="error">*</span></td><td><input id="surname" name="surname" type="text" class="txt block" value="' . htmlspecialchars($u['surname']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя<span class="error">*</span></td><td><input id="name" name="name" type="text" class="txt block" value="' . htmlspecialchars($u['name']) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Отчество</td><td><input id="patronymic" name="patronymic" type="text" class="txt block" value="' . htmlspecialchars($u['patronymic']) . '"></td></tr></table>'));
 
 if ($u['email'] != '') {
-  $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">E-Mail</td><td><input id="email" name="email" onblur="check_frm_email ();" type="text" class="txt block" value="' . htmlspecialchars($u['email']) . '"></td></tr></table><div id="email_check_res" style="display: none;"></div>'));
+  $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">E-Mail<span class="error">*</span></td><td><input id="email" name="email" onblur="check_frm_email ();" type="text" class="txt block" value="' . htmlspecialchars($u['email']) . '"></td></tr></table><div id="email_check_res" style="display: none;"></div>'));
 }
 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон</td><td><input id="phone" name="phone" onblur="check_frm_email ();" type="text" class="txt block" value="' . htmlspecialchars($u['phone']) . '"></td></tr><tr><td><i>Например: +79091234567</i></td></tr></table>'));
@@ -85,6 +92,8 @@ $f->AppendCustomField(array('title' => '<input type="checkbox" class="cb pointer
     '<table class="clear" width="100%"><tr><td width="85">Новый пароль</td><td style="padding-bottom: 2px;"><input type="password" class="txt block" id="passwd" name="passwd" onkeyup="check_passwd ();" onchange="check_passwd ();"></td></tr>' .
     '<tr><td>Подтверждение пароля</td><td style="padding-top: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm" onkeyup="check_passwd ();" onchange="check_passwd ();"></td></tr>' .
     '</table><div id="passwd_msg"></div></div>'));
+if ($err_string!='')
+    $f->AppendCustomField(array('src' => '<div class="txt error">Вы не заполнили следующие обязательные поля: '.stripslashes($err_string).'</div>'));
 ?>
 
 <script language="JavaScript" type="text/JavaScript">

@@ -36,8 +36,44 @@ if ($_team_included_ != '#team_Included#') {
   /**
    * Проверка корректности заполнения полей
    */
-  function team_check_fields() {
-    //TODO Check fields
+  function team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $update=false, $id=-1) {
+    if ($update) {
+      $team = team_get_by_id($id);
+      if ($team['is_payment'] > 0) {
+        add_info("Данная команда не доступна для редактирования");
+        return false;
+      }
+      if ($team['responsible_id']!= user_id()){
+          add_info('Вы не можете редактировать эту команду');
+          return false;
+      }
+
+    }
+    if ($grade==''){
+        add_info('Поле "Класс" является обязательным для заполнения');
+        return false;
+    }
+
+    if (!isIntNumber($grade)){
+        add_info('"Класс" должен быть целым числом');
+        return false;
+    }
+
+    if ($teacher_full_name==''){
+        add_info('Поле "Полное имя учителя" является обязательным для заполнения');
+        return false;
+    }
+
+    if ($grade==''){
+        add_info('Поле "Полное имя 1-го участника" является обязательным для заполнения');
+        return false;
+    }
+
+    $max_comment_len = opt_get('max_comment_len');
+    if (strlen($comment) > $max_comment_len) {
+      add_info('Поле "Комментарий" не может содержать более ' . $max_comment_len . ' символов');
+      return false;
+    }
     return true;
   }
 
@@ -57,8 +93,7 @@ if ($_team_included_ != '#team_Included#') {
    *                вернет false
    */
   function team_create($number, $responsible_id, $contest_id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment) {
-    //TODO Some check
-    if (!team_check_fields()) {
+    if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name)) {
       return false;
     }
 
@@ -108,8 +143,7 @@ if ($_team_included_ != '#team_Included#') {
   }
 
   function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number) {
-    //TODO Some check
-    if (!team_check_fields()) {
+    if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, true, $id)) {
       return false;
     }
 
@@ -157,12 +191,15 @@ if ($_team_included_ != '#team_Included#') {
   }
 
   function team_can_delete($id) {
-    //TODO Some check here
-    /*
-      if (smth_wrong) {
-      add_info('bla-bla');
+      $team = team_get_by_id($id);
+      if ($team['is_payment'] > 0) {
+        add_info("Данную команду нельзя удалить");
+        return false;
       }
-     */
+      if ($team['responsible_id']!= user_id()){
+          add_info('Вы не можете удалять эту команду');
+          return false;
+      }
     return true;
   }
 
