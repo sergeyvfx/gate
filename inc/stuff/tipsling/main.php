@@ -34,8 +34,10 @@ function tipsling_initialize() {
 
     db_create_table_safe('payment', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+        'responsible_id' => 'INT',
         'date' => 'DATE',
         'cheque_number' => 'TEXT',
+        'payer_full_name' => 'TEXT',
         'amount' => 'DOUBLE',
         'comment' => 'TEXT'));
     if (!db_table_exists ('contest')) {

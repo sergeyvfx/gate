@@ -25,23 +25,23 @@ dd_formo('title=Добавить команду;');
     var pupil3_full_name = getElementById ('pupil3_full_name').value;
 
     if (qtrim(grade)==''){
-        alert('Укажите класс команды')
-        return;
+      alert('Укажите класс команды')
+      return;
     }
 
     if (!isnumber(grade)){
-        alert('класс должен быть числом')
-        return;
+      alert('класс должен быть числом')
+      return;
     }
 
     if (qtrim(teacher_full_name)==''){
-        alert('ФИО учителя не может быть пустым');
-        return;
+      alert('ФИО учителя не может быть пустым');
+      return;
     }
 
     if (qtrim(pupil1_full_name)==''){
-        alert('ФИО первого ученика не может быть пустым');
-        return;
+      alert('ФИО первого ученика не может быть пустым');
+      return;
     }
 
     //TODO Check fields on errors
@@ -49,11 +49,19 @@ dd_formo('title=Добавить команду;');
   }
 </script>
 <div>
-  <form action=".?action=create&page=<?=$page?>" method="POST" onsubmit="check (this); return false;">
+  <form action=".?action=create&page=<?= $page ?>" method="POST" onsubmit="check (this); return false;">
     <span class="error">*</span>Класс участников:
     <input type="text" id="grade" name="grade" value="<?= htmlspecialchars(stripslashes($_POST['grade'])); ?>" class="txt block"><div id="hr"></div>
     <span class="error">*</span>Полное имя учителя:
-    <input type="text" id="teacher_full_name" name="teacher_full_name" value="<?= htmlspecialchars(stripslashes($_POST['teacher_full_name'])); ?>" class="txt block"><div id="hr"></div>
+    <?php
+    $teacher_full_name = htmlspecialchars(stripslashes($_POST['teacher_full_name']));
+    if ($teacher_full_name == '') {
+      $u = user_get_by_id(user_id());
+      $teacher_full_name = $u['surname'] . ' ' . $u['name'] .
+              (($u['patronymic'] == '') ? ('') : (' ' . $u['patronymic']));
+    }
+    print('<input type="text" id="teacher_full_name" name="teacher_full_name" value="' . $teacher_full_name . '" class="txt block"><div id="hr"></div>');
+    ?>
     <span class="error">*</span>Полное имя 1-го участника:
     <input type="text" id="pupil1_full_name" name="pupil1_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil1_full_name'])); ?>" class="txt block"><div id="hr"></div>
     Полное имя 2-го участника:
@@ -62,9 +70,19 @@ dd_formo('title=Добавить команду;');
     <input type="text" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil3_full_name'])); ?>" class="txt block"><div id="hr"></div>
     Платеж:
     <select id="payment_id" name="payment_id" class="block">
-      <option value="-1">Нет платежей</option>
+      <option value="-1"></option>
       <?php
-      //TODO Fill select from payment table
+      $payments = payment_list(user_id());
+      foreach ($payments as $p) {
+        $amount = $p['amount'];
+        if (!preg_match('/\./', $amount)) {
+          $amount = $amount . '.00';
+        }
+        $amount = $amount . ' руб.';
+      ?>
+        <option value="<?= $p['id'] ?>"><?= $p['date'] . ' ' . $p['cheque_number'] . ' ' . $amount ?></option>
+      <?php
+      }
       ?>
     </select><div id="hr"></div>
     <div class="formPast">
@@ -73,5 +91,5 @@ dd_formo('title=Добавить команду;');
   </form>
 </div>
 <?php
-dd_formc ();
+      dd_formc ();
 ?>

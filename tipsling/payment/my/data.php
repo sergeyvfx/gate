@@ -21,14 +21,32 @@ ${information}
 <div class="form">
   <div class="content">
     <?php
-    global $DOCUMENT_ROOT;
+    global $DOCUMENT_ROOT, $action, $id;
     include $DOCUMENT_ROOT . '/tipsling/menu.php';
     include '../menu.php';
     $contest_menu->SetActive('payment');
     $payment_menu->SetActive('my');
+
+    if ($action == 'create') {
+      payment_create_received();
+    }
+
     $contest_menu->Draw();
     $payment_menu->Draw();
-    on_construction();
+
+    if ($action == 'edit') {
+      include 'edit.php';
+    } else {
+      if ($action == 'save') {
+        payment_update_received($id);
+      } else if ($action == 'delete') {
+        payment_delete($id);
+      }
+      //BUG When you get payment_list, you should show only payment for current contest
+      $list = payment_list(user_id());
+      include 'list.php';
+      include 'create_form.php';
+    }
     ?>
   </div>
 </div>
