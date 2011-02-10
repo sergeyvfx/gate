@@ -24,17 +24,37 @@ dd_formo('title=Добавить команду;');
     var pupil2_full_name = getElementById('pupil2_full_name').value;
     var pupil3_full_name = getElementById ('pupil3_full_name').value;
 
+    if (qtrim(grade)==''){
+        alert('Укажите класс команды')
+        return;
+    }
+
+    if (!isnumber(grade)){
+        alert('класс должен быть числом')
+        return;
+    }
+
+    if (qtrim(teacher_full_name)==''){
+        alert('ФИО учителя не может быть пустым');
+        return;
+    }
+
+    if (qtrim(pupil1_full_name)==''){
+        alert('ФИО первого ученика не может быть пустым');
+        return;
+    }
+
     //TODO Check fields on errors
     frm.submit ();
   }
 </script>
 <div>
   <form action=".?action=create&page=<?=$page?>" method="POST" onsubmit="check (this); return false;">
-    Класс участников:
+    <span class="error">*</span>Класс участников:
     <input type="text" id="grade" name="grade" value="<?= htmlspecialchars(stripslashes($_POST['grade'])); ?>" class="txt block"><div id="hr"></div>
-    Полное имя учителя:
+    <span class="error">*</span>Полное имя учителя:
     <input type="text" id="teacher_full_name" name="teacher_full_name" value="<?= htmlspecialchars(stripslashes($_POST['teacher_full_name'])); ?>" class="txt block"><div id="hr"></div>
-    Полное имя 1-го участника:
+    <span class="error">*</span>Полное имя 1-го участника:
     <input type="text" id="pupil1_full_name" name="pupil1_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil1_full_name'])); ?>" class="txt block"><div id="hr"></div>
     Полное имя 2-го участника:
     <input type="text" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil2_full_name'])); ?>" class="txt block"><div id="hr"></div>

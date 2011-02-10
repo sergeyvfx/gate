@@ -58,11 +58,6 @@ ${information}
       return false;
     }
 
-    if (qtrim (patronymic)=='') {
-      alert ('Отчество создаваемого пользователя не может быть пустым.');
-      return false;
-    }
-
     if (qtrim (surname).length > <?=$max_surname_len;?>) {
       alert ('Фамилия создаваемого пользователя может содержать не более <?=$max_surname_len;?> символов.');
       return false;
@@ -96,6 +91,11 @@ ${information}
     if (!check_phone (getElementById('phone').value)) {
       alert ('Указанный телефон не является корректным.');
       return false;
+    }
+
+    if (qtrim(passwd)==''){
+        alert ('Пароль не может быть пустым');
+        return false;
     }
 
     if (passwd != passwd_confirm) {
@@ -198,20 +198,20 @@ $rn->Init();
 
 // Fields
 // FIXME Почему не используются поля специализироваанного типа?
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="surname" name="surname" value="' . htmlspecialchars(stripslashes($surname)) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="name" name="name" value="' . htmlspecialchars(stripslashes($name)) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="surname" name="surname" value="' . htmlspecialchars(stripslashes($surname)) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="name" name="name" value="' . htmlspecialchars(stripslashes($name)) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Отчество</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="patronymic" name="patronymic" value="' . htmlspecialchars(stripslashes($patronymic)) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Логин</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="login" onBlur="check_login ();" name="login" value="' . htmlspecialchars(stripslashes($login)) . '"></td></tr>' .
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Логин<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="login" onBlur="check_login ();" name="login" value="' . htmlspecialchars(stripslashes($login)) . '"></td></tr>' .
     '</table>' . '<div id="login_check_res" style="display: none;"></div>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">E-Mail</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="email" onBlur="check_frm_email ();" name="email" value="' . htmlspecialchars(stripslashes($email)) . '"></td></tr></table>' .
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">E-Mail<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="email" onBlur="check_frm_email ();" name="email" value="' . htmlspecialchars(stripslashes($email)) . '"></td></tr></table>' .
     '<div id="email_check_res" style="display: none;"></div>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="phone" name="phone" value="' . htmlspecialchars(stripslashes($phone)) . '"></td></tr>'.
     '<tr><td><i>Например: +79091234567</i></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"></td></tr>' .
-    '<tr><td>Подтверждение</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль<span class="error">*</div></td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"></td></tr>' .
+    '<tr><td>Подтверждение<span class="error">*</div></td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
     '</table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;" width="100%"><div>' . $rn->OuterHTML() . '</div></td></tr></table>'));
-$f->AppendCUstomField(array('src' => '<center><input type="checkbox" class="cb" value="1" name="agree" id="agree">Я согласен с <a href="' . config_get('document-root') . '/articles/rules" target="blank">правилами</a> этого ресурса</center>'));
+$f->AppendCUstomField(array('src' => '<center><input type="checkbox" class="cb" value="1" name="agree" id="agree">Я согласен с <a href="' . config_get('document-root') . '/articles/rules" target="blank">правилами</a> этого ресурса<span class="error">*</div></center>'));
 
 if ($action == 'register') {
   if (!register ()) {

@@ -261,6 +261,7 @@ body {
 
 /* Some other classes */
 #content .block { width: 100%; display: block; }
+#content .error { color: red;}
 
 #content .smb { margin-bottom: -6px; }
 #content .wmb { margin-bottom: 20px; }
