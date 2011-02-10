@@ -37,9 +37,19 @@ $team = team_get_by_id($id);
   <input type="text" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars($team['pupil3_full_name']); ?>" class="txt block"><div id="hr"></div>
   Платеж:
   <select id="payment_id" name="payment_id" class="block">
-    <option value="-1">Нет платежей</option>
+    <option value="-1"></option>
     <?php
-    //TODO Fill select from payment table
+    $payments = payment_list(user_id());
+    foreach ($payments as $p) {
+      $amount = $p['amount'];
+      if (!preg_match('/\./', $amount)) {
+        $amount = $amount . '.00';
+      }
+      $amount = $amount . ' руб.';
+    ?>
+      <option value="<?= $p['id'] ?>"><?= $p['date'] . ' ' . $p['cheque_number'] . ' ' . $amount ?></option>
+    <?php
+    }
     ?>
   </select><div id="hr"></div>
   <div class="formPast">
