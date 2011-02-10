@@ -82,6 +82,9 @@ dd_formo('title=Добавить команду;');
       }
       ?>
     </select><div id="hr"></div>
+    Примечание:
+    <input type="text" id="comment" name="comment" value="<?= htmlspecialchars(stripslashes($_POST['comment'])); ?>" class="txt block"><div id="hr"></div>
+
     <div class="formPast">
       <button class="submitBtn block" type="submit">Создать</button>
     </div>

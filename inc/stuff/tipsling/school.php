@@ -29,7 +29,8 @@ function school_initialize() {
         'street' => 'TEXT',
         'house' => 'TEXT',
         'building' => 'TEXT',
-        'flat' => 'TEXT'));
+        'flat' => 'TEXT',
+        'comment' => 'TEXT'));
 
     if (!db_table_exists ('school_status')) {
     db_create_table('school_status', array(

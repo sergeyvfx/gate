@@ -68,12 +68,6 @@ if ($_team_included_ != '#team_Included#') {
         add_info('Поле "Полное имя 1-го участника" является обязательным для заполнения');
         return false;
     }
-
-    $max_comment_len = opt_get('max_comment_len');
-    if (strlen($comment) > $max_comment_len) {
-      add_info('Поле "Комментарий" не может содержать более ' . $max_comment_len . ' символов');
-      return false;
-    }
     return true;
   }
 
@@ -89,10 +83,11 @@ if ($_team_included_ != '#team_Included#') {
    * @param <type> $pupil2_full_name - Полное имя второго ученика
    * @param <type> $pupil3_full_name - Полное имя третьего ученика
    * @param <type> $is_payment - Флаг оплаты участия
+   * @param <type> $comment - Примечание
    * @return <type> Вернет true если команда успешно создана, в противном случае
    *                вернет false
    */
-  function team_create($number, $responsible_id, $contest_id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment) {
+  function team_create($number, $responsible_id, $contest_id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $comment) {
     if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name)) {
       return false;
     }
@@ -104,6 +99,7 @@ if ($_team_included_ != '#team_Included#') {
     $pupil1_full_name = db_string($pupil1_full_name);
     $pupil2_full_name = db_string($pupil2_full_name);
     $pupil3_full_name = db_string($pupil3_full_name);
+    $comment = db_string($comment);
     db_insert('team', array('number' => $number,
         'responsible_id' => $responsible_id,
         'contest_id' => $contest_id,
@@ -113,7 +109,8 @@ if ($_team_included_ != '#team_Included#') {
         'pupil1_full_name' => $pupil1_full_name,
         'pupil2_full_name' => $pupil2_full_name,
         'pupil3_full_name' => $pupil3_full_name,
-        'is_payment' => $is_payment));
+        'is_payment' => $is_payment,
+        'comment' => $comment));
 
     return true;
   }
@@ -126,6 +123,7 @@ if ($_team_included_ != '#team_Included#') {
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
+    $comment = stripslashes($_POST['comment']);
     //TODO Make it more universally
     $contest_id = 1;
     $c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
@@ -134,7 +132,7 @@ if ($_team_included_ != '#team_Included#') {
     $is_payment = 0;
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
                     $teacher_full_name, $pupil1_full_name, $pupil2_full_name,
-                    $pupil3_full_name, $is_payment)) {
+                    $pupil3_full_name, $is_payment, $comment)) {
       $_POST = array();
       return true;
     }
@@ -142,7 +140,7 @@ if ($_team_included_ != '#team_Included#') {
     return false;
   }
 
-  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number) {
+  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number, $comment) {
     if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, true, $id)) {
       return false;
     }
@@ -160,7 +158,8 @@ if ($_team_included_ != '#team_Included#') {
         'pupil2_full_name' => $pupil2_full_name,
         'pupil3_full_name' => $pupil3_full_name,
         'is_payment' => $is_payment,
-        'number' => $number);
+        'number' => $number,
+        'comment' => $comment);
 
     db_update('team', $update, "`id`=$id");
 
@@ -175,6 +174,7 @@ if ($_team_included_ != '#team_Included#') {
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
+    $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
     if ($team['grade'] != $grade) {
       //TODO Make it more universally
@@ -185,7 +185,7 @@ if ($_team_included_ != '#team_Included#') {
 
     if (team_update($id, $payment_id, $grade, $teacher_full_name,
                     $pupil1_full_name, $pupil2_full_name, $pupil3_full_name,
-                    $is_payment, $number)) {
+                    $is_payment, $number, $comment)) {
       $_POST = array();
     }
   }

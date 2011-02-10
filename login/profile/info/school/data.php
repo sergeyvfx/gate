@@ -32,7 +32,7 @@ $r = responsible_get_by_id(user_id());
 $sc = school_get_by_id($r['school_id']);
 
 if ($action == 'save') {
-  global $name, $school_status, $zipcode, $country, $country_name, $region, $region_name, $area, $area_name, $city_status, $city, $city_name, $street, $house, $building, $flat;
+  global $name, $school_status, $zipcode, $country, $country_name, $region, $region_name, $area, $area_name, $city_status, $city, $city_name, $street, $house, $building, $flat, $comment;
   $name = stripslashes($name);
   $school_status = stripslashes($school_status);
   $zipcode = stripslashes($zipcode);
@@ -45,6 +45,7 @@ if ($action == 'save') {
   $house = stripslashes($house);
   $building = stripslashes($building);
   $flat = stripslashes($flat);
+  $comment = stripslashes($comment);
 
   $arr = array();
   
@@ -123,6 +124,7 @@ if ($action == 'save') {
     $err_string=$err_string==''?'Дом':$err_string.', Дом';
   $arr['building'] = db_string($building);
   $arr['flat'] = db_string($flat);
+  $arr['comment'] = db_string($comment);
 
   //save info about school
   if ($err_string=='')
@@ -255,6 +257,7 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Дом: <span class="error">*</span></td><td><input id="house" name="house" type="text" class="txt block" value="' . htmlspecialchars($sc['house']) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Корпус:</td><td><input id="building" name="building" type="text" class="txt block" value="' . htmlspecialchars($sc['building']) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Квартира:</td><td><input id="flat" name="flat" type="text" class="txt block" value="' . htmlspecialchars($sc['flat']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Примечание:</td><td><input id="comment" name="comment" type="text" class="txt block" value="' . htmlspecialchars($sc['comment']) . '"></td></tr></table>'));
 
 if ($err_string!='')
     $f->AppendCustomField(array('src' => '<div class="txt error">Вы не заполнили следующие обязательные поля: '.stripslashes($err_string).'</div>'));

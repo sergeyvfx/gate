@@ -74,6 +74,9 @@ $team = team_get_by_id($id);
     }
     ?>
   </select><div id="hr"></div>
+  Примечание:
+  <input type="text" id="comment" name="comment" value="<?= htmlspecialchars(stripslashes($team['comment'])); ?>" class="txt block"><div id="hr"></div>
+
   <div class="formPast">
     <button class="submitBtn" type="button" onclick="nav ('.?<?= (($page != '') ? ('&page=' . $page) : ('')); ?>');">Назад</button>
     <button class="submitBtn" type="submit">Сохранить</button>
