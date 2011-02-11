@@ -41,7 +41,8 @@
       return ('<div class="dd_form"><div id="title" class="dd_title">'.
               '<table><tr><td><img src="'.config_get ('document-root').
               '/pics/arrdown_green.gif" id="show" '.
-              'onclick="dd_form_expand (this);'.$onexpand.
+              'onload="dd_form_expand (this);'.$onexpand.
+              '" onclick="dd_form_expand (this);'.$onexpand. '"' .
               '" alt="Развернуть" title="Развернуть" '.
                 ($expanded ? ' style="display: none;"' : '') .'>'.
               '<img src="'.config_get ('document-root').
