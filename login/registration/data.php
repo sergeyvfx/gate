@@ -198,20 +198,20 @@ $rn->Init();
 
 // Fields
 // FIXME Почему не используются поля специализироваанного типа?
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="surname" name="surname" value="' . htmlspecialchars(stripslashes($surname)) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="name" name="name" value="' . htmlspecialchars(stripslashes($name)) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Отчество</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="patronymic" name="patronymic" value="' . htmlspecialchars(stripslashes($patronymic)) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Логин<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="login" onBlur="check_login ();" name="login" value="' . htmlspecialchars(stripslashes($login)) . '"></td></tr>' .
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия: <span class="error">*</span></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="surname" name="surname" value="' . htmlspecialchars(stripslashes($surname)) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя: <span class="error">*</span></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="name" name="name" value="' . htmlspecialchars(stripslashes($name)) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Отчество: </td><td style="padding: 0 2px;"><input type="text" class="txt block" id="patronymic" name="patronymic" value="' . htmlspecialchars(stripslashes($patronymic)) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Логин: <span class="error">*</span></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="login" onBlur="check_login ();" name="login" value="' . htmlspecialchars(stripslashes($login)) . '"></td></tr>' .
     '</table>' . '<div id="login_check_res" style="display: none;"></div>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">E-Mail<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="email" onBlur="check_frm_email ();" name="email" value="' . htmlspecialchars(stripslashes($email)) . '"></td></tr></table>' .
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">E-Mail: <span class="error">*</span></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="email" onBlur="check_frm_email ();" name="email" value="' . htmlspecialchars(stripslashes($email)) . '"></td></tr></table>' .
     '<div id="email_check_res" style="display: none;"></div>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="phone" name="phone" value="' . htmlspecialchars(stripslashes($phone)) . '"></td></tr>'.
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон:</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="phone" name="phone" value="' . htmlspecialchars(stripslashes($phone)) . '"></td></tr>'.
     '<tr><td><i>Например: +79091234567</i></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"></td></tr>' .
-    '<tr><td>Подтверждение пароля</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль: <span class="error">*</span></td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"></td></tr>' .
+    '<tr><td>Подтверждение пароля: <span class="error">*</span></td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
     '</table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;" width="100%"><div>' . $rn->OuterHTML() . '</div></td></tr></table>'));
-$f->AppendCUstomField(array('src' => '<center><input type="checkbox" class="cb" value="1" name="agree" id="agree">Я согласен с <a href="' . config_get('document-root') . '/articles/rules" target="blank">правилами</a> этого ресурса<span class="error">*</div></center>'));
+$f->AppendCUstomField(array('src' => '<center><input type="checkbox" class="cb" value="1" name="agree" id="agree">Я согласен с <a href="' . config_get('document-root') . '/articles/rules" target="blank">правилами</a> этого ресурса <span class="error">*</span></center>'));
 
 if ($action == 'register') {
   if (!register ()) {
@@ -221,8 +221,10 @@ if ($action == 'register') {
   } else {
     $id = user_id_by_login(stripslashes($login));
     $reglink = config_get('http-document-root') . '/login/registration/confirm/?id=' . $id . '&hash=' . md5(stripslashes($login) . '##VERY_RANDOM_SEED##' . stripslashes($email) . '##' . $id);
-    sendmail_tpl(stripslashes($email), 'Регистрация в системе ' . config_get('site-name'), 'registration', array('login' => stripslashes($login),
-        'passwd' => stripslashes($passwd), 'reglink' => $reglink));
+    $restorelink = config_get('http-document-root') . '/login/restore';
+    $contestname = 'Тризформашка-2011';
+    sendmail_tpl(stripslashes($email), 'Регистрация в конкурсе Тризформашка', 'registration', array('login' => stripslashes($login),
+        'passwd' => stripslashes($passwd), 'reglink' => $reglink, 'restorelink' => $restorelink, 'contestname' => $contestname));
     add_info('Новый пользователь был успешно добавлен в базу, но в данный момент он неактивирован и вход в систему от его имени пока невозможен. ' .
             'Письмо с подробной информации об активации пользователя было выслано по электронному адресу ' . $email .
             (($redirect != '') ? ('<br><br><a href="' . htmlspecialchars($redirect) . '">Вернуться в предыдущий раздел</a>') : ('')));
