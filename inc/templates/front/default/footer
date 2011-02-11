@@ -1,21 +1,16 @@
 Страница / Нижний колонтитул
-<?php
-  $info = client_info ();
-?>
 <div id="footer" style="padding-bottom: 4px;">
-  <center>
-    <small>
-      Страница была сгенерирована за <?=debug_get_watchdog();?>сек.<br>
-      Использовано запросов: <?=db_query_count ();?><br>
-      Твой IP-адрес: <?=$info['realIP'];?>&nbsp;&nbsp;&nbsp;Твой агент: <?=$info['userAgent']?>&nbsp;&nbsp;&nbsp;Движок браузера: <?=$info ['browserEngine'];?><br>
-      И о какой конфединциальности после этого может идти речь?
-    </small>
-  </center>
-  <div id="hr" style="margin: 6px 0 1px 0;"></div>
   <table width="100%" class="small">
     <tr>
-      <td width="50%">Powered by Gate5 Engine (c) 2006-2007 nazgul</td>
-      <td align="right">Все права защищены (с) 2007 sch9 team</td>
+      <td align="left">
+        Powered by Gate5 Engine (c) 2006-2007 nazgul
+      </td>
+      <td align="right">
+        <?php
+        $email = config_get('webmaster-email');
+        print 'Связь с разработчиками: <a href="mailto:' . $email . '">' . $email . '</a>';
+        ?>
+      </td>
     </tr>
   </table>
 </div>

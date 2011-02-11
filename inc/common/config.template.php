@@ -77,6 +77,7 @@
 
     config_set ('bot-email', 'user@mail.ru');
     config_set ('null-email', 'noreply@localhost');
+    config_set ('webmaster-email', '');
 
     config_set ('time-zone', '0500');
 
