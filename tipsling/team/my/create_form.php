@@ -21,6 +21,7 @@ dd_formo('title=Добавить команду;');
     var grade  = getElementById ('grade').value;
     var teacher_full_name = getElementById('teacher_full_name').value;
     var pupil1_full_name   = getElementById ('pupil1_full_name').value;
+    var comment = qtrim(getElementById('comment').value);
 
     if (qtrim(grade)==''){
       alert('Укажите класс команды')
@@ -39,6 +40,11 @@ dd_formo('title=Добавить команду;');
 
     if (qtrim(pupil1_full_name)==''){
       alert('ФИО первого участника не может быть пустым');
+      return;
+    }
+
+    if (comment.length > <?=opt_get('max_comment_len');?>) {
+      alert("Поле \"Комментарий\" не может содержать более <?=opt_get('max_comment_len');?> символов");
       return;
     }
 

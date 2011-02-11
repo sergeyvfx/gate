@@ -30,7 +30,8 @@ function tipsling_initialize() {
         'pupil1_full_name' => 'TEXT',
         'pupil2_full_name' => 'TEXT',
         'pupil3_full_name' => 'TEXT',
-        'is_payment' => 'BOOLEAN'));
+        'is_payment' => 'BOOLEAN',
+        'comment' => 'TEXT'));
 
     db_create_table_safe('payment', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',

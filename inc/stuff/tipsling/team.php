@@ -60,37 +60,43 @@ if ($_team_included_ != '#team_Included#') {
   /**
    * Проверка корректности заполнения полей
    */
-  function team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $update=false, $id=-1) {
+  function team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment, $update=false, $id=-1) {
     if ($update) {
       $team = team_get_by_id($id);
+      //FIXME
       if ($team['is_payment'] > 0) {
         add_info("Данная команда не доступна для редактирования");
         return false;
       }
-      if ($team['responsible_id']!= user_id()){
-          add_info('Вы не можете редактировать эту команду');
-          return false;
+      if ($team['responsible_id'] != user_id()) {
+        add_info('Вы не можете редактировать эту команду');
+        return false;
       }
-
     }
-    if ($grade==''){
-        add_info('Поле "Класс" является обязательным для заполнения');
-        return false;
-    }
-
-    if (!isIntNumber($grade)){
-        add_info('"Класс" должен быть целым числом');
-        return false;
+    if ($grade == '') {
+      add_info('Поле "Класс" является обязательным для заполнения');
+      return false;
     }
 
-    if ($teacher_full_name==''){
-        add_info('Поле "Полное имя учителя" является обязательным для заполнения');
-        return false;
+    if (!isIntNumber($grade)) {
+      add_info('"Класс" должен быть целым числом');
+      return false;
     }
 
-    if ($grade==''){
-        add_info('Поле "Полное имя 1-го участника" является обязательным для заполнения');
-        return false;
+    if ($teacher_full_name == '') {
+      add_info('Поле "Полное имя учителя" является обязательным для заполнения');
+      return false;
+    }
+
+    if ($pupil1_full_name == '') {
+      add_info('Поле "Полное имя 1-го участника" является обязательным для заполнения');
+      return false;
+    }
+
+    $max_comment_len = opt_get('max_comment_len');
+    if (strlen($comment) > $max_comment_len) {
+      add_info("Поле \"Примечание\" не может содержать более " . $max_comment_len . " символов");
+      return false;
     }
     return true;
   }
@@ -112,7 +118,7 @@ if ($_team_included_ != '#team_Included#') {
    *                вернет false
    */
   function team_create($number, $responsible_id, $contest_id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $comment) {
-    if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name)) {
+    if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment)) {
       return false;
     }
 
@@ -147,7 +153,7 @@ if ($_team_included_ != '#team_Included#') {
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
-    $comment = stripslashes($_POST['comment']);
+    $comment = stripslashes(trim($_POST['comment']));
     //TODO Make it more universally
     $contest_id = 1;
     $c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
@@ -165,7 +171,7 @@ if ($_team_included_ != '#team_Included#') {
   }
 
   function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number, $comment) {
-    if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, true, $id)) {
+    if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment, true, $id)) {
       return false;
     }
 
@@ -174,6 +180,8 @@ if ($_team_included_ != '#team_Included#') {
     $pupil1_full_name = db_string($pupil1_full_name);
     $pupil2_full_name = db_string($pupil2_full_name);
     $pupil3_full_name = db_string($pupil3_full_name);
+    $comment = db_string($comment);
+    $number = db_string($number);
 
     $update = array('payment_id' => $payment_id,
         'grade' => $grade,
@@ -184,7 +192,7 @@ if ($_team_included_ != '#team_Included#') {
         'is_payment' => $is_payment,
         'number' => $number,
         'comment' => $comment);
-
+    
     db_update('team', $update, "`id`=$id");
 
     return true;
@@ -205,6 +213,8 @@ if ($_team_included_ != '#team_Included#') {
       $contest_id = 1;
       $c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
       $number = $grade . '.' . $c;
+    } else {
+      $number = $team['number'];
     }
 
     if (team_update($id, $payment_id, $grade, $teacher_full_name,
@@ -215,15 +225,16 @@ if ($_team_included_ != '#team_Included#') {
   }
 
   function team_can_delete($id) {
-      $team = team_get_by_id($id);
-      if ($team['is_payment'] > 0) {
-        add_info("Данную команду нельзя удалить");
-        return false;
-      }
-      if ($team['responsible_id']!= user_id()){
-          add_info('Вы не можете удалять эту команду');
-          return false;
-      }
+    $team = team_get_by_id($id);
+    //FIXME What about admins?
+    if ($team['is_payment'] > 0) {
+      add_info("Данную команду нельзя удалить");
+      return false;
+    }
+    if ($team['responsible_id'] != user_id()) {
+      add_info('Вы не можете удалять эту команду');
+      return false;
+    }
     return true;
   }
 
