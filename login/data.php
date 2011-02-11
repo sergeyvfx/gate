@@ -28,12 +28,12 @@
   if (!$authorized) {
     add_body_handler ('onload', 'getElementById ("login").focus');
 ?>
-<div id="navigator">Вход в систему</div>
-<form action=".?redirect=<?=urlencode ($redirect);?>" method="POST">
-  <div class="form" style="width: 460px; margin-left: 40px;">
+<div id="snavigator">Вход в систему</div>
+<form action=".?redirect=<?=urlencode ($redirect);?>" method="POST" style="">
+  <div class="form" style="width: 460px; margin: 0 auto;">
     <div class="content">
-      <div id="navigator">Введите ваше имя пользователя и пароль</div>
-      <div class="contentSub"><span class="arr">Чтобы представиться системе &laquo;<a href="<?=config_get ('document-root');?>/articles/about"><?=config_get ('site-name');?></a>&raquo;</span></div>
+      <h3>Введите ваше имя пользователя и пароль</h3>
+      <div style="height: 10px;"></div>
       <table width="100%">
         <tr>
           <td>

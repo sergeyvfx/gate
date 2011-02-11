@@ -16,7 +16,7 @@
   }
 
   if (!user_authorized ()) {
-    include 'inc/login.php';
+  redirect(config_get('document-root') . '/login');
   } else if (user_access_root ()) {
     header ('Location: content');
   } else {
