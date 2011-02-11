@@ -31,6 +31,7 @@ ${information}
     } else {
       add_info ('Пользователь успешно активирован. Вход в систему с логином '.$r['login'].' разрешен.');
       db_update ('user', array ('authorized' => 1));
+      redirect(config_get('document-root') . '/login');
     }
   }
 ?>

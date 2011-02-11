@@ -29,7 +29,7 @@ dd_formo('title=Добавить команду;');
     }
 
     if (!isnumber(grade)){
-      alert('Класс должен быть числом')
+      alert('Класс должен быть целым положительным числом числом')
       return;
     }
 
@@ -50,12 +50,77 @@ dd_formo('title=Добавить команду;');
 
     frm.submit ();
   }
+
+  function check_frm_grade() {
+      var grade = getElementById ('grade').value;
+
+      if (qtrim(grade)==''){
+          show_msg ('grade_check_res', 'err', 'Укажите класс команды');
+          return;
+      }
+
+      if (!isnumber(grade)){
+          show_msg ('grade_check_res', 'err', 'Класс должен быть целым положительным числом');
+          return;
+      }
+
+      hide_msg('grade_check_res');
+  }
+
+  function check_frm_teacher() {
+      var teacher = getElementById ('teacher_full_name').value;
+
+      if (qtrim(teacher)==''){
+          show_msg ('teacher_check_res', 'err', 'Это поле обзательно для заполнения');
+          return;
+      }
+
+      hide_msg('teacher_check_res');
+  }
+
+  function check_frm_pupil() {
+      var pupil = getElementById ('pupil1_full_name').value;
+
+      if (qtrim(pupil)=='') {
+          show_msg ('pupil_check_res', 'err', 'Это поле обязательно для заполнения');
+          return;
+      }
+
+      hide_msg('pupil_check_res');
+  }
+
+  function check_frm_comment() {
+      var comment = getElementById ('comment').value;
+
+      if (comment.length > <?=opt_get('max_comment_len');?>) {
+          show_msg ('comment_check_res', 'err', 'Поле "Комментарий" не может содержать более <?=opt_get('max_comment_len');?> символов');
+          return;
+      }
+
+      hide_msg('comment_check_res');
+  }
+
 </script>
 <div>
+
   <form action=".?action=create&page=<?= $page ?>" method="POST" onsubmit="check (this); return false;">
-    Класс участников: <span class="error">*</span>
-    <input type="text" id="grade" name="grade" value="<?= htmlspecialchars(stripslashes($_POST['grade'])); ?>" class="txt block"><div id="hr"></div>
-    Полное имя учителя: <span class="error">*</span>
+      <table class="clear" width="100%">
+        <tr><td width="30%" style="padding: 0 2px;">
+                Класс участников: <span class="error">*</span>
+            </td>
+            <td style="padding: 0 2px;">
+                <input type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" value="<?= htmlspecialchars(stripslashes($_POST['grade'])); ?>">
+            </td>
+        </tr>
+        <tr><td><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д).</i></td></tr>
+      </table>
+      <div id="grade_check_res" style="display: none;"></div>
+      <div id="hr"></div>
+      <table class ="clear" width="100%">
+        <tr><td width="30%">
+                Полное имя учителя: <span class="error">*</span>
+            </td>
+            <td style="padding: 0 2px;">
     <?php
     $teacher_full_name = htmlspecialchars(stripslashes($_POST['teacher_full_name']));
     if ($teacher_full_name == '') {
@@ -63,16 +128,50 @@ dd_formo('title=Добавить команду;');
       $teacher_full_name = $u['surname'] . ' ' . $u['name'] .
               (($u['patronymic'] == '') ? ('') : (' ' . $u['patronymic']));
     }
-    print('<input type="text" id="teacher_full_name" name="teacher_full_name" value="' . $teacher_full_name . '" class="txt block"><div id="hr"></div>');
+    print('<input type="text" class="txt block"  id="teacher_full_name" name="teacher_full_name" onblur="check_frm_teacher ();" value="' . $teacher_full_name . '">');
     ?>
-    Полное имя 1-го участника: <span class="error">*</span>
-    <input type="text" id="pupil1_full_name" name="pupil1_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil1_full_name'])); ?>" class="txt block"><div id="hr"></div>
-    Полное имя 2-го участника:
-    <input type="text" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil2_full_name'])); ?>" class="txt block"><div id="hr"></div>
-    Полное имя 3-го участника:
-    <input type="text" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil3_full_name'])); ?>" class="txt block"><div id="hr"></div>
-    Платеж:
-    <select id="payment_id" name="payment_id" class="block">
+            </td>
+        </tr>
+      </table>
+      <div id="teacher_check_res" style="display: none;"></div>
+      <div id="hr"></div>
+      <table class ="clear" width="100%">
+        <tr><td width="30%">
+                Полное имя 1-го участника: <span class="error">*</span>
+            </td>
+            <td style="padding: 0 2px;">
+                <input type="text" class="txt block" id="pupil1_full_name" name="pupil1_full_name" onblur="check_frm_pupil ();" value="<?= htmlspecialchars(stripslashes($_POST['pupil1_full_name'])); ?>">
+            </td>
+        </tr>
+      </table>
+      <div id="pupil_check_res" style="display: none;"></div>
+      <div id="hr"></div>
+      <table class ="clear" width="100%">
+        <tr><td width="30%">
+                Полное имя 2-го участника:
+            </td>
+            <td style="padding: 0 2px;">
+                <input type="text" class="txt block" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil2_full_name'])); ?>">
+            </td>
+        </tr>
+      </table>
+      <div id="hr"></div>
+      <table class ="clear" width="100%">     
+        <tr><td width="30%">
+                Полное имя 3-го участника:
+            </td>
+            <td style="padding: 0 2px;">
+                <input type="text" class="txt block" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil3_full_name'])); ?>">
+            </td>
+        </tr>
+      </table>
+      <div id="hr"></div>
+<!--      <table class ="clear" width="100%">
+        <tr><td width="30%">
+                Платеж:
+            </td>
+            <td style="padding: 0 2px;">
+        <select id="payment_id" name="payment_id" class="block">
       <option value="-1"></option>
       <?php
       $payments = payment_list(user_id());
@@ -87,15 +186,27 @@ dd_formo('title=Добавить команду;');
       <?php
       }
       ?>
-    </select><div id="hr"></div>
-    Примечание:
-    <input type="text" id="comment" name="comment" value="<?= htmlspecialchars(stripslashes($_POST['comment'])); ?>" class="txt block"><div id="hr"></div>
-
+    </select>
+            </td>
+        </tr>
+      </table>
+      <div id="hr"></div>-->
+      <table class ="clear" width="100%">
+        <tr><td width="30%">
+                Примечание:
+            </td>
+            <td style="padding: 0 2px;">
+                <input type="text" id="comment" name="comment" onblur="check_frm_comment ();" value="<?= htmlspecialchars(stripslashes($_POST['comment'])); ?>" class="txt block">
+            </td>
+        </tr>
+    </table>
+    <div id="comment_check_res" style="display: none;"></div>
     <div class="formPast">
-      <button class="submitBtn block" type="submit">Создать</button>
+      <button class="submitBtn block" type="submit">Сохранить</button>
     </div>
   </form>
 </div>
+
 <?php
       dd_formc ();
 ?>

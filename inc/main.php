@@ -61,7 +61,7 @@
         $this->URL  = $url;
 
         $this->PAGE = new CVCPage ();
-        $this->PAGE->Init ('title=GATE;');
+        $this->PAGE->Init ('title=Тризформашка;');
         $CORE = $this;
 
         // Starting session

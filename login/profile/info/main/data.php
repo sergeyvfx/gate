@@ -77,15 +77,15 @@ $f = new CVCForm ();
 $f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
 
 $f->AppendLabelField('Логин', '', $u['login']);
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия: <span class="error">*</span></td><td><input id="surname" name="surname" type="text" class="txt block" value="' . htmlspecialchars($u['surname']) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя: <span class="error">*</span></td><td><input id="name" name="name" type="text" class="txt block" value="' . htmlspecialchars($u['name']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия: <span class="error">*</span></td><td><input id="surname" name="surname" type="text" class="txt block" onblur="check_frm_surname ();" value="' . htmlspecialchars($u['surname']) . '"></td></tr></table><div id="surname_check_res" style="display: none;">'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя: <span class="error">*</span></td><td><input id="name" name="name" type="text" class="txt block" onblur="check_frm_name ();" value="' . htmlspecialchars($u['name']) . '"></td></tr></table><div id="name_check_res" style="display: none;">'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Отчество:</td><td><input id="patronymic" name="patronymic" type="text" class="txt block" value="' . htmlspecialchars($u['patronymic']) . '"></td></tr></table>'));
 
 if ($u['email'] != '') {
   $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">E-Mail: <span class="error">*</span></td><td><input id="email" name="email" onblur="check_frm_email ();" type="text" class="txt block" value="' . htmlspecialchars($u['email']) . '"></td></tr></table><div id="email_check_res" style="display: none;"></div>'));
 }
 
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон:</td><td><input id="phone" name="phone" onblur="check_frm_email ();" type="text" class="txt block" value="' . htmlspecialchars($u['phone']) . '"></td></tr><tr><td><i>Например: +79091234567</i></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон:</td><td><input id="phone" name="phone" onblur="check_frm_phone ();" type="text" class="txt block" value="' . htmlspecialchars($u['phone']) . '"></td></tr><tr><td><i>Например: +79091234567</i></td></tr></table><div id="phone_check_res" style="display: none;">'));
 
 $f->AppendCustomField(array('title' => '<input type="checkbox" class="cb pointer" value="1" onclick="fchpasswd (this);" id="chpasswd" name="chpasswd_val"><span class="pointer" onclick="var e=getElementById (\'chpasswd\'); e.checked=!e.checked; fchpasswd (e);">Сменить пароль</span>',
     'src' => '<div id="passwd_block" class="invisible">' .
@@ -109,9 +109,11 @@ if ($err_string!='')
       return;
     }
 
-    if (passwd == confirm)
-      widget.innerHTML='<span style="color: #006000">Пароль подтвержден</span>'; else
+    if (passwd != confirm)
         widget.innerHTML='<span style="color: #600000">Ошибка подтверждения пароля</span>';
+    else
+        widget.innerHTML='';
+        //widget.innerHTML='<span style="color: #006000">Пароль подтвержден</span>';
   }
 
   function check () {
@@ -158,7 +160,44 @@ if ($err_string!='')
       return false;
     }
 
-    ipc_send_request ('/', 'ipc=check_email&skipId=<?= user_id (); ?>&email='+email, update_email_check);
+    hide_msg('email_check_res');
+    //ipc_send_request ('/', 'ipc=check_email&email='+email, update_email_check);
+  }
+
+  function check_frm_phone () {
+    var phone = getElementById ('phone').value;
+
+    if (!check_phone (phone)) {
+      show_msg ('phone_check_res', 'err', 'Указанный телефон не выглядит корректным.');
+      return false;
+    }
+
+    hide_msg('phone_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_surname () {
+    var surname = getElementById ('surname').value;
+
+    if (qtrim(surname) == '') {
+      show_msg ('surname_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('surname_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_name () {
+    var name = getElementById ('name').value;
+
+    if (qtrim(name)=='') {
+      show_msg ('name_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('name_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
   }
 </script>
 

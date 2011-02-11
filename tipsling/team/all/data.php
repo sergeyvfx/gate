@@ -12,9 +12,6 @@ if ($PHP_SELF != '') {
   die;
 }
 
-if (!user_authorized ()) {
-  header('Location: ../../../login');
-}
 
 global $sort;
 ?>
@@ -24,12 +21,14 @@ ${information}
   <div class="content">
     <?php
     global $DOCUMENT_ROOT;
-    include $DOCUMENT_ROOT . '/tipsling/menu.php';
-    include '../menu.php';
-    $contest_menu->SetActive('team');
-    $team_menu->SetActive('all');
-    $contest_menu->Draw();
-    $team_menu->Draw();
+    if (user_authorized ()) {
+      include $DOCUMENT_ROOT . '/tipsling/menu.php';
+      include '../menu.php';
+      $contest_menu->SetActive('team');
+      $team_menu->SetActive('all');
+      $contest_menu->Draw();
+      $team_menu->Draw();
+    }
     $list = team_list('', $sort);
     include 'list.php';
     ?>

@@ -14,9 +14,8 @@
     print 'HACKERS?';
     die;
   }
-  //FIXME Исправить капчу в странице восстановления пароля
 ?>
-<div id="navigator"><a href="<?=config_get ('document-root');?>/login">Вход в систему</a>Восстановление пароля</div>
+<div id="snavigator"><a href="<?=config_get ('document-root');?>/login">Вход в систему</a>Восстановление пароля</div>
 ${information}
 <script language="JavaScript" type="text/JavaScript">
 function check_passwd () {
@@ -75,7 +74,7 @@ function check () {
     $s = unserialize ($r['settings']);
 
     if ($s['restore_timestamp'] && time () - $s['restore_timestamp'] < config_get ('restore-timeout')) {
-      add_info ('Вы не можете просить восстановку пароля так часто');
+      add_info ('Вы не можете использовать сервис восстановления пароля так часто');
       return false;
     }
 
@@ -85,7 +84,7 @@ function check () {
     db_update ('user', array ('settings'=>db_string (serialize ($s))), '`id`='.$r['id']);
 
     $link = config_get ('http-document-root').'/login/restore/confirm/?id='.$r['id'].'&hash='.$hash;
-    sendmail_tpl (stripslashes ($email), 'Восстановление пароля в системе '.config_get ('site-name'), 'restore', array ('login'=>stripslashes ($login), 'email'=>stripslashes ($email), 'link'=>$link));
+    sendmail_tpl (stripslashes ($email), 'Восстановление пароля', 'restore', array ('login'=>stripslashes ($login), 'email'=>stripslashes ($email), 'link'=>$link));
 
     return true;
   }
@@ -96,9 +95,9 @@ function check () {
   $rn = new CVCCaptcha ();
   $rn->Init ();
 
-  $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td width="30%">Код с картинки</td><td style="padding: 0 2px;"><div>'.$rn->OuterHTML ().'</div><input type="text" class="txt block" name="keystring" value=""></td></tr></table>'));
-  $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td width="30%">Логин</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="login" name="login" value="'.htmlspecialchars (stripslashes ($login)).'"></td></tr></table>'));
-  $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td width="30%">E-Mail</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="email" name="email" value="'.htmlspecialchars (stripslashes ($email)).'"></td></tr></table>'));
+  $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td width="30%">Логин:</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="login" name="login" value="'.htmlspecialchars (stripslashes ($login)).'"></td></tr></table>'));
+  $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td width="30%">E-Mail:</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="email" name="email" value="'.htmlspecialchars (stripslashes ($email)).'"></td></tr></table>'));
+  $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;"><div>'.$rn->OuterHTML ().'</div></td></tr></table>'));
 
   if ($action == 'send') {
     if (!send ()) {
@@ -106,7 +105,7 @@ function check () {
       $f->Draw ();
       formc ();
     } else {
-      add_info ('Письмо с подробной информации о дальнейших действиях для смены пароля было выслано по электронному адресу '.$email.
+      add_info ('Письмо с подробной информации о дальнейших действиях для восстановления пароля было выслано по электронному адресу '.$email.
         (($redirect!='')?('<br><br><a href="'.htmlspecialchars ($redirect).'">Вернуться в предыдущий раздел</a>'):('')));
     }
   } else {

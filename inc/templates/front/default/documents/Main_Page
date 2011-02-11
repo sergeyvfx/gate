@@ -8,8 +8,7 @@
           <table class="clear" width="100%"><tr>
           <td align="center" width="85" valign="middle"><img src="<?=config_get ('document-root');?>/pics/wt_l_s.gif"></td>
           <td style="text-align: left; padding-left: 16px;">
-            <h2 style="margin: 0;">Добро пожаловать в <a href="<?=config_get ('document-root');?>/articles/about">Gate</a>,</h2>
-            <h3 style="margin: 6px 0 0 0; font-weight: normal;">систему проведения on-line олимпиад</h3>
+            <h2 style="margin: 0;">Межрегиональный дистанционный конкурс "ТРИЗформашка"</h2>
           </td>
           </tr></table>
           </div>
@@ -21,15 +20,23 @@
 </div>
 <table class="clear" width="100%">
   <tr valign="top">
-    <td width="40%" style="padding-right: 4px;">
-      <div class="lblock"><div class="title tblue"></div><div class="content">
 <?php
-  $tpl = manage_template_by_name ('Статьи / Заглавная страница / Левый колонтитул');
-  print ($tpl->GetText ());
+  if (!user_authorized ()) {
 ?>
-        </div>
+  <td width="40%" style="padding-right: 4px;">
+    <div class="lblock">
+      <div class="title tblue"></div>
+      <div class="content">
+<?php
+        $tpl = manage_template_by_name ('Статьи / Заглавная страница / Левый колонтитул');
+        print ($tpl->GetText ());
+?>
       </div>
-    </td>
+    </div>
+  </td>
+<?php
+  }
+?>
     <td style="padding-left: 4px;">
 <?php
   $news=content_lookup (config_get ('document-root').'/articles/news');

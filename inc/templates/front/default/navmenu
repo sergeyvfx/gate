@@ -10,10 +10,12 @@
 -->
 + Навигация
 . [url href="$document_root/"]Главная страница[/url]
-. l [url href="$document_root/login/profile"]Мой профиль[/url]
-. [url href="$document_root/tipsling"]Регистрация команд[/url]
+. l [url href="$document_root/login/profile/info/main"]Пользователь[/url]
+. l [url href="$document_root/login/profile/info/school"]Учебное заведение[/url]
+. l [url href="$document_root/tipsling/team/my"]Команда[/url]
+. l [url href="$document_root/tipsling/payment/my"]Платежи[/url]
+. [url href="$document_root/tipsling/team/all"]Зарегистрированные команды[/url]
+. [url href="http://www.trizformashka.land.ru/"]Старая версия сайта[/url]
 + Wiki
 . [url href="$document_root/articles/news"]Новости[/url]
-. [url href="$document_root/articles/FAQ"]ЧаВо[/url]
 . [url href="$document_root/articles/rules"]Правила[/url]
-. [url href="$document_root/articles/about"]О проекте[/url]
