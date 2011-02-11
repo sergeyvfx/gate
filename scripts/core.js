@@ -118,6 +118,23 @@ function check_phone (str) {
   return result.length == 0;
 }
 
+function check_zipcode(str) {
+    if (str.length==0)
+        return true;
+
+    result = str;
+    result = result.replace(/^[0-9]{6}$/g, '');
+
+    return result.length==0;
+}
+
+function hide_msg(id) {
+    var node = getElementById (id);
+    node.className="";
+    node.style.display='none';
+    node.innerHTML="";
+}
+
 function show_msg (id, type, text) {
   var node = getElementById (id);
 

@@ -34,9 +34,11 @@ ${information}
       return;
     }
 
-  if (passwd == confirm)
-      widget.innerHTML='<span style="color: #006000">Успешное подтверждение пароля</span>'; else
-        widget.innerHTML='<span style="color: #600000">Ошибка подтверждения пароля</span>';
+  if (passwd != confirm)
+      widget.innerHTML='<span style="color: #600000">Ошибка подтверждения пароля</span>';
+      else widget.innerHTML='';
+          //widget.innerHTML='<span style="color: #006000">Успешное подтверждение пароля</span>';
+        
   }
 
   function check () {
@@ -144,7 +146,8 @@ ${information}
       return false;
     }
 
-    ipc_send_request ('/', 'ipc=check_login&login='+login, update_login_check);
+    hide_msg('login_check_res');
+    //ipc_send_request ('/', 'ipc=check_login&login='+login, update_login_check);
   }
 
   function check_frm_email () {
@@ -155,7 +158,44 @@ ${information}
       return false;
     }
 
-    ipc_send_request ('/', 'ipc=check_email&email='+email, update_email_check);
+    hide_msg('email_check_res');
+    //ipc_send_request ('/', 'ipc=check_email&email='+email, update_email_check);
+  }
+
+  function check_frm_phone () {
+    var phone = getElementById ('phone').value;
+
+    if (!check_phone (phone)) {
+      show_msg ('phone_check_res', 'err', 'Указанный телефон не выглядит корректным.');
+      return false;
+    }
+
+    hide_msg('phone_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_surname () {
+    var surname = getElementById ('surname').value;
+
+    if (qtrim(surname) == '') {
+      show_msg ('surname_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('surname_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_name () {
+    var name = getElementById ('name').value;
+
+    if (qtrim(name)=='') {
+      show_msg ('name_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('name_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
   }
 </script>
 
@@ -198,16 +238,18 @@ $rn->Init();
 
 // Fields
 // FIXME Почему не используются поля специализироваанного типа?
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="surname" name="surname" value="' . htmlspecialchars(stripslashes($surname)) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="name" name="name" value="' . htmlspecialchars(stripslashes($name)) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="surname" name="surname" onBlur="check_frm_surname ();" value="' . htmlspecialchars(stripslashes($surname)) . '"></td></tr>'.
+    '</table><div id="surname_check_res" style="display: none;"></div>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Имя<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="name" name="name" onBlur="check_frm_name();" value="' . htmlspecialchars(stripslashes($name)) . '"></td></tr>'.
+    '</table><div id="name_check_res" style="display: none;"></div>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Отчество</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="patronymic" name="patronymic" value="' . htmlspecialchars(stripslashes($patronymic)) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Логин<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="login" onBlur="check_login ();" name="login" value="' . htmlspecialchars(stripslashes($login)) . '"></td></tr>' .
     '</table>' . '<div id="login_check_res" style="display: none;"></div>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">E-Mail<span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="email" onBlur="check_frm_email ();" name="email" value="' . htmlspecialchars(stripslashes($email)) . '"></td></tr></table>' .
     '<div id="email_check_res" style="display: none;"></div>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="phone" name="phone" value="' . htmlspecialchars(stripslashes($phone)) . '"></td></tr>'.
-    '<tr><td><i>Например: +79091234567</i></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"></td></tr>' .
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Телефон</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="phone" name="phone" onBlur="check_frm_phone();" value="' . htmlspecialchars(stripslashes($phone)) . '"></td></tr>'.
+    '<tr><td><i>Например: +79091234567</i></td></tr></table><div id="phone_check_res" style="display: none;"></div>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"onBlur="check_passwd ();"></td></tr>' .
     '<tr><td>Подтверждение пароля</td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
     '</table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;" width="100%"><div>' . $rn->OuterHTML() . '</div></td></tr></table>'));

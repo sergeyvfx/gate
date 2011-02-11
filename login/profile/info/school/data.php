@@ -171,9 +171,9 @@ if ($r['school_id']!='' && $r['school_id']!=-1)
     $f->AppendCustomField(array('src' => '<div style="padding-bottom:10px">Зарегистрировать команды вы можете <a href="'.$href_string.'">здесь</a></div>'));
     }
 
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Название: <span class="error">*</span></td><td><input id="name" name="name" type="text" class="txt block" value="' . htmlspecialchars($sc['name']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Название: <span class="error">*</span></td><td><input id="name" name="name" type="text" class="txt block" onblur="check_frm_name ();" value="' . htmlspecialchars($sc['name']) . '"></td></tr></table><div id="name_check_res" style="display: none;"></div>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Статус учебного заведения: <span class="error">*</span></td><td><select id="school_status" name="school_status" class="txt block">'.addslashes($statuses).'</select></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Почтовый индекс: <span class="error">*</span></td><td><input id="zipcode" name="zipcode" type="text" class="txt block" value="' . htmlspecialchars($sc['zipcode']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Почтовый индекс: <span class="error">*</span></td><td><input id="zipcode" name="zipcode" type="text" class="txt block" onblur="check_frm_zipcode ();" value="' . htmlspecialchars($sc['zipcode']) . '"></td></tr></table><div id="zipcode_check_res" style="display: none;"></div>'));
 
 //find all countries
 $query = "select * from `country`";
@@ -185,10 +185,10 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
         $countries .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
 if ($countries!=''){
     $countries .='<option value="-1">Другая</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна: <span class="error">*</span></td><td><select id="country" name="country" class="block" onchange="other_country()">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: none; margin-top:3px"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна: <span class="error">*</span></td><td><select id="country" name="country" class="block" onchange="other_country()">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: none; margin-top:3px"></div></td></tr></table><div id="country_check_res" style="display: none;"></div>'));
 } else {
     $countries .='<option value="-1">Другая</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна: <span class="error">*</span></td><td><select id="country" name="country" class="block" onchange="other_country()">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: block; margin-top:3px"><input id="country_name" name="country_name" type="text" class="txt block"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна: <span class="error">*</span></td><td><select id="country" name="country" class="block" onblur="country_frm_name ();">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: block; margin-top:3px"><input id="country_name" name="country_name" type="text" class="txt block"></div></td></tr></table><div id="country_check_res" style="display: none;"></div>'));
 }
 
 //find all region
@@ -203,10 +203,10 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
             $regions .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
 if ($regions!='') {
     $regions .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onchange="other_region()">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: none; margin-top:3px"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onchange="other_region()">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: none; margin-top:3px"></div></td></tr></table><div id="region_check_res" style="display: none;"></div>'));
 } else {
     $regions .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onchange="other_region()">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: block; margin-top:3px"><input id="region_name" name="region_name" type="text" class="txt block"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onblur="check_frm_region ();">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: block; margin-top:3px"><input id="region_name" name="region_name" type="text" class="txt block"></div></td></tr></table><div id="region_check_res" style="display: none;"></div>'));
 }
 $query = "select * from `area`";
 $result = db_query($query);
@@ -218,10 +218,10 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
             $areas .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
 if ($areas!=''){
     $areas .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">'.addslashes($areas).'</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display: none; margin-top:3px"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">'.addslashes($areas).'</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display: none; margin-top:3px"></div></td></tr></table>'));
 } else {
     $areas .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">'.addslashes($areas).'</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display:block; margin-top:3px"><input id="area_name" name="area_name" type="text" class="txt block"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">'.addslashes($areas).'</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display:block; margin-top:3px"><input id="area_name" name="area_name" type="text" class="txt block"></div></td></tr></table>'));
 }
 
 $query = "select * from `city_status`";
@@ -246,19 +246,19 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
 if ($cities!='')
 {
     $cities .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Населенный пункт: <span class="error">*</span></td><td><select id="city" name="city" class="block" onchange="other_city()">'.addslashes($cities).'</select></td></tr><tr><td width="30%"></td><td><div id="other_city" name="other_city" style="display: none; margin-top:3px"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Населенный пункт: <span class="error">*</span></td><td><select id="city" name="city" class="block" onchange="other_city()">'.addslashes($cities).'</select></td></tr><tr><td width="30%"></td><td><div id="other_city" name="other_city" style="display: none; margin-top:3px"></div></td></tr></table><div id="city_check_res" style="display: none;"></div>'));
 }
 else
 {
     $cities .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Населенный пункт: <span class="error">*</span></td><td><select id="city" name="city" class="block" onchange="other_city()">'.addslashes($cities).'</select></td></tr><tr><td width="30%"></td><td><div id="other_city" name="other_city" style="display:block; margin-top:3px"><input id="city_name" name="city_name" type="text" class="txt block"></div></td><tr></table>'));
+    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Населенный пункт: <span class="error">*</span></td><td><select id="city" name="city" class="block" onblur="check_frm_city ();">'.addslashes($cities).'</select></td></tr><tr><td width="30%"></td><td><div id="other_city" name="other_city" style="display:block; margin-top:3px"><input id="city_name" name="city_name" type="text" class="txt block"></div></td></tr></table><div id="city_check_res" style="display: none;"></div>'));
 }
 
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Улица: <span class="error">*</span></td><td><input id="street" name="street" type="text" class="txt block" value="' . htmlspecialchars($sc['street']) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Дом: <span class="error">*</span></td><td><input id="house" name="house" type="text" class="txt block" value="' . htmlspecialchars($sc['house']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Улица: <span class="error">*</span></td><td><input id="street" name="street" type="text" class="txt block" onblur="check_frm_street ();" value="' . htmlspecialchars($sc['street']) . '"></td></tr></table><div id="street_check_res" style="display: none;"></div>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Дом: <span class="error">*</span></td><td><input id="house" name="house" type="text" class="txt block" onblur="check_frm_house ();" value="' . htmlspecialchars($sc['house']) . '"></td></tr></table><div id="house_check_res" style="display: none;"></div>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Корпус:</td><td><input id="building" name="building" type="text" class="txt block" value="' . htmlspecialchars($sc['building']) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Квартира:</td><td><input id="flat" name="flat" type="text" class="txt block" value="' . htmlspecialchars($sc['flat']) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Примечание:</td><td><input id="comment" name="comment" type="text" class="txt block" value="' . htmlspecialchars($sc['comment']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Примечание:</td><td><input id="comment" name="comment" type="text" class="txt block" onblur="comment_frm_street ();" value="' . htmlspecialchars($sc['comment']) . '"></td></tr></table><div id="comment_check_res" style="display: none;"></div>'));
 
 if ($err_string!='')
     $f->AppendCustomField(array('src' => '<div class="txt error">Вы не заполнили следующие обязательные поля: '.stripslashes($err_string).'</div>'));
@@ -266,12 +266,72 @@ if ($err_string!='')
 
 
 <script type="text/JavaScript"  language="JavaScript">
+  function check () {
+      var name = getElementById("name").value;
+      var zipcode = getElementById("zipcode").value;
+      var country = getElementById("country").value;
+      var other_country = getElementById("country_name").value;
+      var region = getElementById("region").value;
+      var other_region = getElementById("region_name").value;
+      var city = getElementById("city").value;
+      var other_city = getElementById("city_name").value;
+      var street = getElementById("street").value;
+      var house = getElementById("house").value;
+      var comment = getElementById("comment").value;
+      
+    if (qtrim(name)=='') {
+        alert ('Поле "Название" обязательно для заполнения');
+        return false;
+    }
+
+    if (qtrim(zipcode)=='') {
+      alert('Поле "Почтовый индекс" обязательно для заполнения');
+      return false;
+    }
+
+    if (!check_zipcode(zipcode)) {
+      alert('Указанный почтовый индекс не выглядит корректным. Индекс должен состоять из 6 цифр');
+      return false;
+    }
+    
+    if (country==-1 && qtrim(other_country)=='') {
+      alert('Поле "Страна" обязательно для заполнения');
+      return false;
+    }
+    
+    if (region==-1 && qtrim(other_region)=='') {
+      alert('Поле "Регион" обязательно для заполнения');
+      return false;
+    }
+    
+    if (city==-1 && qtrim(other_city)=='') {
+      alert('Поле "Населенный пункт" обязательно для заполнения');
+      return false;
+    }
+    
+    if (qtrim(street)=='') {
+      alert('Поле "Улица" обязательно для заполнения');
+      return false;
+    }
+    
+    if (qtrim(house)=='') {
+      alert('Поле "Дом" обязательно для заполнения');
+      return false;
+    }
+
+    if (comment.length > <?=opt_get('max_comment_len');?>) {
+      alert('Поле "Комментарий" не может содержать более <?=opt_get('max_comment_len');?> символов');
+      return;
+    }
+  }
+
   function other_country() {
     var id = getElementById("country").value;
     var opt = getElementById("other_country");
     if (id == -1) {
       opt.style.display = 'block';
-      opt.innerHTML = '<input id="country_name" name="country_name" type="text" class="txt block">'
+      opt.innerHTML = '<input id="country_name" name="country_name" type="text" class="txt block" onblur="check_frm_country ();">'
+      getElementById('country_name').focus();
     } else {
       opt.style.display = 'none';
     }
@@ -282,7 +342,8 @@ if ($err_string!='')
     var opt = getElementById("other_region");
     if (id == -1) {
       opt.style.display = 'block';
-      opt.innerHTML = '<input id="region_name" name="region_name" type="text" class="txt block">'
+      opt.innerHTML = '<input id="region_name" name="region_name" type="text" class="txt block" onblur="check_frm_region ();">'
+      getElementById('region_name').focus();
     } else {
       opt.style.display = 'none';
     }
@@ -294,6 +355,7 @@ if ($err_string!='')
     if (id == -1) {
       opt.style.display = 'block';
       opt.innerHTML = '<input id="area_name" name="area_name" type="text" class="txt block">'
+      getElementById('area_name').focus();
     } else {
       opt.style.display = 'none';
     }
@@ -304,10 +366,114 @@ if ($err_string!='')
     var opt = getElementById("other_city");
     if (id == -1) {
       opt.style.display = 'block';
-      opt.innerHTML = '<input id="city_name" name="city_name" type="text" class="txt block">'
+      opt.innerHTML = '<input id="city_name" name="city_name" type="text" class="txt block" onblur="check_frm_city ();">'
+      getElementById('city_name').focus();
     } else {
       opt.style.display = 'none';
     }
+  }
+
+  function check_frm_name () {
+    var name = getElementById ('name').value;
+
+    if (qtrim(name)=='') {
+      show_msg ('name_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('name_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_zipcode () {
+    var zipcode = getElementById ('zipcode').value;
+
+    if (qtrim(zipcode)=='') {
+      show_msg ('zipcode_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    if (!check_zipcode(zipcode)) {
+      show_msg ('zipcode_check_res', 'err', 'Указанный индекс не выглядит корректным. Индекс должен состоять из 6 цифр');
+      return false;
+    }
+
+    hide_msg('zipcode_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_country () {
+    var country = getElementById ('country').value;
+    var other_country = getElementById("country_name").value;
+    
+    if (country==-1 && qtrim(other_country)=='') {
+      show_msg ('country_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('country_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_region () {
+    var region = getElementById ('region').value;
+    var other_region = getElementById("region_name").value;
+
+    if (region==-1 && qtrim(other_region)=='') {
+      show_msg ('region_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('region_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_city () {
+    var city = getElementById ('city').value;
+    var other_city = getElementById('city_name').value;
+
+    if (place==-1 && qtrim(other_place)=='') {
+      show_msg ('city_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('city_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_street () {
+    var street = getElementById ('street').value;
+
+    if (qtrim(street)=='') {
+      show_msg ('street_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('street_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_house () {
+    var house = getElementById ('house').value;
+
+    if (qtrim(house)=='') {
+      show_msg ('house_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('house_check_res');
+    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
+  }
+
+  function check_frm_comment() {
+      var comment = getElementById ('comment').value;
+
+      if (comment.length > <?=opt_get('max_comment_len');?>) {
+          show_msg ('comment_check_res', 'err', 'Поле "Комментарий" не может содержать более <?=opt_get('max_comment_len');?> символов');
+          return;
+      }
+
+      hide_msg('comment_check_res');
   }
 </script>
 
