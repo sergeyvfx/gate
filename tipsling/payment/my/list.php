@@ -55,7 +55,7 @@ if (count($list) > 0) {
       }
       $amount = $amount . ' руб.';
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">' . $it['date'] . '</a></td>' .
+      '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">' . date_format(date_create($it['date']), 'd.m.Y') . '</a></td>' .
       '<td>' . $it['cheque_number'] . '</td>' .
       '<td>' . $it['payer_full_name'] . '<td align="right">' . $amount . '</td>' .
       '<td align="right">' .
