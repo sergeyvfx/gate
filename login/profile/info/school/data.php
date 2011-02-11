@@ -135,6 +135,7 @@ if ($action == 'save') {
     {
         db_insert('school', $arr);
         $arr=array();
+        //FIXME Why not used db_last_insert()?
         $arr['school_id'] = (int)db_max('school', 'id');
         db_update('responsible', $arr, '`user_id`='.$r['user_id']);
     }

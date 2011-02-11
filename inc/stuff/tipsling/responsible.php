@@ -30,7 +30,7 @@ function responsible_initialize() {
 function is_responsible($id) {
   $id = user_id();
   $g = group_get_by_name("Ответственные");
-  return is_user_in_group($id, $g['id']) || user_is_system($id);
+  return is_user_in_group($id, $g['id']);
 }
 
 function responsible_get_by_id($id) {
