@@ -30,7 +30,7 @@ ${information}
         add_info ('Ошибка активации пользователя.');
     } else {
       db_update ('user', array ('authorized' => 1));
-      redirect(config_get('document-root') . '/login?firstlogin=true&username=' . $r['login']);
+      redirect(config_get('document-root') . '/login?firstlogin=1&username=' . $r['login']);
     }
   }
 ?>

@@ -20,6 +20,13 @@ $authorized = false;
 if (trim($login) != '') {
   if (user_authorize(stripslashes($login), stripslashes($passwd))) {
     $authorized = true;
+    $id = user_id();
+    if (is_responsible($id)) {
+      $r = responsible_get_by_id($id);
+      if ($r['school_id'] == -1 && $firstlogin) {
+        $redirect = config_get('document-root') . '/login/profile/info/school/?firstlogin=1';
+      }
+    }
     redirect ();
   }
 }
@@ -31,7 +38,7 @@ if (!$authorized) {
   ${information}
 <?php
   if ($firstlogin) {
-    add_info ('Пользователь успешно активирован. Вход в систему с логином '. $username .' разрешен.');
+    add_info('Пользователь успешно активирован. Вход в систему с логином ' . $username . ' разрешен.');
   }
 ?>
   <form action=".?redirect=<?= urlencode($redirect); ?>" method="POST" style="">
@@ -50,7 +57,7 @@ if (!$authorized) {
           </tr>
           <tr>
             <td width="100" align="center" colspan="2" style="padding-top: 4px;">
-              <button style="width: 100%" class="submitBtn" type="submit"><b>Представиться</b></button>
+              <button style="width: 445px" class="submitBtn" type="submit"><b>Представиться</b></button>
             </td>
           </tr>
           <tr>
@@ -62,7 +69,14 @@ if (!$authorized) {
         </table>
       </div>
     </div>
-  </form>
+  <?php
+  if ($firstlogin) {
+  ?>
+    <input type="hidden" value="1" name="firstlogin">
+  <?php
+  }
+  ?>
+</form>
 <?php
 }
 ?>

@@ -21,7 +21,11 @@ if (!is_responsible(user_id())) {
   return;
 }
 
-global $DOCUMENT_ROOT, $redirect, $action, $config_get;
+global $DOCUMENT_ROOT, $redirect, $action, $config_get, $firstlogin;
+
+if ($firstlogin) {
+  add_info("Это Ваш первый вход в систему. Заполните, пожалуйста, информацию о Вашем учебном заведении.");
+}
 include $DOCUMENT_ROOT . '/login/profile/inc/menu.php';
 include '../menu.php';
 $profile_menu->SetActive('info');
