@@ -338,6 +338,7 @@ if ($err_string!='')
       getElementById('country_name').focus();
     } else {
       opt.style.display = 'none';
+      hide_msg('country_check_res');
     }
   }
 
@@ -350,6 +351,7 @@ if ($err_string!='')
       getElementById('region_name').focus();
     } else {
       opt.style.display = 'none';
+      hide_msg('region_check_res');
     }
   }
 
@@ -374,6 +376,7 @@ if ($err_string!='')
       getElementById('city_name').focus();
     } else {
       opt.style.display = 'none';
+      hide_msg('city_check_res');
     }
   }
 
