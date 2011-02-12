@@ -37,4 +37,9 @@ function responsible_get_by_id($id) {
   return db_row_value('responsible', "`user_id`=$id");
 }
 
+function is_responsible_has_school($rid) {
+  $r = responsible_get_by_id($rid);
+  return $r['school_id'] > 0;
+}
+
 ?>

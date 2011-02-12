@@ -21,10 +21,14 @@ if (!is_responsible(user_id())) {
   return;
 }
 
-global $DOCUMENT_ROOT, $redirect, $action, $config_get, $firstlogin;
+global $DOCUMENT_ROOT, $redirect, $action, $config_get, $firstlogin, $noschool;
 
 if ($firstlogin) {
   add_info("Это Ваш первый вход в систему. Заполните, пожалуйста, информацию о Вашем учебном заведении.");
+}
+
+if ($noschool) {
+  add_info("Вы не сможете добавлять команды пока не заполните информацию о учебном заведении. Заполните, пожалуйста, информацию о Вашем учебном заведении.");
 }
 include $DOCUMENT_ROOT . '/login/profile/inc/menu.php';
 include '../menu.php';

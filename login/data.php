@@ -20,14 +20,12 @@ $authorized = false;
 if (trim($login) != '') {
   if (user_authorize(stripslashes($login), stripslashes($passwd))) {
     $authorized = true;
-    $id = user_id();
-    if (is_responsible($id)) {
-      $r = responsible_get_by_id($id);
-      if ($r['school_id'] == -1 && $firstlogin) {
-        $redirect = config_get('document-root') . '/login/profile/info/school/?firstlogin=1';
-      }
+    if (!is_responsible_has_school(user_id()) && $firstlogin) {
+      $redirect = config_get('document-root') . '/login/profile/info/school/?firstlogin=1';
     }
     redirect ();
+  } else {
+    add_info("Неверный логин или пароль. Пожалуйста, повторите попытку.");
   }
 }
 
