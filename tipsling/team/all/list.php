@@ -56,7 +56,7 @@ if (count($list) > 0) {
       $ps = $it['is_payment'];
       $r = responsible_get_by_id($it['responsible_id']);
       $s = school_get_by_id($r['school_id']);
-      $number = $it['number'];
+      $number = $it['grade'].'.'.$it['number'];
       $school_name = $s['name'];
       $region = school_get_region_name($r['school_id']);
       $city = school_get_city_name($r['school_id']);
