@@ -1,11 +1,16 @@
 Заготовки / Публикация / Подробно о публикации
-<div id="navigator"><?=$pIFACE->GetName ();?></div>
-${subnav}
 <?php
-global $oldid, $uid;
+global $oldid, $uid, $page;
 if ($oldid=='')
   // Получение последней версии публикаии
   $data=$pIFACE->GetListRowByUid ($uid); else
   // Получение бубликации с указанным id
   $data=$pIFACE->GetListRowbyId ($oldid);
+?>
+<div id="navigator"><a href="<?=dirname ($GLOBALS['REQUEST_URI'])?>"><?=$pIFACE->GetName ();?></a><?=$data['title'];?></div>
+${subnav}
+<?php
+  $full=trim (html2txt ($data['full']))!='';
+  if ($full) print ($data['full']); else print ('<p>'.fakecode ($data['short']).'</p>');
+  print ('<div style="margin-top: 8px;"><span class="arr"><a href="../'.(($page!='')?('?page='.$page):('')).'">Перейти к списку новостей</a></span></div>');
 ?>
