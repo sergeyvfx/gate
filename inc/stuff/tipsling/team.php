@@ -153,6 +153,9 @@ if ($_team_included_ != '#team_Included#') {
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
+    if ($payment_id == '') {
+      $payment_id = -1;
+    }
     $comment = stripslashes(trim($_POST['comment']));
     //TODO Make it more universally
     $contest_id = 1;
@@ -192,7 +195,7 @@ if ($_team_included_ != '#team_Included#') {
         'is_payment' => $is_payment,
         'number' => $number,
         'comment' => $comment);
-    
+
     db_update('team', $update, "`id`=$id");
 
     return true;
@@ -206,6 +209,9 @@ if ($_team_included_ != '#team_Included#') {
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
+    if ($payment_id == '') {
+      $payment_id = -1;
+    }
     $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
     if ($team['grade'] != $grade) {
