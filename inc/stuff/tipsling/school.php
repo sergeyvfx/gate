@@ -40,7 +40,7 @@ function school_initialize() {
     db_insert('school_status', array ('name' => '"Гимназия"'));
     db_insert('school_status', array ('name' => '"Лицей"'));
     db_insert('school_status', array ('name' => '"Колледж"'));
-    db_insert('school_status', array ('name' => '"техникум"'));
+    db_insert('school_status', array ('name' => '"Техникум"'));
     db_insert('school_status', array ('name' => '"Учреждение доп. образования"'));
     db_insert('school_status', array ('name' => '"Частная команда"'));
     db_insert('school_status', array ('name' => '"ВУЗ"'));

@@ -21,11 +21,11 @@ function tipsling_initialize() {
   if (config_get('check-database')) {
     db_create_table_safe('team', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
-        'number' => 'TEXT',
+        'number' => 'INT',
         'responsible_id' => 'INT',
         'contest_id' => 'INT',
         'payment_id' => 'INT',
-        'grade' => 'TEXT',
+        'grade' => 'INT',
         'teacher_full_name' => 'TEXT',
         'pupil1_full_name' => 'TEXT',
         'pupil2_full_name' => 'TEXT',

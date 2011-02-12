@@ -21,7 +21,15 @@ if (!is_responsible(user_id())) {
   return;
 }
 
-global $DOCUMENT_ROOT, $redirect, $action, $config_get;
+global $DOCUMENT_ROOT, $redirect, $action, $config_get, $firstlogin, $noschool;
+
+if ($firstlogin) {
+  add_info("Это Ваш первый вход в систему. Заполните, пожалуйста, информацию о Вашем учебном заведении.");
+}
+
+if ($noschool) {
+  add_info("Вы не сможете добавлять команды пока не заполните информацию о учебном заведении. Заполните, пожалуйста, информацию о Вашем учебном заведении.");
+}
 include $DOCUMENT_ROOT . '/login/profile/inc/menu.php';
 include '../menu.php';
 $profile_menu->SetActive('info');
@@ -30,6 +38,9 @@ $err_string='';
 
 $r = responsible_get_by_id(user_id());
 $sc = school_get_by_id($r['school_id']);
+
+$f = new CVCForm ();
+$f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
 
 if ($action == 'save') {
   global $name, $school_status, $zipcode, $country, $country_name, $region, $region_name, $area, $area_name, $city_status, $city, $city_name, $street, $house, $building, $flat, $comment;
@@ -145,6 +156,8 @@ if ($action == 'save') {
     $arr['status_id'] = $city_status;
     if (count($arr) > 0)
         db_update('city', $arr, '`id`=' . $city);
+
+//    $f->AppendCustomField(array('src' => '<div align="center">Сохранение прошло успешно</div>'));
   }
 }
 
@@ -158,21 +171,12 @@ $query = "select * from `school_status`";
 $result = db_query($query);
 while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
     if ($rows['id']==$sc['status_id'])
-        $statuses .= '<option value='.$rows["id"].' selected>'.$rows["name"].'</option> ';
+        $statuses .= '<option value="'.$rows["id"].'" selected>'.$rows["name"].'</option> ';
     else
-        $statuses .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
-
-$f = new CVCForm ();
-$f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
-
-if ($r['school_id']!='' && $r['school_id']!=-1)
-{
-    $href_string = "<?=config_get('document-root');?>/tipsling/team/my";
-    $f->AppendCustomField(array('src' => '<div style="padding-bottom:10px">Зарегистрировать команды вы можете <a href="'.$href_string.'">здесь</a></div>'));
-    }
+        $statuses .= '<option value="'.$rows["id"].'">'.$rows["name"].'</option> ';
 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Название: <span class="error">*</span></td><td><input id="name" name="name" type="text" class="txt block" onblur="check_frm_name ();" value="' . htmlspecialchars($sc['name']) . '"></td></tr></table><div id="name_check_res" style="display: none;"></div>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Статус учебного заведения: <span class="error">*</span></td><td><select id="school_status" name="school_status" class="txt block">'.addslashes($statuses).'</select></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Статус учебного заведения: <span class="error">*</span></td><td><select id="school_status" name="school_status" class="block">'.addslashes($statuses).'</select></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Почтовый индекс: <span class="error">*</span></td><td><input id="zipcode" name="zipcode" type="text" class="txt block" onblur="check_frm_zipcode ();" value="' . htmlspecialchars($sc['zipcode']) . '"></td></tr></table><div id="zipcode_check_res" style="display: none;"></div>'));
 
 //find all countries
@@ -185,7 +189,7 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
         $countries .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
 if ($countries!=''){
     $countries .='<option value="-1">Другая</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна: <span class="error">*</span></td><td><select id="country" name="country" class="block" onchange="other_country()">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: none; margin-top:3px"></div></td></tr></table><div id="country_check_res" style="display: none;"></div>'));
+    $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Страна: <span class="error">*</span></td><td><select id="country" name="country" class="block" onchange="other_country()">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: none; margin-top:3px"></div></td></tr></table><div id="country_check_res" style="display: none;"></div>'));
 } else {
     $countries .='<option value="-1">Другая</option>';
     $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Страна: <span class="error">*</span></td><td><select id="country" name="country" class="block" onblur="country_frm_name ();">'.addslashes($countries).'</select></td></tr><tr><td width="30%"></td><td><div id="other_country" name="other_country" style="display: block; margin-top:3px"><input id="country_name" name="country_name" type="text" class="txt block"></div></td></tr></table><div id="country_check_res" style="display: none;"></div>'));
@@ -203,7 +207,7 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
             $regions .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
 if ($regions!='') {
     $regions .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onchange="other_region()">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: none; margin-top:3px"></div></td></tr></table><div id="region_check_res" style="display: none;"></div>'));
+    $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onchange="other_region()">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: none; margin-top:3px"></div></td></tr></table><div id="region_check_res" style="display: none;"></div>'));
 } else {
     $regions .='<option value="-1">Другой</option>';
     $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onblur="check_frm_region ();">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: block; margin-top:3px"><input id="region_name" name="region_name" type="text" class="txt block"></div></td></tr></table><div id="region_check_res" style="display: none;"></div>'));
@@ -218,7 +222,7 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
             $areas .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
 if ($areas!=''){
     $areas .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">'.addslashes($areas).'</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display: none; margin-top:3px"></div></td></tr></table>'));
+    $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">'.addslashes($areas).'</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display: none; margin-top:3px"></div></td></tr></table>'));
 } else {
     $areas .='<option value="-1">Другой</option>';
     $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">'.addslashes($areas).'</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display:block; margin-top:3px"><input id="area_name" name="area_name" type="text" class="txt block"></div></td></tr></table>'));
@@ -231,7 +235,7 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
         $city_statuses .= '<option value='.$rows["id"].' selected>'.$rows["name"].'</option> ';
     else
         $city_statuses .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Статус населенного пункта: <span class="error">*</span></td><td><select id="city_status" name="city_status" class="block" onchange="other_city_status()">'.addslashes($city_statuses).'</select></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Статус населенного пункта: <span class="error">*</span></td><td><select id="city_status" name="city_status" class="block" onchange="other_city_status()">'.addslashes($city_statuses).'</select></td></tr></table>'));
 
 //find all cities
 $query = "select * from `city`";
@@ -246,7 +250,7 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
 if ($cities!='')
 {
     $cities .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Населенный пункт: <span class="error">*</span></td><td><select id="city" name="city" class="block" onchange="other_city()">'.addslashes($cities).'</select></td></tr><tr><td width="30%"></td><td><div id="other_city" name="other_city" style="display: none; margin-top:3px"></div></td></tr></table><div id="city_check_res" style="display: none;"></div>'));
+    $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Населенный пункт: <span class="error">*</span></td><td><select id="city" name="city" class="block" onchange="other_city()">'.addslashes($cities).'</select></td></tr><tr><td width="30%"></td><td><div id="other_city" name="other_city" style="display: none; margin-top:3px"></div></td></tr></table><div id="city_check_res" style="display: none;"></div>'));
 }
 else
 {
@@ -334,6 +338,7 @@ if ($err_string!='')
       getElementById('country_name').focus();
     } else {
       opt.style.display = 'none';
+      hide_msg('country_check_res');
     }
   }
 
@@ -346,6 +351,7 @@ if ($err_string!='')
       getElementById('region_name').focus();
     } else {
       opt.style.display = 'none';
+      hide_msg('region_check_res');
     }
   }
 
@@ -370,6 +376,7 @@ if ($err_string!='')
       getElementById('city_name').focus();
     } else {
       opt.style.display = 'none';
+      hide_msg('city_check_res');
     }
   }
 
@@ -432,7 +439,7 @@ if ($err_string!='')
     var city = getElementById ('city').value;
     var other_city = getElementById('city_name').value;
 
-    if (place==-1 && qtrim(other_place)=='') {
+    if (city==-1 && qtrim(other_city)=='') {
       show_msg ('city_check_res', 'err', 'Это поле обязательно для заполнения');
       return false;
     }
@@ -485,6 +492,12 @@ ${information}
     $profile_menu->Draw();
     $info_menu->Draw();
     $f->Draw();
+    $r = responsible_get_by_id(user_id());
+    $href_string = "<?=config_get('document-root');?>/tipsling/team/my";
     ?>
+      <div style="padding-top: 10px; font-size: 12px; font-style: italic" >
+        <?=($r['school_id']!='' && $r['school_id']!=-1)?'Зарегистрировать команды вы можете <a style="font-size:12px" href="'.$href_string.'">здесь</a>':''
+        ?>
+      </div>
   </div>
 </div>

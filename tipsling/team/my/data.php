@@ -20,6 +20,10 @@ if (!is_responsible(user_id())) {
   print (content_error_page(403));
   return;
 }
+
+if (!is_responsible_has_school(user_id())) {
+  redirect (config_get('document-root') . '/login/profile/info/school/?noschool=1');
+}
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Мои команды</div>
 ${information}

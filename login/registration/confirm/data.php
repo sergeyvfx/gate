@@ -29,9 +29,8 @@ ${information}
     } else if (md5 ($r['login'].'##VERY_RANDOM_SEED##'.$r['email'].'##'.$r['id'])!=$hash) {
         add_info ('Ошибка активации пользователя.');
     } else {
-      add_info ('Пользователь успешно активирован. Вход в систему с логином '.$r['login'].' разрешен.');
       db_update ('user', array ('authorized' => 1));
-      redirect(config_get('document-root') . '/login');
+      redirect(config_get('document-root') . '/login?firstlogin=1&username=' . $r['login']);
     }
   }
 ?>

@@ -14,13 +14,18 @@ if ($PHP_SELF != '') {
   die;
 }
 
-global $login, $passwd, $redirect;
+global $login, $passwd, $redirect, $firstlogin, $username;
 $authorized = false;
 
 if (trim($login) != '') {
   if (user_authorize(stripslashes($login), stripslashes($passwd))) {
     $authorized = true;
+    if (!is_responsible_has_school(user_id()) && $firstlogin) {
+      $redirect = config_get('document-root') . '/login/profile/info/school/?firstlogin=1';
+    }
     redirect ();
+  } else {
+    add_info("Неверный логин или пароль. Пожалуйста, повторите попытку.");
   }
 }
 
@@ -28,6 +33,12 @@ if (!$authorized) {
   add_body_handler('onload', 'getElementById ("login").focus');
 ?>
   <div id="snavigator">Вход в систему</div>
+  ${information}
+<?php
+  if ($firstlogin) {
+    add_info('Пользователь успешно активирован. Вход в систему с логином ' . $username . ' разрешен.');
+  }
+?>
   <form action=".?redirect=<?= urlencode($redirect); ?>" method="POST" style="">
     <div class="form" style="width: 460px; margin: 0 auto;">
       <div class="content">
@@ -43,8 +54,8 @@ if (!$authorized) {
             <td style="padding-top: 4px;"><input type="password" class="passwd" name="passwd" style="width: 380px;"></td>
           </tr>
           <tr>
-            <td width="100" align="center" colspan="2" style="padding-top: 4px;">  
-              <button style="width: 100%" class="submitBtn" type="submit"><b>Представиться</b></button>
+            <td width="100" align="center" colspan="2" style="padding-top: 4px;">
+              <button style="width: 445px" class="submitBtn" type="submit"><b>Представиться</b></button>
             </td>
           </tr>
           <tr>
@@ -56,7 +67,14 @@ if (!$authorized) {
         </table>
       </div>
     </div>
-  </form>
+  <?php
+  if ($firstlogin) {
+  ?>
+    <input type="hidden" value="1" name="firstlogin">
+  <?php
+  }
+  ?>
+</form>
 <?php
 }
 ?>
