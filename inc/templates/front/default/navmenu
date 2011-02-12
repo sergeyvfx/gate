@@ -1,4 +1,3 @@
-Страница / Меню навигации
 <!--
   `+`   -    Начать новое меню
   `,` <модификаторы>     -   Новый элемент вне списка в текущем меню/подменю.
@@ -9,13 +8,13 @@
       'L'    - Отображать элемент только если пользователь _не_ авторизовался
 -->
 + Навигация
-. [url href="$document_root/"]Главная страница[/url]
+. [url href="http://www.trizformashka.land.ru/"]Главная страница[/url]
+. [url href="$document_root/"]Новый сайт[/url]
 . l [url href="$document_root/login/profile/info/main"]Пользователь[/url]
 . l [url href="$document_root/login/profile/info/school"]Учебное заведение[/url]
-. l [url href="$document_root/tipsling/team/my"]Команда[/url]
+. l [url href="$document_root/tipsling/team/my"]Команды[/url]
 . l [url href="$document_root/tipsling/payment/my"]Платежи[/url]
-. [url href="$document_root/tipsling/team/all"]Зарегистрированные команды[/url]
-. [url href="http://www.trizformashka.land.ru/"]Старая версия сайта[/url]
+. [url href="$document_root/tipsling/team/all"]Все команды конкурса[/url]
 + Wiki
 . [url href="$document_root/articles/news"]Новости[/url]
 . [url href="$document_root/articles/rules"]Правила[/url]
