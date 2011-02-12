@@ -29,11 +29,11 @@ if ($_team_included_ != '#team_Included#') {
     }
 
     if ($sort == 1) {
-      $sort = "ORDER BY team.number";
+      $sort = "ORDER BY team.grade, team.number";
     } elseif ($sort == 2) {
-      $sort = "ORDER BY region.name, team.number";
+      $sort = "ORDER BY region.name, team.grade, team.number";
     } elseif ($sort == 3) {
-      $sort = "ORDER BY region.name, city.name, school.name, team.number";
+      $sort = "ORDER BY region.name, city.name, school.name, team.grade, team.number";
     }
 
     if ($responsible_id < 0) {
@@ -79,7 +79,7 @@ if ($_team_included_ != '#team_Included#') {
     }
 
     if (!isIntNumber($grade)) {
-      add_info('"Класс" должен быть целым числом');
+      add_info('"Класс" должен быть целым положительным числом');
       return false;
     }
 
@@ -123,8 +123,6 @@ if ($_team_included_ != '#team_Included#') {
     }
 
     // Checking has been passed
-    $number = db_string($number);
-    $grade = db_string($grade);
     $teacher_full_name = db_string($teacher_full_name);
     $pupil1_full_name = db_string($pupil1_full_name);
     $pupil2_full_name = db_string($pupil2_full_name);
@@ -159,8 +157,9 @@ if ($_team_included_ != '#team_Included#') {
     $comment = stripslashes(trim($_POST['comment']));
     //TODO Make it more universally
     $contest_id = 1;
-    $c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
-    $number = $grade . '.' . $c;
+    $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
+    //$c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
+    //$number = $grade . '.' . $numb;
     $responsible_id = user_id();
     $is_payment = 0;
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
@@ -178,13 +177,12 @@ if ($_team_included_ != '#team_Included#') {
       return false;
     }
 
-    $grade = db_string($grade);
     $teacher_full_name = db_string($teacher_full_name);
     $pupil1_full_name = db_string($pupil1_full_name);
     $pupil2_full_name = db_string($pupil2_full_name);
     $pupil3_full_name = db_string($pupil3_full_name);
     $comment = db_string($comment);
-    $number = db_string($number);
+    //$number = db_string($number);
 
     $update = array('payment_id' => $payment_id,
         'grade' => $grade,
@@ -217,8 +215,9 @@ if ($_team_included_ != '#team_Included#') {
     if ($team['grade'] != $grade) {
       //TODO Make it more universally
       $contest_id = 1;
-      $c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
-      $number = $grade . '.' . $c;
+      $number = db_max('team','number',"`grade`=$grade AND `contest_id`=$contest_id") + 1;
+      //$c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
+      //$number = $grade . '.' . $c;
     } else {
       $number = $team['number'];
     }
