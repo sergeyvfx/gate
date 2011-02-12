@@ -39,6 +39,9 @@ $err_string='';
 $r = responsible_get_by_id(user_id());
 $sc = school_get_by_id($r['school_id']);
 
+$f = new CVCForm ();
+$f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
+
 if ($action == 'save') {
   global $name, $school_status, $zipcode, $country, $country_name, $region, $region_name, $area, $area_name, $city_status, $city, $city_name, $street, $house, $building, $flat, $comment;
   $name = stripslashes($name);
@@ -153,6 +156,8 @@ if ($action == 'save') {
     $arr['status_id'] = $city_status;
     if (count($arr) > 0)
         db_update('city', $arr, '`id`=' . $city);
+
+//    $f->AppendCustomField(array('src' => '<div align="center">Сохранение прошло успешно</div>'));
   }
 }
 
@@ -169,15 +174,6 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
         $statuses .= '<option value="'.$rows["id"].'" selected>'.$rows["name"].'</option> ';
     else
         $statuses .= '<option value="'.$rows["id"].'">'.$rows["name"].'</option> ';
-
-$f = new CVCForm ();
-$f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
-
-if ($r['school_id']!='' && $r['school_id']!=-1)
-{
-    $href_string = "<?=config_get('document-root');?>/tipsling/team/my";
-    $f->AppendCustomField(array('src' => '<div style="padding-bottom:10px">Зарегистрировать команды вы можете <a href="'.$href_string.'">здесь</a></div>'));
-    }
 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Название: <span class="error">*</span></td><td><input id="name" name="name" type="text" class="txt block" onblur="check_frm_name ();" value="' . htmlspecialchars($sc['name']) . '"></td></tr></table><div id="name_check_res" style="display: none;"></div>'));
 $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Статус учебного заведения: <span class="error">*</span></td><td><select id="school_status" name="school_status" class="block">'.addslashes($statuses).'</select></td></tr></table>'));
@@ -493,6 +489,12 @@ ${information}
     $profile_menu->Draw();
     $info_menu->Draw();
     $f->Draw();
+    $r = responsible_get_by_id(user_id());
+    $href_string = "<?=config_get('document-root');?>/tipsling/team/my";
     ?>
+      <div style="padding-top: 10px; font-size: 12px; font-style: italic" >
+        <?=($r['school_id']!='' && $r['school_id']!=-1)?'Зарегистрировать команды вы можете <a style="font-size:12px" href="'.$href_string.'">здесь</a>':''
+        ?>
+      </div>
   </div>
 </div>
