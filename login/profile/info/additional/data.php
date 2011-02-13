@@ -22,9 +22,7 @@ if (!is_responsible(user_id())) {
 }
 
 global $DOCUMENT_ROOT, $redirect, $action;
-include $DOCUMENT_ROOT . '/login/profile/inc/menu.php';
 include '../menu.php';
-$profile_menu->SetActive('info');
 $info_menu->SetActive('additional');
 
 if ($action == 'save') {
@@ -113,7 +111,6 @@ ${information}
 <div class="form">
   <div class="content">
     <?php
-    $profile_menu->Draw();
     $info_menu->Draw();
     $f->Draw();
     ?>

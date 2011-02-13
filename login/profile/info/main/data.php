@@ -17,9 +17,7 @@ if (!user_authorized ()) {
 }
 
 global $DOCUMENT_ROOT, $redirect, $action;
-include $DOCUMENT_ROOT . '/login/profile/inc/menu.php';
 include '../menu.php';
-$profile_menu->SetActive('info');
 $info_menu->SetActive('main');
 $err_string='';
 
@@ -206,7 +204,6 @@ ${information}
 <div class="form">
   <div class="content">
     <?php
-    $profile_menu->Draw();
     $info_menu->Draw();
     $f->Draw();
     ?>

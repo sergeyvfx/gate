@@ -14,7 +14,7 @@ if ($PHP_SELF != '') {
 }
 
 $info_menu = new CVCMenu ();
-$info_menu->Init('andevMenu', 'type=hor;colorized=true;sublevel=1;border=thin;');
+$info_menu->Init('andevMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
 $info_menu->AppendItem('Основные сведения', config_get('document-root') . '/login/profile/info/main/', 'main');
 if (is_responsible(user_id())) {
   $info_menu->AppendItem('Учебное заведение', config_get('document-root') . '/login/profile/info/school/', 'school');

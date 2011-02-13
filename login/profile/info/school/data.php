@@ -30,9 +30,7 @@ if ($firstlogin) {
 if ($noschool) {
   add_info("Вы не сможете добавлять команды пока не заполните информацию о учебном заведении. Заполните, пожалуйста, информацию о Вашем учебном заведении.");
 }
-include $DOCUMENT_ROOT . '/login/profile/inc/menu.php';
 include '../menu.php';
-$profile_menu->SetActive('info');
 $info_menu->SetActive('school');
 $err_string='';
 
@@ -489,7 +487,6 @@ ${information}
 <div class="form">
   <div class="content">
     <?php
-    $profile_menu->Draw();
     $info_menu->Draw();
     $f->Draw();
     ?>
