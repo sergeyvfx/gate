@@ -14,8 +14,8 @@ if ($PHP_SELF != '') {
 }
 
 global $DOCUMENT_ROOT;
-$contest_menu = new CVCMenu ();
-$contest_menu->Init('ContestTopMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
-$contest_menu->AppendItem('Команды', config_get('document-root') . '/tipsling/team', 'team');
-$contest_menu->AppendItem('Платежи', config_get('document-root') . '/tipsling/payment', 'payment');
+//$contest_menu = new CVCMenu ();
+//$contest_menu->Init('ContestTopMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
+//$contest_menu->AppendItem('Команды', config_get('document-root') . '/tipsling/team', 'team');
+//$contest_menu->AppendItem('Платежи', config_get('document-root') . '/tipsling/payment', 'payment');
 ?>

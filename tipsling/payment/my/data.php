@@ -22,16 +22,13 @@ ${information}
   <div class="content">
     <?php
     global $DOCUMENT_ROOT, $action, $id;
-    include $DOCUMENT_ROOT . '/tipsling/menu.php';
     include '../menu.php';
-    $contest_menu->SetActive('payment');
     $payment_menu->SetActive('my');
 
     if ($action == 'create') {
       payment_create_received();
     }
 
-    $contest_menu->Draw();
     $payment_menu->Draw();
 
     if ($action == 'edit') {

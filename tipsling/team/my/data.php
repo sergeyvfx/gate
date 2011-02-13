@@ -31,16 +31,13 @@ ${information}
   <div class="content">
     <?php
     global $DOCUMENT_ROOT, $action, $id;
-    include $DOCUMENT_ROOT . '/tipsling/menu.php';
     include '../menu.php';
-    $contest_menu->SetActive('team');
     $team_menu->SetActive('my');
 
     if ($action == 'create') {
       team_create_received();
     }
 
-    $contest_menu->Draw();
     $team_menu->Draw();
 
     if ($action == 'edit') {
