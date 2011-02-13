@@ -45,7 +45,7 @@ dd_formo('title=Новый платеж;');
     }
 
     if (!isRealNumber(amount)) {
-      alert("В поле \"Сумма платежа\" должно быть положительное число с двумя знаками после запятой");
+      alert("Поле \"Сумма платежа\" заполнено некорректно");
       return;
     }
 
@@ -97,7 +97,7 @@ dd_formo('title=Новый платеж;');
         return;
     }
     if (!isRealNumber(amount)) {
-        show_msg ('amount_check_res', 'err', 'В поле "Сумма платежа" должно быть число с двумя знаками после запятой');
+        show_msg ('amount_check_res', 'err', 'Поле заполненно некорректно');
         return;
     }
 
