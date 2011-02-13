@@ -16,6 +16,8 @@
 . l [url href="$document_root/tipsling/team/my"]Команды[/url]
 . l [url href="$document_root/tipsling/payment/my"]Платежи[/url]
 . [url href="$document_root/tipsling/team/all"]Все команды конкурса[/url]
+. L [url href="$document_root/login"]Войти[/url]
+. l [url href="$document_root/?action=logout"]Выйти[/url]
 + Wiki
 . [url href="$document_root/articles/news"]Новости[/url]
 . [url href="$document_root/articles/rules"]Правила[/url]
