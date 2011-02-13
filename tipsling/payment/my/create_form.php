@@ -14,7 +14,7 @@ if ($PHP_SELF != '') {
 
 global $page;
 
-dd_formo('title=Добавить платеж;');
+dd_formo('title=Новый платеж;');
 ?>
 <script language="JavaScript" type="text/javascript">
   function check(frm) {

@@ -14,7 +14,7 @@ if ($PHP_SELF != '') {
 
 global $page;
 
-dd_formo('title=Добавить команду;');
+dd_formo('title=Новая команда;');
 ?>
 <script language="JavaScript" type="text/javascript">
   function check(frm) {
