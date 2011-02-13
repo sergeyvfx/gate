@@ -162,6 +162,11 @@
           $this->topmenu->AppendItem ('Представиться системе / Зарегистрироваться', config_get ('document-root').'/login?redirect='.get_redirection (), 'logout', 'key.gif');
         }
 
+        if (user_authorized ()) {
+          $u = user_get_by_id(user_id());
+          $this->topmenu->AppendItem ('<b>' . $u['surname'] . ' ' . $u['name'] . ' [' . $u['login'] . ']' . '</b>', '', '', '');
+        }
+
         if (user_access_root ()) {
           if (nav_inside ('/admin')>=0) {
             $this->topmenu->AppendItem ('Основной раздел', config_get ('document-root').'/', 'main', '');
