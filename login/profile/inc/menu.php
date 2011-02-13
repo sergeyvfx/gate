@@ -14,8 +14,8 @@ if ($PHP_SELF != '') {
 }
 
 global $DOCUMENT_ROOT;
-$profile_menu = new CVCMenu ();
-$profile_menu->Init('ProfileTopMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
-$profile_menu->AppendItem('Мой профиль', config_get('document-root') . '/login/profile/info', 'info');
-$profile_menu->AppendItem('Настройки', config_get('document-root') . '/login/profile/settings', 'settings');
+//$profile_menu = new CVCMenu ();
+//$profile_menu->Init('ProfileTopMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
+//$profile_menu->AppendItem('Мой профиль', config_get('document-root') . '/login/profile/info', 'info');
+//$profile_menu->AppendItem('Настройки', config_get('document-root') . '/login/profile/settings', 'settings');
 ?>

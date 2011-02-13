@@ -22,11 +22,8 @@ ${information}
     <?php
     global $DOCUMENT_ROOT;
     if (user_authorized ()) {
-      include $DOCUMENT_ROOT . '/tipsling/menu.php';
       include '../menu.php';
-      $contest_menu->SetActive('team');
       $team_menu->SetActive('all');
-      $contest_menu->Draw();
       $team_menu->Draw();
     }
     $list = team_list('', $sort);

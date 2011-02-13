@@ -27,11 +27,8 @@ ${information}
   <div class="content">
     <?php
     global $DOCUMENT_ROOT;
-    include $DOCUMENT_ROOT . '/tipsling/menu.php';
     include '../menu.php';
-    $contest_menu->SetActive('payment');
     $payment_menu->SetActive('all');
-    $contest_menu->Draw();
     $payment_menu->Draw();
     on_construction();
     ?>

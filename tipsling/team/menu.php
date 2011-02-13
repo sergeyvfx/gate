@@ -15,7 +15,7 @@ if ($PHP_SELF != '') {
 
 global $DOCUMENT_ROOT;
 $team_menu = new CVCMenu ();
-$team_menu->Init('TeamMenu', 'type=hor;colorized=true;sublevel=1;border=thin;');
+$team_menu->Init('TeamMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
 if (is_responsible(user_id())) {
   $team_menu->AppendItem('Мои команды', config_get('document-root') . '/tipsling/team/my', 'my');
 }

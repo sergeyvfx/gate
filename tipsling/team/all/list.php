@@ -11,7 +11,22 @@ if ($PHP_SELF != '') {
   print ('HACKERS?');
   die;
 }
-
+?>
+<div class="f" style="margin: 6px -6px 6px;">
+  <form action="." method="POST" onsubmit="update (); return false;" onkeypress="if (event.keyCode==13) update ();">
+    <b>Варианты сортировки:</b>
+    <table width="100%"><tr>
+        <td>
+          <select id="sortGroup" onchange="update()">
+            <option value="1" <?=($sort == 1) ? ('selected') : ('')?>>По номеру команды</option>
+            <option value="2" <?=($sort == 2) ? ('selected') : ('')?>>По региону</option>
+            <option value="3" <?=($sort == 3) ? ('selected') : ('')?>>По учебному заведению</option>
+          </select>
+        </td>
+      </tr></table>
+  </form>
+</div>
+<?php
 formo('title=Список зарегистрированных команд;');
 ?>
 <script language="JavaScript" type="text/javascript">
@@ -85,21 +100,6 @@ if (count($list) > 0) {
 } else {
   info('Пока что ни одна команда не зарегистрировалась.');
 }
-?>
-<div class="f">
-  <form action="." method="POST" onsubmit="update (); return false;" onkeypress="if (event.keyCode==13) update ();">
-    <b>Варианты сортировки:</b>
-    <table width="100%"><tr>
-        <td>
-          <select id="sortGroup" onchange="update()">
-            <option value="1" <?=($sort == 1) ? ('selected') : ('')?>>По номеру команды</option>
-            <option value="2" <?=($sort == 2) ? ('selected') : ('')?>>По региону</option>
-            <option value="3" <?=($sort == 3) ? ('selected') : ('')?>>По учебному заведению</option>
-          </select>
-        </td>
-      </tr></table>
-  </form>
-</div>
-<?php
+
 formc ();
 ?>
