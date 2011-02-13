@@ -93,8 +93,8 @@ if (count($list) > 0) {
         <td>
           <select id="sortGroup" onchange="update()">
             <option value="1" <?=($sort == 1) ? ('selected') : ('')?>>По номеру команды</option>
-            <option value="2" <?=($sort == 2) ? ('selected') : ('')?>>По региону + номеру команды</option>
-            <option value="3" <?=($sort == 3) ? ('selected') : ('')?>>По региону + населенному пункту + названию учебного заведения + номеру команды</option>
+            <option value="2" <?=($sort == 2) ? ('selected') : ('')?>>По региону</option>
+            <option value="3" <?=($sort == 3) ? ('selected') : ('')?>>По учебному заведению</option>
           </select>
         </td>
       </tr></table>

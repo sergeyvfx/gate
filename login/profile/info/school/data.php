@@ -492,12 +492,6 @@ ${information}
     $profile_menu->Draw();
     $info_menu->Draw();
     $f->Draw();
-    $r = responsible_get_by_id(user_id());
-    $href_string = "<?=config_get('document-root');?>/tipsling/team/my";
     ?>
-      <div style="padding-top: 10px; font-size: 12px; font-style: italic" >
-        <?=($r['school_id']!='' && $r['school_id']!=-1)?'Зарегистрировать команды вы можете <a style="font-size:12px" href="'.$href_string.'">здесь</a>':''
-        ?>
-      </div>
   </div>
 </div>
