@@ -79,6 +79,8 @@
     config_set ('null-email', 'noreply@localhost');
     config_set ('webmaster-email', '');
 
+    config_set ('googleanalytics', false);
+
     config_set ('time-zone', '0500');
 
     config_set ('default-scripts', array ('content.js', 'ipc.js'));
