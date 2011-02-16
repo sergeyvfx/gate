@@ -47,6 +47,31 @@ function tipsling_initialize() {
           'name' => 'TEXT'));
       db_insert ('contest', array('name' => '"Тризформашка-2011"'));
     }
+
+    if (!db_table_exists('timezone')) {
+      db_create_table('timezone', array(
+          'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+          'name' => 'TEXT',
+          'offset' => 'INT'
+      ));
+      db_insert('timezone', array('name' => '"Калининград"', 'offset' => '-1'));
+      db_insert('timezone', array('name' => '"Москва"', 'offset' => '0'));
+      db_insert('timezone', array('name' => '"Самара"', 'offset' => '1'));
+      db_insert('timezone', array('name' => '"Ижевск"', 'offset' => '1'));
+      db_insert('timezone', array('name' => '"Екатеринбург"', 'offset' => '2'));
+      db_insert('timezone', array('name' => '"Пермь"', 'offset' => '2'));
+      db_insert('timezone', array('name' => '"Новосибирск"', 'offset' => '3'));
+      db_insert('timezone', array('name' => '"Омск"', 'offset' => '3'));
+      db_insert('timezone', array('name' => '"Красноярск"', 'offset' => '4'));
+      db_insert('timezone', array('name' => '"Новокузнецк"', 'offset' => '4'));
+      db_insert('timezone', array('name' => '"Иркутск"', 'offset' => '5'));
+      db_insert('timezone', array('name' => '"Якутск"', 'offset' => '6'));
+      db_insert('timezone', array('name' => '"Чита"', 'offset' => '6'));
+      db_insert('timezone', array('name' => '"Хабаровск"', 'offset' => '7'));
+      db_insert('timezone', array('name' => '"Владивосток"', 'offset' => '7'));
+      db_insert('timezone', array('name' => '"Магадан"', 'offset' => '8'));
+      db_insert('timezone', array('name' => '"Петропавловск-Камчатский"', 'offset' => '9'));
+    }
   }
 }
 

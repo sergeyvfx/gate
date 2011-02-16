@@ -30,7 +30,8 @@ function school_initialize() {
         'house' => 'TEXT',
         'building' => 'TEXT',
         'flat' => 'TEXT',
-        'comment' => 'TEXT'));
+        'comment' => 'TEXT',
+        'timezone_id' => 'INT'));
 
     if (!db_table_exists ('school_status')) {
     db_create_table('school_status', array(
