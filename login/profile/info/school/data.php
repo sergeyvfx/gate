@@ -41,7 +41,7 @@ $f = new CVCForm ();
 $f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
 
 if ($action == 'save') {
-  global $name, $school_status, $zipcode, $country, $country_name, $region, $region_name, $area, $area_name, $city_status, $city, $city_name, $street, $house, $building, $flat, $comment;
+  global $name, $school_status, $zipcode, $country, $country_name, $region, $region_name, $area, $area_name, $city_status, $city, $city_name, $street, $house, $building, $flat, $comment, $timezone;
   $name = stripslashes($name);
   $school_status = stripslashes($school_status);
   $zipcode = stripslashes($zipcode);
@@ -57,6 +57,8 @@ if ($action == 'save') {
   $comment = stripslashes($comment);
 
   $arr = array();
+
+  $arr['timezone_id'] = $timezone;
   
   //TODO Add check of all necessary
   if ($name!='')
@@ -261,6 +263,20 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Корпус:</td><td><input id="building" name="building" type="text" class="txt block" value="' . htmlspecialchars($sc['building']) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Квартира:</td><td><input id="flat" name="flat" type="text" class="txt block" value="' . htmlspecialchars($sc['flat']) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Примечание:</td><td><input id="comment" name="comment" type="text" class="txt block" onblur="comment_frm_street ();" value="' . htmlspecialchars($sc['comment']) . '"></td></tr></table><div id="comment_check_res" style="display: none;"></div>'));
+
+$sql = arr_from_query('SELECT * FROM timezone');
+$timezome = '';
+foreach ($sql as $k) {
+  $sign = ($k['offset'] > 0) ? ('+') : ('');
+  if ($sc['timezone_id'] <= 0 || $sc['timezone_id'] == '') {
+    $selected = ($k['name'] == 'Пермь') ? ('selected') : ('');
+  } else {
+    $selected = ($k['id'] == $sc['timezone_id']) ? ('selected') : ('');
+  }
+  $timezome .= '<option value="' . $k['id'] . '" '. $selected . '>' . $k['name'] . ' (' . $sign . $k['offset'] . ')</option>';
+}
+
+$f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Часовой пояс: <span class="error">*</span></td><td><select id="timezone" name="timezone" class="block">'.addslashes($timezome).'</select></td></tr><tr><td width="30%"></td></tr></table>'));
 
 if ($err_string!='')
     $f->AppendCustomField(array('src' => '<div class="txt error">Вы не заполнили следующие обязательные поля: '.stripslashes($err_string).'</div>'));

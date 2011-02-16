@@ -212,6 +212,7 @@
             'access'     => 'INT',
             'email'      => 'TEXT',
             'phone'      => 'TEXT DEFAULT ""',
+            'timezone'   => 'INT',
             'authorized' => 'BOOL',
             'timestamp'  => 'INT DEFAULT 0',
             'last_act'   => 'INT DEFAULT 0',
