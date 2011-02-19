@@ -121,7 +121,8 @@ ${information}
   function update_login_check (http_request) {
     if (http_request.readyState == 4) {
       if (http_request.responseText == '+OK')
-        show_msg ('login_check_res', 'ok', 'Данный логин пользователя является корректным и Вы можете его использовать.'); else
+          hide_msg('login_check_res');
+      else
           show_msg ('login_check_res', 'err', 'Данный логин уже используется и Вы не можете его использовать.');
     }
   }
@@ -129,8 +130,9 @@ ${information}
   function update_email_check (http_request) {
     if (http_request.readyState == 4) {
       if (http_request.responseText == '+OK')
-        show_msg ('email_check_res', 'ok', 'Данный адрес электронной почты пользователя является корректным и Вы можете его использовать.'); else
-          show_msg ('email_check_res', 'err', 'Вы не можете использовать этот адрес электронной почты, так как он уже используется.');
+          hide_msg('email_check_res');
+      else
+        show_msg ('email_check_res', 'err', 'Вы не можете использовать этот адрес электронной почты, так как он уже используется.');
     }
   }
 
@@ -146,8 +148,7 @@ ${information}
       return false;
     }
 
-    hide_msg('login_check_res');
-    //ipc_send_request ('/', 'ipc=check_login&login='+login, update_login_check);
+    ipc_send_request ('/', 'ipc=check_login&login='+login, update_login_check);
   }
 
   function check_frm_email () {
@@ -158,8 +159,7 @@ ${information}
       return false;
     }
 
-    hide_msg('email_check_res');
-    //ipc_send_request ('/', 'ipc=check_email&email='+email, update_email_check);
+    ipc_send_request ('/', 'ipc=check_email&email='+email, update_email_check);
   }
 
   function check_frm_phone () {
@@ -171,7 +171,6 @@ ${information}
     }
 
     hide_msg('phone_check_res');
-    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
   }
 
   function check_frm_surname () {
@@ -183,7 +182,6 @@ ${information}
     }
 
     hide_msg('surname_check_res');
-    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
   }
 
   function check_frm_name () {
@@ -195,7 +193,6 @@ ${information}
     }
 
     hide_msg('name_check_res');
-    //ipc_send_request ('/', 'ipc=check_phone&phone='+phone, update_phone_check);
   }
 </script>
 
