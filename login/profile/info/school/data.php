@@ -199,12 +199,14 @@ if ($countries!=''){
 $query = "select * from `region`";
 $result = db_query($query);
 //TODO: Добавить фильтрацию списка (основная проблема с фильтрацией после смены значения в верхнем комбике
-while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-    //if ($rows['country_id']==$cntr['id'])
-        if ($rows['id']==$sc['region_id'])
-            $regions .= '<option value='.$rows["id"].' selected>'.$rows["name"].'</option> ';
-        else
-            $regions .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';
+while ($rows = mysql_fetch_array($result, MYSQL_ASSOC)) {
+  if ($sc['region_id'] <= 0 || $sc['region_id'] == '') {
+    $selected = ($rows['name'] == 'Пермский край') ? ('selected') : ('');
+  } else {
+    $selected = ($rows['id'] == $sc['region_id']) ? ('selected') : ('');
+  }
+  $regions .= '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
+}
 if ($regions!='') {
     $regions .='<option value="-1">Другой</option>';
     $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onchange="other_region()">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: none; margin-top:3px"></div></td></tr></table><div id="region_check_res" style="display: none;"></div>'));
