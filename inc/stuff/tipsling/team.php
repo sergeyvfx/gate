@@ -63,12 +63,13 @@ if ($_team_included_ != '#team_Included#') {
   function team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment, $update=false, $id=-1) {
     if ($update) {
       $team = team_get_by_id($id);
-      //FIXME
-      if ($team['is_payment'] > 0) {
+      $g = group_get_by_name("Администраторы");
+      $has_access = is_user_in_group(user_id(), $g['id']) || user_access_root();
+      if ($team['is_payment'] > 0 && !$has_access) {
         add_info("Данная команда не доступна для редактирования");
         return false;
       }
-      if ($team['responsible_id'] != user_id()) {
+      if ($team['responsible_id'] != user_id() && !$has_access) {
         add_info('Вы не можете редактировать эту команду');
         return false;
       }
@@ -231,12 +232,13 @@ if ($_team_included_ != '#team_Included#') {
 
   function team_can_delete($id) {
     $team = team_get_by_id($id);
-    //FIXME What about admins?
-    if ($team['is_payment'] > 0) {
+    $g = group_get_by_name("Администраторы");
+    $has_access = is_user_in_group(user_id(), $g['id']) || user_access_root();
+    if ($team['is_payment'] > 0 && !$has_access) {
       add_info("Данную команду нельзя удалить");
       return false;
     }
-    if ($team['responsible_id'] != user_id()) {
+    if ($team['responsible_id'] != user_id() && !$has_access) {
       add_info('Вы не можете удалять эту команду');
       return false;
     }

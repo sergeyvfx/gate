@@ -64,6 +64,9 @@ if (count($list) > 0) {
     $pageid = '&page=' . $page;
   }
 
+  $g = group_get_by_name("Администраторы");
+  $has_access = is_user_in_group(user_id(), $g['id']) || user_access_root();
+
   while ($i < $n) {
     $c = 0;
     $pageSrc = '<table class="list">' . "\n";
@@ -73,7 +76,9 @@ if (count($list) > 0) {
         <th width="10%">Населенный пункт</th>
         <th width="15%">Учитель</th>
         <th width="25%">Участники</th>
-        <th>Статус платежа</th>'; //<th width="48" class="last">&nbsp;</th></tr>' . "\n";
+        <th>Статус платежа</th>' .
+        (($has_access) ? ('<th width="48" class="last">&nbsp;</th>') : (''))
+        . '</tr>' . "\n";
 
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
@@ -91,6 +96,13 @@ if (count($list) > 0) {
               (($it['pupil2_full_name'] == '') ? ('') : (', ' . $it['pupil2_full_name'])) .
               (($it['pupil3_full_name'] == '') ? ('') : (', ' . $it['pupil3_full_name']));
       $payment = (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>'));
+      if ($has_access) {
+        $edit_delete =
+          '<td align="right">' .
+            stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить информацию о команде') .
+            stencil_ibtnav(($d) ? ('cross.gif') : ('cross_d.gif'), ($d) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), 'Удалить команду', 'Удалить эту команду?') .
+          '</td>';
+      }
 
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
               '<td class="n">' . $number . '</td>' .
@@ -100,6 +112,7 @@ if (count($list) > 0) {
               '<td>' . $teacher . '</td>' .
               '<td>' . $pupils . '</td>' .
               '<td>' . $payment . '</td>' .
+              $edit_delete .
               '</tr>' . "\n";
       $c++;
       $i++;
