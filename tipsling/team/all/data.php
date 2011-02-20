@@ -13,7 +13,7 @@ if ($PHP_SELF != '') {
 }
 
 
-global $sort;
+global $sort, $action, $id;
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Все команды</div>
 ${information}
@@ -26,8 +26,19 @@ ${information}
       $team_menu->SetActive('all');
       $team_menu->Draw();
     }
-    $list = team_list('', $sort);
-    include 'list.php';
+    if ($action == 'edit') {
+      include 'edit.php';
+    } else {
+      if ($action == 'save') {
+        team_update_received($id);
+      } else if ($action == 'delete') {
+        team_delete($id);
+      }
+      $list = team_list('', $sort);
+      include 'list.php';
+      //TODO
+//      include 'create_form.php';
+    }
     ?>
   </div>
 </div>
