@@ -100,7 +100,7 @@
     }
 
     function ipc_find_cities(){
-      global $region, $area, $skipId;
+      global $region, $area, $city_status, $skipId;
 
       if ($skipId == '') {
         $skipId = -1;
@@ -110,9 +110,11 @@
       $sc = school_get_by_id($r['school_id']);
 
       if ($area!=NULL && $area>0)
-        $query = 'select * from `city` where `area_id`='.$area;
+        $query = 'select * from `city` where `area_id`='.$area.' and (`status_id` IS NULL or `status_id`='.$city_status.')';
+      else if ($region!=NULL && $region>0)
+        $query = 'select * from `city` where `region_id`='.$region.' and (`status_id` IS NULL or `status_id`='.$city_status.') and (`area_id` IS NULL or `area_id`=-1)';
       else
-        $query = 'select * from `city` where `region_id`='.$region;
+        $query = 'select * from `city` where `status_id`=NULL or `status_id`='.$city_status;
       $result = db_query($query);
 
       while($rows = mysql_fetch_array($result, MYSQL_ASSOC)){
