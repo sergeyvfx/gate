@@ -73,7 +73,7 @@ if ($action == 'save') {
     $arr['zipcode'] = db_string($zipcode);
   else
     $err_string=$err_string==''?'Индекс':$err_string.', Индекс';
-
+  
   if ($country>0)
     $arr['country_id'] = (int)$country;
   else if ($country_name!='')
@@ -125,7 +125,7 @@ if ($action == 'save') {
   }
   else
       $arr['area_id'] = $area;
-
+  
   if ($city>0)
     $arr['city_id'] = (int)$city;
   else if ($city_name!='')
