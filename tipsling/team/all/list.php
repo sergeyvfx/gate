@@ -14,16 +14,27 @@ if ($PHP_SELF != '') {
 ?>
 <div class="f" style="margin: 6px -6px 6px;">
   <form action="." method="POST" onsubmit="update (); return false;" onkeypress="if (event.keyCode==13) update ();">
-    <b>Варианты сортировки:</b>
-    <table width="100%"><tr>
+    <table width="100%">
+      <tr>
         <td>
+          <b>Варианты сортировки: &nbsp;</b>
           <select id="sortGroup" onchange="update()">
             <option value="1" <?=($sort == 1) ? ('selected') : ('')?>>По номеру команды</option>
             <option value="2" <?=($sort == 2) ? ('selected') : ('')?>>По региону</option>
             <option value="3" <?=($sort == 3) ? ('selected') : ('')?>>По учебному заведению</option>
           </select>
         </td>
-      </tr></table>
+        <td style="text-align: right; padding-right: 5px;">
+          <b>
+            <?php
+              if (count($list) > 0) {
+                print "Всего команд: " . count($list);
+              }
+            ?>
+          </b>
+        </td>
+      </tr>
+    </table>
   </form>
 </div>
 <?php
