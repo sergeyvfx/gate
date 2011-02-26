@@ -264,20 +264,22 @@ if ($region!=-1)
 else
     $query = "select * from `area`";
 $result = db_query($query);
-while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-    if ($rows['region_id']==$sc['region_id'] || $sc==''){
-        if ($area==-1)
-            $area=$rows['id'];
-        if ($rows['id']==$sc['area_id']){
-            $areas .= '<option value='.$rows["id"].' selected>'.$rows["name"].'</option> ';
-            $area = $rows['id'];
-        }
-        else
-            $areas .= '<option value='.$rows["id"].'>'.$rows["name"].'</option>';
+while ($rows = mysql_fetch_array($result, MYSQL_ASSOC)) {
+  if ($rows['region_id'] == $sc['region_id'] || $sc == '') {
+    if ($area == -1) {
+      $area = $rows['id'];
     }
-if ($areas!='' && $sc['area_id']!=-1){
-        $areas .='<option value="-1">Другой</option>';
-    $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">'.addslashes($areas).'</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display: none; margin-top:3px"></div></td></tr></table>'));
+    if ($rows['id'] == $sc['area_id']) {
+      $areas .= '<option value=' . $rows["id"] . ' selected>' . $rows["name"] . '</option> ';
+      $area = $rows['id'];
+    } else {
+      $areas .= '<option value=' . $rows["id"] . '>' . $rows["name"] . '</option>';
+    }
+  }
+}
+if ($areas!='' && !($sc['area_id'] <= 0 || $sc['area_id'] == '')){
+  $areas .='<option value="-1">Другой</option>';
+  $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">' . addslashes($areas) . '</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display: none; margin-top:3px"></div></td></tr></table>'));
 } else {
     $area=-1;
     $areas .='<option value="-1" selected>Другой</option>';
