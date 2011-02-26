@@ -106,7 +106,7 @@ if ($action == 'save') {
   }
   else
     $err_string=$err_string==''?'Регион':$err_string.', Регион';
-
+  
   if ($area>0)
     $arr['area_id'] = (int)$area;
   else if ($area_name!='')
@@ -249,7 +249,6 @@ while ($rows = mysql_fetch_array($result, MYSQL_ASSOC)) {
     }
     $regions .= '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
   }
-  $regions .= '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
 }
 if ($regions!='') {
     $regions .='<option value="-1">Другой</option>';
