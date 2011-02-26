@@ -9,3 +9,8 @@ devel
 .htaccess
 nbproject
 *.patch
+redmine
+rm
+favicon.ico
+robots.txt
+yandex_*
