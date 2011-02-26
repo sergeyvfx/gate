@@ -18,7 +18,7 @@ if ($IFACE != "SPAWNING NEW IFACE" || $_GET['IFACE'] != '') {
 function is_bookkeeper($id) {
   $id = user_id();
   $g = group_get_by_name("Бухгалтеры");
-  return is_user_in_group($id, $g['id']) || user_is_system($id);
+  return is_user_in_group($id, $g['id']);
 }
 
 ?>

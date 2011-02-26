@@ -30,7 +30,9 @@ ${information}
     include '../menu.php';
     $payment_menu->SetActive('all');
     $payment_menu->Draw();
-    on_construction();
+
+    $list = payment_list();
+    include 'list.php';
     ?>
   </div>
 </div>
