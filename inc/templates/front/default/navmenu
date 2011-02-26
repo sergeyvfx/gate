@@ -20,4 +20,10 @@
 . l [url href="$document_root/?action=logout"]Выйти[/url]
 + Wiki
 . [url href="$document_root/articles/news"]Новости[/url]
-. [url href="$document_root/articles/rules"]Правила[/url]
+. [url href="$document_root/articles/regrules"]Правила регистрации[/url]
+. [url href="$document_root/articles/rules"]Правила сайта[/url]
+. [url href="$document_root/articles/docs"]Документы[/url]
+. [url href="$document_root/articles/docs/regulations"]Положение о конкурсе[/url]
+. [url href="$document_root/articles/history"]История Тризформашки[/url]
+. [url href="$document_root/articles/archive"]Прошлые конкурсы[/url]
+. [url href="$document_root/articles/contacts"]Контакты[/url]
