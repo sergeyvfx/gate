@@ -909,11 +909,12 @@
 
         $list = $this->GetList ();
         $n = count ($list);
-        $pageCount = ceil ($n/$perPage);
-      
+
         if ($perPage <= 0) {
           return $list;
         }
+
+        $pageCount = ceil ($n/$perPage);
 
         if ($pageCount <= 0) {
           return array ();
