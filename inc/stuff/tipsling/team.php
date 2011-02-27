@@ -230,6 +230,12 @@ if ($_team_included_ != '#team_Included#') {
     }
   }
 
+  function team_update_is_payment($id, $payment_id, $is_payment) {
+    $update = array('payment_id' => $payment_id, 'is_payment' => $is_payment);
+
+    db_update('team', $update, "`id`=$id");
+  }
+
   function team_can_delete($id) {
     $team = team_get_by_id($id);
     $g = group_get_by_name("Администраторы");

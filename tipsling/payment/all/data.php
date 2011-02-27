@@ -26,13 +26,20 @@ ${information}
 <div class="form">
   <div class="content">
     <?php
-    global $DOCUMENT_ROOT;
+    global $DOCUMENT_ROOT, $action, $id;
     include '../menu.php';
     $payment_menu->SetActive('all');
     $payment_menu->Draw();
 
-    $list = payment_list();
-    include 'list.php';
+    if ($action == 'edit') {
+      include 'edit.php';
+    } else {
+      if ($action == 'save') {
+        payment_apply($id);
+      }
+      $list = payment_list();
+      include 'list.php';
+    }
     ?>
   </div>
 </div>

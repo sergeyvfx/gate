@@ -35,29 +35,27 @@ if (count($list) > 0) {
   while ($i < $n) {
     $c = 0;
     $pageSrc = '<table class="list">' . "\n";
-    $pageSrc .= '<tr class="h"><th class="n first">Дата платежа</th>
-        <th width="20%">Номер чек-ордера</th>
-        <th width="25%">Плательщик</th>
-        <th width="10%">Сумма</th>
+    $pageSrc .= '<tr class="h"><th width="150" style="text-align: center;">Дата платежа</th>
+        <th style="text-align: center;">Номер чек-ордера</th>
+        <th style="text-align: center;">Плательщик</th>
+        <th style="text-align: center;">Сумма</th>
+        <th width="150" style="text-align: center;" align="right">Дата поступления</th>
         <th width="48" class="last">&nbsp;</th></tr>' . "\n";
 
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
       //TODO Check is contest running or archive
-      $tc = teams_count_is_payment($it['id']);
-      $d = 1;
-      if ($tc > 0) {
-        $d = 0;
-      }
+      $d = $it['date_arrival'] == null ? (1) : (0);
       $amount = $it['amount'];
       if (!preg_match('/\./', $amount)) {
         $amount = $amount . '.00';
       }
       $amount = $amount . ' руб.';
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">' . date_format(date_create($it['date']), 'd.m.Y') . '</a></td>' .
+      '<td class="n">' . (($d) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')) . date_format(date_create($it['date']), 'd.m.Y') . (($d) ? ('</a>') : ('')) . '</td>' .
       '<td>' . $it['cheque_number'] . '</td>' .
       '<td>' . $it['payer_full_name'] . '<td align="right">' . $amount . '</td>' .
+      '<td style="text-align: center;">' . (($d) ? ('<span style="color: red">Не поступил</span>') : ('<span style="color: green">' . date_format(date_create($it['date_arrival']), 'd.m.Y') . '</span>')) . '</td>' .
       '<td align="right">' .
         stencil_ibtnav((($d) ? 'edit.gif' : 'edit_d.gif'), (($d) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : ''), 'Изменить информацию о платеже') .
         stencil_ibtnav((($d) ? 'cross.gif' : 'cross_d.gif'), (($d) ? '?action=delete&id=' . $it['id'] . '&' . $pageid : ''), 'Удалить платеж', 'Удалить этот платеж?') .
