@@ -17,10 +17,6 @@ formo('title=Редактирование платежа;');
 
 $payment = payment_get_by_id($id);
 
-if ($payment['date_arrival'] != null) {
-  print (content_error_page(403));
-  return;
-}
 ?>
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
@@ -117,58 +113,84 @@ if ($payment['date_arrival'] != null) {
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
   <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
-                Дата платежа: <span class="error">*</span>
+                Дата платежа:
             </td>
             <td style="padding: 0 2px;">
-                <?= calendar('date', htmlspecialchars($payment['date'])) ?>
+                <?= date_format(date_create($payment['date']), 'd.m.Y'); ?>
             </td>
         </tr>
     </table>
-    <div id="date_check_res" style="display: none;"></div>
     <div id="hr"></div>
     <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
-                Номер чека-ордера: <span class="error">*</span>
+                Номер чека-ордера:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" id="cheque_number" name="cheque_number" onblur="check_frm_cheque ();" value="<?= htmlspecialchars(stripslashes($payment['cheque_number'])); ?>" class="txt block">
+                <?= htmlspecialchars(stripslashes($payment['cheque_number'])); ?>
             </td>
         </tr>
     </table>
-    <div id="cheque_check_res" style="display: none;"></div>
     <div id="hr"></div>
     <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
-                Полное имя плательщика: <span style="color: red">*</span>
+                Полное имя плательщика:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" id="payer_full_name" name="payer_full_name" onblur="check_frm_payer ();" value="<?= htmlspecialchars(stripslashes($payment['payer_full_name'])); ?>" class="txt block">
+                <?= htmlspecialchars(stripslashes($payment['payer_full_name'])); ?>
             </td>
         </tr>
     </table>
-    <div id="payer_check_res" style="display: none;"></div>
     <div id="hr"></div>
     <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
-                Сумма платежа: <span style="color: red">*</span>
+                Сумма платежа:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" id="amount" name="amount" onblur="check_frm_amount ();" value="<?= htmlspecialchars(stripslashes($payment['amount'])); ?>" class="txt block">
+                <?= htmlspecialchars(stripslashes($payment['amount'])); ?>
             </td>
         </tr>
     </table>
-    <div id="amount_check_res" style="display: none;"></div>
     <div id="hr"></div>
     <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
                 Примечание:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" id="comment" name="comment" onblur="check_frm_comment ();" value="<?= htmlspecialchars(stripslashes($payment['comment'])); ?>" class="txt block">
+                <?= htmlspecialchars(stripslashes($payment['comment'])); ?>
             </td>
         </tr>
     </table>
-    <div id="comment_check_res" style="display: none;"></div>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+      <tr><td width="30%" style="padding: 0 2px;">
+          Дата поступления платежа: <span class="error">*</span>
+        </td>
+        <td style="padding: 0 2px;">
+          <?= calendar('date_arrival', htmlspecialchars($payment['date_arrival'])) ?>
+        </td>
+      </tr>
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+      <tr><td width="30%" style="padding: 0 2px;">
+          Команды: <span class="error">*</span>
+        </td>
+        <td style="padding: 0 2px;">
+          <?php
+          $responsible_id = $payment['responsible_id'];
+          $teams = arr_from_query("SELECT * FROM `team` WHERE `team`.`is_payment`=0 ORDER BY `team`.`grade`, `team`.`number`");
+          foreach ($teams as $team) {
+          ?>
+              <input type="checkbox" name=<?="team_".$team['id']?> value=<?="team_".$team['id']?>>
+              <?=$team['grade'] . '.' . $team['number']?>
+              <div id="hr"></div>
+          <?php
+          }
+          ?>
+        </td>
+      </tr>
+    </table>
+    <div id="hr"></div>
   <div class="formPast">
     <button class="submitBtn" type="button" onclick="nav ('.?<?= (($page != '') ? ('&page=' . $page) : ('')); ?>');">Назад</button>
     <button class="submitBtn" type="submit">Сохранить</button>

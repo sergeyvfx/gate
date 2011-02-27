@@ -15,6 +15,11 @@ if ($PHP_SELF != '') {
 if (!user_authorized ()) {
   header('Location: ../../../login');
 }
+
+if (!is_responsible(user_id())) {
+  print (content_error_page(403));
+  return;
+}
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/payment" ?>">Платежи</a>Мои платежи</div>
 ${information}

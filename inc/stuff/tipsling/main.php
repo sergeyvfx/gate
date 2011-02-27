@@ -37,6 +37,7 @@ function tipsling_initialize() {
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
         'responsible_id' => 'INT',
         'date' => 'DATE',
+        'date_arrival' => 'DATE',
         'cheque_number' => 'TEXT',
         'payer_full_name' => 'TEXT',
         'amount' => 'DOUBLE',
