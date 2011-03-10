@@ -24,7 +24,7 @@ if ($_payment_included_ != '#payment_Included#') {
     }
 
     if ($responsible_id < 0) {
-      return arr_from_query('SELECT * FROM `payment` ORDER BY `date`');
+      return arr_from_query('SELECT * FROM `payment` ORDER BY `date_arrival`, `date`');
     }
 
     return arr_from_query('SELECT `payment`.* FROM `payment` ' .
@@ -37,9 +37,9 @@ if ($_payment_included_ != '#payment_Included#') {
    */
   function payment_check_fields($date, $cheque_number, $payer_full_name, $amount, $comment, $update = false, $id = -1) {
     if ($update) {
-      $tc = teams_count_is_payment($id);
+      $p = payment_get_by_id($id);
       $b = group_get_by_name("Бухгалтеры");
-      if ($tc > 0 && !is_user_in_group(user_id(), $b['id'])) {
+      if ($p['date_arrival'] != null && !is_user_in_group(user_id(), $b['id'])) {
         add_info("Данный платеж не доступен для редактирования");
         return false;
       }
@@ -161,6 +161,18 @@ if ($_payment_included_ != '#payment_Included#') {
     if (payment_update($id, $date, $cheque_number, $payer_full_name, $amount, $comment)) {
       $_POST = array();
     }
+  }
+
+  function payment_apply($id) {
+    $date_arrival = stripslashes(trim($_POST['date_arrival']));
+    foreach ($_POST as $p) {
+      if (preg_match("/^team_(?P<id>\d+)$/", $p, $t) > 0) {
+        team_update_is_payment($t['id'], $id, 1);
+      }
+    }
+    $date_arrival = db_string(date('Y-m-d H:i:s', strtotime($date_arrival)));
+    $update = array('date_arrival' => $date_arrival);
+    db_update('payment', $update, "`id`=$id");
   }
 
   function payment_can_delete($id) {

@@ -13,7 +13,7 @@ if ($PHP_SELF != '') {
   die;
 }
 
-formo('title=Список моих платежей;');
+formo('title=Список всех платежей;');
 
 if (count($list) > 0) {
   global $page;
@@ -52,13 +52,13 @@ if (count($list) > 0) {
       }
       $amount = $amount . ' руб.';
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n">' . (($d) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')) . date_format(date_create($it['date']), 'd.m.Y') . (($d) ? ('</a>') : ('')) . '</td>' .
+      '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">' . date_format(date_create($it['date']), 'd.m.Y') . '</a></td>' .
       '<td>' . $it['cheque_number'] . '</td>' .
       '<td>' . $it['payer_full_name'] . '<td align="right">' . $amount . '</td>' .
       '<td style="text-align: center;">' . (($d) ? ('<span style="color: red">Не поступил</span>') : ('<span style="color: green">' . date_format(date_create($it['date_arrival']), 'd.m.Y') . '</span>')) . '</td>' .
       '<td align="right">' .
-        stencil_ibtnav((($d) ? 'edit.gif' : 'edit_d.gif'), (($d) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : ''), 'Изменить информацию о платеже') .
-        stencil_ibtnav((($d) ? 'cross.gif' : 'cross_d.gif'), (($d) ? '?action=delete&id=' . $it['id'] . '&' . $pageid : ''), 'Удалить платеж', 'Удалить этот платеж?') .
+        stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить информацию о платеже') .
+        stencil_ibtnav('cross.gif', '?action=delete&id=' . $it['id'] . '&' . $pageid, 'Удалить платеж', 'Удалить этот платеж?') .
       '</td></tr>' . "\n";
       $c++;
       $i++;
@@ -68,7 +68,7 @@ if (count($list) > 0) {
   }
   $pages->Draw();
 } else {
-  info('У Вас пока что нет платежей. Но Вы можете их добавить.');
+  info('Список платежей пуст');
 }
 
 formc ();
