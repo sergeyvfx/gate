@@ -178,7 +178,7 @@ $payment = payment_get_by_id($id);
         <td style="padding: 0 2px;">
           <?php
           $responsible_id = $payment['responsible_id'];
-          $teams = arr_from_query("SELECT * FROM `team` WHERE `team`.`is_payment`=0 ORDER BY `team`.`grade`, `team`.`number`");
+          $teams = arr_from_query("SELECT * FROM `team` WHERE `team`.`is_payment`=0 AND `team`.`responsible_id`=" . $responsible_id . " ORDER BY `team`.`grade`, `team`.`number`");
           foreach ($teams as $team) {
           ?>
               <input type="checkbox" name=<?="team_".$team['id']?> value=<?="team_".$team['id']?>>
