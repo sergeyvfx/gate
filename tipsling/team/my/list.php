@@ -47,14 +47,15 @@ if (count($list) > 0) {
       //TODO Check is contest running or archive
       $ps = $it['is_payment'];
       $d = !$ps;
+      $reg_off = opt_get('reg_off');
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
       '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">'.$it['grade'].'.'. $it['number'] . '</a></td>' .
       '<td>' . $it['teacher_full_name'] . '</td><td>' . $it['pupil1_full_name'] . '</td>' .
       '<td>' . $it['pupil2_full_name'] . '<td>' . $it['pupil3_full_name'] . '</td>' .
       '<td>' . (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>')) . '</td>' .
       '<td align="right">' .
-        stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить информацию о команде') .
-        stencil_ibtnav(($d) ? ('cross.gif') : ('cross_d.gif'), ($d) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), 'Удалить команду', 'Удалить эту команду?') .
+        stencil_ibtnav((!$reg_off) ? 'edit.gif' : 'edit_d.gif', (!$reg_off) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : '', (!$reg_off) ? 'Изменить информацию о команде' : '') .
+        stencil_ibtnav(($d && !$reg_off) ? ('cross.gif') : ('cross_d.gif'), ($d && !$reg_off) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), ($d && !$reg_off) ? 'Удалить команду' : '', 'Удалить эту команду?') .
       '</td></tr>' . "\n";
       $c++;
       $i++;

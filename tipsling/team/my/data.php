@@ -22,7 +22,7 @@ if (!is_responsible(user_id())) {
 }
 
 if (!is_responsible_has_school(user_id())) {
-  redirect (config_get('document-root') . '/login/profile/info/school/?noschool=1');
+  redirect(config_get('document-root') . '/login/profile/info/school/?noschool=1');
 }
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Мои команды</div>
@@ -34,19 +34,21 @@ ${information}
     include '../menu.php';
     $team_menu->SetActive('my');
 
-    if ($action == 'create') {
+    if ($action == 'create' && !opt_get('reg_off')) {
       team_create_received();
     }
 
     $team_menu->Draw();
 
-    if ($action == 'edit') {
+    if ($action == 'edit' && !opt_get('reg_off')) {
       include 'edit.php';
     } else {
-      if ($action == 'save') {
-        team_update_received($id);
-      } else if ($action == 'delete') {
-        team_delete($id);
+      if (!opt_get('reg_off')) {
+        if ($action == 'save') {
+          team_update_received($id);
+        } else if ($action == 'delete') {
+          team_delete($id);
+        }
       }
       $r = responsible_get_by_id(user_id());
       if ($r['school_id'] > 0 || user_is_system(user_id())) {
@@ -54,9 +56,11 @@ ${information}
         $list = team_list(user_id());
         include 'list.php';
 
-        include 'create_form.php';
+        if (!opt_get('reg_off')) {
+          include 'create_form.php';
+        }
       } else {
-        info ('Вы должны сначала заполнить информацию о учебном заведении <a href="' . config_get('document-root') .  '/login/profile/info/school/">здесь</a>.');
+        info('Вы должны сначала заполнить информацию о учебном заведении <a href="' . config_get('document-root') . '/login/profile/info/school/">здесь</a>.');
       }
     }
     ?>
