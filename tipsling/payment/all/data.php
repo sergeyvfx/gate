@@ -36,6 +36,8 @@ ${information}
     } else {
       if ($action == 'save') {
         payment_apply($id);
+      } else if ($action == 'delete') {
+        payment_delete($id);
       }
       $list = payment_list();
       include 'list.php';
