@@ -66,6 +66,7 @@
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Количество записей на странице &laquo;Пользователи и группы&raquo;"', 'ident'=>'"user_count"', 'class'=>'"CSCNumber"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:2:"15";}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Блокировать сайт"',  'ident'=>'"site_lock"', 'class'=>'"CSCCheckBox"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";b:0;}').'"', 'used'=>'1'));
           db_insert ('settings', array ('section'=>'"Системные"', 'name'=>'"Стартовый каталог"', 'ident'=>'"start_root"', 'class'=>'"CSCText"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";s:1:"/";}').'"',  'used'=>'1'));
+          db_insert ('settings', array ('section'=>'"Тризформашка"', 'name'=>'"Регистрация закрыта"', 'ident'=>'"reg_off"', 'class'=>'"CSCCheckBox"', 'settings'=>'"'.addslashes ('a:1:{s:5:"value";b:0;}').'"', 'used'=>'1'));
         }
 
         db_create_table_safe ('storage', array (
