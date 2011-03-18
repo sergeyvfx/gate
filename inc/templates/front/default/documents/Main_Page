@@ -14,7 +14,20 @@
           </div>
         </div>
       </td>
-      <td>&nbsp;</td>
+      <td style="padding: 8px 0;">
+        <div style="background: #f9f9f9; padding: 8px; border: 1px #eee solid; margin-left: 8px;">
+          <div style="width: 60%; background-color: #fff; padding: 4px 0;">
+          <table class="clear" width="100%"><tr>
+          <td style="text-align: left; padding-left: 16px;">
+            <h3>Финансовая поддержка конкурса</h3>
+          </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><img src="<?=config_get ('document-root');?>/adv/ppk.gif"></td>
+          </tr></table>
+          </div>
+        </div>
+      </td>
     </tr>
   </table>
 </div>
