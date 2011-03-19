@@ -61,8 +61,7 @@ ${information}
           $text = '<span style="color: green">';
           $time = $s["time"];
           $time = preg_replace('/:[0-9]{2}$/i', '', $time);
-          $size = $s["size"];
-          $size /= 1024;
+          $size = round($s["size"] / 1024);
           $text .= $time . '<br>' . $size . ' KB';
           $text .= '</span>';
           $j++;
