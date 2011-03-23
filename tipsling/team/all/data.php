@@ -30,7 +30,8 @@ ${information}
       include 'edit.php';
     } else {
       if ($action == 'save') {
-        team_update_received($id);
+        $t = team_get_by_id($id);
+        team_update_received($id, $t['is_payment']);
       } else if ($action == 'delete') {
         team_delete($id);
       }
