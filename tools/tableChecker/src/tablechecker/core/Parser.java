@@ -90,6 +90,7 @@ public class Parser {
         Cell c = new Cell(data, rowCount, colCount[0], spanRow, spanCol, null);
         c.setHAlignment(ha);
         c.setVAlignment(va);
+        c.setType(Type.DATA);
         cells.add(c);
         colCount[0]++;
 
@@ -134,15 +135,45 @@ public class Parser {
     return result;
   }
 
+  private int rowCount(List<Cell> col) {
+    int result = 0;
+    for (Cell c : col) {
+      if (c.getType() != Type.HEAD
+              && (c.getTopLeftCell() == null
+              || c.getTopLeftCell().getSpanRow() == 1)) {
+        result++;
+      }
+    }
+    return result;
+  }
+
   private void formatTable(Table table) {
     //Выделяем головку
+    int headSize = 0;
     for (ArrayList<Cell> row : table.getRows()) {
       int colCount = columnCount(row);
       if (colCount <= table.getColumnCount()) {
+        headSize++;
         for (Cell c : row) {
           c.setType(Type.HEAD);
         }
         if (colCount == table.getColumnCount()) {
+          break;
+        }
+      }
+    }
+
+    //Выделяем боковик
+    int rowCountWithOutHead = table.getRowCount() - headSize;
+    for (ArrayList<Cell> col : table.getColumns()) {
+      int rowCount = rowCount(col);
+      if (rowCount <= rowCountWithOutHead) {
+        for (Cell c : col) {
+          if (c.getType() != Type.HEAD) {
+            c.setType(Type.STUD);
+          }
+        }
+        if (rowCount == rowCountWithOutHead) {
           break;
         }
       }
