@@ -28,7 +28,7 @@ public class Cell {
   private String data; // Данные
   private HAlignment ha; // Тип выравнивание по горизотали
   private VAlignment va; // Тип выравнивания по вертикали
-  private int type; // Тип ячейки (Головка, Боковик, Прографка)
+  private Type type; // Тип ячейки (Головка, Боковик, Прографка)
   private int row; // Номер строки в которой содержится ячейка
   private int column; // Номер столбца в котором содержится ячейка
   private int tier; // Ярус ячейки
@@ -64,11 +64,11 @@ public class Cell {
     this.va = alignment;
   }
 
-  public int getType() {
+  public Type getType() {
     return type;
   }
 
-  public void setType(int type) {
+  public void setType(Type type) {
     this.type = type;
   }
 

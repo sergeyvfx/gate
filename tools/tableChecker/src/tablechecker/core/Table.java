@@ -46,6 +46,10 @@ public class Table {
   public ArrayList<ArrayList<Cell>> getColumns() {
     return columns;
   }
+  
+  public int getColumnCount() {
+    return columns.size();
+  }
 
   public Cell getCell(int row, int col) {
     for (Cell c : cells) {

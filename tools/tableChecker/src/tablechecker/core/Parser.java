@@ -7,6 +7,7 @@ import java.util.List;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+import tablechecker.core.Cell.Type;
 
 public class Parser {
 
@@ -23,29 +24,29 @@ public class Parser {
    * @param rowCount - номер текущей строки
    * @param colCount - номер текущего столбца
    */
-  private void addJoinCells(List<Cell> joinCells, List<Cell> cells, int rowCount, Integer colCount) {
+  private void addJoinCells(List<Cell> joinCells, List<Cell> cells, int rowCount, int[] colCount) {
     boolean flag = true;
 
     while (flag) {
-      int oldColCount = colCount;
+      int oldColCount = colCount[0];
 
       for (Cell c : joinCells) {
         if (rowCount >= c.getRow()
                 && rowCount < c.getRow() + c.getSpanRow()
-                && colCount >= c.getColumn()
-                && colCount < c.getColumn() + c.getSpanColumn()
+                && colCount[0] >= c.getColumn()
+                && colCount[0] < c.getColumn() + c.getSpanColumn()
                 && (rowCount != c.getRow()
-                || colCount != c.getColumn())) {
+                || colCount[0] != c.getColumn())) {
           //Ячейка находится в объединенной области и не является левым верхним углом
           //Добавляем ее к строке, изменяем текущий столбец
-          Cell inCell = new Cell(null, rowCount, colCount, 0, 0, c);
+          Cell inCell = new Cell(null, rowCount, colCount[0], 0, 0, c);
           cells.add(inCell);
-          colCount++;
+          colCount[0]++;
           break;
         }
       }
 
-      flag = !(oldColCount == colCount);
+      flag = !(oldColCount == colCount[0]);
     }
   }
 
@@ -58,7 +59,7 @@ public class Parser {
    */
   private List<Cell> parseRow(List<TagNode> nodes, int rowCount, List<Cell> joinCells) {
     ArrayList<Cell> cells = new ArrayList<Cell>();
-    Integer colCount = new Integer(0);
+    int[] colCount = new int[1];
 
     addJoinCells(joinCells, cells, rowCount, colCount);
 
@@ -86,11 +87,11 @@ public class Parser {
           va = Cell.VAlignment.valueOf(n.getAttributeByName("valign").toUpperCase());
         } catch (Exception ex) {
         }
-        Cell c = new Cell(data, rowCount, colCount, spanRow, spanCol, null);
+        Cell c = new Cell(data, rowCount, colCount[0], spanRow, spanCol, null);
         c.setHAlignment(ha);
         c.setVAlignment(va);
         cells.add(c);
-        colCount++;
+        colCount[0]++;
 
         if (spanCol > 1 || spanRow > 1) {
           joinCells.add(c);
@@ -122,9 +123,30 @@ public class Parser {
     }
   }
 
+  private int columnCount(List<Cell> row) {
+    int result = 0;
+    for (Cell c : row) {
+      if (c.getTopLeftCell() == null
+              || c.getTopLeftCell().getSpanColumn() == 1) {
+        result++;
+      }
+    }
+    return result;
+  }
+
   private void formatTable(Table table) {
-    //TODO Здесь мы должны пробежаться по созданной таблице и выделить головку
-    //и боковик
+    //Выделяем головку
+    for (ArrayList<Cell> row : table.getRows()) {
+      int colCount = columnCount(row);
+      if (colCount <= table.getColumnCount()) {
+        for (Cell c : row) {
+          c.setType(Type.HEAD);
+        }
+        if (colCount == table.getColumnCount()) {
+          break;
+        }
+      }
+    }
   }
 
   /**
