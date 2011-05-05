@@ -9,24 +9,30 @@ public class Cell {
     DATA // Прографка
   };
 
-  public enum Alignment {
+  public enum HAlignment {
 
     LEFT, // По левому краю
     RIGHT, // По правому краю
     CENTER, // По центру
-    JUSTIFIED, // По ширине
+    JUSTIFY // По ширине
+  };
+
+  public enum VAlignment {
+
     TOP, // По верхнему краю
     BOTTOM, // По нижнему краю
-    DIGIT // По разрядам
+    MIDDLE, // По середине
+    BASELINE // Выравнивание по базовой линии
   };
 
   private String data; // Данные
-  private int alignment;
+  private HAlignment ha; // Тип выравнивание по горизотали
+  private VAlignment va; // Тип выравнивания по вертикали
   private int type; // Тип ячейки (Головка, Боковик, Прографка)
   private int row; // Номер строки в которой содержится ячейка
   private int column; // Номер столбца в котором содержится ячейка
   private int tier; // Ярус ячейки
-  private int spanRow; // Протяженность по сроке
+  private int spanRow; // Протяженность по строкам
   private int spanColumn; // Протяженность по столбцам
   private Cell topLeftCell; // Левая верхняя ячейка, если данная ячейка находится в объединенной области
 
@@ -42,12 +48,20 @@ public class Cell {
     this.topLeftCell = topLeftCell;
   }
 
-  public int getAlignment() {
-    return alignment;
+  public HAlignment getHAlignment() {
+    return ha;
   }
 
-  public void setAlignment(int alignment) {
-    this.alignment = alignment;
+  public void setHAlignment(HAlignment alignment) {
+    this.ha = alignment;
+  }
+
+  public VAlignment getVAlignment() {
+    return va;
+  }
+
+  public void setVAlignment(VAlignment alignment) {
+    this.va = alignment;
   }
 
   public int getType() {

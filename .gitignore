@@ -9,3 +9,6 @@ devel
 .htaccess
 nbproject
 *.patch
+*.class
+tools/tableChecker/build
+tools/tableChecker/dist

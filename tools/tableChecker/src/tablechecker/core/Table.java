@@ -1,14 +1,15 @@
 package tablechecker.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Table {
 
   private String number; // Номер таблицы
   private String title; // Заголовок таблицы
-  private ArrayList<Cell> cells; // Все ячейки таблицы
-  private ArrayList<ArrayList<Cell>> rows; // Строки таблицы
-  private ArrayList<ArrayList<Cell>> columns; // Столбцы таблицы
+  private ArrayList<Cell> cells = new ArrayList<Cell>(); // Все ячейки таблицы
+  private ArrayList<ArrayList<Cell>> rows = new ArrayList<ArrayList<Cell>>(); // Строки таблицы
+  private ArrayList<ArrayList<Cell>> columns = new ArrayList<ArrayList<Cell>>(); // Столбцы таблицы
 
   public Table() {
   }
@@ -45,10 +46,41 @@ public class Table {
   public ArrayList<ArrayList<Cell>> getColumns() {
     return columns;
   }
-  
+
+  public Cell getCell(int row, int col) {
+    for (Cell c : cells) {
+      if (c.getRow() == row && c.getColumn() == col) {
+        return c;
+      }
+    }
+    return null;
+  }
+
+  public boolean isCell(int row, int col) {
+    return getCell(row, col) != null;
+  }
+
   public void addCell(Cell c) {
-    // TODO Проверить существует ли такая ячейка в таблице уже
+    int row = c.getRow();
+    int col = c.getColumn();
+    if (isCell(row, col)) {
+      //TODO Сгенерировать исключение: такая ячейка уже существует.
+      return;
+    }
     cells.add(c);
-    // TODO Добавить ячейки в соответствующую строку и столбец
+    if (rows.size() - 1 < row) {
+      rows.add(row, new ArrayList<Cell>());
+    }
+    rows.get(row).add(c);
+    if (columns.size() - 1 < col) {
+      columns.add(col, new ArrayList<Cell>());
+    }
+    columns.get(col).add(c);
+  }
+
+  public void addCells(List<Cell> cells) {
+    for (Cell c : cells) {
+      addCell(c);
+    }
   }
 }
