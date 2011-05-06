@@ -109,7 +109,7 @@ public class Parser {
    * @param table - Таблица для заполнения
    * @param nodes - Список тегов для парсинга
    */
-  private void parseTable(Table table, List<TagNode> nodes) {
+  private void parseTable(Table table, List<TagNode> nodes, List<String> pList) {
     int rowCount = 0;
     List<Cell> joinCells = new ArrayList<Cell>();
     while (nodes.size() > 0) {
@@ -121,6 +121,13 @@ public class Parser {
       } else {
         nodes.addAll(0, n.getChildTagList());
       }
+    }
+    //Распознавание номера и заголовка таблицы
+    if (pList.size() >= 1) {
+      table.setTitle(pList.remove(pList.size() - 1));
+    }
+    if (pList.size() >= 1) {
+      table.setNumber(pList.remove(pList.size() - 1));
     }
   }
 
@@ -180,6 +187,18 @@ public class Parser {
     }
   }
 
+  private void parseP(List<String> pList, TagNode n) {
+    String data = n.getText().toString().trim();
+
+    if (data.equals("")
+            || data.equals(" ")
+            || data.length() == 1 && data.codePointAt(0) == 160) {
+      return;
+    }
+
+    pList.add(data);
+  }
+
   /**
    * Парсер html страницы
    * @return таблица с html страницы
@@ -190,21 +209,24 @@ public class Parser {
     CleanerProperties props = cleaner.getProperties();
     TagNode node = cleaner.clean(new File(fileName));
     Table table = new Table();
+    List<String> pList = new ArrayList<String>();
 
     //Помещаем все вершины для обхода в список
     List<TagNode> nodesToLook = node.getChildTagList();
     //Пока список не пуст
     while (nodesToLook.size() > 0) {
       TagNode n = nodesToLook.remove(0);
-      System.out.println(n.getName());
       if (n.getName().equals("table")) {
-        parseTable(table, n.getChildTagList());
+        parseTable(table, n.getChildTagList(), pList);
         formatTable(table);
+        return table;
+      } else if (n.getName().equals("p")) {
+        parseP(pList, n);
       }
       if (n.hasChildren()) {
         nodesToLook.addAll(0, n.getChildTagList());
       }
     }
-    return table;
+    return null;
   }
 }
