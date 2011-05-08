@@ -1,4 +1,4 @@
-package tablechecker.core;
+package tablechecker.core.parsers;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,13 +7,15 @@ import java.util.List;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+import tablechecker.core.Cell;
 import tablechecker.core.Cell.Type;
+import tablechecker.core.Table;
 
-public class Parser {
+public class HtmlParser implements Parser {
 
   private String fileName;
 
-  public Parser(String fileName) {
+  public HtmlParser(String fileName) {
     this.fileName = fileName;
   }
 
@@ -204,28 +206,32 @@ public class Parser {
    * @return таблица с html страницы
    * @throws IOException
    */
-  public Table parse() throws IOException {
-    HtmlCleaner cleaner = new HtmlCleaner();
-    CleanerProperties props = cleaner.getProperties();
-    TagNode node = cleaner.clean(new File(fileName));
-    Table table = new Table();
-    List<String> pList = new ArrayList<String>();
+  @Override
+  public Table parse() {
+    try {
+      HtmlCleaner cleaner = new HtmlCleaner();
+      CleanerProperties props = cleaner.getProperties();
+      TagNode node = cleaner.clean(new File(fileName));
+      Table table = new Table();
+      List<String> pList = new ArrayList<String>();
 
-    //Помещаем все вершины для обхода в список
-    List<TagNode> nodesToLook = node.getChildTagList();
-    //Пока список не пуст
-    while (nodesToLook.size() > 0) {
-      TagNode n = nodesToLook.remove(0);
-      if (n.getName().equals("table")) {
-        parseTable(table, n.getChildTagList(), pList);
-        formatTable(table);
-        return table;
-      } else if (n.getName().equals("p")) {
-        parseP(pList, n);
+      //Помещаем все вершины для обхода в список
+      List<TagNode> nodesToLook = node.getChildTagList();
+      //Пока список не пуст
+      while (nodesToLook.size() > 0) {
+        TagNode n = nodesToLook.remove(0);
+        if (n.getName().equals("table")) {
+          parseTable(table, n.getChildTagList(), pList);
+          formatTable(table);
+          return table;
+        } else if (n.getName().equals("p")) {
+          parseP(pList, n);
+        }
+        if (n.hasChildren()) {
+          nodesToLook.addAll(0, n.getChildTagList());
+        }
       }
-      if (n.hasChildren()) {
-        nodesToLook.addAll(0, n.getChildTagList());
-      }
+    } catch (IOException ex) {
     }
     return null;
   }
