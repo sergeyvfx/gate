@@ -11,7 +11,9 @@ import tablechecker.core.Cell;
 import tablechecker.core.Cell.Type;
 import tablechecker.core.Table;
 
-public class HtmlParser implements Parser {
+public class HtmlParser
+        extends Formater
+        implements Parser {
 
   private String fileName;
 
@@ -26,7 +28,8 @@ public class HtmlParser implements Parser {
    * @param rowCount - номер текущей строки
    * @param colCount - номер текущего столбца
    */
-  private void addJoinCells(List<Cell> joinCells, List<Cell> cells, int rowCount, int[] colCount) {
+  private void addJoinCells(List<Cell> joinCells, List<Cell> cells, int rowCount,
+          int[] colCount) {
     boolean flag = true;
 
     while (flag) {
@@ -59,7 +62,8 @@ public class HtmlParser implements Parser {
    * @param joinCells - список левых верхних ячеек
    * @return список ячеек в строке
    */
-  private List<Cell> parseRow(List<TagNode> nodes, int rowCount, List<Cell> joinCells) {
+  private List<Cell> parseRow(List<TagNode> nodes, int rowCount,
+          List<Cell> joinCells) {
     ArrayList<Cell> cells = new ArrayList<Cell>();
     int[] colCount = new int[1];
 
@@ -82,11 +86,13 @@ public class HtmlParser implements Parser {
         } catch (NumberFormatException ex) {
         }
         try {
-          ha = Cell.HAlignment.valueOf(n.getAttributeByName("align").toUpperCase());
+          ha = Cell.HAlignment.valueOf(
+                  n.getAttributeByName("align").toUpperCase());
         } catch (Exception ex) {
         }
         try {
-          va = Cell.VAlignment.valueOf(n.getAttributeByName("valign").toUpperCase());
+          va = Cell.VAlignment.valueOf(n.getAttributeByName("valign").
+                  toUpperCase());
         } catch (Exception ex) {
         }
         Cell c = new Cell(data, rowCount, colCount[0], spanRow, spanCol, null);
@@ -130,62 +136,6 @@ public class HtmlParser implements Parser {
     }
     if (pList.size() >= 1) {
       table.setNumber(pList.remove(pList.size() - 1));
-    }
-  }
-
-  private int columnCount(List<Cell> row) {
-    int result = 0;
-    for (Cell c : row) {
-      if (c.getTopLeftCell() == null
-              || c.getTopLeftCell().getSpanColumn() == 1) {
-        result++;
-      }
-    }
-    return result;
-  }
-
-  private int rowCount(List<Cell> col) {
-    int result = 0;
-    for (Cell c : col) {
-      if (c.getType() != Type.HEAD
-              && (c.getTopLeftCell() == null
-              || c.getTopLeftCell().getSpanRow() == 1)) {
-        result++;
-      }
-    }
-    return result;
-  }
-
-  private void formatTable(Table table) {
-    //Выделяем головку
-    int headSize = 0;
-    for (ArrayList<Cell> row : table.getRows()) {
-      int colCount = columnCount(row);
-      if (colCount <= table.getColumnCount()) {
-        headSize++;
-        for (Cell c : row) {
-          c.setType(Type.HEAD);
-        }
-        if (colCount == table.getColumnCount()) {
-          break;
-        }
-      }
-    }
-
-    //Выделяем боковик
-    int rowCountWithOutHead = table.getRowCount() - headSize;
-    for (ArrayList<Cell> col : table.getColumns()) {
-      int rowCount = rowCount(col);
-      if (rowCount <= rowCountWithOutHead) {
-        for (Cell c : col) {
-          if (c.getType() != Type.HEAD) {
-            c.setType(Type.STUD);
-          }
-        }
-        if (rowCount == rowCountWithOutHead) {
-          break;
-        }
-      }
     }
   }
 
