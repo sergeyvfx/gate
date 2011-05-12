@@ -1,14 +1,21 @@
 package tablechecker;
 
 import java.io.File;
+import java.io.IOException;
+import tablechecker.core.Checker;
+import tablechecker.core.libreoffice.LibreOffice;
 
 public class TableChecker {
+
+  private void check() {
+  }
 
   public static void main(String[] args) {
     String jarFile = TableChecker.class.getProtectionDomain().
             getCodeSource().getLocation().getPath();
     if (args.length != 2) {
-      System.out.println("Usage: java -jar " + jarFile + " fileToCheck dirWithTemplates");
+      System.out.println(
+              "Usage: java -jar " + jarFile + " fileToCheck dirWithTemplates");
       return;
     }
 
@@ -36,8 +43,12 @@ public class TableChecker {
       return;
     }
     if (!templatesDir.canRead()) {
-      System.out.println("Directory " + templatesDir.getPath() + " can not be read!");
+      System.out.println(
+              "Directory " + templatesDir.getPath() + " can not be read!");
       return;
     }
+
+    Checker checker = new Checker(fileToCheck, templatesDir);
+    checker.check();
   }
 }
