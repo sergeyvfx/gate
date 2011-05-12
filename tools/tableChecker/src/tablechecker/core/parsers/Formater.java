@@ -62,5 +62,27 @@ public class Formater {
         }
       }
     }
+
+    //Выделяем уровни в головке
+    int tier = 0;
+    for (ArrayList<Cell> row : table.getHead()) {
+      for (Cell c : row) {
+        if (c.getTopLeftCell() == null) {
+          c.setTier(tier);
+        }
+      }
+      tier++;
+    }
+
+    //Выделяем уровни в боковике
+    tier = 0;
+    for (ArrayList<Cell> col : table.getStud()) {
+      for (Cell c : col) {
+        if (c.getTopLeftCell() == null && c.getType() == Cell.Type.STUD) {
+          c.setTier(tier);
+        }
+      }
+      tier++;
+    }
   }
 }

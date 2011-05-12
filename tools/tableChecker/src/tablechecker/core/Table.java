@@ -42,7 +42,7 @@ public class Table {
   public ArrayList<ArrayList<Cell>> getRows() {
     return rows;
   }
-  
+
   public int getRowCount() {
     return rows.size();
   }
@@ -50,7 +50,7 @@ public class Table {
   public ArrayList<ArrayList<Cell>> getColumns() {
     return columns;
   }
-  
+
   public int getColumnCount() {
     return columns.size();
   }
@@ -90,5 +90,43 @@ public class Table {
     for (Cell c : cells) {
       addCell(c);
     }
+  }
+
+  public ArrayList<ArrayList<Cell>> getHead() {
+    ArrayList<ArrayList<Cell>> result = new ArrayList<ArrayList<Cell>>();
+
+    for (ArrayList<Cell> cs : rows) {
+      int s = result.size();
+      if (cs.size() > 0) {
+        Cell c = cs.get(0);
+        if (c.getType() == Cell.Type.HEAD) {
+          result.add(cs);
+        }
+      }
+      if (s == result.size()) {
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  public ArrayList<ArrayList<Cell>> getStud() {
+    ArrayList<ArrayList<Cell>> result = new ArrayList<ArrayList<Cell>>();
+
+    for (ArrayList<Cell> cs : columns) {
+      int s = result.size();
+      if (cs.size() > 0) {
+        Cell c = cs.get(cs.size() - 1);
+        if (c.getType() == Cell.Type.STUD) {
+          result.add(cs);
+        }
+      }
+      if (s == result.size()) {
+        break;
+      }
+    }
+
+    return result;
   }
 }
