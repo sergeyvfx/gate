@@ -63,6 +63,13 @@ public class Formater {
       }
     }
 
+    //Все остальное DATA
+    for (Cell c : table.getCells()) {
+      if (c.getType() == null) {
+        c.setType(Type.DATA);
+      }
+    }
+
     //Выделяем уровни в головке
     int tier = 0;
     for (ArrayList<Cell> row : table.getHead()) {

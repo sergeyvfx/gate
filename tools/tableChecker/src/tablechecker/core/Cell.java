@@ -24,7 +24,6 @@ public class Cell {
     MIDDLE, // По середине
     BASELINE // Выравнивание по базовой линии
   };
-
   private String data; // Данные
   private HAlignment ha; // Тип выравнивание по горизотали
   private VAlignment va; // Тип выравнивания по вертикали
@@ -39,7 +38,8 @@ public class Cell {
   public Cell() {
   }
 
-  public Cell(String data, int row, int column, int spanRow, int spanColumn, Cell topLeftCell) {
+  public Cell(String data, int row, int column, int spanRow, int spanColumn,
+          Cell topLeftCell) {
     this.data = data;
     this.row = row;
     this.column = column;
@@ -118,5 +118,44 @@ public class Cell {
 
   public void setTopLeftCell(Cell topLeftCell) {
     this.topLeftCell = topLeftCell;
+  }
+
+  public void setData(String data) {
+    this.data = data;
+  }
+
+  public String getData() {
+    return data;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    boolean f = true;
+    Cell c = null;
+    if (obj instanceof Cell) {
+      c = (Cell) obj;
+    }
+    if (c != null) {
+      f &= c.getRow() == getRow();
+      f &= c.getColumn() == getColumn();
+      f &= c.getSpanRow() == getSpanRow();
+      f &= c.getSpanColumn() == getSpanColumn();
+      f &= c.getType() == getType();
+      f &= c.getTier() == getTier();
+
+      if (c.getTopLeftCell() == null && getTopLeftCell() == null) {
+        f &= c.getData().equals(getData());
+        f &= c.getHAlignment() == getHAlignment();
+        f &= c.getVAlignment() == getVAlignment();
+      } else if (c.getTopLeftCell() != null & getTopLeftCell() != null) {
+        f &= c.getTopLeftCell().equals(getTopLeftCell());
+      }
+    } else {
+      f = false;
+    }
+    if (!f) {
+      System.out.println("!!!");
+    }
+    return f;
   }
 }

@@ -98,7 +98,6 @@ public class HtmlParser
         Cell c = new Cell(data, rowCount, colCount[0], spanRow, spanCol, null);
         c.setHAlignment(ha);
         c.setVAlignment(va);
-        c.setType(Type.DATA);
         cells.add(c);
         colCount[0]++;
 

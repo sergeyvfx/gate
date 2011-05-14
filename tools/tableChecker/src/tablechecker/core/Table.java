@@ -129,4 +129,58 @@ public class Table {
 
     return result;
   }
+
+  public ArrayList<Cell> getTier(int tier, Cell.Type type) {
+    ArrayList<Cell> result = new ArrayList<Cell>();
+    ArrayList<ArrayList<Cell>> arr = new ArrayList<ArrayList<Cell>>();
+    if (type == Cell.Type.HEAD) {
+      arr = getHead();
+    }
+    for (ArrayList<Cell> a : arr) {
+      for (Cell c : a) {
+        if (c.getTopLeftCell() == null && c.getTier() == tier) {
+          result.add(c);
+        }
+      }
+    }
+    return result;
+  }
+
+  public ArrayList<ArrayList<Cell>> getTiers(Cell.Type type) {
+    ArrayList<ArrayList<Cell>> result = new ArrayList<ArrayList<Cell>>();
+    int tier = 0;
+    ArrayList<Cell> a = null;
+    do {
+      a = getTier(tier, type);
+      if (a.size() > 0) {
+        result.add(a);
+      }
+      tier++;
+    } while (a.size() > 0);
+    return result;
+  }
+
+  public Cell findCell(String data, int tier, Cell.Type type) {
+    Cell result = null;
+    for (Cell c : getTier(tier, type)) {
+      if (c.getData().equals(data)) {
+        return c;
+      }
+    }
+    return result;
+  }
+
+  public boolean findCell(Cell cell) {
+    boolean f = true;
+    Cell c = null;
+    if (cell != null) {
+      c = getCell(cell.getRow(), cell.getColumn());
+    }
+    if (c != null) {
+      f = c.equals(cell);
+    } else {
+      f = false;
+    }
+    return f;
+  }
 }

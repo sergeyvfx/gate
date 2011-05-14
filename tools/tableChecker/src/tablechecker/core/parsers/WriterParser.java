@@ -128,7 +128,6 @@ public class WriterParser
 
               }
             }
-            System.out.println("(" + i + "," + j + ") = " + xtc.getString());
           }
         }
       }
