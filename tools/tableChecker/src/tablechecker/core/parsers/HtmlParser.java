@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.ContentNode;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import tablechecker.core.Cell;
@@ -55,6 +56,32 @@ public class HtmlParser
     }
   }
 
+  private String parseData(TagNode node) {
+    String result = "";
+    List<TagNode> nodes = new ArrayList<TagNode>();
+    nodes.add(node);
+    while (nodes.size() > 0) {
+      Object o = nodes.remove(0);
+      TagNode tn = null;
+      ContentNode cn = null;
+      if (o instanceof TagNode) {
+        tn = (TagNode) o;
+      } else if (o instanceof ContentNode) {
+        cn = (ContentNode) o;
+      }
+      if (tn != null) {
+        if (tn.hasChildren()) {
+          nodes.addAll(0, tn.getChildren());
+        } else {
+          result += " ";
+        }
+      } else if (cn != null) {
+        result += cn.toString();
+      }
+    }
+    return result;
+  }
+
   /**
    * Парсер строки
    * @param nodes - элементы строки
@@ -72,7 +99,7 @@ public class HtmlParser
     while (nodes.size() > 0) {
       TagNode n = nodes.remove(0);
       if (n.getName().equals("td")) {
-        String data = n.getText().toString();
+        String data = parseData(n);
         int spanRow = 1;
         int spanCol = 1;
         Cell.HAlignment ha = Cell.HAlignment.LEFT;
