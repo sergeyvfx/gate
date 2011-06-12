@@ -77,7 +77,7 @@ final class InstallationFinder {
     private static final String SYSPROP_NAME =
         "com.sun.star.lib.loader.unopath";
     private static final String ENVVAR_NAME = "UNO_PATH";
-    private static final String SOFFICE = "/opt/libreoffice/program/soffice"; // Unix/Linux only
+    private static final String SOFFICE = "soffice";
     
     private InstallationFinder() {} // do not instantiate
     

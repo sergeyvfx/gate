@@ -1,6 +1,7 @@
 package tablechecker.core.parsers;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.comp.helper.BootstrapException;
 import com.sun.star.container.XEnumeration;
@@ -10,6 +11,7 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
@@ -18,6 +20,7 @@ import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.table.XTableColumns;
 import com.sun.star.table.XTableRows;
+import com.sun.star.text.TableColumnSeparator;
 import com.sun.star.text.VertOrientation;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextDocument;
@@ -29,6 +32,7 @@ import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import tablechecker.core.Cell;
@@ -71,6 +75,75 @@ public class WriterParser
         XTextTable xTextTable = UnoRuntime.queryInterface(XTextTable.class,
                 textTable);
         XTableRows xTableRows = xTextTable.getRows();
+        int rowCount = xTableRows.getCount();
+        int sum = getTableColumnRelativeSum(xTextTable);
+        int[] colCounts = new int[rowCount];
+
+        ArrayList<ArrayList<Integer>> matrix = new ArrayList<ArrayList<Integer>>(
+                rowCount);
+        for (int i = 0; i < rowCount; i++) {
+          matrix.add(new ArrayList<Integer>());
+        }
+
+        int maxColCount = 0;
+        for (int rowNo = 0; rowNo < rowCount; rowNo++) {
+          TableColumnSeparator[] sep = getTableRowSeparator(xTableRows, rowNo);
+          colCounts[rowNo] = sep.length + 1;
+
+          if (maxColCount < colCounts[rowNo]) {
+            maxColCount = colCounts[rowNo];
+          }
+
+          for (int j = 0; j < sep.length; j++) {
+            matrix.get(rowNo).add((int) sep[j].Position);
+          }
+
+          matrix.get(rowNo).add(sum);
+        }
+
+        int[] curIndex = new int[rowCount];
+
+        ArrayList<ArrayList<TCell>> tcs = new ArrayList<ArrayList<TCell>>();
+        for (int i = 0; i < rowCount; i++) {
+          tcs.add(new ArrayList<TCell>());
+        }
+
+        int curMinSep = matrix.get(0).get(0);
+        do {
+          curMinSep = matrix.get(0).get(curIndex[0]);
+          for (int i = 0; i < rowCount; i++) {
+            if (curMinSep > matrix.get(i).get(curIndex[i])) {
+              curMinSep = matrix.get(i).get(curIndex[i]);
+            }
+          }
+
+          for (int rowNo = 0; rowNo < rowCount; rowNo++) {
+            int col = curIndex[rowNo];
+            int lastInd = tcs.get(rowNo).size() - 1;
+
+            if (curMinSep == matrix.get(rowNo).get(col)) {
+              if (colCounts[rowNo] > col + 1) {
+                curIndex[rowNo] = col + 1;
+              }
+              if (tcs.get(rowNo).size() > 0
+                      && tcs.get(rowNo).get(lastInd).text < 1
+                      && tcs.get(rowNo).get(lastInd).colspan > 0) {
+                tcs.get(rowNo).get(lastInd).colspan++;
+                tcs.get(rowNo).get(lastInd).text++;
+              } else {
+                tcs.get(rowNo).add(new TCell(rowNo, col, 0, 0, 1));
+              }
+            } else {
+              if (tcs.get(rowNo).size() > 0
+                      && tcs.get(rowNo).get(lastInd).text < 1) {
+                tcs.get(rowNo).get(lastInd).colspan++;
+              } else {
+                tcs.get(rowNo).add(new TCell(0, 1));
+              }
+            }
+          }
+        } while (curMinSep < sum);
+
         for (int i = 0; i < xTableRows.getCount(); i++) {
           XTableColumns xTableColumns = xTextTable.getColumns();
           for (int j = 0; j < xTableColumns.getCount(); j++) {
@@ -89,7 +162,7 @@ public class WriterParser
               if (!xsi.supportsService("com.sun.star.text.TextTable")) {
                 XPropertySet set = UnoRuntime.queryInterface(XPropertySet.class,
                         xsi);
-                int h = (short) set.getPropertyValue("ParaAdjust");
+                int h = (Integer) set.getPropertyValue("ParaAdjust");
                 Cell.HAlignment hAlignment = Cell.HAlignment.CENTER;
                 switch (h) {
                   case ParagraphAdjust.CENTER_value:
@@ -105,7 +178,7 @@ public class WriterParser
                     hAlignment = Cell.HAlignment.JUSTIFY;
                 }
 
-                int v = (short) cellSet.getPropertyValue("VertOrient");
+                int v = (Integer) cellSet.getPropertyValue("VertOrient");
                 Cell.VAlignment vAlignment = Cell.VAlignment.TOP;
                 switch (v) {
                   case VertOrientation.TOP:
@@ -119,9 +192,12 @@ public class WriterParser
                     break;
                 }
 
+                int rowSpan = 1;
+                int colSpan = 1;
+
 
                 //Создаем ячейку
-                Cell c = new Cell(xtc.getString(), i, j, 1, 1, null);
+                Cell c = new Cell(xtc.getString(), i, j, rowSpan, colSpan, null);
                 c.setHAlignment(hAlignment);
                 c.setVAlignment(vAlignment);
                 resultTable.addCell(c);
@@ -138,6 +214,43 @@ public class WriterParser
     }
     formatTable(resultTable);
     return resultTable;
+  }
+
+  private int getTableColumnRelativeSum(XTextTable rows) {
+    int result = 0;
+    XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class,
+            rows);
+    try {
+      result = ((Short) xPropertySet.getPropertyValue("TableColumnRelativeSum")).
+              intValue();
+    } catch (UnknownPropertyException ex) {
+    } catch (WrappedTargetException ex) {
+    }
+
+    return result;
+  }
+
+  private TableColumnSeparator[] getTableRowSeparator(XTableRows rows, int n) {
+
+    Object o = null;
+    TableColumnSeparator[] sep = null;
+    try {
+      o = rows.getByIndex(n);
+    } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
+    } catch (WrappedTargetException ex) {
+    }
+    if (o != null) {
+      XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class,
+              o);
+      try {
+        sep = (TableColumnSeparator[]) xPropertySet.getPropertyValue(
+                "TableColumnSeparators");
+      } catch (UnknownPropertyException ex) {
+      } catch (WrappedTargetException ex) {
+      }
+    }
+
+    return sep;
   }
 
   private void connect() {
@@ -230,5 +343,27 @@ public class WriterParser
 
   private boolean terminate() {
     return xDesktop.terminate();
+  }
+
+  private class TCell {
+
+    int row;
+    int col;
+    int rowspan;
+    int colspan;
+    int text;
+
+    public TCell(int row, int col, int rowspan, int colspan, int text) {
+      this.row = row;
+      this.col = col;
+      this.rowspan = rowspan;
+      this.colspan = colspan;
+      this.text = text;
+    }
+
+    public TCell(int rowspan, int colspan) {
+      this.rowspan = rowspan;
+      this.colspan = colspan;
+    }
   }
 }

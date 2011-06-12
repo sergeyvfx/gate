@@ -50,6 +50,22 @@ public class Checker {
   private CheckResult compare(Table t, Table template) {
     CheckResult result = CheckResult.EQUAL;
 
+    ArrayList<ArrayList<Cell>> head = template.getHead();
+
+    for (ArrayList<Cell> r : head) {
+      for (Cell c : r) {
+        if (c.getTopLeftCell() == null) {
+          //Ячейка является левой верхней в объединении
+          String data = c.getData();
+          Cell tc = t.findCell(data, c.getTier(), c.getType());
+          if (tc != null) {
+            //Ячейка с такими же данными на таком же уровне и такого же типа
+            //нашлась
+          }
+        }
+      }
+    }
+
     ArrayList<Cell> templateC = template.getCells();
     for (Cell c : templateC) {
       if (!t.findCell(c)) {
@@ -62,7 +78,6 @@ public class Checker {
 
   public void check() {
     Table tableToTest = fileToTable(fileToCheck);
-
     if (tableToTest != null) {
       File[] files = templatesDir.listFiles(new FF());
       Arrays.sort(files);

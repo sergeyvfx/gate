@@ -1,5 +1,8 @@
 package tablechecker.core;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,13 +164,12 @@ public class Table {
   }
 
   public Cell findCell(String data, int tier, Cell.Type type) {
-    Cell result = null;
     for (Cell c : getTier(tier, type)) {
       if (c.getData().equals(data)) {
         return c;
       }
     }
-    return result;
+    return null;
   }
 
   public boolean findCell(Cell cell) {
@@ -182,5 +184,37 @@ public class Table {
       f = false;
     }
     return f;
+  }
+
+  public void print(String fileName) {
+    try {
+      FileWriter fw = new FileWriter(fileName);
+      BufferedWriter out = new BufferedWriter(fw);
+      out.write("<html>");
+      out.write(
+              "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">");
+      out.write("<head></head>");
+      out.write("<body>");
+      out.write("<table border=\"1\">");
+      for (ArrayList<Cell> r : rows) {
+        out.write("<tr>");
+        for (Cell c : r) {
+          if (c.getTopLeftCell() == null) {
+            out.write("<td");
+            out.write(" align=\"" + c.getHAlignment().name() + "\"");
+            out.write(" valign=\"" + c.getVAlignment().name() + "\"");
+            out.write(" rowspan=\"" + c.getSpanRow() + "\"");
+            out.write(" colspan=\"" + c.getSpanColumn() + "\"");
+            out.write(">");
+            out.write(c.getData());
+            out.write("</td>");
+          }
+        }
+        out.write("</tr>");
+      }
+      out.write("</table></body></html>");
+      out.close();
+    } catch (IOException ex) {
+    }
   }
 }
