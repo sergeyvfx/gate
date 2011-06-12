@@ -1,0 +1,4 @@
+Complex table (with splits and merges) in html format
+
+Templates:
+  * 1.html - the same table
