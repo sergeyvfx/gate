@@ -7,7 +7,7 @@ inc/common/config.php
 devel
 *~
 .htaccess
-nbproject
+#nbproject
 *.patch
 *.class
 tools/tableChecker/build
