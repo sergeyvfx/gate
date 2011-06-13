@@ -2,8 +2,10 @@ package tablechecker;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import tablechecker.core.Checker;
-import tablechecker.core.libreoffice.LibreOffice;
+import tablechecker.frames.Frame;
+import tablechecker.frames.Frameset;
 
 public class TableChecker {
 
@@ -15,7 +17,7 @@ public class TableChecker {
             getCodeSource().getLocation().getPath();
     if (args.length != 2) {
       System.out.println(
-              "Usage: java -jar " + jarFile + " fileToCheck dirWithTemplates");
+              "Usage: java -jar " + jarFile + " fileToCheck fileWithFrames");
       return;
     }
 
@@ -33,22 +35,22 @@ public class TableChecker {
       return;
     }
 
-    File templatesDir = new File(args[1]);
-    if (!templatesDir.exists()) {
-      System.out.println("Directory " + templatesDir.getPath() + " not exists!");
+    File fileWithFrames = new File(args[1]);
+    if (!fileWithFrames.exists()) {
+      System.out.println("File " + fileWithFrames.getPath() + " not exists!");
       return;
     }
-    if (!templatesDir.isDirectory()) {
-      System.out.println(templatesDir.getPath() + " is not a file!");
+    if (fileWithFrames.isDirectory()) {
+      System.out.println(fileWithFrames.getPath() + " is not a file!");
       return;
     }
-    if (!templatesDir.canRead()) {
+    if (!fileWithFrames.canRead()) {
       System.out.println(
-              "Directory " + templatesDir.getPath() + " can not be read!");
+              "File " + fileWithFrames.getPath() + " can not be read!");
       return;
     }
 
-    Checker checker = new Checker(fileToCheck, templatesDir);
+    Checker checker = new Checker(fileToCheck, fileWithFrames);
     checker.check();
   }
 }

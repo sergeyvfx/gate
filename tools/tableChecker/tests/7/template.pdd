@@ -1,0 +1,2222 @@
+<pddresolver.FileStorage>
+  <frameset>
+    <frames>
+      <Frames.Frame>
+        <slots>
+          <Frames.Slot>
+            <name>Табличный номер</name>
+            <parent reference="../../.."/>
+            <type>1</type>
+            <value>
+              <value>Неизвестно</value>
+              <domen>
+                <name>1</name>
+                <values>
+                  <Core.Logic.Value reference="../../.."/>
+                </values>
+                <v reference="../.."/>
+              </domen>
+              <index>0</index>
+            </value>
+            <inLinks>
+              <Frames.Link>
+                <source>
+                  <slots/>
+                  <name>Табличный номер</name>
+                  <comment></comment>
+                  <inLinks/>
+                  <outLinks>
+                    <Frames.Link reference="../../.."/>
+                  </outLinks>
+                  <slotCustoms/>
+                </source>
+                <target class="Frames.Slot" reference="../../.."/>
+                <type>1</type>
+              </Frames.Link>
+            </inLinks>
+          </Frames.Slot>
+          <Frames.Slot>
+            <name>Заголовок</name>
+            <parent reference="../../.."/>
+            <type>1</type>
+            <value reference="../../Frames.Slot/value"/>
+            <inLinks>
+              <Frames.Link>
+                <source>
+                  <slots/>
+                  <name>Заголовок</name>
+                  <comment></comment>
+                  <inLinks/>
+                  <outLinks>
+                    <Frames.Link reference="../../.."/>
+                  </outLinks>
+                  <slotCustoms/>
+                </source>
+                <target class="Frames.Slot" reference="../../.."/>
+                <type>1</type>
+              </Frames.Link>
+            </inLinks>
+          </Frames.Slot>
+        </slots>
+        <name>Абстрактная таблица</name>
+        <comment></comment>
+        <inLinks/>
+        <outLinks/>
+        <slotCustoms/>
+      </Frames.Frame>
+      <Frames.Frame reference="../Frames.Frame/slots/Frames.Slot[2]/inLinks/Frames.Link/source"/>
+      <Frames.Frame>
+        <slots/>
+        <name>Боковик</name>
+        <comment></comment>
+        <inLinks/>
+        <outLinks/>
+        <slotCustoms/>
+      </Frames.Frame>
+      <Frames.Frame>
+        <slots/>
+        <name>Головка</name>
+        <comment></comment>
+        <inLinks/>
+        <outLinks/>
+        <slotCustoms/>
+      </Frames.Frame>
+      <Frames.Frame>
+        <slots/>
+        <name>Прографка</name>
+        <comment></comment>
+        <inLinks/>
+        <outLinks/>
+        <slotCustoms/>
+      </Frames.Frame>
+      <Frames.Frame>
+        <slots>
+          <Frames.Slot>
+            <name>Значение</name>
+            <parent reference="../../.."/>
+            <type>1</type>
+            <inLinks>
+              <Frames.Link>
+                <source>
+                  <slots/>
+                  <name>Значение 1_1</name>
+                  <comment></comment>
+                  <inLinks/>
+                  <outLinks>
+                    <Frames.Link reference="../../.."/>
+                    <Frames.Link>
+                      <source reference="../../.."/>
+                      <target class="Frames.VirtualSlot">
+                        <origSlot class="Frames.Slot">
+                          <name>Значение</name>
+                          <parent>
+                            <slots>
+                              <Frames.Slot reference="../../.."/>
+                            </slots>
+                            <name>Абстрактный объект</name>
+                            <comment></comment>
+                            <inLinks>
+                              <Frames.Link>
+                                <source reference="../../../../../../../../../../../../.."/>
+                                <target class="Frames.Frame" reference="../../.."/>
+                                <type>0</type>
+                              </Frames.Link>
+                              <Frames.Link>
+                                <source>
+                                  <slots/>
+                                  <name>Объект 2_1</name>
+                                  <comment></comment>
+                                  <inLinks/>
+                                  <outLinks>
+                                    <Frames.Link reference="../../.."/>
+                                    <Frames.Link>
+                                      <source reference="../../.."/>
+                                      <target class="Frames.Slot">
+                                        <name>Объект 2</name>
+                                        <parent>
+                                          <slots>
+                                            <Frames.Slot reference="../../.."/>
+                                          </slots>
+                                          <name>Класс объекта  2</name>
+                                          <comment></comment>
+                                          <inLinks/>
+                                          <outLinks>
+                                            <Frames.Link>
+                                              <source reference="../../.."/>
+                                              <target class="Frames.Frame">
+                                                <slots/>
+                                                <name>Абстрактный класс</name>
+                                                <comment></comment>
+                                                <inLinks>
+                                                  <Frames.Link>
+                                                    <source>
+                                                      <slots>
+                                                        <Frames.Slot>
+                                                          <name>Объект 1</name>
+                                                          <parent reference="../../.."/>
+                                                          <type>1</type>
+                                                          <inLinks>
+                                                            <Frames.Link>
+                                                              <source reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../.."/>
+                                                              <target class="Frames.Slot" reference="../../.."/>
+                                                              <type>1</type>
+                                                            </Frames.Link>
+                                                          </inLinks>
+                                                        </Frames.Slot>
+                                                      </slots>
+                                                      <name>Класс объекта 1</name>
+                                                      <comment></comment>
+                                                      <inLinks/>
+                                                      <outLinks>
+                                                        <Frames.Link reference="../../.."/>
+                                                      </outLinks>
+                                                      <slotCustoms/>
+                                                    </source>
+                                                    <target class="Frames.Frame" reference="../../.."/>
+                                                    <type>0</type>
+                                                  </Frames.Link>
+                                                  <Frames.Link reference="../../.."/>
+                                                </inLinks>
+                                                <outLinks/>
+                                                <slotCustoms/>
+                                              </target>
+                                              <type>0</type>
+                                            </Frames.Link>
+                                          </outLinks>
+                                          <slotCustoms/>
+                                        </parent>
+                                        <type>1</type>
+                                        <inLinks>
+                                          <Frames.Link reference="../../.."/>
+                                        </inLinks>
+                                      </target>
+                                      <type>1</type>
+                                    </Frames.Link>
+                                  </outLinks>
+                                  <slotCustoms>
+                                    <entry>
+                                      <string>Значение</string>
+                                      <Frames.VirtualSlot_-VirtualBlock>
+                                        <link reference="../../../../../../../../../.."/>
+                                        <outer-class>
+                                          <origSlot class="Frames.Slot" reference="../../../../../../../../.."/>
+                                          <parent reference="../../../../.."/>
+                                        </outer-class>
+                                      </Frames.VirtualSlot_-VirtualBlock>
+                                    </entry>
+                                  </slotCustoms>
+                                </source>
+                                <target class="Frames.Frame" reference="../../.."/>
+                                <type>0</type>
+                              </Frames.Link>
+                            </inLinks>
+                            <outLinks/>
+                            <slotCustoms/>
+                          </parent>
+                          <type>1</type>
+                          <inLinks/>
+                        </origSlot>
+                        <parent reference="../origSlot/parent/inLinks/Frames.Link[2]/source"/>
+                      </target>
+                      <type>1</type>
+                    </Frames.Link>
+                  </outLinks>
+                  <slotCustoms/>
+                </source>
+                <target class="Frames.Slot" reference="../../.."/>
+                <type>1</type>
+              </Frames.Link>
+            </inLinks>
+          </Frames.Slot>
+        </slots>
+        <name>Объект 1_1</name>
+        <comment></comment>
+        <inLinks/>
+        <outLinks>
+          <Frames.Link reference="../../slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link"/>
+          <Frames.Link reference="../../slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent/outLinks/Frames.Link/target/inLinks/Frames.Link/source/slots/Frames.Slot/inLinks/Frames.Link"/>
+        </outLinks>
+        <slotCustoms>
+          <entry>
+            <string>Значение</string>
+            <Frames.VirtualSlot_-VirtualBlock>
+              <outer-class>
+                <origSlot class="Frames.Slot" reference="../../../../../slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot"/>
+                <parent reference="../../../../.."/>
+              </outer-class>
+            </Frames.VirtualSlot_-VirtualBlock>
+          </entry>
+        </slotCustoms>
+      </Frames.Frame>
+      <Frames.Frame>
+        <slots/>
+        <name>Абстрактное свойство</name>
+        <comment></comment>
+        <inLinks/>
+        <outLinks/>
+        <slotCustoms/>
+      </Frames.Frame>
+      <Frames.Frame reference="../Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent/outLinks/Frames.Link/target/inLinks/Frames.Link/source"/>
+      <Frames.Frame reference="../Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent"/>
+      <Frames.Frame reference="../Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source"/>
+      <Frames.Frame reference="../Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source"/>
+      <Frames.Frame reference="../Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent"/>
+      <Frames.Frame reference="../Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent/outLinks/Frames.Link/target"/>
+      <Frames.Frame reference="../Frames.Frame/slots/Frames.Slot/inLinks/Frames.Link/source"/>
+    </frames>
+    <domens>
+      <Core.Logic.Domen reference="../../frames/Frames.Frame/slots/Frames.Slot/value/domen"/>
+    </domens>
+  </frameset>
+  <model class="Core.Model">
+    <defaultGraphModel serialization="custom">
+      <unserializable-parents>
+        <updateLevel defined-in="javax.swing.undo.UndoableEditSupport">0</updateLevel>
+        <listeners/>
+        <realSource class="org.jgraph.graph.DefaultGraphModel" reference="../.."/>
+      </unserializable-parents>
+      <org.jgraph.graph.DefaultGraphModel>
+        <default>
+          <asksAllowsChildren>false</asksAllowsChildren>
+          <removeEmptyGroups>true</removeEmptyGroups>
+          <attributes serialization="custom">
+            <unserializable-parents/>
+            <hashtable>
+              <default>
+                <loadFactor>0.75</loadFactor>
+                <threshold>6</threshold>
+              </default>
+              <int>3</int>
+              <int>0</int>
+            </hashtable>
+          </attributes>
+          <roots>
+            <org.jgraph.graph.DefaultGraphCell serialization="custom">
+              <javax.swing.tree.DefaultMutableTreeNode>
+                <default>
+                  <allowsChildren>true</allowsChildren>
+                  <children>
+                    <org.jgraph.graph.DefaultPort serialization="custom">
+                      <javax.swing.tree.DefaultMutableTreeNode>
+                        <default>
+                          <allowsChildren>false</allowsChildren>
+                          <parent class="org.jgraph.graph.DefaultGraphCell" reference="../../../../../../.."/>
+                        </default>
+                        <object-array/>
+                      </javax.swing.tree.DefaultMutableTreeNode>
+                      <org.jgraph.graph.DefaultGraphCell>
+                        <default>
+                          <attributes serialization="custom">
+                            <unserializable-parents/>
+                            <hashtable>
+                              <default>
+                                <loadFactor>0.75</loadFactor>
+                                <threshold>6</threshold>
+                              </default>
+                              <int>3</int>
+                              <int>0</int>
+                            </hashtable>
+                          </attributes>
+                        </default>
+                      </org.jgraph.graph.DefaultGraphCell>
+                      <org.jgraph.graph.DefaultPort>
+                        <default>
+                          <edges>
+                            <org.jgraph.graph.DefaultEdge serialization="custom">
+                              <javax.swing.tree.DefaultMutableTreeNode>
+                                <default>
+                                  <allowsChildren>true</allowsChildren>
+                                </default>
+                                <object-array>
+                                  <string>userObject</string>
+                                  <Frames.Link reference="../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame/slots/Frames.Slot[2]/inLinks/Frames.Link"/>
+                                </object-array>
+                              </javax.swing.tree.DefaultMutableTreeNode>
+                              <org.jgraph.graph.DefaultGraphCell>
+                                <default>
+                                  <attributes serialization="custom">
+                                    <unserializable-parents/>
+                                    <hashtable>
+                                      <default>
+                                        <loadFactor>0.75</loadFactor>
+                                        <threshold>6</threshold>
+                                      </default>
+                                      <int>8</int>
+                                      <int>3</int>
+                                      <string>lineEnd</string>
+                                      <int>4</int>
+                                      <string>labelAlongEdge</string>
+                                      <boolean>true</boolean>
+                                      <string>editable</string>
+                                      <boolean>false</boolean>
+                                    </hashtable>
+                                  </attributes>
+                                </default>
+                              </org.jgraph.graph.DefaultGraphCell>
+                              <org.jgraph.graph.DefaultEdge>
+                                <default>
+                                  <source class="org.jgraph.graph.DefaultPort" serialization="custom">
+                                    <javax.swing.tree.DefaultMutableTreeNode>
+                                      <default>
+                                        <allowsChildren>false</allowsChildren>
+                                        <parent class="org.jgraph.graph.DefaultGraphCell" serialization="custom">
+                                          <javax.swing.tree.DefaultMutableTreeNode>
+                                            <default>
+                                              <allowsChildren>true</allowsChildren>
+                                              <children>
+                                                <org.jgraph.graph.DefaultPort reference="../../../../../../.."/>
+                                              </children>
+                                            </default>
+                                            <object-array>
+                                              <string>userObject</string>
+                                              <Frames.Frame reference="../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame/slots/Frames.Slot[2]/inLinks/Frames.Link/source"/>
+                                            </object-array>
+                                          </javax.swing.tree.DefaultMutableTreeNode>
+                                          <org.jgraph.graph.DefaultGraphCell>
+                                            <default>
+                                              <attributes serialization="custom">
+                                                <unserializable-parents/>
+                                                <hashtable>
+                                                  <default>
+                                                    <loadFactor>0.75</loadFactor>
+                                                    <threshold>6</threshold>
+                                                  </default>
+                                                  <int>5</int>
+                                                  <int>5</int>
+                                                  <string>opaque</string>
+                                                  <boolean>true</boolean>
+                                                  <string>bounds</string>
+                                                  <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                                                    <unserializable-parents/>
+                                                    <java.awt.geom.Rectangle2D_-Double>
+                                                      <default>
+                                                        <height>19.0</height>
+                                                        <width>91.0</width>
+                                                        <x>90.0</x>
+                                                        <y>132.0</y>
+                                                      </default>
+                                                    </java.awt.geom.Rectangle2D_-Double>
+                                                    <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                      <default/>
+                                                      <double>90.0</double>
+                                                      <double>132.0</double>
+                                                      <double>91.0</double>
+                                                      <double>19.0</double>
+                                                    </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                  </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                  <string>backgroundColor</string>
+                                                  <awt-color>
+                                                    <red>255</red>
+                                                    <green>255</green>
+                                                    <blue>255</blue>
+                                                    <alpha>255</alpha>
+                                                  </awt-color>
+                                                  <string>bordercolor</string>
+                                                  <awt-color>
+                                                    <red>0</red>
+                                                    <green>0</green>
+                                                    <blue>0</blue>
+                                                    <alpha>255</alpha>
+                                                  </awt-color>
+                                                  <string>gradientColor</string>
+                                                  <awt-color>
+                                                    <red>0</red>
+                                                    <green>255</green>
+                                                    <blue>0</blue>
+                                                    <alpha>255</alpha>
+                                                  </awt-color>
+                                                </hashtable>
+                                              </attributes>
+                                            </default>
+                                          </org.jgraph.graph.DefaultGraphCell>
+                                        </parent>
+                                      </default>
+                                      <object-array/>
+                                    </javax.swing.tree.DefaultMutableTreeNode>
+                                    <org.jgraph.graph.DefaultGraphCell>
+                                      <default>
+                                        <attributes serialization="custom">
+                                          <unserializable-parents/>
+                                          <hashtable>
+                                            <default>
+                                              <loadFactor>0.75</loadFactor>
+                                              <threshold>6</threshold>
+                                            </default>
+                                            <int>3</int>
+                                            <int>0</int>
+                                          </hashtable>
+                                        </attributes>
+                                      </default>
+                                    </org.jgraph.graph.DefaultGraphCell>
+                                    <org.jgraph.graph.DefaultPort>
+                                      <default>
+                                        <edges>
+                                          <org.jgraph.graph.DefaultEdge reference="../../../../../../.."/>
+                                        </edges>
+                                      </default>
+                                    </org.jgraph.graph.DefaultPort>
+                                  </source>
+                                  <target class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                </default>
+                              </org.jgraph.graph.DefaultEdge>
+                            </org.jgraph.graph.DefaultEdge>
+                            <org.jgraph.graph.DefaultEdge serialization="custom">
+                              <javax.swing.tree.DefaultMutableTreeNode>
+                                <default>
+                                  <allowsChildren>true</allowsChildren>
+                                </default>
+                                <object-array>
+                                  <string>userObject</string>
+                                  <Frames.Link reference="../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame/slots/Frames.Slot/inLinks/Frames.Link"/>
+                                </object-array>
+                              </javax.swing.tree.DefaultMutableTreeNode>
+                              <org.jgraph.graph.DefaultGraphCell>
+                                <default>
+                                  <attributes serialization="custom">
+                                    <unserializable-parents/>
+                                    <hashtable>
+                                      <default>
+                                        <loadFactor>0.75</loadFactor>
+                                        <threshold>6</threshold>
+                                      </default>
+                                      <int>8</int>
+                                      <int>3</int>
+                                      <string>lineEnd</string>
+                                      <int>4</int>
+                                      <string>labelAlongEdge</string>
+                                      <boolean>true</boolean>
+                                      <string>editable</string>
+                                      <boolean>false</boolean>
+                                    </hashtable>
+                                  </attributes>
+                                </default>
+                              </org.jgraph.graph.DefaultGraphCell>
+                              <org.jgraph.graph.DefaultEdge>
+                                <default>
+                                  <source class="org.jgraph.graph.DefaultPort" serialization="custom">
+                                    <javax.swing.tree.DefaultMutableTreeNode>
+                                      <default>
+                                        <allowsChildren>false</allowsChildren>
+                                        <parent class="org.jgraph.graph.DefaultGraphCell" serialization="custom">
+                                          <javax.swing.tree.DefaultMutableTreeNode>
+                                            <default>
+                                              <allowsChildren>true</allowsChildren>
+                                              <children>
+                                                <org.jgraph.graph.DefaultPort reference="../../../../../../.."/>
+                                              </children>
+                                            </default>
+                                            <object-array>
+                                              <string>userObject</string>
+                                              <Frames.Frame reference="../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame/slots/Frames.Slot/inLinks/Frames.Link/source"/>
+                                            </object-array>
+                                          </javax.swing.tree.DefaultMutableTreeNode>
+                                          <org.jgraph.graph.DefaultGraphCell>
+                                            <default>
+                                              <attributes serialization="custom">
+                                                <unserializable-parents/>
+                                                <hashtable>
+                                                  <default>
+                                                    <loadFactor>0.75</loadFactor>
+                                                    <threshold>6</threshold>
+                                                  </default>
+                                                  <int>8</int>
+                                                  <int>5</int>
+                                                  <string>bordercolor</string>
+                                                  <awt-color>
+                                                    <red>0</red>
+                                                    <green>0</green>
+                                                    <blue>0</blue>
+                                                    <alpha>255</alpha>
+                                                  </awt-color>
+                                                  <string>backgroundColor</string>
+                                                  <awt-color>
+                                                    <red>255</red>
+                                                    <green>255</green>
+                                                    <blue>255</blue>
+                                                    <alpha>255</alpha>
+                                                  </awt-color>
+                                                  <string>bounds</string>
+                                                  <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                                                    <unserializable-parents/>
+                                                    <java.awt.geom.Rectangle2D_-Double>
+                                                      <default>
+                                                        <height>19.0</height>
+                                                        <width>163.0</width>
+                                                        <x>294.0</x>
+                                                        <y>132.0</y>
+                                                      </default>
+                                                    </java.awt.geom.Rectangle2D_-Double>
+                                                    <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                      <default/>
+                                                      <double>294.0</double>
+                                                      <double>132.0</double>
+                                                      <double>163.0</double>
+                                                      <double>19.0</double>
+                                                    </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                  </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                  <string>gradientColor</string>
+                                                  <awt-color>
+                                                    <red>0</red>
+                                                    <green>255</green>
+                                                    <blue>0</blue>
+                                                    <alpha>255</alpha>
+                                                  </awt-color>
+                                                  <string>opaque</string>
+                                                  <boolean>true</boolean>
+                                                </hashtable>
+                                              </attributes>
+                                            </default>
+                                          </org.jgraph.graph.DefaultGraphCell>
+                                        </parent>
+                                      </default>
+                                      <object-array/>
+                                    </javax.swing.tree.DefaultMutableTreeNode>
+                                    <org.jgraph.graph.DefaultGraphCell>
+                                      <default>
+                                        <attributes serialization="custom">
+                                          <unserializable-parents/>
+                                          <hashtable>
+                                            <default>
+                                              <loadFactor>0.75</loadFactor>
+                                              <threshold>6</threshold>
+                                            </default>
+                                            <int>8</int>
+                                            <int>0</int>
+                                          </hashtable>
+                                        </attributes>
+                                      </default>
+                                    </org.jgraph.graph.DefaultGraphCell>
+                                    <org.jgraph.graph.DefaultPort>
+                                      <default>
+                                        <edges>
+                                          <org.jgraph.graph.DefaultEdge reference="../../../../../../.."/>
+                                        </edges>
+                                      </default>
+                                    </org.jgraph.graph.DefaultPort>
+                                  </source>
+                                  <target class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                </default>
+                              </org.jgraph.graph.DefaultEdge>
+                            </org.jgraph.graph.DefaultEdge>
+                          </edges>
+                        </default>
+                      </org.jgraph.graph.DefaultPort>
+                    </org.jgraph.graph.DefaultPort>
+                  </children>
+                </default>
+                <object-array>
+                  <string>userObject</string>
+                  <Frames.Frame reference="../../../../../../../../../frameset/frames/Frames.Frame"/>
+                </object-array>
+              </javax.swing.tree.DefaultMutableTreeNode>
+              <org.jgraph.graph.DefaultGraphCell>
+                <default>
+                  <attributes serialization="custom">
+                    <unserializable-parents/>
+                    <hashtable>
+                      <default>
+                        <loadFactor>0.75</loadFactor>
+                        <threshold>6</threshold>
+                      </default>
+                      <int>5</int>
+                      <int>5</int>
+                      <string>backgroundColor</string>
+                      <awt-color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                        <alpha>255</alpha>
+                      </awt-color>
+                      <string>bounds</string>
+                      <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                        <unserializable-parents/>
+                        <java.awt.geom.Rectangle2D_-Double>
+                          <default>
+                            <height>19.0</height>
+                            <width>217.0</width>
+                            <x>126.0</x>
+                            <y>30.0</y>
+                          </default>
+                        </java.awt.geom.Rectangle2D_-Double>
+                        <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                          <default/>
+                          <double>126.0</double>
+                          <double>30.0</double>
+                          <double>217.0</double>
+                          <double>19.0</double>
+                        </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      <string>opaque</string>
+                      <boolean>true</boolean>
+                      <string>bordercolor</string>
+                      <awt-color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                        <alpha>255</alpha>
+                      </awt-color>
+                      <string>gradientColor</string>
+                      <awt-color>
+                        <red>0</red>
+                        <green>255</green>
+                        <blue>0</blue>
+                        <alpha>255</alpha>
+                      </awt-color>
+                    </hashtable>
+                  </attributes>
+                </default>
+              </org.jgraph.graph.DefaultGraphCell>
+            </org.jgraph.graph.DefaultGraphCell>
+            <org.jgraph.graph.DefaultGraphCell reference="../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent"/>
+            <org.jgraph.graph.DefaultGraphCell serialization="custom">
+              <javax.swing.tree.DefaultMutableTreeNode>
+                <default>
+                  <allowsChildren>true</allowsChildren>
+                  <children>
+                    <org.jgraph.graph.DefaultPort serialization="custom">
+                      <javax.swing.tree.DefaultMutableTreeNode>
+                        <default>
+                          <allowsChildren>false</allowsChildren>
+                          <parent class="org.jgraph.graph.DefaultGraphCell" reference="../../../../../../.."/>
+                        </default>
+                        <object-array/>
+                      </javax.swing.tree.DefaultMutableTreeNode>
+                      <org.jgraph.graph.DefaultGraphCell>
+                        <default>
+                          <attributes serialization="custom">
+                            <unserializable-parents/>
+                            <hashtable>
+                              <default>
+                                <loadFactor>0.75</loadFactor>
+                                <threshold>6</threshold>
+                              </default>
+                              <int>3</int>
+                              <int>0</int>
+                            </hashtable>
+                          </attributes>
+                        </default>
+                      </org.jgraph.graph.DefaultGraphCell>
+                      <org.jgraph.graph.DefaultPort>
+                        <default>
+                          <edges/>
+                        </default>
+                      </org.jgraph.graph.DefaultPort>
+                    </org.jgraph.graph.DefaultPort>
+                  </children>
+                </default>
+                <object-array>
+                  <string>userObject</string>
+                  <Frames.Frame reference="../../../../../../../../../frameset/frames/Frames.Frame[3]"/>
+                </object-array>
+              </javax.swing.tree.DefaultMutableTreeNode>
+              <org.jgraph.graph.DefaultGraphCell>
+                <default>
+                  <attributes serialization="custom">
+                    <unserializable-parents/>
+                    <hashtable>
+                      <default>
+                        <loadFactor>0.75</loadFactor>
+                        <threshold>6</threshold>
+                      </default>
+                      <int>5</int>
+                      <int>5</int>
+                      <string>opaque</string>
+                      <boolean>true</boolean>
+                      <string>bounds</string>
+                      <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                        <unserializable-parents/>
+                        <java.awt.geom.Rectangle2D_-Double>
+                          <default>
+                            <height>19.0</height>
+                            <width>91.0</width>
+                            <x>78.0</x>
+                            <y>546.0</y>
+                          </default>
+                        </java.awt.geom.Rectangle2D_-Double>
+                        <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                          <default/>
+                          <double>78.0</double>
+                          <double>546.0</double>
+                          <double>91.0</double>
+                          <double>19.0</double>
+                        </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      <string>backgroundColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                      <string>bordercolor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                      <string>gradientColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                    </hashtable>
+                  </attributes>
+                </default>
+              </org.jgraph.graph.DefaultGraphCell>
+            </org.jgraph.graph.DefaultGraphCell>
+            <org.jgraph.graph.DefaultGraphCell serialization="custom">
+              <javax.swing.tree.DefaultMutableTreeNode>
+                <default>
+                  <allowsChildren>true</allowsChildren>
+                  <children>
+                    <org.jgraph.graph.DefaultPort serialization="custom">
+                      <javax.swing.tree.DefaultMutableTreeNode>
+                        <default>
+                          <allowsChildren>false</allowsChildren>
+                          <parent class="org.jgraph.graph.DefaultGraphCell" reference="../../../../../../.."/>
+                        </default>
+                        <object-array/>
+                      </javax.swing.tree.DefaultMutableTreeNode>
+                      <org.jgraph.graph.DefaultGraphCell>
+                        <default>
+                          <attributes serialization="custom">
+                            <unserializable-parents/>
+                            <hashtable>
+                              <default>
+                                <loadFactor>0.75</loadFactor>
+                                <threshold>6</threshold>
+                              </default>
+                              <int>3</int>
+                              <int>0</int>
+                            </hashtable>
+                          </attributes>
+                        </default>
+                      </org.jgraph.graph.DefaultGraphCell>
+                      <org.jgraph.graph.DefaultPort>
+                        <default>
+                          <edges/>
+                        </default>
+                      </org.jgraph.graph.DefaultPort>
+                    </org.jgraph.graph.DefaultPort>
+                  </children>
+                </default>
+                <object-array>
+                  <string>userObject</string>
+                  <Frames.Frame reference="../../../../../../../../../frameset/frames/Frames.Frame[4]"/>
+                </object-array>
+              </javax.swing.tree.DefaultMutableTreeNode>
+              <org.jgraph.graph.DefaultGraphCell>
+                <default>
+                  <attributes serialization="custom">
+                    <unserializable-parents/>
+                    <hashtable>
+                      <default>
+                        <loadFactor>0.75</loadFactor>
+                        <threshold>6</threshold>
+                      </default>
+                      <int>5</int>
+                      <int>5</int>
+                      <string>opaque</string>
+                      <boolean>true</boolean>
+                      <string>bounds</string>
+                      <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                        <unserializable-parents/>
+                        <java.awt.geom.Rectangle2D_-Double>
+                          <default>
+                            <height>19.0</height>
+                            <width>91.0</width>
+                            <x>84.0</x>
+                            <y>576.0</y>
+                          </default>
+                        </java.awt.geom.Rectangle2D_-Double>
+                        <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                          <default/>
+                          <double>84.0</double>
+                          <double>576.0</double>
+                          <double>91.0</double>
+                          <double>19.0</double>
+                        </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      <string>backgroundColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                      <string>bordercolor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                      <string>gradientColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                    </hashtable>
+                  </attributes>
+                </default>
+              </org.jgraph.graph.DefaultGraphCell>
+            </org.jgraph.graph.DefaultGraphCell>
+            <org.jgraph.graph.DefaultGraphCell serialization="custom">
+              <javax.swing.tree.DefaultMutableTreeNode>
+                <default>
+                  <allowsChildren>true</allowsChildren>
+                  <children>
+                    <org.jgraph.graph.DefaultPort serialization="custom">
+                      <javax.swing.tree.DefaultMutableTreeNode>
+                        <default>
+                          <allowsChildren>false</allowsChildren>
+                          <parent class="org.jgraph.graph.DefaultGraphCell" reference="../../../../../../.."/>
+                        </default>
+                        <object-array/>
+                      </javax.swing.tree.DefaultMutableTreeNode>
+                      <org.jgraph.graph.DefaultGraphCell>
+                        <default>
+                          <attributes serialization="custom">
+                            <unserializable-parents/>
+                            <hashtable>
+                              <default>
+                                <loadFactor>0.75</loadFactor>
+                                <threshold>6</threshold>
+                              </default>
+                              <int>3</int>
+                              <int>0</int>
+                            </hashtable>
+                          </attributes>
+                        </default>
+                      </org.jgraph.graph.DefaultGraphCell>
+                      <org.jgraph.graph.DefaultPort>
+                        <default>
+                          <edges/>
+                        </default>
+                      </org.jgraph.graph.DefaultPort>
+                    </org.jgraph.graph.DefaultPort>
+                  </children>
+                </default>
+                <object-array>
+                  <string>userObject</string>
+                  <Frames.Frame reference="../../../../../../../../../frameset/frames/Frames.Frame[5]"/>
+                </object-array>
+              </javax.swing.tree.DefaultMutableTreeNode>
+              <org.jgraph.graph.DefaultGraphCell>
+                <default>
+                  <attributes serialization="custom">
+                    <unserializable-parents/>
+                    <hashtable>
+                      <default>
+                        <loadFactor>0.75</loadFactor>
+                        <threshold>6</threshold>
+                      </default>
+                      <int>5</int>
+                      <int>5</int>
+                      <string>opaque</string>
+                      <boolean>true</boolean>
+                      <string>bounds</string>
+                      <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                        <unserializable-parents/>
+                        <java.awt.geom.Rectangle2D_-Double>
+                          <default>
+                            <height>19.0</height>
+                            <width>91.0</width>
+                            <x>90.0</x>
+                            <y>630.0</y>
+                          </default>
+                        </java.awt.geom.Rectangle2D_-Double>
+                        <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                          <default/>
+                          <double>90.0</double>
+                          <double>630.0</double>
+                          <double>91.0</double>
+                          <double>19.0</double>
+                        </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      <string>backgroundColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                      <string>bordercolor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                      <string>gradientColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                    </hashtable>
+                  </attributes>
+                </default>
+              </org.jgraph.graph.DefaultGraphCell>
+            </org.jgraph.graph.DefaultGraphCell>
+            <org.jgraph.graph.DefaultGraphCell serialization="custom">
+              <javax.swing.tree.DefaultMutableTreeNode>
+                <default>
+                  <allowsChildren>true</allowsChildren>
+                  <children>
+                    <org.jgraph.graph.DefaultPort serialization="custom">
+                      <javax.swing.tree.DefaultMutableTreeNode>
+                        <default>
+                          <allowsChildren>false</allowsChildren>
+                          <parent class="org.jgraph.graph.DefaultGraphCell" reference="../../../../../../.."/>
+                        </default>
+                        <object-array/>
+                      </javax.swing.tree.DefaultMutableTreeNode>
+                      <org.jgraph.graph.DefaultGraphCell>
+                        <default>
+                          <attributes serialization="custom">
+                            <unserializable-parents/>
+                            <hashtable>
+                              <default>
+                                <loadFactor>0.75</loadFactor>
+                                <threshold>6</threshold>
+                              </default>
+                              <int>3</int>
+                              <int>0</int>
+                            </hashtable>
+                          </attributes>
+                        </default>
+                      </org.jgraph.graph.DefaultGraphCell>
+                      <org.jgraph.graph.DefaultPort>
+                        <default>
+                          <edges>
+                            <org.jgraph.graph.DefaultEdge serialization="custom">
+                              <javax.swing.tree.DefaultMutableTreeNode>
+                                <default>
+                                  <allowsChildren>true</allowsChildren>
+                                </default>
+                                <object-array>
+                                  <string>userObject</string>
+                                  <Frames.Link reference="../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link"/>
+                                </object-array>
+                              </javax.swing.tree.DefaultMutableTreeNode>
+                              <org.jgraph.graph.DefaultGraphCell>
+                                <default>
+                                  <attributes serialization="custom">
+                                    <unserializable-parents/>
+                                    <hashtable>
+                                      <default>
+                                        <loadFactor>0.75</loadFactor>
+                                        <threshold>6</threshold>
+                                      </default>
+                                      <int>8</int>
+                                      <int>5</int>
+                                      <string>lineEnd</string>
+                                      <int>4</int>
+                                      <string>labelAlongEdge</string>
+                                      <boolean>true</boolean>
+                                      <string>labelposition</string>
+                                      <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                        <unserializable-parents/>
+                                        <java.awt.geom.Point2D_-Double>
+                                          <default>
+                                            <x>500.0</x>
+                                            <y>0.0</y>
+                                          </default>
+                                        </java.awt.geom.Point2D_-Double>
+                                        <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                          <default/>
+                                          <double>500.0</double>
+                                          <double>0.0</double>
+                                        </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                      </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                      <string>editable</string>
+                                      <boolean>false</boolean>
+                                      <string>points</string>
+                                      <list>
+                                        <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                          <unserializable-parents/>
+                                          <java.awt.geom.Point2D_-Double>
+                                            <default>
+                                              <x>542.75</x>
+                                              <y>579.25</y>
+                                            </default>
+                                          </java.awt.geom.Point2D_-Double>
+                                          <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                            <default/>
+                                            <double>542.75</double>
+                                            <double>579.25</double>
+                                          </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                        </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                        <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                          <unserializable-parents/>
+                                          <java.awt.geom.Point2D_-Double>
+                                            <default>
+                                              <x>440.75</x>
+                                              <y>447.25</y>
+                                            </default>
+                                          </java.awt.geom.Point2D_-Double>
+                                          <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                            <default/>
+                                            <double>440.75</double>
+                                            <double>447.25</double>
+                                          </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                        </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                      </list>
+                                    </hashtable>
+                                  </attributes>
+                                </default>
+                              </org.jgraph.graph.DefaultGraphCell>
+                              <org.jgraph.graph.DefaultEdge>
+                                <default>
+                                  <source class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                  <target class="org.jgraph.graph.DefaultPort" serialization="custom">
+                                    <javax.swing.tree.DefaultMutableTreeNode>
+                                      <default>
+                                        <allowsChildren>false</allowsChildren>
+                                        <parent class="org.jgraph.graph.DefaultGraphCell" serialization="custom">
+                                          <javax.swing.tree.DefaultMutableTreeNode>
+                                            <default>
+                                              <allowsChildren>true</allowsChildren>
+                                              <children>
+                                                <org.jgraph.graph.DefaultPort reference="../../../../../../.."/>
+                                              </children>
+                                            </default>
+                                            <object-array>
+                                              <string>userObject</string>
+                                              <Frames.Frame reference="../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent"/>
+                                            </object-array>
+                                          </javax.swing.tree.DefaultMutableTreeNode>
+                                          <org.jgraph.graph.DefaultGraphCell>
+                                            <default>
+                                              <attributes serialization="custom">
+                                                <unserializable-parents/>
+                                                <hashtable>
+                                                  <default>
+                                                    <loadFactor>0.75</loadFactor>
+                                                    <threshold>6</threshold>
+                                                  </default>
+                                                  <int>8</int>
+                                                  <int>5</int>
+                                                  <string>bordercolor</string>
+                                                  <awt-color reference="../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                                                  <string>backgroundColor</string>
+                                                  <awt-color reference="../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                                                  <string>bounds</string>
+                                                  <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                                                    <unserializable-parents/>
+                                                    <java.awt.geom.Rectangle2D_-Double>
+                                                      <default>
+                                                        <height>19.0</height>
+                                                        <width>187.0</width>
+                                                        <x>347.25</x>
+                                                        <y>437.75</y>
+                                                      </default>
+                                                    </java.awt.geom.Rectangle2D_-Double>
+                                                    <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                      <default/>
+                                                      <double>347.25</double>
+                                                      <double>437.75</double>
+                                                      <double>187.0</double>
+                                                      <double>19.0</double>
+                                                    </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                  </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                  <string>gradientColor</string>
+                                                  <awt-color reference="../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                                                  <string>opaque</string>
+                                                  <boolean>true</boolean>
+                                                </hashtable>
+                                              </attributes>
+                                            </default>
+                                          </org.jgraph.graph.DefaultGraphCell>
+                                        </parent>
+                                      </default>
+                                      <object-array/>
+                                    </javax.swing.tree.DefaultMutableTreeNode>
+                                    <org.jgraph.graph.DefaultGraphCell>
+                                      <default>
+                                        <attributes serialization="custom">
+                                          <unserializable-parents/>
+                                          <hashtable>
+                                            <default>
+                                              <loadFactor>0.75</loadFactor>
+                                              <threshold>6</threshold>
+                                            </default>
+                                            <int>8</int>
+                                            <int>0</int>
+                                          </hashtable>
+                                        </attributes>
+                                      </default>
+                                    </org.jgraph.graph.DefaultGraphCell>
+                                    <org.jgraph.graph.DefaultPort>
+                                      <default>
+                                        <edges>
+                                          <org.jgraph.graph.DefaultEdge reference="../../../../../../.."/>
+                                          <org.jgraph.graph.DefaultEdge serialization="custom">
+                                            <javax.swing.tree.DefaultMutableTreeNode>
+                                              <default>
+                                                <allowsChildren>true</allowsChildren>
+                                              </default>
+                                              <object-array>
+                                                <string>userObject</string>
+                                                <Frames.Link reference="../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]"/>
+                                              </object-array>
+                                            </javax.swing.tree.DefaultMutableTreeNode>
+                                            <org.jgraph.graph.DefaultGraphCell>
+                                              <default>
+                                                <attributes serialization="custom">
+                                                  <unserializable-parents/>
+                                                  <hashtable>
+                                                    <default>
+                                                      <loadFactor>0.75</loadFactor>
+                                                      <threshold>6</threshold>
+                                                    </default>
+                                                    <int>8</int>
+                                                    <int>5</int>
+                                                    <string>lineEnd</string>
+                                                    <int>4</int>
+                                                    <string>labelAlongEdge</string>
+                                                    <boolean>true</boolean>
+                                                    <string>labelposition</string>
+                                                    <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                      <unserializable-parents/>
+                                                      <java.awt.geom.Point2D_-Double>
+                                                        <default>
+                                                          <x>500.0</x>
+                                                          <y>0.0</y>
+                                                        </default>
+                                                      </java.awt.geom.Point2D_-Double>
+                                                      <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                        <default/>
+                                                        <double>500.0</double>
+                                                        <double>0.0</double>
+                                                      </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                    </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                    <string>editable</string>
+                                                    <boolean>false</boolean>
+                                                    <string>points</string>
+                                                    <list>
+                                                      <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                        <unserializable-parents/>
+                                                        <java.awt.geom.Point2D_-Double>
+                                                          <default>
+                                                            <x>740.75</x>
+                                                            <y>579.25</y>
+                                                          </default>
+                                                        </java.awt.geom.Point2D_-Double>
+                                                        <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                          <default/>
+                                                          <double>740.75</double>
+                                                          <double>579.25</double>
+                                                        </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                      </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                      <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                        <unserializable-parents/>
+                                                        <java.awt.geom.Point2D_-Double>
+                                                          <default>
+                                                            <x>440.75</x>
+                                                            <y>447.25</y>
+                                                          </default>
+                                                        </java.awt.geom.Point2D_-Double>
+                                                        <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                          <default/>
+                                                          <double>440.75</double>
+                                                          <double>447.25</double>
+                                                        </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                      </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                    </list>
+                                                  </hashtable>
+                                                </attributes>
+                                              </default>
+                                            </org.jgraph.graph.DefaultGraphCell>
+                                            <org.jgraph.graph.DefaultEdge>
+                                              <default>
+                                                <source class="org.jgraph.graph.DefaultPort" serialization="custom">
+                                                  <javax.swing.tree.DefaultMutableTreeNode>
+                                                    <default>
+                                                      <allowsChildren>false</allowsChildren>
+                                                      <parent class="org.jgraph.graph.DefaultGraphCell" serialization="custom">
+                                                        <javax.swing.tree.DefaultMutableTreeNode>
+                                                          <default>
+                                                            <allowsChildren>true</allowsChildren>
+                                                            <children>
+                                                              <org.jgraph.graph.DefaultPort reference="../../../../../../.."/>
+                                                            </children>
+                                                          </default>
+                                                          <object-array>
+                                                            <string>userObject</string>
+                                                            <Frames.Frame reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source"/>
+                                                          </object-array>
+                                                        </javax.swing.tree.DefaultMutableTreeNode>
+                                                        <org.jgraph.graph.DefaultGraphCell>
+                                                          <default>
+                                                            <attributes serialization="custom">
+                                                              <unserializable-parents/>
+                                                              <hashtable>
+                                                                <default>
+                                                                  <loadFactor>0.75</loadFactor>
+                                                                  <threshold>6</threshold>
+                                                                </default>
+                                                                <int>8</int>
+                                                                <int>5</int>
+                                                                <string>bordercolor</string>
+                                                                <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                                                                <string>backgroundColor</string>
+                                                                <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                                                                <string>bounds</string>
+                                                                <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                                                                  <unserializable-parents/>
+                                                                  <java.awt.geom.Rectangle2D_-Double>
+                                                                    <default>
+                                                                      <height>19.0</height>
+                                                                      <width>91.0</width>
+                                                                      <x>695.25</x>
+                                                                      <y>569.75</y>
+                                                                    </default>
+                                                                  </java.awt.geom.Rectangle2D_-Double>
+                                                                  <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                    <default/>
+                                                                    <double>695.25</double>
+                                                                    <double>569.75</double>
+                                                                    <double>91.0</double>
+                                                                    <double>19.0</double>
+                                                                  </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                <string>gradientColor</string>
+                                                                <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                                                                <string>opaque</string>
+                                                                <boolean>true</boolean>
+                                                              </hashtable>
+                                                            </attributes>
+                                                          </default>
+                                                        </org.jgraph.graph.DefaultGraphCell>
+                                                      </parent>
+                                                    </default>
+                                                    <object-array/>
+                                                  </javax.swing.tree.DefaultMutableTreeNode>
+                                                  <org.jgraph.graph.DefaultGraphCell>
+                                                    <default>
+                                                      <attributes serialization="custom">
+                                                        <unserializable-parents/>
+                                                        <hashtable>
+                                                          <default>
+                                                            <loadFactor>0.75</loadFactor>
+                                                            <threshold>6</threshold>
+                                                          </default>
+                                                          <int>8</int>
+                                                          <int>0</int>
+                                                        </hashtable>
+                                                      </attributes>
+                                                    </default>
+                                                  </org.jgraph.graph.DefaultGraphCell>
+                                                  <org.jgraph.graph.DefaultPort>
+                                                    <default>
+                                                      <edges>
+                                                        <org.jgraph.graph.DefaultEdge serialization="custom">
+                                                          <javax.swing.tree.DefaultMutableTreeNode>
+                                                            <default>
+                                                              <allowsChildren>true</allowsChildren>
+                                                            </default>
+                                                            <object-array>
+                                                              <string>userObject</string>
+                                                              <Frames.Link reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]"/>
+                                                            </object-array>
+                                                          </javax.swing.tree.DefaultMutableTreeNode>
+                                                          <org.jgraph.graph.DefaultGraphCell>
+                                                            <default>
+                                                              <attributes serialization="custom">
+                                                                <unserializable-parents/>
+                                                                <hashtable>
+                                                                  <default>
+                                                                    <loadFactor>0.75</loadFactor>
+                                                                    <threshold>6</threshold>
+                                                                  </default>
+                                                                  <int>8</int>
+                                                                  <int>3</int>
+                                                                  <string>lineEnd</string>
+                                                                  <int>4</int>
+                                                                  <string>labelAlongEdge</string>
+                                                                  <boolean>true</boolean>
+                                                                  <string>editable</string>
+                                                                  <boolean>false</boolean>
+                                                                </hashtable>
+                                                              </attributes>
+                                                            </default>
+                                                          </org.jgraph.graph.DefaultGraphCell>
+                                                          <org.jgraph.graph.DefaultEdge>
+                                                            <default>
+                                                              <source class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                                              <target class="org.jgraph.graph.DefaultPort" serialization="custom">
+                                                                <javax.swing.tree.DefaultMutableTreeNode>
+                                                                  <default>
+                                                                    <allowsChildren>false</allowsChildren>
+                                                                    <parent class="org.jgraph.graph.DefaultGraphCell" serialization="custom">
+                                                                      <javax.swing.tree.DefaultMutableTreeNode>
+                                                                        <default>
+                                                                          <allowsChildren>true</allowsChildren>
+                                                                          <children>
+                                                                            <org.jgraph.graph.DefaultPort reference="../../../../../../.."/>
+                                                                          </children>
+                                                                        </default>
+                                                                        <object-array>
+                                                                          <string>userObject</string>
+                                                                          <Frames.Frame reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent"/>
+                                                                        </object-array>
+                                                                      </javax.swing.tree.DefaultMutableTreeNode>
+                                                                      <org.jgraph.graph.DefaultGraphCell>
+                                                                        <default>
+                                                                          <attributes serialization="custom">
+                                                                            <unserializable-parents/>
+                                                                            <hashtable>
+                                                                              <default>
+                                                                                <loadFactor>0.75</loadFactor>
+                                                                                <threshold>6</threshold>
+                                                                              </default>
+                                                                              <int>8</int>
+                                                                              <int>5</int>
+                                                                              <string>bordercolor</string>
+                                                                              <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                                                                              <string>backgroundColor</string>
+                                                                              <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                                                                              <string>bounds</string>
+                                                                              <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                                                                                <unserializable-parents/>
+                                                                                <java.awt.geom.Rectangle2D_-Double>
+                                                                                  <default>
+                                                                                    <height>19.0</height>
+                                                                                    <width>187.0</width>
+                                                                                    <x>1026.75</x>
+                                                                                    <y>426.75</y>
+                                                                                  </default>
+                                                                                </java.awt.geom.Rectangle2D_-Double>
+                                                                                <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                                  <default/>
+                                                                                  <double>1026.75</double>
+                                                                                  <double>426.75</double>
+                                                                                  <double>187.0</double>
+                                                                                  <double>19.0</double>
+                                                                                </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                              </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                              <string>gradientColor</string>
+                                                                              <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                                                                              <string>opaque</string>
+                                                                              <boolean>true</boolean>
+                                                                            </hashtable>
+                                                                          </attributes>
+                                                                        </default>
+                                                                      </org.jgraph.graph.DefaultGraphCell>
+                                                                    </parent>
+                                                                  </default>
+                                                                  <object-array/>
+                                                                </javax.swing.tree.DefaultMutableTreeNode>
+                                                                <org.jgraph.graph.DefaultGraphCell>
+                                                                  <default>
+                                                                    <attributes serialization="custom">
+                                                                      <unserializable-parents/>
+                                                                      <hashtable>
+                                                                        <default>
+                                                                          <loadFactor>0.75</loadFactor>
+                                                                          <threshold>6</threshold>
+                                                                        </default>
+                                                                        <int>8</int>
+                                                                        <int>0</int>
+                                                                      </hashtable>
+                                                                    </attributes>
+                                                                  </default>
+                                                                </org.jgraph.graph.DefaultGraphCell>
+                                                                <org.jgraph.graph.DefaultPort>
+                                                                  <default>
+                                                                    <edges>
+                                                                      <org.jgraph.graph.DefaultEdge reference="../../../../../../.."/>
+                                                                      <org.jgraph.graph.DefaultEdge serialization="custom">
+                                                                        <javax.swing.tree.DefaultMutableTreeNode>
+                                                                          <default>
+                                                                            <allowsChildren>true</allowsChildren>
+                                                                          </default>
+                                                                          <object-array>
+                                                                            <string>userObject</string>
+                                                                            <Frames.Link reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent/outLinks/Frames.Link"/>
+                                                                          </object-array>
+                                                                        </javax.swing.tree.DefaultMutableTreeNode>
+                                                                        <org.jgraph.graph.DefaultGraphCell>
+                                                                          <default>
+                                                                            <attributes serialization="custom">
+                                                                              <unserializable-parents/>
+                                                                              <hashtable>
+                                                                                <default>
+                                                                                  <loadFactor>0.75</loadFactor>
+                                                                                  <threshold>6</threshold>
+                                                                                </default>
+                                                                                <int>8</int>
+                                                                                <int>5</int>
+                                                                                <string>lineEnd</string>
+                                                                                <int>4</int>
+                                                                                <string>labelAlongEdge</string>
+                                                                                <boolean>true</boolean>
+                                                                                <string>labelposition</string>
+                                                                                <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                  <unserializable-parents/>
+                                                                                  <java.awt.geom.Point2D_-Double>
+                                                                                    <default>
+                                                                                      <x>500.0</x>
+                                                                                      <y>0.0</y>
+                                                                                    </default>
+                                                                                  </java.awt.geom.Point2D_-Double>
+                                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                    <default/>
+                                                                                    <double>500.0</double>
+                                                                                    <double>0.0</double>
+                                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                <string>editable</string>
+                                                                                <boolean>false</boolean>
+                                                                                <string>points</string>
+                                                                                <list>
+                                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                    <unserializable-parents/>
+                                                                                    <java.awt.geom.Point2D_-Double>
+                                                                                      <default>
+                                                                                        <x>1120.25</x>
+                                                                                        <y>436.25</y>
+                                                                                      </default>
+                                                                                    </java.awt.geom.Point2D_-Double>
+                                                                                    <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                      <default/>
+                                                                                      <double>1120.25</double>
+                                                                                      <double>436.25</double>
+                                                                                    </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                    <unserializable-parents/>
+                                                                                    <java.awt.geom.Point2D_-Double>
+                                                                                      <default>
+                                                                                        <x>940.25</x>
+                                                                                        <y>286.25</y>
+                                                                                      </default>
+                                                                                    </java.awt.geom.Point2D_-Double>
+                                                                                    <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                      <default/>
+                                                                                      <double>940.25</double>
+                                                                                      <double>286.25</double>
+                                                                                    </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                </list>
+                                                                              </hashtable>
+                                                                            </attributes>
+                                                                          </default>
+                                                                        </org.jgraph.graph.DefaultGraphCell>
+                                                                        <org.jgraph.graph.DefaultEdge>
+                                                                          <default>
+                                                                            <source class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                                                            <target class="org.jgraph.graph.DefaultPort" serialization="custom">
+                                                                              <javax.swing.tree.DefaultMutableTreeNode>
+                                                                                <default>
+                                                                                  <allowsChildren>false</allowsChildren>
+                                                                                  <parent class="org.jgraph.graph.DefaultGraphCell" serialization="custom">
+                                                                                    <javax.swing.tree.DefaultMutableTreeNode>
+                                                                                      <default>
+                                                                                        <allowsChildren>true</allowsChildren>
+                                                                                        <children>
+                                                                                          <org.jgraph.graph.DefaultPort reference="../../../../../../.."/>
+                                                                                        </children>
+                                                                                      </default>
+                                                                                      <object-array>
+                                                                                        <string>userObject</string>
+                                                                                        <Frames.Frame reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent/outLinks/Frames.Link/target"/>
+                                                                                      </object-array>
+                                                                                    </javax.swing.tree.DefaultMutableTreeNode>
+                                                                                    <org.jgraph.graph.DefaultGraphCell>
+                                                                                      <default>
+                                                                                        <attributes serialization="custom">
+                                                                                          <unserializable-parents/>
+                                                                                          <hashtable>
+                                                                                            <default>
+                                                                                              <loadFactor>0.75</loadFactor>
+                                                                                              <threshold>6</threshold>
+                                                                                            </default>
+                                                                                            <int>8</int>
+                                                                                            <int>5</int>
+                                                                                            <string>bordercolor</string>
+                                                                                            <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                                                                                            <string>backgroundColor</string>
+                                                                                            <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                                                                                            <string>bounds</string>
+                                                                                            <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                                                                                              <unserializable-parents/>
+                                                                                              <java.awt.geom.Rectangle2D_-Double>
+                                                                                                <default>
+                                                                                                  <height>19.0</height>
+                                                                                                  <width>163.0</width>
+                                                                                                  <x>858.75</x>
+                                                                                                  <y>276.75</y>
+                                                                                                </default>
+                                                                                              </java.awt.geom.Rectangle2D_-Double>
+                                                                                              <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                                                <default/>
+                                                                                                <double>858.75</double>
+                                                                                                <double>276.75</double>
+                                                                                                <double>163.0</double>
+                                                                                                <double>19.0</double>
+                                                                                              </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                                            </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                                            <string>gradientColor</string>
+                                                                                            <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                                                                                            <string>opaque</string>
+                                                                                            <boolean>true</boolean>
+                                                                                          </hashtable>
+                                                                                        </attributes>
+                                                                                      </default>
+                                                                                    </org.jgraph.graph.DefaultGraphCell>
+                                                                                  </parent>
+                                                                                </default>
+                                                                                <object-array/>
+                                                                              </javax.swing.tree.DefaultMutableTreeNode>
+                                                                              <org.jgraph.graph.DefaultGraphCell>
+                                                                                <default>
+                                                                                  <attributes serialization="custom">
+                                                                                    <unserializable-parents/>
+                                                                                    <hashtable>
+                                                                                      <default>
+                                                                                        <loadFactor>0.75</loadFactor>
+                                                                                        <threshold>6</threshold>
+                                                                                      </default>
+                                                                                      <int>8</int>
+                                                                                      <int>0</int>
+                                                                                    </hashtable>
+                                                                                  </attributes>
+                                                                                </default>
+                                                                              </org.jgraph.graph.DefaultGraphCell>
+                                                                              <org.jgraph.graph.DefaultPort>
+                                                                                <default>
+                                                                                  <edges>
+                                                                                    <org.jgraph.graph.DefaultEdge reference="../../../../../../.."/>
+                                                                                    <org.jgraph.graph.DefaultEdge serialization="custom">
+                                                                                      <javax.swing.tree.DefaultMutableTreeNode>
+                                                                                        <default>
+                                                                                          <allowsChildren>true</allowsChildren>
+                                                                                        </default>
+                                                                                        <object-array>
+                                                                                          <string>userObject</string>
+                                                                                          <Frames.Link reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent/outLinks/Frames.Link/target/inLinks/Frames.Link"/>
+                                                                                        </object-array>
+                                                                                      </javax.swing.tree.DefaultMutableTreeNode>
+                                                                                      <org.jgraph.graph.DefaultGraphCell>
+                                                                                        <default>
+                                                                                          <attributes serialization="custom">
+                                                                                            <unserializable-parents/>
+                                                                                            <hashtable>
+                                                                                              <default>
+                                                                                                <loadFactor>0.75</loadFactor>
+                                                                                                <threshold>6</threshold>
+                                                                                              </default>
+                                                                                              <int>8</int>
+                                                                                              <int>5</int>
+                                                                                              <string>lineEnd</string>
+                                                                                              <int>4</int>
+                                                                                              <string>labelAlongEdge</string>
+                                                                                              <boolean>true</boolean>
+                                                                                              <string>labelposition</string>
+                                                                                              <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                                <unserializable-parents/>
+                                                                                                <java.awt.geom.Point2D_-Double>
+                                                                                                  <default>
+                                                                                                    <x>500.0</x>
+                                                                                                    <y>0.0</y>
+                                                                                                  </default>
+                                                                                                </java.awt.geom.Point2D_-Double>
+                                                                                                <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                                  <default/>
+                                                                                                  <double>500.0</double>
+                                                                                                  <double>0.0</double>
+                                                                                                </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                              </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                              <string>editable</string>
+                                                                                              <boolean>false</boolean>
+                                                                                              <string>points</string>
+                                                                                              <list>
+                                                                                                <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                                  <unserializable-parents/>
+                                                                                                  <java.awt.geom.Point2D_-Double>
+                                                                                                    <default>
+                                                                                                      <x>835.25</x>
+                                                                                                      <y>442.25</y>
+                                                                                                    </default>
+                                                                                                  </java.awt.geom.Point2D_-Double>
+                                                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                                    <default/>
+                                                                                                    <double>835.25</double>
+                                                                                                    <double>442.25</double>
+                                                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                                </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                                <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                                  <unserializable-parents/>
+                                                                                                  <java.awt.geom.Point2D_-Double>
+                                                                                                    <default>
+                                                                                                      <x>940.25</x>
+                                                                                                      <y>286.25</y>
+                                                                                                    </default>
+                                                                                                  </java.awt.geom.Point2D_-Double>
+                                                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                                    <default/>
+                                                                                                    <double>940.25</double>
+                                                                                                    <double>286.25</double>
+                                                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                                </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                              </list>
+                                                                                            </hashtable>
+                                                                                          </attributes>
+                                                                                        </default>
+                                                                                      </org.jgraph.graph.DefaultGraphCell>
+                                                                                      <org.jgraph.graph.DefaultEdge>
+                                                                                        <default>
+                                                                                          <source class="org.jgraph.graph.DefaultPort" serialization="custom">
+                                                                                            <javax.swing.tree.DefaultMutableTreeNode>
+                                                                                              <default>
+                                                                                                <allowsChildren>false</allowsChildren>
+                                                                                                <parent class="org.jgraph.graph.DefaultGraphCell" serialization="custom">
+                                                                                                  <javax.swing.tree.DefaultMutableTreeNode>
+                                                                                                    <default>
+                                                                                                      <allowsChildren>true</allowsChildren>
+                                                                                                      <children>
+                                                                                                        <org.jgraph.graph.DefaultPort reference="../../../../../../.."/>
+                                                                                                      </children>
+                                                                                                    </default>
+                                                                                                    <object-array>
+                                                                                                      <string>userObject</string>
+                                                                                                      <Frames.Frame reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent/outLinks/Frames.Link/target/inLinks/Frames.Link/source"/>
+                                                                                                    </object-array>
+                                                                                                  </javax.swing.tree.DefaultMutableTreeNode>
+                                                                                                  <org.jgraph.graph.DefaultGraphCell>
+                                                                                                    <default>
+                                                                                                      <attributes serialization="custom">
+                                                                                                        <unserializable-parents/>
+                                                                                                        <hashtable>
+                                                                                                          <default>
+                                                                                                            <loadFactor>0.75</loadFactor>
+                                                                                                            <threshold>6</threshold>
+                                                                                                          </default>
+                                                                                                          <int>5</int>
+                                                                                                          <int>5</int>
+                                                                                                          <string>opaque</string>
+                                                                                                          <boolean>true</boolean>
+                                                                                                          <string>bounds</string>
+                                                                                                          <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                                                                                                            <unserializable-parents/>
+                                                                                                            <java.awt.geom.Rectangle2D_-Double>
+                                                                                                              <default>
+                                                                                                                <height>19.0</height>
+                                                                                                                <width>169.0</width>
+                                                                                                                <x>750.75</x>
+                                                                                                                <y>432.75</y>
+                                                                                                              </default>
+                                                                                                            </java.awt.geom.Rectangle2D_-Double>
+                                                                                                            <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                                                              <default/>
+                                                                                                              <double>750.75</double>
+                                                                                                              <double>432.75</double>
+                                                                                                              <double>169.0</double>
+                                                                                                              <double>19.0</double>
+                                                                                                            </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                                                          </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                                                          <string>backgroundColor</string>
+                                                                                                          <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                                                                                                          <string>bordercolor</string>
+                                                                                                          <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                                                                                                          <string>gradientColor</string>
+                                                                                                          <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                                                                                                        </hashtable>
+                                                                                                      </attributes>
+                                                                                                    </default>
+                                                                                                  </org.jgraph.graph.DefaultGraphCell>
+                                                                                                </parent>
+                                                                                              </default>
+                                                                                              <object-array/>
+                                                                                            </javax.swing.tree.DefaultMutableTreeNode>
+                                                                                            <org.jgraph.graph.DefaultGraphCell>
+                                                                                              <default>
+                                                                                                <attributes serialization="custom">
+                                                                                                  <unserializable-parents/>
+                                                                                                  <hashtable>
+                                                                                                    <default>
+                                                                                                      <loadFactor>0.75</loadFactor>
+                                                                                                      <threshold>6</threshold>
+                                                                                                    </default>
+                                                                                                    <int>3</int>
+                                                                                                    <int>0</int>
+                                                                                                  </hashtable>
+                                                                                                </attributes>
+                                                                                              </default>
+                                                                                            </org.jgraph.graph.DefaultGraphCell>
+                                                                                            <org.jgraph.graph.DefaultPort>
+                                                                                              <default>
+                                                                                                <edges>
+                                                                                                  <org.jgraph.graph.DefaultEdge reference="../../../../../../.."/>
+                                                                                                  <org.jgraph.graph.DefaultEdge serialization="custom">
+                                                                                                    <javax.swing.tree.DefaultMutableTreeNode>
+                                                                                                      <default>
+                                                                                                        <allowsChildren>true</allowsChildren>
+                                                                                                      </default>
+                                                                                                      <object-array>
+                                                                                                        <string>userObject</string>
+                                                                                                        <Frames.Link reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]/target/origSlot/parent/inLinks/Frames.Link[2]/source/outLinks/Frames.Link[2]/target/parent/outLinks/Frames.Link/target/inLinks/Frames.Link/source/slots/Frames.Slot/inLinks/Frames.Link"/>
+                                                                                                      </object-array>
+                                                                                                    </javax.swing.tree.DefaultMutableTreeNode>
+                                                                                                    <org.jgraph.graph.DefaultGraphCell>
+                                                                                                      <default>
+                                                                                                        <attributes serialization="custom">
+                                                                                                          <unserializable-parents/>
+                                                                                                          <hashtable>
+                                                                                                            <default>
+                                                                                                              <loadFactor>0.75</loadFactor>
+                                                                                                              <threshold>6</threshold>
+                                                                                                            </default>
+                                                                                                            <int>8</int>
+                                                                                                            <int>3</int>
+                                                                                                            <string>lineEnd</string>
+                                                                                                            <int>4</int>
+                                                                                                            <string>labelAlongEdge</string>
+                                                                                                            <boolean>true</boolean>
+                                                                                                            <string>editable</string>
+                                                                                                            <boolean>false</boolean>
+                                                                                                          </hashtable>
+                                                                                                        </attributes>
+                                                                                                      </default>
+                                                                                                    </org.jgraph.graph.DefaultGraphCell>
+                                                                                                    <org.jgraph.graph.DefaultEdge>
+                                                                                                      <default>
+                                                                                                        <source class="org.jgraph.graph.DefaultPort" reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../.."/>
+                                                                                                        <target class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                                                                                      </default>
+                                                                                                    </org.jgraph.graph.DefaultEdge>
+                                                                                                  </org.jgraph.graph.DefaultEdge>
+                                                                                                </edges>
+                                                                                              </default>
+                                                                                            </org.jgraph.graph.DefaultPort>
+                                                                                          </source>
+                                                                                          <target class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                                                                        </default>
+                                                                                      </org.jgraph.graph.DefaultEdge>
+                                                                                    </org.jgraph.graph.DefaultEdge>
+                                                                                  </edges>
+                                                                                </default>
+                                                                              </org.jgraph.graph.DefaultPort>
+                                                                            </target>
+                                                                          </default>
+                                                                        </org.jgraph.graph.DefaultEdge>
+                                                                      </org.jgraph.graph.DefaultEdge>
+                                                                    </edges>
+                                                                  </default>
+                                                                </org.jgraph.graph.DefaultPort>
+                                                              </target>
+                                                            </default>
+                                                          </org.jgraph.graph.DefaultEdge>
+                                                        </org.jgraph.graph.DefaultEdge>
+                                                        <org.jgraph.graph.DefaultEdge serialization="custom">
+                                                          <javax.swing.tree.DefaultMutableTreeNode>
+                                                            <default>
+                                                              <allowsChildren>true</allowsChildren>
+                                                            </default>
+                                                            <object-array>
+                                                              <string>userObject</string>
+                                                              <Frames.Link reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source/outLinks/Frames.Link[2]"/>
+                                                            </object-array>
+                                                          </javax.swing.tree.DefaultMutableTreeNode>
+                                                          <org.jgraph.graph.DefaultGraphCell>
+                                                            <default>
+                                                              <attributes serialization="custom">
+                                                                <unserializable-parents/>
+                                                                <hashtable>
+                                                                  <default>
+                                                                    <loadFactor>0.75</loadFactor>
+                                                                    <threshold>6</threshold>
+                                                                  </default>
+                                                                  <int>8</int>
+                                                                  <int>5</int>
+                                                                  <string>lineEnd</string>
+                                                                  <int>4</int>
+                                                                  <string>labelAlongEdge</string>
+                                                                  <boolean>true</boolean>
+                                                                  <string>labelposition</string>
+                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                    <unserializable-parents/>
+                                                                    <java.awt.geom.Point2D_-Double>
+                                                                      <default>
+                                                                        <x>500.0</x>
+                                                                        <y>0.0</y>
+                                                                      </default>
+                                                                    </java.awt.geom.Point2D_-Double>
+                                                                    <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                      <default/>
+                                                                      <double>500.0</double>
+                                                                      <double>0.0</double>
+                                                                    </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                  <string>editable</string>
+                                                                  <boolean>false</boolean>
+                                                                  <string>points</string>
+                                                                  <list>
+                                                                    <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                      <unserializable-parents/>
+                                                                      <java.awt.geom.Point2D_-Double>
+                                                                        <default>
+                                                                          <x>590.75</x>
+                                                                          <y>735.25</y>
+                                                                        </default>
+                                                                      </java.awt.geom.Point2D_-Double>
+                                                                      <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                        <default/>
+                                                                        <double>590.75</double>
+                                                                        <double>735.25</double>
+                                                                      </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                    </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                    <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                      <unserializable-parents/>
+                                                                      <java.awt.geom.Point2D_-Double>
+                                                                        <default>
+                                                                          <x>740.75</x>
+                                                                          <y>579.25</y>
+                                                                        </default>
+                                                                      </java.awt.geom.Point2D_-Double>
+                                                                      <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                        <default/>
+                                                                        <double>740.75</double>
+                                                                        <double>579.25</double>
+                                                                      </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                    </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                  </list>
+                                                                </hashtable>
+                                                              </attributes>
+                                                            </default>
+                                                          </org.jgraph.graph.DefaultGraphCell>
+                                                          <org.jgraph.graph.DefaultEdge>
+                                                            <default>
+                                                              <source class="org.jgraph.graph.DefaultPort" serialization="custom">
+                                                                <javax.swing.tree.DefaultMutableTreeNode>
+                                                                  <default>
+                                                                    <allowsChildren>false</allowsChildren>
+                                                                    <parent class="org.jgraph.graph.DefaultGraphCell" serialization="custom">
+                                                                      <javax.swing.tree.DefaultMutableTreeNode>
+                                                                        <default>
+                                                                          <allowsChildren>true</allowsChildren>
+                                                                          <children>
+                                                                            <org.jgraph.graph.DefaultPort reference="../../../../../../.."/>
+                                                                          </children>
+                                                                        </default>
+                                                                        <object-array>
+                                                                          <string>userObject</string>
+                                                                          <Frames.Frame reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link/source"/>
+                                                                        </object-array>
+                                                                      </javax.swing.tree.DefaultMutableTreeNode>
+                                                                      <org.jgraph.graph.DefaultGraphCell>
+                                                                        <default>
+                                                                          <attributes serialization="custom">
+                                                                            <unserializable-parents/>
+                                                                            <hashtable>
+                                                                              <default>
+                                                                                <loadFactor>0.75</loadFactor>
+                                                                                <threshold>6</threshold>
+                                                                              </default>
+                                                                              <int>8</int>
+                                                                              <int>5</int>
+                                                                              <string>bordercolor</string>
+                                                                              <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                                                                              <string>backgroundColor</string>
+                                                                              <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                                                                              <string>bounds</string>
+                                                                              <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                                                                                <unserializable-parents/>
+                                                                                <java.awt.geom.Rectangle2D_-Double>
+                                                                                  <default>
+                                                                                    <height>19.0</height>
+                                                                                    <width>127.0</width>
+                                                                                    <x>527.25</x>
+                                                                                    <y>725.75</y>
+                                                                                  </default>
+                                                                                </java.awt.geom.Rectangle2D_-Double>
+                                                                                <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                                  <default/>
+                                                                                  <double>527.25</double>
+                                                                                  <double>725.75</double>
+                                                                                  <double>127.0</double>
+                                                                                  <double>19.0</double>
+                                                                                </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                              </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                                                                              <string>gradientColor</string>
+                                                                              <awt-color reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                                                                              <string>opaque</string>
+                                                                              <boolean>true</boolean>
+                                                                            </hashtable>
+                                                                          </attributes>
+                                                                        </default>
+                                                                      </org.jgraph.graph.DefaultGraphCell>
+                                                                    </parent>
+                                                                  </default>
+                                                                  <object-array/>
+                                                                </javax.swing.tree.DefaultMutableTreeNode>
+                                                                <org.jgraph.graph.DefaultGraphCell>
+                                                                  <default>
+                                                                    <attributes serialization="custom">
+                                                                      <unserializable-parents/>
+                                                                      <hashtable>
+                                                                        <default>
+                                                                          <loadFactor>0.75</loadFactor>
+                                                                          <threshold>6</threshold>
+                                                                        </default>
+                                                                        <int>8</int>
+                                                                        <int>0</int>
+                                                                      </hashtable>
+                                                                    </attributes>
+                                                                  </default>
+                                                                </org.jgraph.graph.DefaultGraphCell>
+                                                                <org.jgraph.graph.DefaultPort>
+                                                                  <default>
+                                                                    <edges>
+                                                                      <org.jgraph.graph.DefaultEdge serialization="custom">
+                                                                        <javax.swing.tree.DefaultMutableTreeNode>
+                                                                          <default>
+                                                                            <allowsChildren>true</allowsChildren>
+                                                                          </default>
+                                                                          <object-array>
+                                                                            <string>userObject</string>
+                                                                            <Frames.Link reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../frameset/frames/Frames.Frame[6]/slots/Frames.Slot/inLinks/Frames.Link"/>
+                                                                          </object-array>
+                                                                        </javax.swing.tree.DefaultMutableTreeNode>
+                                                                        <org.jgraph.graph.DefaultGraphCell>
+                                                                          <default>
+                                                                            <attributes serialization="custom">
+                                                                              <unserializable-parents/>
+                                                                              <hashtable>
+                                                                                <default>
+                                                                                  <loadFactor>0.75</loadFactor>
+                                                                                  <threshold>6</threshold>
+                                                                                </default>
+                                                                                <int>8</int>
+                                                                                <int>5</int>
+                                                                                <string>lineEnd</string>
+                                                                                <int>4</int>
+                                                                                <string>labelAlongEdge</string>
+                                                                                <boolean>true</boolean>
+                                                                                <string>labelposition</string>
+                                                                                <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                  <unserializable-parents/>
+                                                                                  <java.awt.geom.Point2D_-Double>
+                                                                                    <default>
+                                                                                      <x>500.0</x>
+                                                                                      <y>0.0</y>
+                                                                                    </default>
+                                                                                  </java.awt.geom.Point2D_-Double>
+                                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                    <default/>
+                                                                                    <double>500.0</double>
+                                                                                    <double>0.0</double>
+                                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                <string>editable</string>
+                                                                                <boolean>false</boolean>
+                                                                                <string>points</string>
+                                                                                <list>
+                                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                    <unserializable-parents/>
+                                                                                    <java.awt.geom.Point2D_-Double>
+                                                                                      <default>
+                                                                                        <x>590.75</x>
+                                                                                        <y>735.25</y>
+                                                                                      </default>
+                                                                                    </java.awt.geom.Point2D_-Double>
+                                                                                    <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                      <default/>
+                                                                                      <double>590.75</double>
+                                                                                      <double>735.25</double>
+                                                                                    </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                  <org.jgraph.graph.AttributeMap_-SerializablePoint2D serialization="custom">
+                                                                                    <unserializable-parents/>
+                                                                                    <java.awt.geom.Point2D_-Double>
+                                                                                      <default>
+                                                                                        <x>542.75</x>
+                                                                                        <y>579.25</y>
+                                                                                      </default>
+                                                                                    </java.awt.geom.Point2D_-Double>
+                                                                                    <org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                      <default/>
+                                                                                      <double>542.75</double>
+                                                                                      <double>579.25</double>
+                                                                                    </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                  </org.jgraph.graph.AttributeMap_-SerializablePoint2D>
+                                                                                </list>
+                                                                              </hashtable>
+                                                                            </attributes>
+                                                                          </default>
+                                                                        </org.jgraph.graph.DefaultGraphCell>
+                                                                        <org.jgraph.graph.DefaultEdge>
+                                                                          <default>
+                                                                            <source class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                                                            <target class="org.jgraph.graph.DefaultPort" reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../.."/>
+                                                                          </default>
+                                                                        </org.jgraph.graph.DefaultEdge>
+                                                                      </org.jgraph.graph.DefaultEdge>
+                                                                      <org.jgraph.graph.DefaultEdge reference="../../../../../../.."/>
+                                                                    </edges>
+                                                                  </default>
+                                                                </org.jgraph.graph.DefaultPort>
+                                                              </source>
+                                                              <target class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                                            </default>
+                                                          </org.jgraph.graph.DefaultEdge>
+                                                        </org.jgraph.graph.DefaultEdge>
+                                                        <org.jgraph.graph.DefaultEdge reference="../../../../../../.."/>
+                                                      </edges>
+                                                    </default>
+                                                  </org.jgraph.graph.DefaultPort>
+                                                </source>
+                                                <target class="org.jgraph.graph.DefaultPort" reference="../../../../../../.."/>
+                                              </default>
+                                            </org.jgraph.graph.DefaultEdge>
+                                          </org.jgraph.graph.DefaultEdge>
+                                        </edges>
+                                      </default>
+                                    </org.jgraph.graph.DefaultPort>
+                                  </target>
+                                </default>
+                              </org.jgraph.graph.DefaultEdge>
+                            </org.jgraph.graph.DefaultEdge>
+                            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge"/>
+                            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]"/>
+                          </edges>
+                        </default>
+                      </org.jgraph.graph.DefaultPort>
+                    </org.jgraph.graph.DefaultPort>
+                  </children>
+                </default>
+                <object-array>
+                  <string>userObject</string>
+                  <Frames.Frame reference="../../../../../../../../../frameset/frames/Frames.Frame[6]"/>
+                </object-array>
+              </javax.swing.tree.DefaultMutableTreeNode>
+              <org.jgraph.graph.DefaultGraphCell>
+                <default>
+                  <attributes serialization="custom">
+                    <unserializable-parents/>
+                    <hashtable>
+                      <default>
+                        <loadFactor>0.75</loadFactor>
+                        <threshold>6</threshold>
+                      </default>
+                      <int>5</int>
+                      <int>5</int>
+                      <string>opaque</string>
+                      <boolean>true</boolean>
+                      <string>bounds</string>
+                      <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                        <unserializable-parents/>
+                        <java.awt.geom.Rectangle2D_-Double>
+                          <default>
+                            <height>19.0</height>
+                            <width>91.0</width>
+                            <x>497.25</x>
+                            <y>569.75</y>
+                          </default>
+                        </java.awt.geom.Rectangle2D_-Double>
+                        <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                          <default/>
+                          <double>497.25</double>
+                          <double>569.75</double>
+                          <double>91.0</double>
+                          <double>19.0</double>
+                        </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      <string>backgroundColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                      <string>bordercolor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                      <string>gradientColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                    </hashtable>
+                  </attributes>
+                </default>
+              </org.jgraph.graph.DefaultGraphCell>
+            </org.jgraph.graph.DefaultGraphCell>
+            <org.jgraph.graph.DefaultGraphCell serialization="custom">
+              <javax.swing.tree.DefaultMutableTreeNode>
+                <default>
+                  <allowsChildren>true</allowsChildren>
+                  <children>
+                    <org.jgraph.graph.DefaultPort serialization="custom">
+                      <javax.swing.tree.DefaultMutableTreeNode>
+                        <default>
+                          <allowsChildren>false</allowsChildren>
+                          <parent class="org.jgraph.graph.DefaultGraphCell" reference="../../../../../../.."/>
+                        </default>
+                        <object-array/>
+                      </javax.swing.tree.DefaultMutableTreeNode>
+                      <org.jgraph.graph.DefaultGraphCell>
+                        <default>
+                          <attributes serialization="custom">
+                            <unserializable-parents/>
+                            <hashtable>
+                              <default>
+                                <loadFactor>0.75</loadFactor>
+                                <threshold>6</threshold>
+                              </default>
+                              <int>3</int>
+                              <int>0</int>
+                            </hashtable>
+                          </attributes>
+                        </default>
+                      </org.jgraph.graph.DefaultGraphCell>
+                      <org.jgraph.graph.DefaultPort>
+                        <default>
+                          <edges/>
+                        </default>
+                      </org.jgraph.graph.DefaultPort>
+                    </org.jgraph.graph.DefaultPort>
+                  </children>
+                </default>
+                <object-array>
+                  <string>userObject</string>
+                  <Frames.Frame reference="../../../../../../../../../frameset/frames/Frames.Frame[7]"/>
+                </object-array>
+              </javax.swing.tree.DefaultMutableTreeNode>
+              <org.jgraph.graph.DefaultGraphCell>
+                <default>
+                  <attributes serialization="custom">
+                    <unserializable-parents/>
+                    <hashtable>
+                      <default>
+                        <loadFactor>0.75</loadFactor>
+                        <threshold>6</threshold>
+                      </default>
+                      <int>5</int>
+                      <int>5</int>
+                      <string>opaque</string>
+                      <boolean>true</boolean>
+                      <string>bounds</string>
+                      <org.jgraph.graph.AttributeMap_-SerializableRectangle2D serialization="custom">
+                        <unserializable-parents/>
+                        <java.awt.geom.Rectangle2D_-Double>
+                          <default>
+                            <height>19.0</height>
+                            <width>91.0</width>
+                            <x>516.4444444444445</x>
+                            <y>233.77777777777834</y>
+                          </default>
+                        </java.awt.geom.Rectangle2D_-Double>
+                        <org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                          <default/>
+                          <double>516.4444444444445</double>
+                          <double>233.77777777777834</double>
+                          <double>91.0</double>
+                          <double>19.0</double>
+                        </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      </org.jgraph.graph.AttributeMap_-SerializableRectangle2D>
+                      <string>backgroundColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color"/>
+                      <string>bordercolor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[2]"/>
+                      <string>gradientColor</string>
+                      <awt-color reference="../../../../../../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent/org.jgraph.graph.DefaultGraphCell/default/attributes/hashtable/awt-color[3]"/>
+                    </hashtable>
+                  </attributes>
+                </default>
+              </org.jgraph.graph.DefaultGraphCell>
+            </org.jgraph.graph.DefaultGraphCell>
+            <org.jgraph.graph.DefaultGraphCell reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent"/>
+            <org.jgraph.graph.DefaultGraphCell reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/javax.swing.tree.DefaultMutableTreeNode/default/parent"/>
+            <org.jgraph.graph.DefaultGraphCell reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent"/>
+            <org.jgraph.graph.DefaultGraphCell reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent"/>
+            <org.jgraph.graph.DefaultGraphCell reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/javax.swing.tree.DefaultMutableTreeNode/default/parent"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge"/>
+            <org.jgraph.graph.DefaultGraphCell reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/target/javax.swing.tree.DefaultMutableTreeNode/default/parent"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell[6]/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge/org.jgraph.graph.DefaultEdge/default/target/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge"/>
+            <org.jgraph.graph.DefaultGraphCell reference="../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]/org.jgraph.graph.DefaultEdge/default/source/javax.swing.tree.DefaultMutableTreeNode/default/parent"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge"/>
+            <org.jgraph.graph.DefaultEdge reference="../org.jgraph.graph.DefaultGraphCell/javax.swing.tree.DefaultMutableTreeNode/default/children/org.jgraph.graph.DefaultPort/org.jgraph.graph.DefaultPort/default/edges/org.jgraph.graph.DefaultEdge[2]"/>
+          </roots>
+        </default>
+      </org.jgraph.graph.DefaultGraphModel>
+    </defaultGraphModel>
+    <defaultGraphModelClass>org.jgraph.graph.DefaultGraphModel</defaultGraphModelClass>
+    <defaultTreeModel serialization="custom">
+      <javax.swing.tree.DefaultTreeModel>
+        <default>
+          <asksAllowsChildren>false</asksAllowsChildren>
+          <listenerList serialization="custom">
+            <javax.swing.event.EventListenerList>
+              <default/>
+              <null/>
+            </javax.swing.event.EventListenerList>
+          </listenerList>
+        </default>
+        <vector/>
+      </javax.swing.tree.DefaultTreeModel>
+    </defaultTreeModel>
+    <defaultTreeModelClass>javax.swing.tree.DefaultTreeModel</defaultTreeModelClass>
+  </model>
+</pddresolver.FileStorage>
