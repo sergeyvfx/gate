@@ -2,10 +2,8 @@ package tablechecker;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import logic.frames.Frameset;
 import tablechecker.core.Checker;
-import tablechecker.frames.Frame;
-import tablechecker.frames.Frameset;
 
 public class TableChecker {
 
@@ -17,7 +15,7 @@ public class TableChecker {
             getCodeSource().getLocation().getPath();
     if (args.length != 2) {
       System.out.println(
-              "Usage: java -jar " + jarFile + " fileToCheck fileWithFrames");
+              "Usage: java -jar " + jarFile + " fileName.(html|odt|ods|doc|xls) fileName.frs");
       return;
     }
 
@@ -50,7 +48,14 @@ public class TableChecker {
       return;
     }
 
-    Checker checker = new Checker(fileToCheck, fileWithFrames);
-    checker.check();
+    // Загружаем Frameset
+    try {
+      Frameset.getInstance().load(fileWithFrames);
+    } catch (IOException ex) {
+      ex.printStackTrace(System.err);
+    }
+    // Теперь надо запускать проверку
+//    Checker checker = new Checker(fileToCheck, fileWithFrames);
+//    checker.check();
   }
 }
