@@ -12,3 +12,7 @@ devel
 *.class
 tools/tableChecker/build
 tools/tableChecker/dist
+tools/frameEditor/build
+tools/frameEditor/dist
+tools/logic/build
+tools/logic/dist
