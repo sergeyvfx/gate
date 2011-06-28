@@ -55,7 +55,7 @@ public class TableChecker {
       ex.printStackTrace(System.err);
     }
     // Теперь надо запускать проверку
-//    Checker checker = new Checker(fileToCheck, fileWithFrames);
-//    checker.check();
+    Checker checker = new Checker(fileToCheck, fileWithFrames);
+    checker.check();
   }
 }
