@@ -7,7 +7,11 @@ inc/common/config.php
 devel
 *~
 .htaccess
-#nbproject
+nbproject/private/
+tools/frameEditor/nbproject/private/
+tools/logic/nbproject/private/
+tools/tableChecker/nbproject/private/
+tools/tipslingMailSorter/nbproject/private/
 *.patch
 *.class
 tools/tableChecker/build
