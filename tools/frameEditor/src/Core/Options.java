@@ -21,7 +21,7 @@ public class Options
   private GroupEntry slotsParent = null;
   private OptionsUpdater updater;
 
-  protected String[] slot_types = {"Перечисление", "Субфрейм", "Продукция", "Изображение"};
+  protected String[] slot_types = {"Перечисление", "Субфрейм", "Продукция", "Изображение", "Текст"};
 
   public Object getSlotsParent()
   {
@@ -246,7 +246,26 @@ public class Options
 
       rm.addEditorForRow(index, 1, Utils.createProductionalCellRenderer(slot));
       ++index;
-    }
+    } else if (slot.getType() == Slot.TEXT) {
+      /* Slot image */
+      OptionEntry optText = new OptionEntry(new ValueSetter (slot) {
+        @Override
+        public Object setValue(Object value)
+        {
+          ISlot slot = (ISlot)userData;
+
+          slot.setText((String) value);
+
+          return value;
+        }
+      });
+
+      optText.setOption("Текст");
+      optText.setValue(slot.getText());
+      grpSlot.add(optText);
+
+      ++index;
+    } 
 
     return index;
   }

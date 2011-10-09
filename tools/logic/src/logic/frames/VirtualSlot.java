@@ -24,6 +24,7 @@ public class VirtualSlot implements ISlot, Serializable {
     public String pathToImage = null;
     public ArrayList<Rule> rules = null;
     public ISlot goalSlot = null;
+    public String text = null;
   }
 
   public VirtualSlot(Frame parent, ISlot origSlot)
@@ -100,6 +101,26 @@ public class VirtualSlot implements ISlot, Serializable {
 
     return rules;
   }
+  
+    @Override
+  public void setText(String text)
+  {
+      VirtualBlock block = (VirtualBlock)getCustomBlock();
+      block.text = text;
+  }
+    
+    @Override
+    public String getText()
+    {
+        String text = origSlot.getText();
+        VirtualBlock block = (VirtualBlock)getCustomBlock();
+
+        if (block.text != null) {
+            text = block.text;
+        }
+
+        return text;
+    }
 
   @Override
   public void setRules(ArrayList<Rule> rules)

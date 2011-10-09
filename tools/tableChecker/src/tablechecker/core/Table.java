@@ -217,4 +217,56 @@ public class Table {
     } catch (IOException ex) {
     }
   }
+  
+  public Cell getHeadOfStud()
+  {
+    ArrayList<ArrayList<Cell>> Stud = getStud();
+    
+    return Stud.get(0).get(0);    
+  }
+  
+  public Object[] getPropertySetOfHead()
+  {
+    ArrayList<ArrayList<Cell>> Head = getHead();
+    ArrayList<Cell> res = new ArrayList<Cell>();
+    for (ArrayList<Cell> tmp : Head) {
+      for (Cell cell : tmp) {
+        if (cell!=getHeadOfStud() && cell.getType()==Cell.Type.HEAD)
+          res.add(cell);
+      }
+    }
+    return res.toArray();
+  }
+  
+  public Object[] getObjectSetOfStud()
+  {
+    ArrayList<ArrayList<Cell>> Stud = getStud();
+    ArrayList<Cell> res = new ArrayList<Cell>();
+    for (ArrayList<Cell> tmp : Stud) {
+      for (Cell cell : tmp) {
+        if (cell.getType()==Cell.Type.STUD)
+          res.add(cell);
+      }
+    }
+    return res.toArray();
+  }
+  
+  public Cell getCell(String rowName, String columnName)
+  {
+    int i=0;
+    int j=0;
+    for (ArrayList<Cell> arrayList : rows) {
+      if (arrayList.get(0).getData().equals(rowName))
+        break;
+      else
+        i++;
+    }
+    for (ArrayList<Cell> arrayList : columns) {
+      if (arrayList.get(0).getData().equals(columnName))
+        break;
+      else
+        j++;
+    }
+    return getCell(i, j);
+  }
 }

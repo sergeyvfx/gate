@@ -35,4 +35,6 @@ public interface ISlot {
   public ISlot getGoalSlot();
   public String getPathToImage();
   public void setPathToImage(String pathToImage);
+  public String getText();
+  public void setText(String text);
 }

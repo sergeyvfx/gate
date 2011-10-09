@@ -1,5 +1,6 @@
 package UI;
 
+import java.awt.event.KeyEvent;
 import logic.product.Domen;
 import logic.product.Rule;
 import logic.product.Value;
@@ -40,6 +41,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import frameEditor._System;
+import java.awt.event.KeyListener;
 
 /**
  *
@@ -65,11 +67,13 @@ public class SlotDialog extends javax.swing.JDialog
   private JComboBox jCbValue;
   private JPanel jDefValPanel;
   private JPanel jFramelinkPanel;
+  private JPanel jTextPanel;
   private JPanel jPanelSlotsProperty;
   private JPanel jImagePanel;
   private RulePanel jRulePanel;
   private JPanel buttonPanel;
   private JTextField jEdtSlotName;
+  private JTextField jText;
   private JTextField jTextFieldPathToImage;
   private JLabel jLabelImage;
   private JTabbedPane jTabbedPanel;
@@ -99,24 +103,36 @@ public class SlotDialog extends javax.swing.JDialog
       jFramelinkPanel.setVisible(false);
       jRulePanel.setVisible(false);
       jImagePanel.setVisible(false);
+      jTextPanel.setVisible(false);
     } else if (Slot.SUBFRAME == type)
     {
       jDefValPanel.setVisible(false);
       jFramelinkPanel.setVisible(true);
       jRulePanel.setVisible(false);
       jImagePanel.setVisible(false);
+      jTextPanel.setVisible(false);
     } else if (Slot.PRODUCTIONAL == type)
     {
       jDefValPanel.setVisible(false);
       jFramelinkPanel.setVisible(false);
       jRulePanel.setVisible(true);
       jImagePanel.setVisible(false);
+      jTextPanel.setVisible(false);
     } else if (Slot.IMAGE == type)
     {
       jDefValPanel.setVisible(false);
       jFramelinkPanel.setVisible(false);
       jRulePanel.setVisible(false);
       jImagePanel.setVisible(true);
+      jTextPanel.setVisible(false);
+      updateJLabelImage();
+    } else if (Slot.TEXT == type)
+    {
+      jDefValPanel.setVisible(false);
+      jFramelinkPanel.setVisible(false);
+      jRulePanel.setVisible(false);
+      jImagePanel.setVisible(false);
+      jTextPanel.setVisible(true);
       updateJLabelImage();
     }
     setMinimumSize(new Dimension(0, 0));
@@ -191,6 +207,9 @@ public class SlotDialog extends javax.swing.JDialog
         case Slot.IMAGE:
           jTextFieldPathToImage.setText(editSlot.getPathToImage());
           break;
+        case Slot.TEXT:
+          jText.setText(editSlot.getText());
+          break;
       }
     } else
     {
@@ -220,6 +239,31 @@ public class SlotDialog extends javax.swing.JDialog
 
   private void createUI()
   {
+    this.addKeyListener(new KeyListener() {
+
+      @Override
+      public void keyTyped(KeyEvent e)
+      {
+      }
+
+      @Override
+      public void keyPressed(KeyEvent e)
+      {
+        switch (e.getKeyCode()) {
+          case KeyEvent.VK_ENTER:
+            jBtnOkActionPerformed(null);
+            break;
+          case KeyEvent.VK_ESCAPE:
+            jBtnCancelActionPerformed(null);
+            break;
+        }
+      }
+
+      @Override
+      public void keyReleased(KeyEvent e)
+      {
+      }
+    });
     // Определяем вкладку
     jTabbedPanel = new JTabbedPane();
     jPanelSlotsProperty = new JPanel(new GridBagLayout());
@@ -237,7 +281,7 @@ public class SlotDialog extends javax.swing.JDialog
             GridBagConstraints.BASELINE, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
     jCbType = new JComboBox(new DefaultComboBoxModel(new String[]
             {
-              "Перечислимый", "Sub-фрейм", "Продукционный", "Изображение"
+              "Перечислимый", "Sub-фрейм", "Продукционный", "Изображение", "Текст"
             }));
     jCbType.addItemListener(new ItemListener()
     {
@@ -265,6 +309,16 @@ public class SlotDialog extends javax.swing.JDialog
     jCbFrames = new JComboBox();
     jFramelinkPanel.add(jCbFrames, new GridBagConstraints(1, 0, 1, 1, 1, 1,
             GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
+    
+    // Для текста
+    jTextPanel = new JPanel(new GridBagLayout());
+    jTextPanel.setBorder(BorderFactory.createTitledBorder("Текст"));
+    jTextPanel.add(new JLabel("Введите значение:"), new GridBagConstraints(
+            0, 0, 1, 1, 0, 0, GridBagConstraints.BASELINE,
+            GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
+    jText = new JTextField();
+    jTextPanel.add(jText, new GridBagConstraints(1, 0, 1, 1, 1, 1,
+            GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
     // Для изображения
     jImagePanel = new JPanel(new GridBagLayout());
@@ -272,9 +326,9 @@ public class SlotDialog extends javax.swing.JDialog
     jLabelImage = new JLabel();
     jLabelImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabelImage.setBorder(BorderFactory.createEtchedBorder());
-    jLabelImage.setMaximumSize(new java.awt.Dimension(640, 480));
-    jLabelImage.setMinimumSize(new java.awt.Dimension(640, 480));
-    jLabelImage.setPreferredSize(new java.awt.Dimension(640, 480));
+//    jLabelImage.setMaximumSize(new java.awt.Dimension(320, 240));
+//    jLabelImage.setMinimumSize(new java.awt.Dimension(320, 240));
+    jLabelImage.setPreferredSize(new java.awt.Dimension(320, 240));
     jTextFieldPathToImage = new JTextField(45);
     jButtonBrowse = new JButton("Обзор...");
     jButtonBrowse.addActionListener(new ActionListener()
@@ -362,6 +416,8 @@ public class SlotDialog extends javax.swing.JDialog
             GridBagConstraints.NORTH, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
     jPanelSlotsProperty.add(jImagePanel, new GridBagConstraints(0, 4, 1, 1, 1, 1,
             GridBagConstraints.NORTH, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
+    jPanelSlotsProperty.add(jTextPanel, new GridBagConstraints(0, 5, 1, 1, 1, 1,
+            GridBagConstraints.NORTH, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
 
     // И напоследок кнопки
     jBtnOk = new JButton("ОK", new ImageIcon(getClass().getResource("/Images/16x16/apply.png")));
@@ -396,7 +452,7 @@ public class SlotDialog extends javax.swing.JDialog
             GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
     getContentPane().add(buttonPanel, new GridBagConstraints(0, 1, 1, 1, 1, 0,
             GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
-
+  
     pack();
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     addWindowListener(new WindowAdapter()
@@ -473,6 +529,8 @@ public class SlotDialog extends javax.swing.JDialog
           return false;
         }
         break;
+      case Slot.TEXT:
+        break;
     }
 
     ISlot curSlot;
@@ -532,6 +590,9 @@ public class SlotDialog extends javax.swing.JDialog
         break;
       case Slot.IMAGE:
         curSlot.setPathToImage(jTextFieldPathToImage.getText());
+        break;
+      case Slot.TEXT:
+        curSlot.setText(jText.getText());
         break;
     }
 

@@ -14,7 +14,7 @@ public class Slot implements Serializable, ISlot
 
   /* Slot's types */
   protected int type;
-  public static final int ENUM = 0, SUBFRAME = 1, PRODUCTIONAL = 2, IMAGE = 3;
+  public static final int ENUM = 0, SUBFRAME = 1, PRODUCTIONAL = 2, IMAGE = 3, TEXT = 4;
 
   /* Only for ENUM type */
   protected Value value;
@@ -26,11 +26,14 @@ public class Slot implements Serializable, ISlot
   protected ArrayList<Rule> rules;
   protected ISlot goalSlot;
 
-  /* Onlt for IMAGE */
+  /* Only for IMAGE */
   protected String pathToImage;
 
   //TODO а это зачем?
   protected Object defaultValue;
+  
+  /* Only for Text */
+  protected String text;
  
 
   /**
@@ -53,6 +56,18 @@ public class Slot implements Serializable, ISlot
   {
     this(parent);
     this.name = name;
+  }
+  
+  @Override
+  public String getText()
+  {
+      return text;
+  }
+  
+    @Override
+  public void setText(String text)
+  {
+      this.text = text;
   }
 
   /**
