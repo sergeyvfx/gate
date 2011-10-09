@@ -115,7 +115,33 @@ dd_formo('title=Новая команда;');
 
   <form action=".?action=create&page=<?= $page ?>" method="POST" onsubmit="check (this); return false;">
       <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
+        <tr>
+            <td width="30%" style="padding: 0 2px;">
+                Конкурс:
+            </td>
+            <td style="padding: 0 2px;">
+                <select id="ContestGroup" name ="ContestGroup">
+                    <?php
+                        $sql = "SELECT\n"
+                        . " * \n"
+                        . "FROM\n"
+                        . " contest \n";
+                        $tmp = arr_from_query($sql);
+                
+                        foreach ($tmp as $k)
+                        {
+                            $selected = ($k['id'] == $_POST['grade']) ? ('selected') : ('');
+                            echo('<option value = "' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+      </table>
+      <div id="hr"></div>
+      <table class="clear" width="100%">
+        <tr>
+            <td width="30%" style="padding: 0 2px;">
                 Класс участников: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">

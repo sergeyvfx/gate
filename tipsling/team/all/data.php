@@ -13,7 +13,7 @@ if ($PHP_SELF != '') {
 }
 
 
-global $sort, $action, $id;
+global $sort, $contest, $action, $id;
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Все команды</div>
 ${information}
@@ -35,7 +35,7 @@ ${information}
       } else if ($action == 'delete') {
         team_delete($id);
       }
-      $list = team_list('', $sort);
+      $list = team_list('', $sort, $contest);
       include 'list.php';
       //TODO
 //      include 'create_form.php';

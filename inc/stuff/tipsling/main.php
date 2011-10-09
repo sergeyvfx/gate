@@ -18,6 +18,7 @@ if ($IFACE != "SPAWNING NEW IFACE" || $_GET['IFACE'] != '') {
 function tipsling_initialize() {
   school_initialize();
   responsible_initialize();
+  contest_initialize();
   if (config_get('check-database')) {
     db_create_table_safe('team', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
