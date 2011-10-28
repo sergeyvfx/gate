@@ -1,0 +1,34 @@
+<?php
+  $document_root = config_get ('document-root');
+  $tpl=manage_template_by_name ('Страница / Меню навигации');
+  echo (wiki_menu_parse ($tpl->GetText ()));
+?>
+  
+<!--<div class="menu">
+  <div class="cpt">Навигация</div>
+  <div class="body">
+    <ul>
+      <li><a href="http://www.trizformashka.land.ru/">Главная страница</a></li>
+      <li><a href=<?=$document_root?>>Новый сайт</a></li>
+      <li><a href="<?=$document_root?>/tipsling/team/all">Все команды конкурса</a></li>
+      <li><a href="<?=$document_root?>/tipsling/status">Монитор</a></li>
+      <li><a href="<?=$document_root?>/login">Войти</a></li>
+    </ul>
+  </div>
+</div>
+<div class="menu" style="padding-top: 8px;">
+  <div class="cpt">Wiki</div>
+  <div class="body">
+    <ul>
+      <li><a href="/articles/news">Новости</a></li>
+      <li><a href="/articles/regrules">Правила регистрации</a></li>
+      <li><a href="/articles/rules">Правила сайта</a></li>
+      <li><a href="/articles/docs">Документы</a></li>
+      <li><a href="/articles/docs/regulations">Положение о конкурсе</a></li>
+      <li><a href="/articles/history">История Тризформашки</a></li>
+      <li><a href="/articles/archive">Прошлые конкурсы</a></li>
+      <li><a href="/articles/contacts">Контакты</a></li>
+    </ul>
+  </div>
+</div>
+-->

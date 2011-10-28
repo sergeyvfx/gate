@@ -41,10 +41,7 @@
                   <img src="<?=config_get ('document-root');?>/pics/wt_l.gif" alt="logo" onclick="nav ('<?=config_get ('document-root');?>');">
                 </div>
                 <div id="nav">
-<?
-  $tpl=manage_template_by_name ('Страница / Меню навигации');
-  print (wiki_menu_parse ($tpl->GetText ()));
-?>
+                    <?= tpl ('common/navigationMenu');?>
                 </div>
                 <img src="<?=config_get ('document-root');?>/pics/clear.gif" width="145" height="1" alt="">
               </td>

@@ -44,14 +44,38 @@
       }
   
       $params = array ();
-      $modifers = preg_replace ('/^([\:lL]+)?(\s*)(.*)/si', '\1', $src);
-      $data = preg_replace ('/^([\:lL]+)?(\s*)(.*)/si', '\3', $src);
+      $modifers = preg_replace ('/^([\:lLuU]+)?({.*})?(\s*)(.*)/si', '\1', $src);
+      $data = preg_replace ('/^([\:lLuU]+)?({.*})?(\s*)(.*)/si', '\4', $src);
+      $modifierParam = preg_replace ('/^([\:lLuU]+)?({.*})?(\s*)(.*)/si', '\2', $src);
+      //$modifers = preg_replace ('/^([\:lLuU]+)?({.*})?(\s*)(.*)/si', '\1', $src);
+      //$data = preg_replace ('/^([\:lLuU]+)?({.*})?(\s*)(.*)/si', '\4', $src);
+      //$modifierParam = preg_replace ('/^([\:lLuU]+)?({.*})?(\s*)(.*)/si', '\2', $src);
+      //length($modifierParam);
+      //$modifierParam = substr($modifierParam, 2, length($modifierParam)-1);
+      $modifierParam = str_replace('{', '', $modifierParam);
       $parse = true;
 
       for ($i = 0; $i < count ($modifers); $i++) {
         if ($modifers[$i]==':') $parse = false;
         if ($modifers[$i]=='l' && !user_authorized ()) return false;
         if ($modifers[$i]=='L' && user_authorized ()) return false;
+/*        if ($modifers[$i]=='u'){
+            $groups = user_get_groups(user_id());
+            $modifierParam = preg_split(', ', $modifierParam);
+            $parse = false;
+            foreach ($modifierParam as $value) {
+                foreach ($groups as $group) {
+                    if ($group == $value){
+                        $parse = true;
+                        break;
+                    }
+                }
+                if ($parse)
+                    break;
+            }
+        }
+        if (!$parse) return false;*/
+//        if ($modifers[$i]=='U' && user_authorized ()) return false;
       }
 
       if (!$parse) {
