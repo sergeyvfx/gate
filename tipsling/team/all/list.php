@@ -99,8 +99,8 @@ if (count($list) > 0) {
         <th width="10%">Населенный пункт</th>
         <th width="15%">Учитель</th>
         <th width="20%">Участники</th>
-        <th width="10%">Статус платежа</th>
-        <th>Конкурс</th>' .
+        <th>Конкурс</th>
+        <th width="10%">Статус платежа</th>' .
         (($has_access) ? ('<th width="48" class="last">&nbsp;</th>') : (''))
         . '</tr>' . "\n";
 
@@ -136,8 +136,8 @@ if (count($list) > 0) {
               '<td>' . $city . '</td>' .
               '<td>' . $teacher . '</td>' .
               '<td>' . $pupils . '</td>' .
-              '<td>' . $payment . '</td>' .
               '<td>' . $contest_name['name'] . '</td>' .
+              '<td>' . $payment . '</td>' .
               $edit_delete .
               '</tr>' . "\n";
       $c++;

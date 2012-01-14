@@ -21,7 +21,7 @@ if (!is_bookkeeper(user_id())) {
   return;
 }
 ?>
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/payment" ?>">Платежи</a>Все платежи</div>
+<div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>--><a href="<?= config_get('document-root') . "/tipsling/payment" ?>">Платежи</a>Все платежи</div>
 ${information}
 <div class="form">
   <div class="content">

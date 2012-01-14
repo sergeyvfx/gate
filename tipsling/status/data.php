@@ -14,9 +14,43 @@ if ($PHP_SELF != '') {
 
 $task_count = 20;
 ?>
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>Монитор</div>
+<div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>-->Монитор</div>
 ${information}
 <? formo('title=Состояние присланных заданий;'); ?>
+<div class="f" style="margin: 6px -6px 6px;">
+  <form action="." method="POST" onsubmit="update (); return false;" onkeypress="if (event.keyCode==13) update ();">
+    <table width="100%">
+      <tr>
+        <td>
+          <b>Конкурс: &nbsp;</b>
+          <select id="ContestGroup" onchange="update()">
+            <?php
+                echo('<option value="-1" selected>Все конкурсы</option>');
+                $sql = "SELECT\n"
+                . " * \n"
+                . "FROM\n"
+                . " contest \n";
+                $tmp = arr_from_query($sql);
+                
+                foreach ($tmp as $k)
+                {
+                    $selected = ($k['id'] == $contest) ? ('selected') : ('');
+                    echo('<option value ="' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
+                }
+            ?>
+          </select>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<script language="JavaScript" type="text/javascript">
+  function update () {
+    //var sort=getElementById ('sortGroup').value;
+    var contest=getElementById ('ContestGroup').value;
+    nav ('.?contest='+contest);
+  }
+</script>
 <p>
   На мониторе отражается текущее состояние присланных заданий.
 </p>

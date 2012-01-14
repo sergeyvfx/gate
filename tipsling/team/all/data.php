@@ -15,7 +15,7 @@ if ($PHP_SELF != '') {
 
 global $sort, $contest, $action, $id;
 ?>
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Все команды</div>
+<div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>--><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Все команды</div>
 ${information}
 <div class="form">
   <div class="content">

@@ -41,8 +41,8 @@ if (count($list) > 0) {
         <th width="16%">Участник 1</th>
         <th width="16%">Участник 2</th>
         <th width="16%">Участник 3</th>
-        <th width="10%">Статус платежа</th>
         <th width="15%">Конкурс</th>
+        <th width="10%">Статус платежа</th>
         <th width="48" class="last">&nbsp;</th></tr>' . "\n";
 
     while ($c < $perPage && $i < $n) {
@@ -56,8 +56,8 @@ if (count($list) > 0) {
       '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">'.$it['grade'].'.'. $it['number'] . '</a></td>' .
       '<td>' . $it['teacher_full_name'] . '</td><td>' . $it['pupil1_full_name'] . '</td>' .
       '<td>' . $it['pupil2_full_name'] . '<td>' . $it['pupil3_full_name'] . '</td>' .
-      '<td>' . (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>')) . '</td>' .
       '<td>' . $contest_name['name'] . '</td>'.
+      '<td>' . (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>')) . '</td>' .
       '<td align="right">' .
         stencil_ibtnav((!$reg_off) ? 'edit.gif' : 'edit_d.gif', (!$reg_off) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : '', (!$reg_off) ? 'Изменить информацию о команде' : '') .
         stencil_ibtnav(($d && !$reg_off) ? ('cross.gif') : ('cross_d.gif'), ($d && !$reg_off) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), ($d && !$reg_off) ? 'Удалить команду' : '', 'Удалить эту команду?') .

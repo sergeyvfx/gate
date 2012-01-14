@@ -60,7 +60,7 @@ if (!$authorized) {
           </tr>
           <tr>
             <td colspan="2">
-              <div style="margin: 6px 0;">Если у Вас нет логина, то вы можете <a href="<?= config_get('document-root'); ?>/login/registration/?redirect=<?= get_redirection(true, true); ?>">зарегистрироваться</a>.</div>
+              <div style="margin: 6px 0;">Если у Вас нет логина, то вы можете <a href="<?= config_get('document-root'); ?>/login/registration/?redirect=<?= get_redirection(true, false); ?>">зарегистрироваться</a>.</div>
               <div style="margin: 6px 0;">Если Вы забыли свой пароль, то мы можем <a href="<?= config_get('document-root'); ?>/login/restore">выслать новый пароль</a>.</div>
             </td>
           </tr>

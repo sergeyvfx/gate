@@ -25,7 +25,7 @@ if (!is_responsible_has_school(user_id())) {
   redirect(config_get('document-root') . '/login/profile/info/school/?noschool=1');
 }
 ?>
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Мои команды</div>
+<div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>--><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Мои команды</div>
 ${information}
 <div class="form">
   <div class="content">
