@@ -17,27 +17,6 @@ if ($PHP_SELF != '') {
     <table width="100%">
       <tr>
         <td>
-          <b>Конкурс: &nbsp;</b>
-          <select id="ContestGroup" onchange="update()">
-            <?php
-                echo('<option value="-1" selected>Все конкурсы</option>');
-                $sql = "SELECT\n"
-                . " * \n"
-                . "FROM\n"
-                . " contest \n";
-                $tmp = arr_from_query($sql);
-                
-                foreach ($tmp as $k)
-                {
-                    $selected = ($k['id'] == $contest) ? ('selected') : ('');
-                    echo('<option value ="' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
-                }
-            ?>
-          </select>
-        </td>            
-      </tr>
-      <tr>
-        <td>
           <b>Варианты сортировки: &nbsp;</b>
           <select id="sortGroup" onchange="update()">
             <option value="1" <?=($sort == 1) ? ('selected') : ('')?>>По номеру команды</option>
@@ -99,8 +78,7 @@ if (count($list) > 0) {
         <th width="10%">Населенный пункт</th>
         <th width="15%">Учитель</th>
         <th width="20%">Участники</th>
-        <th width="10%">Статус платежа</th>
-        <th>Конкурс</th>' .
+        <th width="10%">Статус платежа</th>' .
         (($has_access) ? ('<th width="48" class="last">&nbsp;</th>') : (''))
         . '</tr>' . "\n";
 
@@ -120,7 +98,6 @@ if (count($list) > 0) {
               (($it['pupil2_full_name'] == '') ? ('') : (', ' . $it['pupil2_full_name'])) .
               (($it['pupil3_full_name'] == '') ? ('') : (', ' . $it['pupil3_full_name']));
       $payment = (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>'));
-      $contest_name = contest_get_by_id($it['contest_id']);
       if ($has_access) {
         $edit_delete =
           '<td align="right">' .
@@ -137,7 +114,6 @@ if (count($list) > 0) {
               '<td>' . $teacher . '</td>' .
               '<td>' . $pupils . '</td>' .
               '<td>' . $payment . '</td>' .
-              '<td>' . $contest_name['name'] . '</td>' .
               $edit_delete .
               '</tr>' . "\n";
       $c++;

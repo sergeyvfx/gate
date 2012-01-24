@@ -20,16 +20,18 @@
   <table class="list smb">
     <tr class="h">
         <th width="5%" class="n first">№</th>
-        <th width="85%">Название</th>
+        <th width="45%">Название</th>
+        <th width="40%">Семейство</th>
         <th width="10%" class="last">&nbsp;</th></tr>
 <?php
   $n = count ($list);
   
   for ($i = 0; $i < $n; $i++) {
     $it = $list[$i];
+    $family = contestFamily_get_by_id($it['family_id']);
     $d = true;
 ?>
-    <tr<?=(($i == $n - 1)?(' class="last"'):(''));?>><td class="n"><?=$i + 1;?>.</td><td><a href=".?action=edit&id=<?=$it['id'];?>"><?=$it['name'];?></a></td><td align="right"><?ibtnav ('edit.gif', '?action=edit&id='.$it['id'], 'Изменить элемент');?><?ibtnav (($d)?('cross.gif'):('cross_d.gif'), ($d)?('?action=delete&id='.$it['id']):(''), 'Удалить элемент', 'Удалить этот элемент?');?></td></tr>
+    <tr<?=(($i == $n - 1)?(' class="last"'):(''));?>><td class="n"><?=$i + 1;?>.</td><td><a href=".?action=edit&id=<?=$it['id'];?>"><?=$it['name'];?></a></td><td><?=$family['name'];?></td><td align="right"><?ibtnav ('edit.gif', '?action=edit&id='.$it['id'], 'Изменить элемент');?><?ibtnav (($d)?('cross.gif'):('cross_d.gif'), ($d)?('?action=delete&id='.$it['id']):(''), 'Удалить элемент', 'Удалить этот элемент?');?></td></tr>
 <?php
   }
 ?>

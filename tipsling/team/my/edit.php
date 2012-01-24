@@ -114,10 +114,9 @@ $team = team_get_by_id($id);
             <td style="padding: 0 2px;">
                 <select id="ContestGroup" name ="ContestGroup">
                     <?php
-                        $sql = "SELECT\n"
-                        . " * \n"
-                        . "FROM\n"
-                        . " contest \n";
+                        $sql = "SELECT * FROM contest where ".
+                        "DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')".
+                        "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
                         $tmp = arr_from_query($sql);
                 
                         foreach ($tmp as $k)
