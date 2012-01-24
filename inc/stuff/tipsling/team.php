@@ -151,6 +151,7 @@ if ($_team_included_ != '#team_Included#') {
 
   function team_create_received() {
     // Get post data
+    global $current_contest;
     $grade = stripslashes(trim($_POST['grade']));
     $teacher_full_name = stripslashes(trim($_POST['teacher_full_name']));
     $pupil1_full_name = stripslashes(trim($_POST['pupil1_full_name']));
@@ -163,6 +164,8 @@ if ($_team_included_ != '#team_Included#') {
     }
     $comment = stripslashes(trim($_POST['comment']));
     $contest_id = stripslashes(trim($_POST['ContestGroup']));
+    if ($contest_id == '')
+        $contest_id = $current_contest;
     
     $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
     $responsible_id = user_id();
@@ -177,7 +180,7 @@ if ($_team_included_ != '#team_Included#') {
     return false;
   }
 
-  function team_update($id, $payment_id, $contest_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number, $comment) {
+  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number, $comment) {
     if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment, true, $id)) {
       return false;
     }
@@ -190,7 +193,6 @@ if ($_team_included_ != '#team_Included#') {
     //$number = db_string($number);
 
     $update = array('payment_id' => $payment_id,
-        'contest_id' => $contest_id,
         'grade' => $grade,
         'teacher_full_name' => $teacher_full_name,
         'pupil1_full_name' => $pupil1_full_name,
@@ -218,14 +220,13 @@ if ($_team_included_ != '#team_Included#') {
     }
     $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
-    $contest_id = stripslashes(trim($_POST['ContestGroup']));
     if ($team['grade'] != $grade || $team['contest_id'] != $contest_id) {
       $number = db_max('team','number',"`grade`=$grade AND `contest_id`=$contest_id") + 1;
     } else {
       $number = $team['number'];
     }
 
-    if (team_update($id, $payment_id, $contest_id, $grade, $teacher_full_name,
+    if (team_update($id, $payment_id, $grade, $teacher_full_name,
                     $pupil1_full_name, $pupil2_full_name, $pupil3_full_name,
                     $is_payment, $number, $comment)) {
       $_POST = array();

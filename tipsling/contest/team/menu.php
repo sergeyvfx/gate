@@ -17,7 +17,7 @@ global $DOCUMENT_ROOT;
 $team_menu = new CVCMenu ();
 $team_menu->Init('TeamMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
 if (is_responsible(user_id())) {
-  $team_menu->AppendItem('Мои команды', config_get('document-root') . '/tipsling/team/my', 'my');
+  $team_menu->AppendItem('Мои команды', config_get('document-root') . '/tipsling/contest/team/my', 'my');
 }
-$team_menu->AppendItem('Все команды', config_get('document-root') . '/tipsling/team/all', 'all');
+$team_menu->AppendItem('Все команды', config_get('document-root') . '/tipsling/contest/team/all', 'all');
 ?>
