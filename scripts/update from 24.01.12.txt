@@ -1,0 +1,46 @@
+--
+-- Добавление таблицы с семейством конкурсов (с конкурсом "Тризформашка")
+-- Добавление ссылки на нее в таблицу с конкурсами
+-- указываем для всех существующих конкурсов, что семейство - тризформашка.
+--
+
+
+
+CREATE TABLE IF NOT EXISTS `family_contest` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+
+
+INSERT INTO `family_contest` (`id`, `name`) VALUES
+(1, 'Тризформашка')
+
+
+
+ALTER TABLE contest ADD family_id INT(11) AFTER id
+
+
+
+update contest set family_id=1
+
+
+
+--
+-- Добавление полей-дат в таблицу с конкурсами
+--
+
+
+ALTER TABLE contest ADD registration_start DATETIME, ADD registration_finish DATETIME, ADD contest_start DATETIME, ADD contest_finish DATETIME, ADD send_to_archive DATETIME
+
+
+--
+-- Таблица со списком администраторов конкурсов
+--
+
+CREATE TABLE IF NOT EXISTS `Admin_FamilyContest` (
+  `family_contest_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`family_contest_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251;

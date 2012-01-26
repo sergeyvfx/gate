@@ -44,7 +44,6 @@ ${information}
       } else if ($action == 'delete') {
         payment_delete($id);
       }
-      //BUG When you get payment_list, you should show only payment for current contest
       $list = payment_list(user_id());
       include 'list.php';
       include 'create_form.php';

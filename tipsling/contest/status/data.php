@@ -12,9 +12,15 @@ if ($PHP_SELF != '') {
   die;
 }
 
+global $current_contest;
+
+if ($current_contest =='' || $current_contest == -1)
+    header('Location: ../choose');
+
+$contest = contest_get_by_id($current_contest);
 $task_count = 20;
 ?>
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>Монитор</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a>Монитор</div>
 ${information}
 <? formo('title=Состояние присланных заданий;'); ?>
 <p>
@@ -34,7 +40,7 @@ ${information}
   </tr>
   <?php
     $k = 0;
-    $teams = team_list();
+    $teams = team_list('','',$current_contest);
     foreach ($teams as $t) {
       $status = arr_from_query(
                       "SELECT
@@ -42,7 +48,7 @@ ${information}
            FROM
             `contest_status`
            WHERE
-            `contest_status`.`contest_id`=1 AND
+            `contest_status`.`contest_id`=".$current_contest." AND
             `contest_status`.`team_id`=" . $t["id"] . " ORDER BY `task`");
 
       if ($k % 2 == 0 && $k != 0) {

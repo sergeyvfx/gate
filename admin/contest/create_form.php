@@ -33,9 +33,41 @@
 </script>
 
 <form action=".?action=create" method="POST" onsubmit="check (this); return false;">
-Название нового конкурса
-  <input type="text" class="txt block" name="name" id="name"> <!-- value="<?=$_POST['name'];?>">-->
-
+  <table class="clear" width="100%">
+    <tr>
+      <td width="15%" style="padding: 0 2px;">
+        Название нового конкурса
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="name" id="name"> <!-- value="<?=$_POST['name'];?>">-->
+      </td>
+    </tr>
+  </table>
+  <div id="hr"></div>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="15%" style="padding: 0 2px;">
+        Семество конкурса
+      </td>
+      <td style="padding: 0 2px;">
+        <select id="family_id" name ="family_id">
+                    <?php
+                        $sql = "SELECT\n"
+                        . " * \n"
+                        . "FROM\n"
+                        . " family_contest \n";
+                        $tmp = arr_from_query($sql);
+                
+                        foreach ($tmp as $k)
+                        {
+                            $selected = ($k['id'] == $_POST['family_id']) ? ('selected') : ('');
+                            echo('<option value = "' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
+                        }
+                    ?>
+        </select>
+      </td>        
+    </tr>
+  </table>
   <div class="formPast">
     <button class="submitBtn block" type="submit">Создать</button>
   </div>
