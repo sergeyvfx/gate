@@ -47,7 +47,6 @@ if (count($list) > 0) {
     
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
-      //TODO Check is contest running or archive
       $name = $it['name'];
       $r_s =  $it['registration_start'];
       $r_f =  $it['registration_finish'];
@@ -68,7 +67,7 @@ if (count($list) > 0) {
       '<td align="center">' . $c_s . '</td>' .
       '<td align="center">' . $c_f . '</td>' .
       '<td align="center">' . $s_to_a . '</td>' .
-      '<td align="center">' . get_contest_status($it['id']) . '</td>' .
+      '<td align="center">' . get_contest_text_status($it['id']) . '</td>' .
       '<td align="right">' .
         stencil_ibtnav((($d) ? 'edit.gif' : 'edit_d.gif'), (($d) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : ''), 'Изменить информацию о конкурсе') .
         stencil_ibtnav((($d) ? 'cross.gif' : 'cross_d.gif'), (($d) ? '?action=delete&id=' . $it['id'] . '&' . $pageid : ''), 'Удалить конкурс', 'Удалить этот конкурс?') .

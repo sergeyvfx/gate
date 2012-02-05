@@ -49,10 +49,10 @@ if (count($list) > 0) {
       $it = $list[$i];
       $ps = $it['is_payment'];
       $d = !$ps;
-      $registration_opened = get_contest_status($it['contest_id'])=="Идет регистрация";
+      $registration_opened = get_contest_status($it['contest_id'])==1;
       $contest_name = contest_get_by_id($it['contest_id']);
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">'.$it['grade'].'.'. $it['number'] . '</a></td>' .
+      '<td class="n">' . (($registration_opened) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')).$it['grade'].'.'. $it['number'] . (($registration_opened) ? ('</a>') : ('')) . '</td>' .
       '<td>' . $it['teacher_full_name'] . '</td><td>' . $it['pupil1_full_name'] . '</td>' .
       '<td>' . $it['pupil2_full_name'] . '<td>' . $it['pupil3_full_name'] . '</td>' .
       '<td>' . (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>')) . '</td>' .

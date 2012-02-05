@@ -18,8 +18,8 @@
   </head>
   <body onload="document.getElementById ('login').focus ()">
     <center>
-      <h2>Сайт заблокирован</h2>
-      <h3>Для входа в него Вам необходимо иметь доступ администратора</h3>
+      <h2>В настоящий момент на сайте ведутся технические работы</h2>
+      <h3>Для входа в него Вам необходимо иметь доступ к учетной записи администратора</h3>
       <br>
       <form action="." method="POST">
         Логин:&nbsp;<input type="text" class="txt" id="login" name="login">&nbsp;&nbsp;&nbsp;Пароль:&nbsp;<input type="password" class="txt" name="passwd"><br>
