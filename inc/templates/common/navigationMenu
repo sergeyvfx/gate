@@ -30,13 +30,11 @@
                     if (count($query) > 0)
                         printf('<li><a href="'.$document_root.'/tipsling/contest/admin/">Администрирование</a></li>');
                     printf('<li><a href="'.$document_root.'/tipsling/contest/team/my/">Мои команды</a></li>');
-                    //printf('<li><a href="'.$document_root.'/tipsling/contest/payment/my">Мои платежи</a></li>');
+                    printf('<li><a href="'.$document_root.'/tipsling/contest/payment/my">Мои платежи</a></li>');
                 }
                 printf('<li><a href="'.$document_root.'/tipsling/contest/team/all">Все команды</a></li>');
-                $sql = 'SELECT * FROM contest where id='.$current_contest.' and '.
-                       'DATE_FORMAT(contest_start,"%Y-%m-%d")<=DATE_FORMAT('.db_string(date("Y-m-d")).',"%Y-%m-%d") '.
-                       'and DATE_FORMAT(send_to_archive,"%Y-%m-%d")>=DATE_FORMAT('.db_string(date("Y-m-d")).',"%Y-%m-%d")';
-                if (count(arr_from_query($sql))>0)
+                $contest_status = get_contest_status($current_contest);
+                if ($contest_status>2 && $contest_status<5)
                     printf('<li><a href="'.$document_root.'/tipsling/contest/status">Монитор</a></li>');
             printf('</ul></li>');
         }

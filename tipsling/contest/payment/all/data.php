@@ -20,8 +20,15 @@ if (!is_bookkeeper(user_id())) {
   print (content_error_page(403));
   return;
 }
+
+global $current_contest;
+
+if ($current_contest=='' || $current_contest==-1)
+    header('Location: ../../choose');
+
+$contest = contest_get_by_id($current_contest);
 ?>
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a><a href="<?= config_get('document-root') . "/tipsling/payment" ?>">Платежи</a>Все платежи</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/team" ?>">Платежи</a>Все платежи</div>
 ${information}
 <div class="form">
   <div class="content">
@@ -39,7 +46,7 @@ ${information}
       } else if ($action == 'delete') {
         payment_delete($id);
       }
-      $list = payment_list();
+      $list = payment_list(-1, $current_contest);
       include 'list.php';
     }
     ?>

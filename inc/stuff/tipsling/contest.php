@@ -265,44 +265,63 @@ function contest_update_received($id) {
   
   function get_contest_status($id)
   {
-      $status = "Предстоящий";
+      $status = 0; //"Предстоящий"
       $c = contest_get_by_id($id);
       
       $query = "select * from contest where DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
       if (count($r)>0)
       {
-          $status = "Идет регистрация";
+          $status = 1; //"Идет регистрация"
       }
       
       $query = "select * from contest where DATE_FORMAT(registration_finish,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
       if (count($r)>0)
       {
-          $status = "Регистрация закончилась";
+          $status = 2; //"Регистрация закончилась"
       }
       
       $query = "select * from contest where DATE_FORMAT(contest_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
       if (count($r)>0)
       {
-          $status = "Конкурс начался";
+          $status = 3; //"Конкурс начался"
       }
       
       $query = "select * from contest where DATE_FORMAT(contest_finish,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
       if (count($r)>0)
       {
-          $status = "Конкурс завершился";
+          $status = 4; //"Конкурс завершился"
       }
       
       $query = "select * from contest where DATE_FORMAT(send_to_archive,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
       if (count($r)>0)
       {
-          $status = "Архивный";
+          $status = 5; //"Архивный"
       }
       return $status;
+  }
+  
+  function get_contest_text_status($id)
+  {
+      $status = get_contest_status($id);
+      if ($status == 0)
+        return "Предстоящий";
+      if ($status == 1)
+        return "Идет регистрация";
+      if ($status == 2)
+        return "Регистрация закончилась";
+      if ($status == 3)
+        return "Конкурс начался";
+      if ($status == 4)
+        return "Конкурс завершился";
+      if ($status == 5)
+        return "Архивный";
+      
+      return "Невозможно определить статус";
   }
       
 function manage_contest_get_list () {

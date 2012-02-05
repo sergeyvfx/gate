@@ -12,8 +12,10 @@ if ($PHP_SELF != '') {
   die;
 }
 
+global $current_contest;
+
 if (!user_authorized ()) {
-  header('Location: ../../../login');
+  header('Location: ../../../../login');
 }
 
 if (!is_responsible(user_id())) {
@@ -21,33 +23,36 @@ if (!is_responsible(user_id())) {
   return;
 }
 
-$sql = "SELECT * FROM contest where ".
-        "DATE_FORMAT(contest_start,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
-$reg_contests = arr_from_query($sql); 
+if ($current_contest=='' || $current_contest==-1)
+    header('Location: ../../choose');
+
+$contest = contest_get_by_id($current_contest);
+$allow_create = get_contest_status($current_contest)<3;
 ?>
-<div id="snavigator">Мои платежи</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/payment" ?>">Платежи</a>Мои платежи</div>    
 ${information}
 <div class="form">
   <div class="content">
     <?php
     global $DOCUMENT_ROOT, $action, $id;
     include '../menu.php';
-    $payment_menu->SetActive('my');
     
     $allow_editing = false;
     if ($id!='' && $id != -1)
     {
         $p = payment_get_by_id($id);
-        $allow_editing = get_contest_status($p['contest_id'])<3 && user_id()==$p['responsible_id'];
+        $allow_editing = get_contest_status($current_contest)<3 && user_id()==$p['responsible_id'];
     }
+    
+    $payment_menu->SetActive('my');
 
-    if ($action == 'create') {
+    if ($action == 'create' && $allow_create) {
       payment_create_received();
     }
 
     $payment_menu->Draw();
 
-    if ($action == 'edit' &&  $allow_editing) {
+    if ($action == 'edit'  && $allow_editing) {
       include 'edit.php';
     } else {
         if ($allow_editing) {
@@ -57,11 +62,11 @@ ${information}
                 payment_delete($id);
             }
         }
-      $list = payment_list(user_id());
+      $list = payment_list(user_id(), $current_contest);
       include 'list.php';
-           
-      if (count($reg_contests)>0)
-          include 'create_form.php';
+      
+      if ($allow_create)
+        include 'create_form.php';
     }
     ?>
   </div>

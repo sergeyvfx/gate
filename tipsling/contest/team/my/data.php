@@ -25,16 +25,14 @@ if (!is_responsible(user_id())) {
 
 if (!is_responsible_has_school(user_id())) {
   redirect(config_get('document-root') . '/login/profile/info/school/?noschool=1');
-  
-if ($current_contest=='' || $current_contest==-1)
-    header('Location: ../../choose');
 }
 
+if ($current_contest=='' || $current_contest==-1)
+    header('Location: ../../choose');
+
+
 $contest = contest_get_by_id($current_contest);
-$sql = "SELECT * FROM contest where id=".$current_contest." and ".
-       "DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') ".
-       "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
-$registration_opened = count(arr_from_query($sql))>0;
+$allow_registration = get_contest_status($current_contest)==1;
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/team" ?>">Команды</a>Мои команды</div>
 ${information}
@@ -43,18 +41,26 @@ ${information}
     <?php
     global $DOCUMENT_ROOT, $action, $id;
     include '../menu.php';
+    
+    $allow_editing = false;
+    if ($id!='' && $id != -1)
+    {
+        $t = team_get_by_id($id);
+        $allow_editing = get_contest_status($current_contest)<3 && user_id()==$t['responsible_id'];
+    }
+    
     $team_menu->SetActive('my');
 
-    if ($action == 'create' && $registration_opened) {
+    if ($action == 'create' && $allow_registration) {
       team_create_received();
     }
 
     $team_menu->Draw();
 
-    if ($action == 'edit' && $registration_opened) {
+    if ($action == 'edit' && $allow_editing) {
       include 'edit.php';
     } else {
-      if ($registration_opened) {
+      if ($allow_editing) {
         if ($action == 'save') {
           team_update_received($id);
         } else if ($action == 'delete') {
@@ -66,7 +72,7 @@ ${information}
         $list = team_list(user_id(), '', $current_contest);
         include 'list.php';
 
-        if ($registration_opened) {
+        if ($allow_registration) {
           include 'create_form.php';
         }
       } else {

@@ -13,7 +13,7 @@ if ($PHP_SELF != '') {
   die;
 }
 
-formo('title=Список всех платежей;');
+formo('title=Список моих платежей;');
 
 if (count($list) > 0) {
   global $page;
@@ -44,21 +44,21 @@ if (count($list) > 0) {
 
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
-      //TODO Check is contest running or archive
       $d = $it['date_arrival'] == null ? (1) : (0);
       $amount = $it['amount'];
       if (!preg_match('/\./', $amount)) {
         $amount = $amount . '.00';
       }
+      $contest_not_running = get_contest_status($it['contest_id'])<3;
       $amount = $amount . ' руб.';
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">' . date_format(date_create($it['date']), 'd.m.Y') . '</a></td>' .
+      '<td class="n">' . (($d && $contest_not_running) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')) . date_format(date_create($it['date']), 'd.m.Y') . (($d && $contest_not_running) ? ('</a>') : ('')) . '</td>' .
       '<td>' . $it['cheque_number'] . '</td>' .
       '<td>' . $it['payer_full_name'] . '<td align="right">' . $amount . '</td>' .
       '<td style="text-align: center;">' . (($d) ? ('<span style="color: red">Не поступил</span>') : ('<span style="color: green">' . date_format(date_create($it['date_arrival']), 'd.m.Y') . '</span>')) . '</td>' .
       '<td align="right">' .
-        stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить информацию о платеже') .
-        stencil_ibtnav('cross.gif', '?action=delete&id=' . $it['id'] . '&' . $pageid, 'Удалить платеж', 'Удалить этот платеж?') .
+        stencil_ibtnav((($d && $contest_not_running) ? 'edit.gif' : 'edit_d.gif'), (($d && $contest_not_running) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : ''), 'Изменить информацию о платеже') .
+        stencil_ibtnav((($d && $contest_not_running) ? 'cross.gif' : 'cross_d.gif'), (($d && $contest_not_running) ? '?action=delete&id=' . $it['id'] . '&' . $pageid : ''), 'Удалить платеж', 'Удалить этот платеж?') .
       '</td></tr>' . "\n";
       $c++;
       $i++;
@@ -68,7 +68,7 @@ if (count($list) > 0) {
   }
   $pages->Draw();
 } else {
-  info('Список платежей пуст');
+  info('У Вас пока что нет платежей на конкурсе "'.$contest[name].'". Но Вы можете их добавить.');
 }
 
 formc ();

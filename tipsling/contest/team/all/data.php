@@ -42,8 +42,6 @@ ${information}
       }
       $list = team_list('', $sort, $current_contest);
       include 'list.php';
-      //TODO
-//      include 'create_form.php';
     }
     ?>
   </div>

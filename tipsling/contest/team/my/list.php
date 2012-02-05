@@ -48,15 +48,14 @@ if (count($list) > 0) {
       $it = $list[$i];
       $ps = $it['is_payment'];
       $d = !$ps;
-      $registration_opened = get_contest_status($it['contest_id'])=="Идет регистрация";
-      $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">'.$it['grade'].'.'. $it['number'] . '</a></td>' .
+      $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .  
+      '<td class="n">' . (($allow_registration) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')).$it['grade'].'.'. $it['number'] . (($allow_registration) ? ('</a>') : ('')) . '</td>' .
       '<td>' . $it['teacher_full_name'] . '</td><td>' . $it['pupil1_full_name'] . '</td>' .
       '<td>' . $it['pupil2_full_name'] . '<td>' . $it['pupil3_full_name'] . '</td>' .
       '<td>' . (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>')) . '</td>' .
       '<td align="right">' .
-        stencil_ibtnav(($registration_opened) ? 'edit.gif' : 'edit_d.gif', ($registration_opened) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : '', ($registration_opened) ? 'Изменить информацию о команде' : '') .
-        stencil_ibtnav(($d && $registration_opened) ? ('cross.gif') : ('cross_d.gif'), ($d && $registration_opened) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), ($d && $registration_opened) ? 'Удалить команду' : '', 'Удалить эту команду?') .
+        stencil_ibtnav(($allow_registration) ? 'edit.gif' : 'edit_d.gif', ($allow_registration) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : '', ($allow_registration) ? 'Изменить информацию о команде' : '') .
+        stencil_ibtnav(($d && $allow_registration) ? ('cross.gif') : ('cross_d.gif'), ($d && $allow_registration) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), ($d && $registration_opened) ? 'Удалить команду' : '', 'Удалить эту команду?') .
       '</td></tr>' . "\n";
       $c++;
       $i++;
