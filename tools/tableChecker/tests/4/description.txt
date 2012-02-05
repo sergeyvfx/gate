@@ -1,0 +1,4 @@
+Simple table (with no splits and no merges) in html format
+
+Templates:
+  * 01.odt - the same table in odt format

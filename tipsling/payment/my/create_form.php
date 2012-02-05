@@ -117,7 +117,26 @@ dd_formo('title=Новый платеж;');
 </script>
 <div>
   <form action=".?action=create&page=<?=$page?>" method="POST" onsubmit="check(this); return false;">
-    <table class="clear" width="100%">
+      <table class="clear" width="100%">
+        <tr>
+            <td width="30%" style="padding: 0 2px;">
+                Конкурс:
+            </td>
+            <td style="padding: 0 2px;">
+                <select id="ContestGroup" name ="ContestGroup">
+                    <?php
+                        foreach ($reg_contests as $k)
+                        {
+                            $selected = ($k['id'] == $_POST['grade']) ? ('selected') : ('');
+                            echo('<option value = "' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+      </table>
+      <div id="hr"></div>
+      <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
                 Дата платежа: <span class="error">*</span>
             </td>

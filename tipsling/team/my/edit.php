@@ -106,7 +106,26 @@ $team = team_get_by_id($id);
 </script>
 
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
-      <table class="clear" width="100%">
+    <table class="clear" width="100%">
+        <tr>
+            <td width="30%" style="padding: 0 2px;">
+                Конкурс:
+            </td>
+            <td style="padding: 0 2px;">
+                <select id="ContestGroup" name ="ContestGroup">
+                    <?php
+                        foreach ($reg_opened as $k)
+                        {
+                            $selected = ($k['id'] == htmlspecialchars(stripslashes($team['contest_id']))) ? ('selected') : ('');
+                            echo('<option value = "' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>  
+    <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
                 Класс участников: <span class="error">*</span>
             </td>

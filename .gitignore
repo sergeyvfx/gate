@@ -7,7 +7,11 @@ inc/common/config.php
 devel
 *~
 .htaccess
-nbproject
+nbproject/private/
+tools/frameEditor/nbproject/private/
+tools/logic/nbproject/private/
+tools/tableChecker/nbproject/private/
+tools/tipslingMailSorter/nbproject/private/
 *.patch
 redmine
 rm
@@ -15,3 +19,10 @@ favicon.ico
 robots.txt
 yandex_*
 google*.html
+*.class
+tools/tableChecker/build
+tools/tableChecker/dist
+tools/frameEditor/build
+tools/frameEditor/dist
+tools/logic/build
+tools/logic/dist

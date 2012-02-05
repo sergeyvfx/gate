@@ -19,7 +19,7 @@ if ($_team_included_ != '#team_Included#') {
   $_team_included_ = '#team_Included#';
   $user_infos = array();
 
-  function team_list($responsible_id = -1, $sort = 1) {
+  function team_list($responsible_id = -1, $sort = 1, $contest = -1) {
     if ($responsible_id == '') {
       $responsible_id = -1;
     }
@@ -27,6 +27,8 @@ if ($_team_included_ != '#team_Included#') {
     if ($sort == '') {
       $sort = 1;
     }
+    
+    if ($contest == '') $contest = -1;
 
     if ($sort == 1) {
       $sort = "ORDER BY team.grade, team.number";
@@ -41,6 +43,9 @@ if ($_team_included_ != '#team_Included#') {
     } else {
       $where = " team.responsible_id=" . $responsible_id . " AND\n";
     }
+    
+    if ($contest != -1)
+        $where .= "team.contest_id=".$contest." AND\n";
 
     $sql = "SELECT\n"
             . " team.*\n"
@@ -146,21 +151,23 @@ if ($_team_included_ != '#team_Included#') {
 
   function team_create_received() {
     // Get post data
+    global $current_contest;
     $grade = stripslashes(trim($_POST['grade']));
     $teacher_full_name = stripslashes(trim($_POST['teacher_full_name']));
     $pupil1_full_name = stripslashes(trim($_POST['pupil1_full_name']));
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
+    
     if ($payment_id == '') {
       $payment_id = -1;
     }
     $comment = stripslashes(trim($_POST['comment']));
-    //TODO Make it more universally
-    $contest_id = 1;
+    $contest_id = stripslashes(trim($_POST['ContestGroup']));
+    if ($contest_id == '')
+        $contest_id = $current_contest;
+    
     $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
-    //$c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
-    //$number = $grade . '.' . $numb;
     $responsible_id = user_id();
     $is_payment = 0;
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
@@ -213,12 +220,8 @@ if ($_team_included_ != '#team_Included#') {
     }
     $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
-    if ($team['grade'] != $grade) {
-      //TODO Make it more universally
-      $contest_id = 1;
+    if ($team['grade'] != $grade || $team['contest_id'] != $contest_id) {
       $number = db_max('team','number',"`grade`=$grade AND `contest_id`=$contest_id") + 1;
-      //$c = db_count('team', "`grade`=$grade AND `contest_id`=$contest_id") + 1;
-      //$number = $grade . '.' . $c;
     } else {
       $number = $team['number'];
     }

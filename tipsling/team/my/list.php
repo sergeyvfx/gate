@@ -35,27 +35,31 @@ if (count($list) > 0) {
   while ($i < $n) {
     $c = 0;
     $pageSrc = '<table class="list">' . "\n";
-    $pageSrc .= '<tr class="h"><th width="7%" align="center">Номер команды</th>
-        <th width="20%">Учитель</th>
-        <th width="20%">Участник 1</th>
-        <th width="20%">Участник 2</th>
-        <th width="20%">Участник 3</th>
-        <th width="100">Статус платежа</th><th width="48" class="last">&nbsp;</th></tr>' . "\n";
+    $pageSrc .= '<tr class="h">
+        <th width="7%" align="center">Номер команды</th>
+        <th width="15%">Учитель</th>
+        <th width="15%">Участник 1</th>
+        <th width="15%">Участник 2</th>
+        <th width="15%">Участник 3</th>
+        <th width="10%">Статус платежа</th>
+        <th width="15%">Конкурс</th>
+        <th width="48" class="last">&nbsp;</th></tr>' . "\n";
 
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
-      //TODO Check is contest running or archive
       $ps = $it['is_payment'];
       $d = !$ps;
-      $reg_off = opt_get('reg_off');
+      $registration_opened = get_contest_status($it['contest_id'])==1;
+      $contest_name = contest_get_by_id($it['contest_id']);
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">'.$it['grade'].'.'. $it['number'] . '</a></td>' .
+      '<td class="n">' . (($registration_opened) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')).$it['grade'].'.'. $it['number'] . (($registration_opened) ? ('</a>') : ('')) . '</td>' .
       '<td>' . $it['teacher_full_name'] . '</td><td>' . $it['pupil1_full_name'] . '</td>' .
       '<td>' . $it['pupil2_full_name'] . '<td>' . $it['pupil3_full_name'] . '</td>' .
       '<td>' . (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>')) . '</td>' .
+      '<td>' . $contest_name['name'] . '</td>'.
       '<td align="right">' .
-        stencil_ibtnav((!$reg_off) ? 'edit.gif' : 'edit_d.gif', (!$reg_off) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : '', (!$reg_off) ? 'Изменить информацию о команде' : '') .
-        stencil_ibtnav(($d && !$reg_off) ? ('cross.gif') : ('cross_d.gif'), ($d && !$reg_off) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), ($d && !$reg_off) ? 'Удалить команду' : '', 'Удалить эту команду?') .
+        stencil_ibtnav(($registration_opened) ? 'edit.gif' : 'edit_d.gif', ($registration_opened) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : '', ($registration_opened) ? 'Изменить информацию о команде' : '') .
+        stencil_ibtnav(($d && $registration_opened) ? ('cross.gif') : ('cross_d.gif'), ($d && $registration_opened) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), ($d && $registration_opened) ? 'Удалить команду' : '', 'Удалить эту команду?') .
       '</td></tr>' . "\n";
       $c++;
       $i++;

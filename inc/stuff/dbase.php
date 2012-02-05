@@ -262,7 +262,6 @@
       }
 
       $sql = "INSERT INTO `$table` ($fields) VALUES($values)";
-
       db_query ($sql);
     }
 

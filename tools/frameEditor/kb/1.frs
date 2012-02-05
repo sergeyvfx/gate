@@ -1,0 +1,44 @@
+<logic.frames.Frameset>
+  <frames>
+    <logic.frames.Frame>
+      <slots/>
+      <name>New frame 0</name>
+      <comment></comment>
+      <inLinks>
+        <logic.frames.Link>
+          <source>
+            <slots/>
+            <name>New frame 2</name>
+            <comment></comment>
+            <inLinks/>
+            <outLinks>
+              <logic.frames.Link reference="../../.."/>
+            </outLinks>
+            <slotCustoms/>
+          </source>
+          <target class="logic.frames.Frame" reference="../../.."/>
+          <type>0</type>
+        </logic.frames.Link>
+        <logic.frames.Link>
+          <source>
+            <slots/>
+            <name>New frame 1</name>
+            <comment></comment>
+            <inLinks/>
+            <outLinks>
+              <logic.frames.Link reference="../../.."/>
+            </outLinks>
+            <slotCustoms/>
+          </source>
+          <target class="logic.frames.Frame" reference="../../.."/>
+          <type>0</type>
+        </logic.frames.Link>
+      </inLinks>
+      <outLinks/>
+      <slotCustoms/>
+    </logic.frames.Frame>
+    <logic.frames.Frame reference="../logic.frames.Frame/inLinks/logic.frames.Link[2]/source"/>
+    <logic.frames.Frame reference="../logic.frames.Frame/inLinks/logic.frames.Link/source"/>
+  </frames>
+  <domens/>
+</logic.frames.Frameset>
