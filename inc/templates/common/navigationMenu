@@ -7,7 +7,7 @@
   <div class="body">
     <ul type ="disc">
       <li><a href="http://www.trizformashka.land.ru/">Главная страница</a></li>
-      <li><a href=<?=$document_root?>>Новый сайт</a></li>
+      <li><a href="<?=$document_root?>">Новый сайт</a></li>
       <?php
         global $current_contest;
         if (user_authorized()) 
