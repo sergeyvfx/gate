@@ -179,6 +179,35 @@ if ($_team_included_ != '#team_Included#') {
 
     return false;
   }
+  
+  function team_register_again_received() {
+    // Get post data
+    global $current_contest;
+    $team_id = stripslashes(trim($_POST['Team']));
+    $this_team = team_get_by_id($team_id);
+    $grade = $this_team['grade']+1;
+    $teacher_full_name = $this_team['teacher_full_name'];
+    $pupil1_full_name = $this_team['pupil1_full_name'];
+    $pupil2_full_name = $this_team['pupil2_full_name'];
+    $pupil3_full_name = $this_team['pupil3_full_name'];
+    $payment_id = -1;
+
+    $comment = $this_team['comment'];
+    $contest_id = $current_contest;
+    
+    $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
+    $responsible_id = $this_team['responsible_id'];
+    $is_payment = 0;
+    
+    if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
+                    $teacher_full_name, $pupil1_full_name, $pupil2_full_name,
+                    $pupil3_full_name, $is_payment, $comment)) {
+      $_POST = array();
+      return true;
+    }
+
+    return false;
+  }
 
   function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number, $comment) {
     if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment, true, $id)) {

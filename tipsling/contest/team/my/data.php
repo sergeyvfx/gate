@@ -67,6 +67,10 @@ ${information}
           team_delete($id);
         }
       }
+      if ($action=='register_again'){
+          team_register_again_received();
+      } 
+        
       $r = responsible_get_by_id(user_id());
       if ($r['school_id'] > 0 || user_is_system(user_id())) {
         $list = team_list(user_id(), '', $current_contest);
