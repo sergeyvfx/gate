@@ -210,12 +210,12 @@ dd_formo('title=Новая команда;');
         for ($i=0; $i<count($contest_list); $i++)
         {
             if ($i+1<count($contest_list))
-                $whereContests .= 'contest_id = '.$contest_list[$i]['id'].' and ';
+                $whereContests .= 'contest_id = '.$contest_list[$i]['id'].' or ';
             else
                 $whereContests .= 'contest_id = '.$contest_list[$i]['id'];
         }
         
-        $sql = "SELECT * FROM team where ".$whereContests;
+        $sql = "SELECT * FROM team where responsible_id=".user_id(). " and (".$whereContests.")";
         $team_list = arr_from_query($sql);
         
         dd_formo('title=Зарегистрировать команду из предыдущих конкурсов;');
