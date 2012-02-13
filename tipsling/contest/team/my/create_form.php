@@ -218,9 +218,10 @@ dd_formo('title=Новая команда;');
         $sql = "SELECT * FROM team where responsible_id=".user_id(). " and (".$whereContests.")";
         $team_list = arr_from_query($sql);
         
-        dd_formo('title=Зарегистрировать команду из предыдущих конкурсов;');
+        //dd_formo('title=Зарегистрировать команду из предыдущих конкурсов;');
       }
 ?>
+<!--
 <div>
 
   <form action=".?action=register_again" method="POST">
@@ -253,7 +254,8 @@ dd_formo('title=Новая команда;');
     </div>
   </form>
 </div>
+-->
 <?php
-    if (count($contest_list)>0 && count($team_list)>0)
-      dd_formc();
+    /*if (count($contest_list)>0 && count($team_list)>0)
+      dd_formc();*/
 ?>
