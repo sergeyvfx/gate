@@ -254,6 +254,6 @@ dd_formo('title=Новая команда;');
   </form>
 </div>
 <?php
-    if (count($contest_list)>0)
+    if (count($contest_list)>0 && count($team_list)>0)
       dd_formc();
 ?>
