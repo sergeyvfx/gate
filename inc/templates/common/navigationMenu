@@ -3,7 +3,7 @@
 ?>
   
 <div class="menu">
-  <div class="cpt">Навигация</div>
+  <!--<div class="cpt">Навигация</div>-->
   <div class="body">
     <ul type ="disc">
       <li><a href="<?=$document_root . '/'?>">Главная страница</a></li>
@@ -12,7 +12,7 @@
         global $current_contest;
         if (user_authorized()) 
         {
-            printf('<li><a href="'.$document_root.'/login/profile/info/main">Пользователь</a></li>');
+            printf('<li><a href="'.$document_root.'/login/profile/info/main">Мой профиль</a></li>');
             printf('<li><a href="'.$document_root.'/login/profile/info/school">Учебное заведение</a></li>');
             printf('<li><a href="'.$document_root.'/tipsling/team/my/">Мои команды</a></li>');
             printf('<li><a href="'.$document_root.'/tipsling/payment/my">Мои платежи</a></li>');
@@ -45,8 +45,8 @@
         else printf('<li><a href="'.$document_root.'/?action=logout">Выйти</a></li>');
       ?>
     </ul>
-  </div>
 </div>
+  <br/>
 <?php
   $tpl=manage_template_by_name ('Страница / Меню навигации');
   echo (wiki_menu_parse ($tpl->GetText ()));
