@@ -218,44 +218,42 @@ dd_formo('title=Новая команда;');
         $sql = "SELECT * FROM team where responsible_id=".user_id(). " and (".$whereContests.")";
         $team_list = arr_from_query($sql);
         
-        //dd_formo('title=Зарегистрировать команду из предыдущих конкурсов;');
-      }
-?>
-<!--
+        if (count($contest_list)>0 && count($team_list)>0)
+        {
+            dd_formo('title=Зарегистрировать команду из предыдущих конкурсов;');
+            echo('
 <div>
-
   <form action=".?action=register_again" method="POST">
       <table class="clear" width="100%">
             <td width="15%" style="padding: 0 2px;">
                 Команда:
             </td>
             <td style="padding: 0 2px;">
-                <select id="Team" name ="Team">
-                    <?php
-                        foreach ($team_list as $t)
-                        {
-                            $t_contest = contest_get_by_id($t['contest_id']);
-                            echo('<option value = "' . $t['id'] . '" >' . 
-                                    $t['grade'].'.'.$t['number'].' ('.
-                                    $t_contest['name'].
-                                     ') - '.$t['pupil1_full_name'].
-                                    ($t['pupil2_full_name']!=null
-                                    ?', '.$t['pupil2_full_name']:'').
-                                    ($t['pupil3_full_name']!=null
-                                    ?', '.$t['pupil3_full_name']:'').
-                                    '</option>');
-                        }
-                    ?>
-                </select>
+                <select id="Team" name ="Team">');
+             foreach ($team_list as $t)
+             {
+                $t_contest = contest_get_by_id($t['contest_id']);
+                echo('<option value = "' . $t['id'] . '" >' . 
+                     $t['grade'].'.'.$t['number'].' ('.
+                     $t_contest['name'].
+                     ') - '.$t['pupil1_full_name'].
+                     ($t['pupil2_full_name']!=null
+                     ?', '.$t['pupil2_full_name']:'').
+                     ($t['pupil3_full_name']!=null
+                     ?', '.$t['pupil3_full_name']:'').
+                     '</option>');
+             }
+             echo('
+                 </select>
             </td>
       </table>
     <div class="formPast">
       <button class="submitBtn block" type="submit">Сохранить</button>
     </div>
   </form>
-</div>
--->
-<?php
-    /*if (count($contest_list)>0 && count($team_list)>0)
-      dd_formc();*/
+</div>');
+        }
+      }
+    if (count($contest_list)>0 && count($team_list)>0)
+      dd_formc();
 ?>
