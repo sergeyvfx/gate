@@ -1,5 +1,10 @@
 <?php
   $document_root = config_get ('document-root');
+    
+  global $current_contest;
+ 
+  if ($current_contest=='' || $current_contest==-1)
+      $current_contest = opt_get("current_contest_number");
 ?>
   
 <div class="menu">
