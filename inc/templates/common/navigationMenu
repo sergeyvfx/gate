@@ -6,11 +6,10 @@
   if ($current_contest=='' || $current_contest==-1)
       $current_contest = opt_get("current_contest_number");
 ?>
-  
+
 <div class="menu">
-  <!--<div class="cpt">Навигация</div>-->
   <div class="body">
-    <ul type ="disc">
+    <ul class="navMenu" type="square">
       <li><a href="<?=$document_root . '/'?>">Главная страница</a></li>
       <li><a href="http://www.trizformashka.land.ru/">Старый сайт</a></li>
       <?php
@@ -25,7 +24,8 @@
         if ($current_contest!='')
         {
             $it = contest_get_by_id($current_contest);
-            printf('<li><a href="'.$document_root.'/tipsling/contest/">'.$it['name'].'<ul type="circle">');
+            printf('<li>
+                        <a href="'.$document_root.'/tipsling/contest/">'.$it['name'].'</a><ul class="navMenu" type="circle">');
                 if (user_authorized())
                 {
                     $query = arr_from_query ("select * ".
@@ -50,6 +50,7 @@
         else printf('<li><a href="'.$document_root.'/?action=logout">Выйти</a></li>');
       ?>
     </ul>
+</div>
 </div>
   <br/>
 <?php
