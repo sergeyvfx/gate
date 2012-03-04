@@ -18,4 +18,5 @@ $contest_menu = new CVCMenu ();
 $contest_menu->Init('ContestMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
 
 $contest_menu->AppendItem('Мои конкурсы', config_get('document-root') . '/tipsling/contest/admin/MyContests', 'MyContest');
+$contest_menu->AppendItem('Статистическая инфорация', config_get('document-root') . '/tipsling/contest/admin/Information', 'Information');
 ?>

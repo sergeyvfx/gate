@@ -36,8 +36,8 @@ ${information}
     $is_user_admin = is_user_in_group(user_id(), $g['id']) || user_access_root();
     $has_access = is_user_bookkeeper(user_id(), $current_contest) || $is_user_admin;
     
-    if ($action == 'edit') {
-      include 'edit.php';
+    if ($action == 'edit' && $has_access) {
+            include 'edit.php';
     } else {
       if ($action == 'save') {
         $t = team_get_by_id($id);
