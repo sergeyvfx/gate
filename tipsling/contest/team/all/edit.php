@@ -111,7 +111,7 @@ $team = team_get_by_id($id);
                 Класс участников: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
+                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
             </td>
         </tr>
         <tr><td><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д.)</i></td></tr>
@@ -123,7 +123,7 @@ $team = team_get_by_id($id);
                 Полное имя учителя: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block"  id="teacher_full_name" name="teacher_full_name" onblur="check_frm_teacher ();" value="<?= htmlspecialchars(stripslashes($team['teacher_full_name']));?>">
+                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block"  id="teacher_full_name" name="teacher_full_name" onblur="check_frm_teacher ();" value="<?= htmlspecialchars(stripslashes($team['teacher_full_name']));?>">
             </td>
         </tr>
       </table>
@@ -134,7 +134,7 @@ $team = team_get_by_id($id);
                 Полное имя 1-го участника: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="pupil1_full_name" name="pupil1_full_name" onblur="check_frm_pupil ();" value="<?= htmlspecialchars(stripslashes($team['pupil1_full_name'])); ?>">
+                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block" id="pupil1_full_name" name="pupil1_full_name" onblur="check_frm_pupil ();" value="<?= htmlspecialchars(stripslashes($team['pupil1_full_name'])); ?>">
             </td>
         </tr>
       </table>
@@ -145,7 +145,7 @@ $team = team_get_by_id($id);
                 Полное имя 2-го участника:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars(stripslashes($team['pupil2_full_name'])); ?>">
+                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars(stripslashes($team['pupil2_full_name'])); ?>">
             </td>
         </tr>
       </table>
@@ -155,46 +155,31 @@ $team = team_get_by_id($id);
                 Полное имя 3-го участника:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars(stripslashes($team['pupil3_full_name'])); ?>">
+                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars(stripslashes($team['pupil3_full_name'])); ?>">
             </td>
         </tr>
       </table>
       <div id="hr"></div>
-<!--      <table class ="clear" width="100%">
-        <tr><td width="30%">
-                Платеж:
-            </td>
-            <td style="padding: 0 2px;">
-                  <select id="payment_id" name="payment_id" class="block" <?= ($team['is_payment']) ? ('disabled="disabled"') : ('') ?>>
-    <option value="-1"></option>
-    <?php
-    $payments = payment_list(user_id());
-    foreach ($payments as $p) {
-      $amount = $p['amount'];
-      if (!preg_match('/\./', $amount)) {
-        $amount = $amount . '.00';
-      }
-      $amount = $amount . ' руб.';
-    ?>
-      <option value="<?= $p['id'] ?>" <?= ($team['payment_id'] == $p['id']) ? ('selected') : ('') ?>><?= $p['date'] . ' ' . $p['cheque_number'] . ' ' . $amount ?></option>
-    <?php
-    }
-    ?>
-    </select>
-            </td>
-        </tr>
-      </table>
-      <div id="hr"></div>-->
       <table class ="clear" width="100%">
         <tr><td width="30%">
                 Примечание:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" id="comment" name="comment" onblur="check_frm_comment ();" value="<?= htmlspecialchars(stripslashes($team['comment'])); ?>" class="txt block">
+                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" id="comment" name="comment" onblur="check_frm_comment ();" value="<?= htmlspecialchars(stripslashes($team['comment'])); ?>" class="txt block">
             </td>
         </tr>
       </table>
       <div id="comment_check_res" style="display: none;"></div>
+      <div id="hr"></div>
+      <table class ="clear" width="100%">
+        <tr><td width="30%">
+                Платеж подтвержден:
+            </td>
+            <td style="padding: 0 2px;">
+                <input type="checkbox" value="1" <?=($team['is_payment'])?'CHECKED':''?> id="is_payment" name="is_payment"></input>
+            </td>
+        </tr>
+      </table>
 
   <div class="formPast">
     <button class="submitBtn" type="button" onclick="nav ('.?<?= (($page != '') ? ('&page=' . $page) : ('')); ?>');">Назад</button>

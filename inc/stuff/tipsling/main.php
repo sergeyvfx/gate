@@ -19,6 +19,7 @@ function tipsling_initialize() {
   school_initialize();
   responsible_initialize();
   contest_initialize();
+  bookkeepers_initialize();
   if (config_get('check-database')) {
     db_create_table_safe('team', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',

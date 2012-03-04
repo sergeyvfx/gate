@@ -30,6 +30,8 @@ body {
 
 #content #nav .body ul { margin: 0; padding: 0 0 0 16px; }
 #content #nav .body ul.sub {  }
+#content #nav .body ul.navMenu li { list-style-image:none;  margin: 0; padding: 0; }
+
 
 #content .pointer {cursor: pointer;}
 #content .cntsmall, #content .cntsmall a:visited, #content .cntsmall a:link  { font-size: 7pt; }
@@ -45,8 +47,10 @@ body {
 #content table.small      { font-size: 7pt; }
 #content table tr td, table tr th { margin: 0; padding: 0;}
 
+
 #content ul    { margin: 0; padding: 0 0 0 40px; }
-#content ul li { list-style: url('../pics/ul_marker.gif'); margin: 0; padding: 0; }
+#content ul li { list-style-image: url('../pics/ul_marker.gif'); margin: 0; padding: 0; }
+
 
 #content a, #content a:visited, #content a:link { font-family: "tahoma", "arial", "verdana"; font-size: 8pt; text-decoration: underline; color: #0000cf; }
 #content a:hover { color: #00f; text-decoration: none; }

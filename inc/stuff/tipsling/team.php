@@ -69,7 +69,7 @@ if ($_team_included_ != '#team_Included#') {
     if ($update) {
       $team = team_get_by_id($id);
       $g = group_get_by_name("Администраторы");
-      $has_access = is_user_in_group(user_id(), $g['id']) || user_access_root();
+      $has_access = is_user_bookkeeper(user_id(), $team['contest_id']) || is_user_in_group(user_id(), $g['id']) || user_access_root();
       if ($team['is_payment'] > 0 && !$has_access) {
         add_info("Данная команда не доступна для редактирования");
         return false;
@@ -236,13 +236,16 @@ if ($_team_included_ != '#team_Included#') {
     return true;
   }
 
-  function team_update_received($id, $is_payment = 0) {
+  function team_update_received($id) {
     // Get post data
     $grade = stripslashes(trim($_POST['grade']));
     $teacher_full_name = stripslashes(trim($_POST['teacher_full_name']));
     $pupil1_full_name = stripslashes(trim($_POST['pupil1_full_name']));
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
+    $is_payment = stripslashes(trim($_POST['is_payment']));
+    if ($is_payment=='')
+        $is_payment = 0;
     $payment_id = stripslashes(trim($_POST['payment_id']));
     if ($payment_id == '') {
       $payment_id = -1;
