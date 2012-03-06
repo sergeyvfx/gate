@@ -43,8 +43,7 @@ formo('title=Список зарегистрированных команд;');
 <script language="JavaScript" type="text/javascript">
   function update () {
     var sort=getElementById ('sortGroup').value;
-    var contest=getElementById ('ContestGroup').value;
-    nav ('.?sort='+sort+'&contest='+contest);
+    nav ('.?sort='+sort);
   }
 </script>
 <?php

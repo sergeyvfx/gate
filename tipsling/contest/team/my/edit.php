@@ -160,31 +160,6 @@ $team = team_get_by_id($id);
         </tr>
       </table>
       <div id="hr"></div>
-<!--      <table class ="clear" width="100%">
-        <tr><td width="30%">
-                Платеж:
-            </td>
-            <td style="padding: 0 2px;">
-                  <select id="payment_id" name="payment_id" class="block" <?= ($team['is_payment']) ? ('disabled="disabled"') : ('') ?>>
-    <option value="-1"></option>
-    <?php
-    $payments = payment_list(user_id());
-    foreach ($payments as $p) {
-      $amount = $p['amount'];
-      if (!preg_match('/\./', $amount)) {
-        $amount = $amount . '.00';
-      }
-      $amount = $amount . ' руб.';
-    ?>
-      <option value="<?= $p['id'] ?>" <?= ($team['payment_id'] == $p['id']) ? ('selected') : ('') ?>><?= $p['date'] . ' ' . $p['cheque_number'] . ' ' . $amount ?></option>
-    <?php
-    }
-    ?>
-    </select>
-            </td>
-        </tr>
-      </table>
-      <div id="hr"></div>-->
       <table class ="clear" width="100%">
         <tr><td width="30%">
                 Примечание:

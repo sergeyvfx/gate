@@ -195,9 +195,9 @@ if ($_team_included_ != '#team_Included#') {
     $comment = $this_team['comment'];
     $contest_id = $current_contest;
     
-    $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
     $responsible_id = $this_team['responsible_id'];
     $is_payment = 0;
+    $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
     
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
                     $teacher_full_name, $pupil1_full_name, $pupil2_full_name,
@@ -252,8 +252,8 @@ if ($_team_included_ != '#team_Included#') {
     }
     $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
-    if ($team['grade'] != $grade || $team['contest_id'] != $contest_id) {
-      $number = db_max('team','number',"`grade`=$grade AND `contest_id`=$contest_id") + 1;
+    if ($team['grade'] != $grade) {
+      $number = db_max('team','number',"`grade`=$grade AND `contest_id`=".$team['contest_id']) + 1;
     } else {
       $number = $team['number'];
     }
