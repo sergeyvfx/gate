@@ -18,6 +18,6 @@ $payment_menu = new CVCMenu ();
 $payment_menu->Init('PaymentMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
 $payment_menu->AppendItem('Мои платежи', config_get('document-root') . '/tipsling/contest/payment/my', 'my');
 if (is_user_bookkeeper(user_id(), $current_contest)) {
-  $payment_menu->AppendItem('Все платежи', config_get('document-root') . '/tipsling/contest/payment/all', 'all');
+    $payment_menu->AppendItem('Все платежи', config_get('document-root') . '/tipsling/contest/payment/all', 'all');
 }
 ?>

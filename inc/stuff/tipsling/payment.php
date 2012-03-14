@@ -41,7 +41,7 @@ if ($_payment_included_ != '#payment_Included#') {
             $where = " where `payment`.`responsible_id`=" . $responsible_id;
     }
     else
-        $sort = " ORDER BY `date_arrival`, `date`";
+        $sort = " ORDER BY `date`";
 
     $sql='SELECT * FROM `payment` '.$where.$sort;
     return arr_from_query($sql);

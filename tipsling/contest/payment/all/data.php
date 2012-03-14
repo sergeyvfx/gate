@@ -16,15 +16,16 @@ if (!user_authorized ()) {
   header('Location: ../../../login');
 }
 
-if (!is_bookkeeper(user_id())) {
-  print (content_error_page(403));
-  return;
-}
-
 global $current_contest;
 
 if ($current_contest=='' || $current_contest==-1)
     header('Location: ../../choose');
+
+if (!is_user_bookkeeper(user_id(), $current_contest)) 
+{
+  print (content_error_page(403));
+  return;
+}
 
 $contest = contest_get_by_id($current_contest);
 ?>

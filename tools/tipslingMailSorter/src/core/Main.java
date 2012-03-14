@@ -16,10 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,6 +32,8 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MailDateFormat;
 import javax.mail.internet.MimeUtility;
+import java.util.LinkedList;
+
 
 public class Main {
 
@@ -76,11 +74,9 @@ public class Main {
     private String password = config.getProperty("mail.password");
     private String provider = "pop3";
     private String path = new File(config.getProperty("store.path")).getAbsolutePath();
+    private String page = config.getProperty("tipsling.page");
     private Properties props = new Properties();
     private Connection conn = null;
-    String mysqlUserName = config.getProperty("mysql.username");
-    String mysqlPassword = config.getProperty("mysql.password");
-    String mysqlURL = config.getProperty("mysql.url");
 
     @Override
     public void run() {
@@ -108,19 +104,12 @@ public class Main {
 
         Message[] messages = inbox.getMessages();
 
-        if (messages.length > 0) {
-          try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            conn = DriverManager.getConnection(mysqlURL, mysqlUserName, mysqlPassword);
-            log("Соединение с базой данных установлено", false);
-          } catch (Exception ex) {
-            log("Не удается установить соединение с БД", true);
-            log(ex.getMessage(), true);
-            return;
-          }
-        }
         for (int i = 0; i < messages.length; i++) {
+          if (messages[i].getFlags().contains(Flags.Flag.SEEN))
+              continue;
           String subject = messages[i].getSubject();
+          if (subject==null)
+              subject="";
           subject = subject.replaceAll("Fwd:", "");
           subject = subject.replaceAll("\\ ", "");
           subject = subject.replaceAll("\"", "");
@@ -128,7 +117,7 @@ public class Main {
           log("[" + subject + "] - Получено сообщение", false);
           if (!m.matches()) {
             log("[" + subject + "] - Тема сообщения не соответствует формату", false);
-            messages[i].setFlag(Flags.Flag.DELETED, true);
+            messages[i].setFlag(Flags.Flag.SEEN, true);
           } else {
             Integer grade = new Integer(subject.substring(0, subject.indexOf(".")));
             Integer number = new Integer(subject.substring(subject.indexOf(".") + 1, subject.indexOf("-")));
@@ -140,7 +129,7 @@ public class Main {
             f.setTimeZone(new SimpleTimeZone(2, "ID"));
             recieveDate = f.parse(recieve);
             log("[" + subject + "] - " + recieveDate.toString(), false);
-            messages[i].setFlag(Flags.Flag.DELETED, true);
+            messages[i].setFlag(Flags.Flag.SEEN, true);
             Object content = messages[i].getContent();
             if (content instanceof Multipart) {
               Multipart mp = (Multipart) content;
@@ -171,7 +160,8 @@ public class Main {
                   }
                 }
               }
-              addInfo(grade, number, task, recieveDate, size, subject);
+              SendPostQuery(grade, number, task, recieveDate, size, subject);
+              //addInfo(grade, number, task, recieveDate, size, subject);
             }
           }
         }
@@ -202,29 +192,33 @@ public class Main {
       is.close();
       return count;
     }
-
-    private void addInfo(int grade, int number, int task, Date date, int size, String subject) {
-      DateFormat df = new SimpleDateFormat("HH:mm:ss");
-      try {
-        Statement s = conn.createStatement();
-        ResultSet rs = s.executeQuery("SELECT `team`.`id` FROM `team` WHERE `team`.`grade`=" + grade + " AND `team`.`number`=" + number);
-        int teamId = -1;
-        if (rs.next()) {
-          teamId = rs.getInt("id");
-        }
-        rs.close();
-        if (teamId != -1) {
-          s.executeUpdate("INSERT INTO contest_status (contest_id, task, team_id, time, size) VALUES "
-                  + "(" + 1 + ", " + task + ", " + teamId + ", " + "'" + df.format(date) + "', " + size + ")");
-        } else {
-          log("Ошибка при получении ID команды", false);
-        }
-        s.close();
-        log("[" + subject + "] - Информация внесена в БД", false);
-      } catch (SQLException ex) {
-        log(ex.getMessage(), true);
-      }
-    }
+    
+    private void SendPostQuery(int grade, int number, int task, Date date, int size, String subject)
+    {
+       DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        
+       //создаём лист параметров для запроса
+       java.util.List<String[]> params = new LinkedList<String[]>();
+       params.add(new String[]{"id", String.valueOf(120121)});
+       params.add(new String[]{"grade", String.valueOf(grade)});
+       params.add(new String[]{"number", String.valueOf(number)});
+       params.add(new String[]{"task", String.valueOf(task)});
+       params.add(new String[]{"date", df.format(date)});
+       params.add(new String[]{"size", String.valueOf(size)});
+       params.add(new String[]{"contest_id", String.valueOf(2)});
+       
+       try {
+           //отправляем запрос
+           RequestSender sender = new RequestSender();
+           String response = sender.sendPostRequest(page, params);
+           if (response == null || "".equals(response.trim()))
+               log("[" + subject + "] - Информация внесена в БД", false);
+           else
+               log(response,true);
+       } catch (IOException ex) {
+           log(ex.getMessage(), true);
+       }
+    }    
   }
 
   public static void main(String[] args) {
