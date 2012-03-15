@@ -32,7 +32,9 @@ if ($current_contest=='' || $current_contest==-1)
 
 
 $contest = contest_get_by_id($current_contest);
-$allow_registration = get_contest_status($current_contest)==1;
+$contest_stat = get_contest_status($current_contest);
+$allow_registration = $contest_stat==1;
+$allow_edit = $contest_stat==1 || $contest_stat==2;
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/team" ?>">Команды</a>Мои команды</div>
 ${information}
@@ -46,7 +48,7 @@ ${information}
     if ($id!='' && $id != -1)
     {
         $t = team_get_by_id($id);
-        $allow_editing = get_contest_status($current_contest)<3 && user_id()==$t['responsible_id'];
+        $allow_editing = $allow_edit && user_id()==$t['responsible_id'];
     }
     
     $team_menu->SetActive('my');

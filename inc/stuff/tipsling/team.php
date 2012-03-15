@@ -243,15 +243,15 @@ if ($_team_included_ != '#team_Included#') {
     $pupil1_full_name = stripslashes(trim($_POST['pupil1_full_name']));
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
-    $is_payment = stripslashes(trim($_POST['is_payment']));
-    if ($is_payment=='')
-        $is_payment = 0;
-    $payment_id = stripslashes(trim($_POST['payment_id']));
-    if ($payment_id == '') {
-      $payment_id = -1;
-    }
     $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
+    $is_payment = stripslashes(trim($_POST['is_payment']));
+    if ($is_payment=='')
+        $is_payment = $team['is_payment'];
+    $payment_id = stripslashes(trim($_POST['payment_id']));
+    if ($payment_id == '') {
+      $payment_id = $team['payment_id'];
+    }
     if ($team['grade'] != $grade) {
       $number = db_max('team','number',"`grade`=$grade AND `contest_id`=".$team['contest_id']) + 1;
     } else {
