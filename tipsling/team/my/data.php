@@ -40,7 +40,7 @@ ${information}
     if ($id!='' && $id != -1)
     {
         $t = team_get_by_id($id);
-        $allow_editing = get_contest_status($t['contest_id'])<3 && user_id()==$t['responsible_id'];
+        $allow_editing = get_contest_status($t['contest_id'])<4 && user_id()==$t['responsible_id'];
     }
     if ($action == 'create') {
       team_create_received();

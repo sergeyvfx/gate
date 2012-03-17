@@ -70,7 +70,10 @@ if ($_team_included_ != '#team_Included#') {
       $team = team_get_by_id($id);
       $g = group_get_by_name("Администраторы");
       $has_access = is_user_bookkeeper(user_id(), $team['contest_id']) || is_user_in_group(user_id(), $g['id']) || user_access_root();
-      if ($team['is_payment'] > 0 && !$has_access) {
+      
+      $contest_stat = get_contest_status($team['contest_id']);
+      $allow_edit = $contest_stat==1 || $contest_stat==2 || $contest_stat==3;
+      if ($allow_edit && !$has_access) {
         add_info("Данная команда не доступна для редактирования");
         return false;
       }
