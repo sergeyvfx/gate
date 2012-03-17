@@ -26,3 +26,7 @@ tools/frameEditor/build
 tools/frameEditor/dist
 tools/logic/build
 tools/logic/dist
+tools/tipslingMailSorter/build
+tools/tipslingMailSorter/dist
+build-impl.xml
+genfiles.properties

@@ -9,30 +9,18 @@
 
 package core;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Properties;
-import java.util.SimpleTimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.mail.Flags;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.Session;
-import javax.mail.Store;
+import javax.mail.*;
 import javax.mail.internet.MailDateFormat;
 import javax.mail.internet.MimeUtility;
-import java.util.LinkedList;
 
 
 public class Main {
@@ -106,11 +94,14 @@ public class Main {
         Message[] messages = inbox.getMessages();
 
         for (int i = 0; i < messages.length; i++) {
-          if (messages[i].getFlags().contains(Flags.Flag.DELETED))
+          //FIXME Realy?! Is it possible to get message from server with deleted flag?
+          if (messages[i].getFlags().contains(Flags.Flag.DELETED)) {
               continue;
+          }
           String subject = messages[i].getSubject();
-          if (subject==null)
-              subject="";
+          if (subject==null) {
+              subject = "";
+          }
           subject = subject.replaceAll("Fwd:", "");
           subject = subject.replaceAll("\\ ", "");
           subject = subject.replaceAll("\"", "");
@@ -125,10 +116,9 @@ public class Main {
             Integer task = new Integer(subject.substring(subject.indexOf("-") + 1, subject.length()));
             String recieve = messages[i].getHeader("Received")[0];
             recieve = recieve.substring(recieve.lastIndexOf(";") + 1, recieve.length());
-            Date recieveDate = null;
             DateFormat f = new MailDateFormat();
-            f.setTimeZone(new SimpleTimeZone(2, "ID"));
-            recieveDate = f.parse(recieve);
+            Date recieveDate = f.parse(recieve);
+            recieveDate.setTime(recieveDate.getTime() + 3600000);
             log("[" + subject + "] - " + recieveDate.toString(), false);
             messages[i].setFlag(Flags.Flag.DELETED, true);
             Object content = messages[i].getContent();
@@ -165,10 +155,12 @@ public class Main {
             }
           }
         }
-        if (inbox.isOpen())
+        if (inbox.isOpen()) {
             inbox.close(true);
-        if (store.isConnected())
+        }
+        if (store.isConnected()) {
             store.close();
+        }
         if (conn != null) {
           conn.close();
           conn = null;
@@ -213,10 +205,11 @@ public class Main {
            //отправляем запрос
            RequestSender sender = new RequestSender();
            String response = sender.sendPostRequest(page, params);
-           if (response == null || "".equals(response.trim()))
+           if (response == null || "".equals(response.trim())) {
                log("[" + subject + "] - Информация внесена в БД", false);
-           else
-               log(response,true);
+           } else {
+               log(response, true);
+           }
        } catch (IOException ex) {
            log(ex.getMessage(), true);
        }
