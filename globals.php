@@ -15,7 +15,7 @@
   $IFACE = 'SPAWNING NEW IFACE';
 
   /* Relative directory name */
-  $relative = '';
+  $relative = 'gate';
 
   $s = $_SERVER['DOCUMENT_ROOT'];
 
