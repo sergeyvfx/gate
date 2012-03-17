@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package core;
 
 import java.io.IOException;
@@ -11,12 +7,7 @@ import java.io.PrintWriter;
 import java.net.*;
 import java.util.Map;
 
-/**
- *
- * @author keeper
- */
-public class RequestSender {
-    
+public class RequestSender {    
     
     private HttpURLConnection getConnection(String urlLocation) throws IOException {
        URL url = new URL(urlLocation);
@@ -50,7 +41,6 @@ public class RequestSender {
    public String sendPostRequest(String urlLocation, java.util.List parameters) throws IOException {
        StringBuilder result = new StringBuilder();
        HttpURLConnection connection = getConnection(urlLocation);
-       //System.out.println("Соединение с " + urlLocation + " установлено.");
        connection.setRequestMethod("POST");
        connection.setRequestProperty("Referer", urlLocation);
        connection.setRequestProperty("Cookie", "your cookies may be here");
@@ -70,17 +60,12 @@ public class RequestSender {
        }
        connection.connect();
        if (parameters != null && data.length() != 0) {
-           //System.out.println("Отправка данных..");
            PrintWriter out = new PrintWriter(connection.getOutputStream());
            out.write(data);
            out.flush();
-           //System.out.println("Получение ответа от сервера..");
        }
-       /*result.append("response code: ").append(connection.getResponseCode()).append("\n");
-       result.append("response cookies: ").append(getResponseCookies(connection)).append("\n");
-       result.append("response page source: ").append("\n");*/
-       
 
+       //TODO: Надо бы наверное лучше обрабатывать код ответа
        BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
        String line;
        while ((line = rd.readLine()) != null) {

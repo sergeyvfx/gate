@@ -2,9 +2,10 @@
     include '../../globals.php';
     include $DOCUMENT_ROOT . '/inc/include.php';
     db_connect (config_get ('check-database'));
+    $MonitorCode = opt_get("MonitorCode");
     
     global $id, $contest_id, $grade, $number, $task, $date, $size;
-    if ($id=='120121')
+    if ($id==$MonitorCode)
     {
         $sql = "SELECT `team`.`id` FROM `team` WHERE `team`.`grade`=".$grade." AND `team`.`number`=".$number." AND `team`.`contest_id`=".$contest_id;
         $res = arr_from_query($sql);

@@ -72,14 +72,6 @@ function check () {
         return false;
     }
 
-    /*if ($_SESSION['CAPTCHA_Keystring'] == '' || strtolower ($keystring) != $_SESSION['CAPTCHA_Keystring']) {
-        add_info("123\n");
-        add_info($_SESSION['CAPTCHA_Keystring']."\n");
-        add_info(strtolower ($keystring)."\n");
-        add_info ('Вы не прошли тест Тьюринга на подтверждение того, что вы не бот.');
-      return false;
-    }*/
-
     $r = db_row_value ('user', "(`login` =\"$login\") AND (`email`=\"$email\") AND (`authorized`=1)");
     if ($r['id'] == '') {
       add_info ('Неверное сочетание login <-> email');

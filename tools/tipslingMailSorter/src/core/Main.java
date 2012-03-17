@@ -75,6 +75,7 @@ public class Main {
     private String provider = "pop3";
     private String path = new File(config.getProperty("store.path")).getAbsolutePath();
     private String page = config.getProperty("tipsling.page");
+    private String code = config.getProperty("tipsling.MonitorCode");
     private Properties props = new Properties();
     private Connection conn = null;
 
@@ -105,7 +106,7 @@ public class Main {
         Message[] messages = inbox.getMessages();
 
         for (int i = 0; i < messages.length; i++) {
-          if (messages[i].getFlags().contains(Flags.Flag.SEEN))
+          if (messages[i].getFlags().contains(Flags.Flag.DELETED))
               continue;
           String subject = messages[i].getSubject();
           if (subject==null)
@@ -117,7 +118,7 @@ public class Main {
           log("[" + subject + "] - Получено сообщение", false);
           if (!m.matches()) {
             log("[" + subject + "] - Тема сообщения не соответствует формату", false);
-            messages[i].setFlag(Flags.Flag.SEEN, true);
+            messages[i].setFlag(Flags.Flag.DELETED, true);
           } else {
             Integer grade = new Integer(subject.substring(0, subject.indexOf(".")));
             Integer number = new Integer(subject.substring(subject.indexOf(".") + 1, subject.indexOf("-")));
@@ -129,7 +130,7 @@ public class Main {
             f.setTimeZone(new SimpleTimeZone(2, "ID"));
             recieveDate = f.parse(recieve);
             log("[" + subject + "] - " + recieveDate.toString(), false);
-            messages[i].setFlag(Flags.Flag.SEEN, true);
+            messages[i].setFlag(Flags.Flag.DELETED, true);
             Object content = messages[i].getContent();
             if (content instanceof Multipart) {
               Multipart mp = (Multipart) content;
@@ -137,7 +138,7 @@ public class Main {
               for (int j = 0; j < mp.getCount(); j++) {
                 Part p = mp.getBodyPart(j);
                 String disposition = p.getDisposition();
-                if ((disposition != null) && (disposition.equals(Part.ATTACHMENT) || disposition.equals(Part.INLINE))) {
+                if ((disposition != null) && (disposition.equals(Part.ATTACHMENT))) {
                   String fileName = MimeUtility.decodeText(p.getFileName());
                   fileName = subject + fileName.substring(fileName.lastIndexOf("."), fileName.length());
                   String localPath = path + File.separator + task.toString();
@@ -160,13 +161,14 @@ public class Main {
                   }
                 }
               }
-              SendPostQuery(grade, number, task, recieveDate, size, subject);
-              //addInfo(grade, number, task, recieveDate, size, subject);
+              SendPostQuery(grade, number, task, recieveDate, size, subject, code);
             }
           }
         }
-        inbox.close(true);
-        store.close();
+        if (inbox.isOpen())
+            inbox.close(true);
+        if (store.isConnected())
+            store.close();
         if (conn != null) {
           conn.close();
           conn = null;
@@ -193,13 +195,13 @@ public class Main {
       return count;
     }
     
-    private void SendPostQuery(int grade, int number, int task, Date date, int size, String subject)
+    private void SendPostQuery(int grade, int number, int task, Date date, int size, String subject, String code)
     {
        DateFormat df = new SimpleDateFormat("HH:mm:ss");
         
        //создаём лист параметров для запроса
        java.util.List<String[]> params = new LinkedList<String[]>();
-       params.add(new String[]{"id", String.valueOf(120121)});
+       params.add(new String[]{"id", code});
        params.add(new String[]{"grade", String.valueOf(grade)});
        params.add(new String[]{"number", String.valueOf(number)});
        params.add(new String[]{"task", String.valueOf(task)});
