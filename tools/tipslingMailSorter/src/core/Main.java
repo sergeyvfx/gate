@@ -94,11 +94,14 @@ public class Main {
         Message[] messages = inbox.getMessages();
 
         for (int i = 0; i < messages.length; i++) {
-          if (messages[i].getFlags().contains(Flags.Flag.DELETED))
+          //FIXME Realy?! Is it possible to get message from server with deleted flag?
+          if (messages[i].getFlags().contains(Flags.Flag.DELETED)) {
               continue;
+          }
           String subject = messages[i].getSubject();
-          if (subject==null)
-              subject="";
+          if (subject==null) {
+              subject = "";
+          }
           subject = subject.replaceAll("Fwd:", "");
           subject = subject.replaceAll("\\ ", "");
           subject = subject.replaceAll("\"", "");
@@ -152,10 +155,12 @@ public class Main {
             }
           }
         }
-        if (inbox.isOpen())
+        if (inbox.isOpen()) {
             inbox.close(true);
-        if (store.isConnected())
+        }
+        if (store.isConnected()) {
             store.close();
+        }
         if (conn != null) {
           conn.close();
           conn = null;
@@ -200,10 +205,11 @@ public class Main {
            //отправляем запрос
            RequestSender sender = new RequestSender();
            String response = sender.sendPostRequest(page, params);
-           if (response == null || "".equals(response.trim()))
+           if (response == null || "".equals(response.trim())) {
                log("[" + subject + "] - Информация внесена в БД", false);
-           else
-               log(response,true);
+           } else {
+               log(response, true);
+           }
        } catch (IOException ex) {
            log(ex.getMessage(), true);
        }
