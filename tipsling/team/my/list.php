@@ -50,7 +50,7 @@ if (count($list) > 0) {
       $ps = $it['is_payment'];
       $d = !$ps;
       $contest_stat = get_contest_status($it['contest_id']);
-      $allow_edit = $contest_stat==1 || $contest_stat==2 || $contest_stat==3;
+      $allow_edit = $contest_stat==1 || $contest_stat==2;
       $contest_name = contest_get_by_id($it['contest_id']);
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
       '<td class="n">' . (($allow_edit) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')).$it['grade'].'.'. $it['number'] . (($allow_edit) ? ('</a>') : ('')) . '</td>' .

@@ -34,7 +34,7 @@ if ($current_contest=='' || $current_contest==-1)
 $contest = contest_get_by_id($current_contest);
 $contest_stat = get_contest_status($current_contest);
 $allow_registration = $contest_stat==1;
-$allow_edit = $contest_stat==1 || $contest_stat==2 || $contest_stat==3;
+$allow_edit = $contest_stat==1 || $contest_stat==2;
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/team" ?>">Команды</a>Мои команды</div>
 ${information}

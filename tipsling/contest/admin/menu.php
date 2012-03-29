@@ -19,4 +19,5 @@ $contest_menu->Init('ContestMenu', 'type=hor;colorized=true;hassubmenu=true;bord
 
 $contest_menu->AppendItem('Мои конкурсы', config_get('document-root') . '/tipsling/contest/admin/MyContests', 'MyContest');
 $contest_menu->AppendItem('Статистическая инфорация', config_get('document-root') . '/tipsling/contest/admin/Information', 'Information');
+$contest_menu->AppendItem('Сертификаты', config_get('document-root') . '/tipsling/contest/admin/Certificates', 'Certificates');
 ?>

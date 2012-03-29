@@ -72,7 +72,7 @@ if ($_team_included_ != '#team_Included#') {
       $has_access = is_user_bookkeeper(user_id(), $team['contest_id']) || is_user_in_group(user_id(), $g['id']) || user_access_root();
       
       $contest_stat = get_contest_status($team['contest_id']);
-      $allow_edit = $contest_stat==1 || $contest_stat==2 || $contest_stat==3;
+      $allow_edit = $contest_stat==1 || $contest_stat==2;
       if ($allow_edit && !$has_access) {
         add_info("Данная команда не доступна для редактирования");
         return false;
