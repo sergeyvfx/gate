@@ -164,7 +164,12 @@ else if ($certificate==5)
 {
     $sql = 'SELECT DISTINCT
                 `team`.`teacher_full_name` as teacher,
-                `team`.`grade`
+                `team`.`grade`,
+                `contest`.`name` as contest,
+                `school`.`name` as school,
+                `city`.`name` as city,
+                `city_status`.`short_name` as city_status,
+                `region`.`name` as region
             FROM
                 `team`,
                 `contest`,
@@ -172,6 +177,7 @@ else if ($certificate==5)
                 `responsible`,
                 `school`,
                 `city`,
+                `city_status`,
                 `region`
             WHERE
                 `team`.`responsible_id`=`user`.`id` AND
@@ -179,6 +185,7 @@ else if ($certificate==5)
                 `team`.`contest_id`=`contest`.`id` AND
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
+                `city`.`status_id`=`city_status`.`id` AND
                 `city`.`region_id`=`region`.`id` AND'
                 //`user`.`id`='.user_id().' AND 
                 .'`contest`.`id`='.$current_contest.' AND 
@@ -188,7 +195,12 @@ else if ($certificate==6)
 {
     $sql = 'SELECT DISTINCT
                 `team`.`teacher_full_name` as teacher,
-                `team`.`grade`
+                `team`.`grade`,
+                `contest`.`name` as contest,
+                `school`.`name` as school,
+                `city`.`name` as city,
+                `city_status`.`short_name` as city_status,
+                `region`.`name` as region
             FROM
                 `team`,
                 `contest`,
@@ -196,6 +208,7 @@ else if ($certificate==6)
                 `responsible`,
                 `school`,
                 `city`,
+                `city_status`,
                 `region`
             WHERE
                 `team`.`responsible_id`=`user`.`id` AND
@@ -203,6 +216,7 @@ else if ($certificate==6)
                 `team`.`contest_id`=`contest`.`id` AND
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
+                `city`.`status_id`=`city_status`.`id` AND
                 `city`.`region_id`=`region`.`id` AND
                 `team`.`place`>0 AND `team`.`place`<4 AND'
                 //`user`.`id`='.user_id().' AND 
@@ -225,9 +239,7 @@ else if ($certificate==5||$certificate==6)
     $teachers = split('[,]', $t['teacher']);
     $t['teacher'] = trim($teachers[$number]);
 }
-/*$t['city'] = $sql;
-$t['region'] = $number;
-$t['school'] = $team;*/
+
 $template = $c['template'];
 $matchearray = array();
 preg_match_all("/#\w+#/", $template, $matchearray);

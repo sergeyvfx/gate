@@ -52,12 +52,12 @@ ${information}
                 <td width="120px">Тип сертификата: </td>
                 <td>
                     <select id="select_type" name="select_type" class="block" onchange="select_type_changed();">
-                        <option value="1">Персональный сертификат участника</option>
-                        <option value="2">Командный сертификат участия</option>
-                        <option value="3">Персональный диплом призера</option>
-                        <option value="4">Командный диплом призера</option>
-                        <option value="5">Благодарность учителю за подготовку команды-участника</option>
-                        <option value="6">Благодарность учителю за подготовку команды-призера</option>
+                        <?php
+                            $sql = 'select * from certificate order by id';
+                            $result = db_query($sql);
+                            while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+                                echo('<option value="'.$rows["id"].'">'.$rows['name'].'</option>');
+                        ?>
                     </select>
                 </td>
             </tr>
