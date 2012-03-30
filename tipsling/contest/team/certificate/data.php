@@ -67,7 +67,63 @@ ${information}
                 <td width="120px">Сертификат для:</td>
                 <td>
                     <select id="select_value" name="select_value" class="block">
-                        
+                        <?php
+                            $sql = 'SELECT DISTINCT
+                                        `team`.`pupil1_full_name` as pupil,
+                                        `team`.`id` as team
+                                    FROM
+                                        `team`,
+                                        `contest`,
+                                        `user`,
+                                        `responsible`
+                                    WHERE
+                                        `team`.`responsible_id`=`user`.`id` AND
+                                        `responsible`.`user_id`=`user`.`id` AND
+                                        `team`.`contest_id`=`contest`.`id` AND'
+                                        //`user`.`id`='.user_id().' AND 
+                                        .'`contest`.`id`='.$current_contest;
+                            $result = db_query($sql);
+                            while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+                                echo('<option value="'.$rows['team'].'.1">'.$rows['pupil'].'</option>');
+          
+                            $sql = 'SELECT DISTINCT
+                                        `team`.`pupil2_full_name` as pupil,
+                                        `team`.`id` as team
+                                    FROM
+                                        `team`,
+                                        `contest`,
+                                        `user`,
+                                        `responsible`
+                                    WHERE
+                                        `team`.`pupil2_full_name`!="" AND
+                                        `team`.`responsible_id`=`user`.`id` AND
+                                        `responsible`.`user_id`=`user`.`id` AND
+                                        `team`.`contest_id`=`contest`.`id` AND'
+                                        //`user`.`id`='.user_id().' AND 
+                                        .'`contest`.`id`='.$current_contest;
+                            $result = db_query($sql);
+                            while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+                                echo('<option value="'.$rows['team'].'.2">'.$rows['pupil'].'</option>');
+                                
+                            $sql = 'SELECT DISTINCT
+                                        `team`.`pupil3_full_name` as pupil,
+                                        `team`.`id` as team
+                                    FROM
+                                        `team`,
+                                        `contest`,
+                                        `user`,
+                                        `responsible`
+                                    WHERE
+                                        `team`.`pupil3_full_name`!="" AND
+                                        `team`.`responsible_id`=`user`.`id` AND
+                                        `responsible`.`user_id`=`user`.`id` AND
+                                        `team`.`contest_id`=`contest`.`id` AND'
+                                        //`user`.`id`='.user_id().' AND 
+                                        .'`contest`.`id`='.$current_contest;
+                            $result = db_query($sql);
+                            while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+                                echo('<option value="'.$rows['team'].'.3">'.$rows['pupil'].'</option>');
+                        ?>
                     </select>
                 </td>
             </tr>

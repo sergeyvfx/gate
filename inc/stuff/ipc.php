@@ -321,7 +321,15 @@
                     .'`contest`.`id`='.$current_contest;
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['teacher'].'#'.$rows['team'];
+          {
+              $i=0;
+              $teachers = split('[,]', $rows['teacher']);
+              while ($i<count($teachers))
+              {
+                  $values .= ';'.trim($teachers[$i]).'#'.$rows['team'].'.'.$i;
+                  $i++;
+              }
+          }
           $values = substr($values, 1);
       }
       else if ($type==6)
@@ -342,8 +350,17 @@
                     //`user`.`id`='.user_id().' AND 
                     .'`contest`.`id`='.$current_contest;
           $result = db_query($sql);
+          
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['teacher'].'#'.$rows['team'];
+          {
+              $i=0;
+              $teachers = split('[,]', $rows['teacher']);
+              while ($i<count($teachers))
+              {
+                  $values .= ';'.trim($teachers[$i]).'#'.$rows['team'].'.'.$i;
+                  $i++;
+              }
+          }
           $values = substr($values, 1);
       }
       print ($values);

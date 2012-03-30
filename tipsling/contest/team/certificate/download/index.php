@@ -13,7 +13,7 @@ db_connect (config_get ('check-database'));
 $c = certificate_get_by_id($certificate);
 
 $sql='';
-if ($certificate==1 || $certificate==3)
+if ($certificate==1 || $certificate==3 || $certificate==5 || $certificate==6)
 {
     $tmp = split('[.]', $param);
     $team = $tmp[0];
@@ -28,6 +28,7 @@ if ($certificate==1)
                 `team`.`pupil'.$number.'_full_name` as pupil,
                 `school`.`name` as school,
                 `city`.`name` as city,
+                `city_status`.`short_name` as city_status,
                 `region`.`name` as region,
                 `contest`.`name` as contest
             FROM
@@ -35,6 +36,7 @@ if ($certificate==1)
                 `school`,
                 `region`,
                 `city`,
+                `city_status`,
                 `contest`,
                 `user`,
                 `responsible`
@@ -43,6 +45,7 @@ if ($certificate==1)
                 `responsible`.`user_id`=`user`.`id` AND
                 `school`.`id`=`responsible`.`school_id` AND
                 `city`.`region_id`=`region`.`id` AND
+                `city`.`status_id`=`city_status`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
                 `team`.`contest_id`=`contest`.`id` AND'
                 //`user`.`id`='.user_id().' AND 
@@ -62,6 +65,7 @@ else if ($certificate==2)
                 `team`.`common_place` as place,
                 `school`.`name` as school,
                 `city`.`name` as city,
+                `city_status`.`short_name` as city_status,
                 `region`.`name` as region,
                 `contest`.`name` as contest
             FROM
@@ -71,6 +75,7 @@ else if ($certificate==2)
                 `responsible`,
                 `school`,
                 `city`,
+                `city_status`,
                 `region`
             WHERE
                 `contest`.`id`='.$current_contest.' AND
@@ -79,6 +84,7 @@ else if ($certificate==2)
                 `team`.`contest_id`=`contest`.`id` AND
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
+                `city`.`status_id`=`city_status`.`id` AND
                 `city`.`region_id`=`region`.`id` AND'
                 //`user`.`id`='.user_id().' AND 
                 .'`team`.`id`='.$team;
@@ -89,6 +95,7 @@ else if ($certificate==3)
                 `team`.`pupil'.$number.'_full_name` as pupil,
                 `school`.`name` as school,
                 `city`.`name` as city,
+                `city_status`.`short_name` as city_status,
                 `region`.`name` as region,
                 `team`.`place` as place,
                 `team`.`mark` as mark,
@@ -100,6 +107,7 @@ else if ($certificate==3)
                 `responsible`,
                 `school`,
                 `city`,
+                `city_status`,
                 `region`
             WHERE
                 `team`.`responsible_id`=`user`.`id` AND
@@ -108,6 +116,7 @@ else if ($certificate==3)
                 `team`.`place`>0 AND `team`.`place`<4 AND
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
+                `city`.`status_id`=`city_status`.`id` AND
                 `city`.`region_id`=`region`.`id` AND'
                 //`user`.`id`='.user_id().' AND 
                 .'`contest`.`id`='.$current_contest.' AND 
@@ -126,6 +135,7 @@ else if ($certificate==4)
                 `team`.`mark` as mark,
                 `school`.`name` as school,
                 `city`.`name` as city,
+                `city_status`.`short_name` as city_status,
                 `region`.`name` as region,
                 `contest`.`name` as contest
             FROM
@@ -135,6 +145,7 @@ else if ($certificate==4)
                 `responsible`,
                 `school`,
                 `city`,
+                `city_status`,
                 `region`
             WHERE
                 `team`.`responsible_id`=`user`.`id` AND
@@ -143,6 +154,7 @@ else if ($certificate==4)
                 `team`.`place`>0 AND `team`.`place`<4 AND
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
+                `city`.`status_id`=`city_status`.`id` AND
                 `city`.`region_id`=`region`.`id` AND'
                 //`user`.`id`='.user_id().' AND 
                 .'`contest`.`id`='.$current_contest.' AND 
@@ -207,6 +219,11 @@ if ($certificate==3||$certificate==4)
         $t['place'] = II;
     else if ($t['place']==3)
         $t['place'] = III;
+}
+else if ($certificate==5||$certificate==6)
+{
+    $teachers = split('[,]', $t['teacher']);
+    $t['teacher'] = trim($teachers[$number]);
 }
 /*$t['city'] = $sql;
 $t['region'] = $number;
