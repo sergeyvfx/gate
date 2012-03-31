@@ -98,6 +98,7 @@ else if ($certificate==3)
                 `city_status`.`short_name` as city_status,
                 `region`.`name` as region,
                 `team`.`place` as place,
+                `team`.`grade` as grade,
                 `team`.`mark` as mark,
                 `contest`.`name` as contest
             FROM
