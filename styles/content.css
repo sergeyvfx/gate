@@ -144,10 +144,10 @@ body {
 #content table.frame .h .t a:hover { position: relative; z-index: 10; height: 13px; border-bottom: 1px #fff solid; background: #fff; }
 #content table.frame .h .tc     { border: 0; _width: 1px; white-space: nowrap; }
 #content table.frame .h div     { position: relative; z-index: 1; top: 1px; height: 13px; white-space: nowrap; background: #e4e4e4 url(../pics/theme/frame.tab.d.gif) 0 0 repeat-x; }
-#content table.frame .h .tc div { inline; border: 1px #f93 solid; border-bottom: 0; -moz-border-radius-topleft: 6px; background: #fff; font-weight: bold; position: relative; z-index: 10; height: 14px; }
+#content table.frame .h .tc div { display: inline; border: 1px #f93 solid; border-bottom: 0; -moz-border-radius-topleft: 6px; background: #fff; font-weight: bold; position: relative; z-index: 10; height: 14px; }
 
 #content table.frame .h .t      { border: 0; _width: 1px; white-space: nowrap; }
-#content table.frame .h .t div  { border: 1px #aaa solid; border-bottom2: 0; }
+#content table.frame .h .t div  { border: 1px #aaa solid; border-bottom: 0; }
 
 #content table.frame .h .s     { background-color: #f7f7f7; }
 #content table.frame .h .s div { height: 12px; border: 1px #d56900 solid; border-bottom: 0; }
@@ -225,7 +225,7 @@ body {
 
 #content button       { border: 1px #aaa solid; background: #fff; cursor: pointer; vertical-align: middle; text-align: center; }
 #content button:hover { background: #eee; }
-#content button.small { font-size: 8pt; height: 18px; padding: 0; marin: 0; }
+#content button.small { font-size: 8pt; height: 18px; padding: 0; margin: 0; }
 
 #content .blockButton { text-align: center; }
 #content .blockButton a { display: block; background-color: #f0f0f0; padding: 2px 0; border: 1px #aaa solid; }
@@ -264,7 +264,7 @@ body {
 #content div.cats a { margin: 0 4px; }
 
 /* Some other classes */
-#content .block { width: 100%; display: block; }
+#content .block { min-width: 100% !important; min-width: 50px; display: block; }
 #content .error { color: red;}
 
 #content .smb { margin-bottom: -6px; }
