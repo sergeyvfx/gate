@@ -57,12 +57,12 @@ if ($certificate==1)
 else if ($certificate==2)
 {
     $sql = 'SELECT DISTINCT
-                `team`.`grade` as grade,
+                if (`team`.`grade`<12, concat(`team`.`grade`," класса "), "") as grade,
                 `team`.`number` as number,
                 `team`.`pupil1_full_name` as pupil1,
                 if (`team`.`pupil2_full_name`="","",concat(",\n",`team`.`pupil2_full_name`)) as pupil2,
                 if (`team`.`pupil3_full_name`="","",concat(",\n",`team`.`pupil1_full_name`)) as pupil3,
-                `team`.`teacher_full_name` as teacher,
+                if (`team`.`grade`<12, concat("Руководитель команды:\n", `team`.`teacher_full_name`),"") as teacher,
                 `team`.`mark` as mark,
                 `team`.`common_place` as place,
                 `school`.`name` as school,
