@@ -139,7 +139,11 @@
       if ($type==1)
       {
           $sql = 'SELECT DISTINCT
-                    `team`.`pupil1_full_name` as pupil,
+                    `team`.`pupil1_full_name` as pupil1,
+                    `team`.`pupil2_full_name` as pupil2,
+                    `team`.`pupil3_full_name` as pupil3,
+                    `team`.`grade`,
+                    `team`.`number`,
                     `team`.`id` as team
                  FROM
                     `team`,
@@ -151,48 +155,18 @@
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND'
                     //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
+                    .'`contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['pupil'].'#'.$rows['team'].'.1';
+          {
+            $values .= ';'.$rows['pupil1'].'#'.$rows['team'].'.1';
+            if (trim($rows['pupil2'])!="")
+                $values .= ';'.$rows['pupil2'].'#'.$rows['team'].'.2';
+            if (trim($rows['pupil3'])!="")
+                $values .= ';'.$rows['pupil3'].'#'.$rows['team'].'.3';
+          }
           
-          $sql = 'SELECT DISTINCT
-                    `team`.`pupil2_full_name` as pupil,
-                    `team`.`id` as team
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`pupil2_full_name`!="" AND
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND'
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['pupil'].'#'.$rows['team'].'.2';
-          
-          $sql = 'SELECT DISTINCT
-                    `team`.`pupil3_full_name` as pupil,
-                    `team`.`id` as team
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`pupil3_full_name`!="" AND
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND'
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['pupil'].'#'.$rows['team'].'.2';
           $values = substr($values, 1);
       }
       else if ($type==2)
@@ -212,16 +186,21 @@
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND'
                     //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
+                    .'`contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['grade'].'.'.$rows['number'].'#'.$rows['team'];
+            $values .= ';Команда '.$rows['grade'].'.'.$rows['number'].'#'.$rows['team'];
           $values = substr($values, 1);
       }
       else if ($type==3)
       {
           $sql = 'SELECT DISTINCT
-                    `team`.`pupil1_full_name` as pupil,
+                    `team`.`pupil1_full_name` as pupil1,
+                    `team`.`pupil2_full_name` as pupil2,
+                    `team`.`pupil3_full_name` as pupil3,
+                    `team`.`grade`,
+                    `team`.`number`,
                     `team`.`id` as team
                  FROM
                     `team`,
@@ -232,52 +211,21 @@
                     `team`.`responsible_id`=`user`.`id` AND
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`place`>0 AND `team`.`place`<4 AND'
+                    `team`.`place`>0 AND `team`.`place`<4 AND
+                    `team`.`grade`>1 AND `team`.`grade`<12 AND '//Условие только для этого конкурса, т.к. команд 1 класса и ВУЗОВ мало
                     //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
+                    .'`contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['pupil'].'#'.$rows['team'].'.1';
+          {
+              $values .= ';'.$rows['pupil1'].'#'.$rows['team'].'.1';
+              if (trim($rows['pupil2'])!="")
+                $values .= ';'.$rows['pupil2'].'#'.$rows['team'].'.2';
+              if (trim($rows['pupil3'])!="")
+                $values .= ';'.$rows['pupil3'].'#'.$rows['team'].'.3';
+          }
           
-          $sql = 'SELECT DISTINCT
-                    `team`.`pupil2_full_name` as pupil,
-                    `team`.`id` as team
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`pupil2_full_name`!="" AND
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`place`>0 AND `team`.`place`<4 AND'
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['pupil'].'#'.$rows['team'].'.2';
-          
-          $sql = 'SELECT DISTINCT
-                    `team`.`pupil3_full_name` as pupil,
-                    `team`.`id` as team
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`pupil3_full_name`!="" AND
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`place`>0 AND `team`.`place`<4 AND'
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['pupil'].'#'.$rows['team'].'.3';
           $values = substr($values, 1);
       }
       else if ($type==4)
@@ -295,19 +243,23 @@
                     `team`.`responsible_id`=`user`.`id` AND
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`place`>0 AND `team`.`place`<4 AND'
+                    `team`.`place`>0 AND `team`.`place`<4 AND
+                    `team`.`grade`>1 AND `team`.`grade`<12 AND '
                     //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
+                    .'`contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';'.$rows['grade'].'.'.$rows['number'].'#'.$rows['team'];
+            $values .= ';Команда '.$rows['grade'].'.'.$rows['number'].'#'.$rows['team'];
           $values = substr($values, 1);
       }
       else if ($type==5)
       {
           $sql = 'SELECT DISTINCT
                     `team`.`teacher_full_name` as teacher,
-                    `team`.`id` as team
+                    `team`.`id` as team,
+                    `team`.`grade` as grade,
+                    `team`.`number` as number
                  FROM
                     `team`,
                     `contest`,
@@ -318,7 +270,8 @@
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND'
                     //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
+                    .'`contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
           {
@@ -326,7 +279,7 @@
               $teachers = split('[,]', $rows['teacher']);
               while ($i<count($teachers))
               {
-                  $values .= ';'.trim($teachers[$i]).'#'.$rows['team'].'.'.$i;
+                  $values .= ';'.trim($teachers[$i]).' (команда '.$rows['grade'].'.'.$rows['number'].')#'.$rows['team'].'.'.$i;
                   $i++;
               }
           }
@@ -336,7 +289,9 @@
       {
           $sql = 'SELECT DISTINCT
                     `team`.`teacher_full_name` as teacher,
-                    `team`.`id` as team
+                    `team`.`id` as team,
+                    `team`.`grade` as grade,
+                    `team`.`number` as number
                  FROM
                     `team`,
                     `contest`,
@@ -346,9 +301,11 @@
                     `team`.`responsible_id`=`user`.`id` AND
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`place`>0 AND `team`.`place`<4 AND'
+                    `team`.`place`>0 AND `team`.`place`<4 AND
+                    `team`.`grade`>1 AND `team`.`grade`<12 AND '
                     //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest;
+                    .'`contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -357,7 +314,7 @@
               $teachers = split('[,]', $rows['teacher']);
               while ($i<count($teachers))
               {
-                  $values .= ';'.trim($teachers[$i]).'#'.$rows['team'].'.'.$i;
+                  $values .= ';'.trim($teachers[$i]).' (команда '.$rows['grade'].'.'.$rows['number'].')#'.$rows['team'].'.'.$i;
                   $i++;
               }
           }

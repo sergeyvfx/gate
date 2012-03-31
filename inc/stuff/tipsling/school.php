@@ -50,11 +50,12 @@ function school_initialize() {
     if (!db_table_exists ('city_status')) {
     db_create_table('city_status', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
-        'name' => 'TEXT'));
-    db_insert('city_status', array ('name' => '"Город"'));
-    db_insert('city_status', array ('name' => '"Поселок городского типа"'));
-    db_insert('city_status', array ('name' => '"Село"'));
-    db_insert('city_status', array ('name' => '"Деревня"'));
+        'name' => 'TEXT',
+        'short_name' => 'VARCHAR(10)'));
+    db_insert('city_status', array ('name' => '"Город"', 'short_name'=>'г.'));
+    db_insert('city_status', array ('name' => '"Поселок городского типа"', 'short_name'=>'п.г.т.'));
+    db_insert('city_status', array ('name' => '"Село"', 'short_name'=>'с.'));
+    db_insert('city_status', array ('name' => '"Деревня"', 'short_name'=>'д.'));
     }
 
     db_create_table_safe('country', array(

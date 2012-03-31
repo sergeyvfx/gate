@@ -69,7 +69,11 @@ ${information}
                     <select id="select_value" name="select_value" class="block">
                         <?php
                             $sql = 'SELECT DISTINCT
-                                        `team`.`pupil1_full_name` as pupil,
+                                        `team`.`pupil1_full_name` as pupil1,
+                                        `team`.`pupil2_full_name` as pupil2,
+                                        `team`.`pupil3_full_name` as pupil3,
+                                        `team`.`grade`,
+                                        `team`.`number`,
                                         `team`.`id` as team
                                     FROM
                                         `team`,
@@ -81,48 +85,18 @@ ${information}
                                         `responsible`.`user_id`=`user`.`id` AND
                                         `team`.`contest_id`=`contest`.`id` AND'
                                         //`user`.`id`='.user_id().' AND 
-                                        .'`contest`.`id`='.$current_contest;
+                                        .'`contest`.`id`='.$current_contest.'
+                                    ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
                             $result = db_query($sql);
                             while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-                                echo('<option value="'.$rows['team'].'.1">'.$rows['pupil'].'</option>');
-          
-                            $sql = 'SELECT DISTINCT
-                                        `team`.`pupil2_full_name` as pupil,
-                                        `team`.`id` as team
-                                    FROM
-                                        `team`,
-                                        `contest`,
-                                        `user`,
-                                        `responsible`
-                                    WHERE
-                                        `team`.`pupil2_full_name`!="" AND
-                                        `team`.`responsible_id`=`user`.`id` AND
-                                        `responsible`.`user_id`=`user`.`id` AND
-                                        `team`.`contest_id`=`contest`.`id` AND'
-                                        //`user`.`id`='.user_id().' AND 
-                                        .'`contest`.`id`='.$current_contest;
-                            $result = db_query($sql);
-                            while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-                                echo('<option value="'.$rows['team'].'.2">'.$rows['pupil'].'</option>');
-                                
-                            $sql = 'SELECT DISTINCT
-                                        `team`.`pupil3_full_name` as pupil,
-                                        `team`.`id` as team
-                                    FROM
-                                        `team`,
-                                        `contest`,
-                                        `user`,
-                                        `responsible`
-                                    WHERE
-                                        `team`.`pupil3_full_name`!="" AND
-                                        `team`.`responsible_id`=`user`.`id` AND
-                                        `responsible`.`user_id`=`user`.`id` AND
-                                        `team`.`contest_id`=`contest`.`id` AND'
-                                        //`user`.`id`='.user_id().' AND 
-                                        .'`contest`.`id`='.$current_contest;
-                            $result = db_query($sql);
-                            while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-                                echo('<option value="'.$rows['team'].'.3">'.$rows['pupil'].'</option>');
+                            {
+                                $values .= ';'.$rows['pupil1'].'#'.$rows['team'].'.1';
+                                echo('<option value="'.$rows['team'].'.1">'.$rows['pupil1'].'</option>');
+                                if (trim($rows['pupil2'])!="")
+                                    echo('<option value="'.$rows['team'].'.2">'.$rows['pupil2'].'</option>');
+                                if (trim($rows['pupil3'])!="")
+                                    echo('<option value="'.$rows['team'].'.3">'.$rows['pupil3'].'</option>');
+                            }
                         ?>
                     </select>
                 </td>

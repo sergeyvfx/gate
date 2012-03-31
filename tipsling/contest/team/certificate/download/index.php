@@ -11,6 +11,8 @@ global $certificate, $param;
 db_connect (config_get ('check-database'));
 
 $c = certificate_get_by_id($certificate);
+if ($c==false)
+    return;
 
 $sql='';
 if ($certificate==1 || $certificate==3 || $certificate==5 || $certificate==6)
@@ -226,6 +228,8 @@ else if ($certificate==6)
 }
 
 $t = db_row(db_query($sql));
+if ($t==false)
+    return;
 if ($certificate==3||$certificate==4)
 {
     if ($t['place']==1)
