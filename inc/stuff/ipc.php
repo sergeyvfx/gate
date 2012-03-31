@@ -269,6 +269,7 @@
                     `team`.`responsible_id`=`user`.`id` AND
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND
+                    `team`.`grade`<12 AND 
                     `user`.`id`='.user_id().' AND 
                     `contest`.`id`='.$current_contest.'
                  ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
