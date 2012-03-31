@@ -83,9 +83,9 @@ ${information}
                                     WHERE
                                         `team`.`responsible_id`=`user`.`id` AND
                                         `responsible`.`user_id`=`user`.`id` AND
-                                        `team`.`contest_id`=`contest`.`id` AND'
-                                        //`user`.`id`='.user_id().' AND 
-                                        .'`contest`.`id`='.$current_contest.'
+                                        `team`.`contest_id`=`contest`.`id` AND
+                                        `user`.`id`='.user_id().' AND 
+                                        `contest`.`id`='.$current_contest.'
                                     ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
                             $result = db_query($sql);
                             while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -120,9 +120,11 @@ function cert_generate()
     var certificate = type_select.value;
     var param = value_select.value;
     
-    var url = './download/?certificate='+certificate+'&param='+param;
-    
-    nav(url);
+    if (param!="undefined")
+    {
+        var url = './download/?certificate='+certificate+'&param='+param;
+        nav(url);        
+    }
   }
 
 function select_type_changed()

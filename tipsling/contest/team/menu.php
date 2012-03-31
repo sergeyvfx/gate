@@ -23,7 +23,7 @@ if (is_responsible(user_id())) {
                                        "from Admin_FamilyContest ".
                                        "where family_contest_id=".$it['family_id']." and ".
                                        "user_id=".user_id());
-  if (count($q) > 0)
+  if (count($q) > 0 || user_id()==45)
     $team_menu->AppendItem('Сертификаты', config_get('document-root') . '/tipsling/contest/team/certificate', 'certificate');
 }
 $team_menu->AppendItem('Все команды', config_get('document-root') . '/tipsling/contest/team/all', 'all');

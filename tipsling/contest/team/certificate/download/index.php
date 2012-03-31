@@ -49,9 +49,9 @@ if ($certificate==1)
                 `city`.`region_id`=`region`.`id` AND
                 `city`.`status_id`=`city_status`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
-                `team`.`contest_id`=`contest`.`id` AND'
-                //`user`.`id`='.user_id().' AND 
-                .'`contest`.`id`='.$current_contest.' AND
+                `team`.`contest_id`=`contest`.`id` AND
+                `user`.`id`='.user_id().' AND 
+                `contest`.`id`='.$current_contest.' AND
                 `team`.`id`='.$team;
 }
 else if ($certificate==2)
@@ -87,9 +87,9 @@ else if ($certificate==2)
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
                 `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND'
-                //`user`.`id`='.user_id().' AND 
-                .'`team`.`id`='.$team;
+                `city`.`region_id`=`region`.`id` AND
+                `user`.`id`='.user_id().' AND 
+                `team`.`id`='.$team;
 }
 else if ($certificate==3)
 {
@@ -120,9 +120,9 @@ else if ($certificate==3)
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
                 `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND'
-                //`user`.`id`='.user_id().' AND 
-                .'`contest`.`id`='.$current_contest.' AND 
+                `city`.`region_id`=`region`.`id` AND
+                `user`.`id`='.user_id().' AND 
+                `contest`.`id`='.$current_contest.' AND 
                 `team`.`id`='.$team;
 }
 else if ($certificate==4)
@@ -158,9 +158,9 @@ else if ($certificate==4)
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
                 `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND'
-                //`user`.`id`='.user_id().' AND 
-                .'`contest`.`id`='.$current_contest.' AND 
+                `city`.`region_id`=`region`.`id` AND
+                `user`.`id`='.user_id().' AND 
+                `contest`.`id`='.$current_contest.' AND 
                 `team`.`id`='.$team;
 }
 else if ($certificate==5)
@@ -189,9 +189,9 @@ else if ($certificate==5)
                 `responsible`.`school_id`=`school`.`id` AND
                 `school`.`city_id`=`city`.`id` AND
                 `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND'
-                //`user`.`id`='.user_id().' AND 
-                .'`contest`.`id`='.$current_contest.' AND 
+                `city`.`region_id`=`region`.`id` AND
+                `user`.`id`='.user_id().' AND 
+                `contest`.`id`='.$current_contest.' AND 
                 `team`.`id`='.$team;
 }
 else if ($certificate==6)
@@ -221,9 +221,9 @@ else if ($certificate==6)
                 `school`.`city_id`=`city`.`id` AND
                 `city`.`status_id`=`city_status`.`id` AND
                 `city`.`region_id`=`region`.`id` AND
-                `team`.`place`>0 AND `team`.`place`<4 AND'
-                //`user`.`id`='.user_id().' AND 
-                .'`contest`.`id`='.$current_contest.' AND 
+                `team`.`place`>0 AND `team`.`place`<4 AND
+                `user`.`id`='.user_id().' AND 
+                `contest`.`id`='.$current_contest.' AND 
                 `team`.`id`='.$team;
 }
 

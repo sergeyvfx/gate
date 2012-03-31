@@ -153,9 +153,9 @@
                  WHERE
                     `team`.`responsible_id`=`user`.`id` AND
                     `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND'
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest.'
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
                  ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -184,9 +184,9 @@
                     `contest`.`id`='.$current_contest.' AND
                     `team`.`responsible_id`=`user`.`id` AND
                     `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND'
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest.'
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
                  ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -213,8 +213,8 @@
                     `team`.`contest_id`=`contest`.`id` AND
                     `team`.`place`>0 AND `team`.`place`<4 AND
                     `team`.`grade`>1 AND `team`.`grade`<12 AND '//Условие только для этого конкурса, т.к. команд 1 класса и ВУЗОВ мало
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest.'
+                    .'`user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
                  ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -244,9 +244,9 @@
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND
                     `team`.`place`>0 AND `team`.`place`<4 AND
-                    `team`.`grade`>1 AND `team`.`grade`<12 AND '
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest.'
+                    `team`.`grade`>1 AND `team`.`grade`<12 AND 
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
                  ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -268,9 +268,9 @@
                  WHERE
                     `team`.`responsible_id`=`user`.`id` AND
                     `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND'
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest.'
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
                  ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -302,9 +302,9 @@
                     `responsible`.`user_id`=`user`.`id` AND
                     `team`.`contest_id`=`contest`.`id` AND
                     `team`.`place`>0 AND `team`.`place`<4 AND
-                    `team`.`grade`>1 AND `team`.`grade`<12 AND '
-                    //`user`.`id`='.user_id().' AND 
-                    .'`contest`.`id`='.$current_contest.'
+                    `team`.`grade`>1 AND `team`.`grade`<12 AND 
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
                  ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $result = db_query($sql);
           
