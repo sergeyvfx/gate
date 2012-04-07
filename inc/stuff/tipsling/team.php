@@ -19,7 +19,7 @@ if ($_team_included_ != '#team_Included#') {
   $_team_included_ = '#team_Included#';
   $user_infos = array();
 
-  function team_list($responsible_id = -1, $sort = 1, $contest = -1) {
+  function team_list($responsible_id = -1, $sort = 1, $contest = -1, $filter=-1) {
     if ($responsible_id == '') {
       $responsible_id = -1;
     }
@@ -29,6 +29,8 @@ if ($_team_included_ != '#team_Included#') {
     }
     
     if ($contest == '') $contest = -1;
+    
+    if ($filter == '') $filter = -1;
 
     if ($sort == 1) {
       $sort = "ORDER BY team.grade, team.number";
@@ -46,6 +48,9 @@ if ($_team_included_ != '#team_Included#') {
     
     if ($contest != -1)
         $where .= "team.contest_id=".$contest." AND\n";
+    
+    if ($filter == 2)
+        $where .= "team.place>0 AND team.place<4 AND\n";
 
     $sql = "SELECT\n"
             . " team.*\n"

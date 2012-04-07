@@ -18,11 +18,6 @@ if (!user_authorized ()) {
   header('Location: ../../../../login');
 }
 
-if (!is_responsible(user_id())) {
-  print (content_error_page(403));
-  return;
-}
-
 $it = contest_get_by_id($current_contest);
 $query = arr_from_query("select * from Admin_FamilyContest ".
                    "where family_contest_id=".$it['family_id']." and ".
@@ -40,9 +35,9 @@ ${information}
   <div class="content">
     <?php
     include '../menu.php';
-    $contest_menu->SetActive('Information');
+    $admin_menu->SetActive('Information');
     
-    $contest_menu->Draw();
+    $admin_menu->Draw();
     include 'list.php';
     ?>
 
@@ -107,9 +102,9 @@ ${information}
     <?php
     global $action, $id;
     include '../menu.php';
-    $contest_menu->SetActive('Information');
+    $admin_menu->SetActive('Information');
     
-    $contest_menu->Draw();
+    $admin_menu->Draw();
 
     ?>
       

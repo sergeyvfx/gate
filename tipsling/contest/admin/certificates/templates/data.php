@@ -12,10 +12,15 @@ if ($PHP_SELF != '') {
   die;
 }
 
-global $current_contest;
+global $current_contest, $document_root;
 
 if (!user_authorized ()) {
-  header('Location: ../../../../login');
+  header('Location: ../../../../../login');
+}
+
+if (!is_responsible(user_id())) {
+  print (content_error_page(403));
+  return;
 }
 
 $it = contest_get_by_id($current_contest);
@@ -27,37 +32,45 @@ if (count ($query) <= 0)
   print (content_error_page(403));
   return;
 }
-
 ?>
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest" ?>"><?=$it['name']?></a><a>Администрирование</a>Конкурсы</div>
+
+<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest" ?>"><?=$it['name']?></a><a>Администрирование</a><a>Сертификаты</a>Шаблоны</div>
 ${information}
 <div class="form">
   <div class="content">
     <?php
-    include '../menu.php';
-    $admin_menu->SetActive('MyContest');
-    
     global $DOCUMENT_ROOT, $action, $id;
-       
+    include '../../menu.php';
+    include '../menu.php';
+    $admin_menu->SetActive('Certificate');
+    $certificate_menu->SetActive('Templates');
+    
     if ($action == 'create') {
-      contest_create_received();
+      certificate_create_received();
     }
+    
     $admin_menu->Draw();
-
-    if ($action == 'edit') {
+    $certificate_menu->Draw();
+    
+    if ($action=='view')
+    {
+        include 'view.php';
+    }
+    else if ($action == 'edit') {
       include 'edit.php';
     } else {
       if ($action == 'save') {
-        contest_update_received($id);
-        //payment_update_received($id);
+        certificate_update_received($id);
       } else if ($action == 'delete') {
-        contest_delete($id);
-        //payment_delete($id);
+        certificate_delete($id);
       }
-      $list = contest_list($it['family_id']);
+      $contest = contest_get_by_id($current_contest);
+      $list = certificate_list($contest['family_id']);
       include 'list.php';
-      include 'create_form.php';
+      //include 'create_form.php';
     }
+    
     ?>
+
   </div>
 </div>
