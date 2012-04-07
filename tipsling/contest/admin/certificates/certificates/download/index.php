@@ -301,6 +301,6 @@ while ($i<$n)
 }
 
 $mpdf->WriteHTML($html);
-$mpdf->Output();
+$mpdf->Output('sertificates.pdf','D');
     
 ?>
