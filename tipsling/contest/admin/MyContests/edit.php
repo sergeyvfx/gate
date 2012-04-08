@@ -21,6 +21,7 @@ $contest = contest_get_by_id($id);
 //  print (content_error_page(403));
 //  return;
 //}
+
 ?>
 <script language="JavaScript" type="text/javascript">
   function check(frm) {
@@ -130,7 +131,7 @@ $contest = contest_get_by_id($id);
                 Начало регистрации:
             </td>
             <td style="padding: 0 2px;">
-                <?= calendar('registration_start', $contest['registration_start']) ?>
+                <?= calendar('registration_start', htmlspecialchars($contest['registration_start'])) ?>
             </td>
         </tr>
     </table>
@@ -141,7 +142,7 @@ $contest = contest_get_by_id($id);
                 Конец регистрации:
             </td>
             <td style="padding: 0 2px;">
-                <?= calendar('registration_finish', $contest['registration_finish']) ?>
+                <?= calendar('registration_finish', htmlspecialchars($contest['registration_finish'])) ?>
             </td>
         </tr>
     </table>
@@ -152,7 +153,7 @@ $contest = contest_get_by_id($id);
                 Начало конкурса:
             </td>
             <td style="padding: 0 2px;">
-                <?= calendar('contest_start', $contest['contest_start']) ?>
+                <?= calendar('contest_start', htmlspecialchars($contest['contest_start'])) ?>
             </td>
         </tr>
     </table>
@@ -163,7 +164,7 @@ $contest = contest_get_by_id($id);
                 Конец конкурса:
             </td>
             <td style="padding: 0 2px;">
-                <?= calendar('contest_finish', $contest['contest_finish']) ?>
+                <?= calendar('contest_finish', htmlspecialchars($contest['contest_finish'])) ?>
             </td>
         </tr>
     </table>
@@ -174,7 +175,7 @@ $contest = contest_get_by_id($id);
                 Дата добавления в архив:
             </td>
             <td style="padding: 0 2px;">
-                <?= calendar('send_to_archive', $contest['send_to_archive']) ?>
+                <?= calendar('send_to_archive', htmlspecialchars($contest['send_to_archive'])) ?>
             </td>
         </tr>
     </table>

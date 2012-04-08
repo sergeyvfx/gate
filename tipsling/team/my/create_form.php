@@ -122,12 +122,7 @@ dd_formo('title=Новая команда;');
             <td style="padding: 0 2px;">
                 <select id="ContestGroup" name ="ContestGroup">
                     <?php
-                        $sql = "SELECT * FROM contest where ".
-                        "DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')".
-                        "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
-                        $tmp = arr_from_query($sql);
-                
-                        foreach ($tmp as $k)
+                        foreach ($reg_opened as $k)
                         {
                             $selected = ($k['id'] == $_POST['grade']) ? ('selected') : ('');
                             echo('<option value = "' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');

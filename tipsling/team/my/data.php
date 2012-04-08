@@ -24,6 +24,11 @@ if (!is_responsible(user_id())) {
 if (!is_responsible_has_school(user_id())) {
   redirect(config_get('document-root') . '/login/profile/info/school/?noschool=1');
 }
+
+$sql = "SELECT * FROM contest where ".
+        "DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')".
+        "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
+$reg_opened = arr_from_query($sql);
 ?>
 <div id="snavigator">Мои команды</div>
 ${information}
@@ -31,23 +36,20 @@ ${information}
   <div class="content">
     <?php
     global $DOCUMENT_ROOT, $action, $id;
-    $reg_opened = true;
+    $allow_editing = false;
     if ($id!='' && $id != -1)
     {
         $t = team_get_by_id($id);
-        $sql = "SELECT * FROM contest where id=".$t['contest_id']." and ".
-               "DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') ".
-               "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
-        $reg_opened = (count(arr_from_query($sql))>0);
+        $allow_editing = get_contest_status($t['contest_id'])<3 && user_id()==$t['responsible_id'];
     }
-    if ($action == 'create' && $reg_opened) {
+    if ($action == 'create') {
       team_create_received();
     }
 
-    if ($action == 'edit' && $reg_opened) {
+    if ($action == 'edit' && $allow_editing) {
       include 'edit.php';
     } else {
-      if ($reg_opened) {
+      if ($allow_editing) {
         if ($action == 'save') {
           team_update_received($id);
         } else if ($action == 'delete') {
@@ -59,11 +61,7 @@ ${information}
         $list = team_list(user_id());
         include 'list.php';
         
-        $sql = "SELECT * FROM contest where ".
-               "DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')".
-               "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
-        $tmp = arr_from_query($sql);
-        if (count($tmp)) {
+        if (count($reg_opened)) {
           include 'create_form.php';
         }
       } else {

@@ -43,13 +43,12 @@ formo('title=Список зарегистрированных команд;');
 <script language="JavaScript" type="text/javascript">
   function update () {
     var sort=getElementById ('sortGroup').value;
-    var contest=getElementById ('ContestGroup').value;
-    nav ('.?sort='+sort+'&contest='+contest);
+    nav ('.?sort='+sort);
   }
 </script>
 <?php
 if (count($list) > 0) {
-  global $page, $sort, $contest;
+  global $page, $sort, $contest, $current_contest;
 
   $perPage = opt_get('user_count');
   if ($perPage <= 0) {
@@ -64,9 +63,6 @@ if (count($list) > 0) {
   if ($page != '') {
     $pageid = '&page=' . $page;
   }
-
-  $g = group_get_by_name("Администраторы");
-  $has_access = is_user_in_group(user_id(), $g['id']) || user_access_root();
 
   while ($i < $n) {
     $c = 0;
@@ -84,8 +80,7 @@ if (count($list) > 0) {
 
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
-      //TODO Check is contest running or archive
-      $d = 1;
+      $d = $is_user_admin;
       $ps = $it['is_payment'];
       $r = responsible_get_by_id($it['responsible_id']);
       $s = school_get_by_id($r['school_id']);
@@ -102,7 +97,7 @@ if (count($list) > 0) {
         $edit_delete =
           '<td align="right">' .
             stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить информацию о команде') .
-            stencil_ibtnav(($d) ? ('cross.gif') : ('cross_d.gif'), ($d) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), 'Удалить команду', 'Удалить эту команду?') .
+            stencil_ibtnav(($d) ? ('cross.gif') : ('cross_d.gif'), ($d) ? ('?action=delete&id=' . $it['id'] . '&' . $pageid) : (''), 'Удалить команду', 'Удалить эту команду?').
           '</td>';
       }
 

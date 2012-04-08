@@ -112,20 +112,23 @@ $team = team_get_by_id($id);
                 Конкурс:
             </td>
             <td style="padding: 0 2px;">
-                <select id="ContestGroup" name ="ContestGroup">
-                    <?php
-                        $sql = "SELECT * FROM contest where ".
-                        "DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')".
-                        "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
-                        $tmp = arr_from_query($sql);
-                
-                        foreach ($tmp as $k)
+                <?php
+                if (get_contest_status($t['contest_id'])<2)
+                {
+                    echo('<select id="ContestGroup" name="ContestGroup">');
+                    foreach ($reg_opened as $k)
                         {
                             $selected = ($k['id'] == htmlspecialchars(stripslashes($team['contest_id']))) ? ('selected') : ('');
                             echo('<option value = "' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
                         }
-                    ?>
-                </select>
+                    echo('</select>');
+                }
+                else
+                {
+                    $team_contest = contest_get_by_id($t['contest_id']);
+                    echo('<input type="text" class="txt block" id="ContestGroup" name="ContestGroup" disabled="disabled" value="'.htmlspecialchars(stripslashes($team_contest['name'])).'";>');
+                }
+                ?>  
             </td>
         </tr>
     </table>

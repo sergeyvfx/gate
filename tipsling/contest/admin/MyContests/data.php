@@ -18,11 +18,6 @@ if (!user_authorized ()) {
   header('Location: ../../../../login');
 }
 
-if (!is_responsible(user_id())) {
-  print (content_error_page(403));
-  return;
-}
-
 $it = contest_get_by_id($current_contest);
 $query = arr_from_query("select * from Admin_FamilyContest ".
                    "where family_contest_id=".$it['family_id']." and ".
@@ -34,19 +29,20 @@ if (count ($query) <= 0)
 }
 
 ?>
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest" ?>"><?=$it['name']?></a>Администрирование</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest" ?>"><?=$it['name']?></a><a>Администрирование</a>Конкурсы</div>
 ${information}
 <div class="form">
   <div class="content">
     <?php
-    global $DOCUMENT_ROOT, $action, $id;
     include '../menu.php';
-    $contest_menu->SetActive('MyContest');
+    $admin_menu->SetActive('MyContest');
     
+    global $DOCUMENT_ROOT, $action, $id;
+       
     if ($action == 'create') {
       contest_create_received();
     }
-    $contest_menu->Draw();
+    $admin_menu->Draw();
 
     if ($action == 'edit') {
       include 'edit.php';

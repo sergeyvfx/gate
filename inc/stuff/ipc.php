@@ -126,6 +126,203 @@
       $cities.='-1,Другой,false';
       print ($cities);
     }
+    
+    function ipc_find_values(){
+      global $type, $current_contest, $skipId;
+      
+      if ($skipId == '') {
+        $skipId = -1;
+      }
+      
+      $sql = '';
+      $values = '';
+      if ($type==1)
+      {
+          $sql = 'SELECT DISTINCT
+                    `team`.`pupil1_full_name` as pupil1,
+                    `team`.`pupil2_full_name` as pupil2,
+                    `team`.`pupil3_full_name` as pupil3,
+                    `team`.`grade`,
+                    `team`.`number`,
+                    `team`.`id` as team
+                 FROM
+                    `team`,
+                    `contest`,
+                    `user`,
+                    `responsible`
+                 WHERE
+                    `team`.`responsible_id`=`user`.`id` AND
+                    `responsible`.`user_id`=`user`.`id` AND
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
+          $result = db_query($sql);
+          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+          {
+            $values .= ';'.$rows['pupil1'].'#'.$rows['team'].'.1';
+            if (trim($rows['pupil2'])!="")
+                $values .= ';'.$rows['pupil2'].'#'.$rows['team'].'.2';
+            if (trim($rows['pupil3'])!="")
+                $values .= ';'.$rows['pupil3'].'#'.$rows['team'].'.3';
+          }
+          
+          $values = substr($values, 1);
+      }
+      else if ($type==2)
+      {
+          $sql = 'SELECT DISTINCT
+                    `team`.`grade`,
+                    `team`.`number`,
+                    `team`.`id` as team
+                 FROM
+                    `team`,
+                    `contest`,
+                    `user`,
+                    `responsible`
+                 WHERE
+                    `contest`.`id`='.$current_contest.' AND
+                    `team`.`responsible_id`=`user`.`id` AND
+                    `responsible`.`user_id`=`user`.`id` AND
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
+          $result = db_query($sql);
+          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+            $values .= ';Команда '.$rows['grade'].'.'.$rows['number'].'#'.$rows['team'];
+          $values = substr($values, 1);
+      }
+      else if ($type==3)
+      {
+          $sql = 'SELECT DISTINCT
+                    `team`.`pupil1_full_name` as pupil1,
+                    `team`.`pupil2_full_name` as pupil2,
+                    `team`.`pupil3_full_name` as pupil3,
+                    `team`.`grade`,
+                    `team`.`number`,
+                    `team`.`id` as team
+                 FROM
+                    `team`,
+                    `contest`,
+                    `user`,
+                    `responsible`
+                 WHERE
+                    `team`.`responsible_id`=`user`.`id` AND
+                    `responsible`.`user_id`=`user`.`id` AND
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `team`.`place`>0 AND `team`.`place`<4 AND
+                    `team`.`grade`>1 AND `team`.`grade`<12 AND '//Условие только для этого конкурса, т.к. команд 1 класса и ВУЗОВ мало
+                    .'`user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
+          $result = db_query($sql);
+          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+          {
+              $values .= ';'.$rows['pupil1'].'#'.$rows['team'].'.1';
+              if (trim($rows['pupil2'])!="")
+                $values .= ';'.$rows['pupil2'].'#'.$rows['team'].'.2';
+              if (trim($rows['pupil3'])!="")
+                $values .= ';'.$rows['pupil3'].'#'.$rows['team'].'.3';
+          }
+          
+          $values = substr($values, 1);
+      }
+      else if ($type==4)
+      {
+          $sql = 'SELECT DISTINCT
+                    `team`.`grade`,
+                    `team`.`number`,
+                    `team`.`id` as team
+                 FROM
+                    `team`,
+                    `contest`,
+                    `user`,
+                    `responsible`
+                 WHERE
+                    `team`.`responsible_id`=`user`.`id` AND
+                    `responsible`.`user_id`=`user`.`id` AND
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `team`.`place`>0 AND `team`.`place`<4 AND
+                    `team`.`grade`>1 AND `team`.`grade`<12 AND 
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
+          $result = db_query($sql);
+          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+            $values .= ';Команда '.$rows['grade'].'.'.$rows['number'].'#'.$rows['team'];
+          $values = substr($values, 1);
+      }
+      else if ($type==5)
+      {
+          $sql = 'SELECT DISTINCT
+                    `team`.`teacher_full_name` as teacher,
+                    `team`.`id` as team,
+                    `team`.`grade` as grade,
+                    `team`.`number` as number
+                 FROM
+                    `team`,
+                    `contest`,
+                    `user`,
+                    `responsible`
+                 WHERE
+                    `team`.`responsible_id`=`user`.`id` AND
+                    `responsible`.`user_id`=`user`.`id` AND
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `team`.`grade`<12 AND 
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
+          $result = db_query($sql);
+          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+          {
+              $i=0;
+              $teachers = split('[,]', $rows['teacher']);
+              while ($i<count($teachers))
+              {
+                  $values .= ';'.trim($teachers[$i]).' (команда '.$rows['grade'].'.'.$rows['number'].')#'.$rows['team'].'.'.$i;
+                  $i++;
+              }
+          }
+          $values = substr($values, 1);
+      }
+      else if ($type==6)
+      {
+          $sql = 'SELECT DISTINCT
+                    `team`.`teacher_full_name` as teacher,
+                    `team`.`id` as team,
+                    `team`.`grade` as grade,
+                    `team`.`number` as number
+                 FROM
+                    `team`,
+                    `contest`,
+                    `user`,
+                    `responsible`
+                 WHERE
+                    `team`.`responsible_id`=`user`.`id` AND
+                    `responsible`.`user_id`=`user`.`id` AND
+                    `team`.`contest_id`=`contest`.`id` AND
+                    `team`.`place`>0 AND `team`.`place`<4 AND
+                    `team`.`grade`>1 AND `team`.`grade`<12 AND 
+                    `user`.`id`='.user_id().' AND 
+                    `contest`.`id`='.$current_contest.'
+                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
+          $result = db_query($sql);
+          
+          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+          {
+              $i=0;
+              $teachers = split('[,]', $rows['teacher']);
+              while ($i<count($teachers))
+              {
+                  $values .= ';'.trim($teachers[$i]).' (команда '.$rows['grade'].'.'.$rows['number'].')#'.$rows['team'].'.'.$i;
+                  $i++;
+              }
+          }
+          $values = substr($values, 1);
+      }
+      print ($values);
+    }
 
 
 
@@ -176,6 +373,7 @@
       ipc_register_function('find_regions', ipc_find_regions);
       ipc_register_function('find_areas', ipc_find_areas);
       ipc_register_function('find_cities', ipc_find_cities);
+      ipc_register_function('find_values', ipc_find_values);
     }
 
     function ipc_exec ($func) {

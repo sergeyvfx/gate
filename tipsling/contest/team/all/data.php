@@ -31,19 +31,22 @@ ${information}
       $team_menu->SetActive('all');
       $team_menu->Draw();
     }
-    if ($action == 'edit') {
-      include 'edit.php';
+    
+    $g = group_get_by_name("Администраторы");
+    $is_user_admin = is_user_in_group(user_id(), $g['id']) || user_access_root();
+    $has_access = is_user_bookkeeper(user_id(), $current_contest) || $is_user_admin;
+    
+    if ($action == 'edit' && $has_access) {
+            include 'edit.php';
     } else {
       if ($action == 'save') {
         $t = team_get_by_id($id);
-        team_update_received($id, $t['is_payment']);
+        team_update_received($id);
       } else if ($action == 'delete') {
         team_delete($id);
       }
       $list = team_list('', $sort, $current_contest);
       include 'list.php';
-      //TODO
-//      include 'create_form.php';
     }
     ?>
   </div>
