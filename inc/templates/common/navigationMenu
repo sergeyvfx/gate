@@ -1,21 +1,70 @@
 <?php
   $document_root = config_get ('document-root');
+    
+  global $current_contest;
+ 
+  if ($current_contest=='' || $current_contest==-1)
+      $current_contest = opt_get("current_contest_number");
+?>
+
+<div class="menu">
+  <div class="body">
+    <ul class="navMenu" type="square">
+      <li><a href="<?=$document_root . '/'?>">Главная страница</a></li>
+      <li><a href="http://www.trizformashka.land.ru/">Старый сайт</a></li>
+      <?php
+        global $current_contest;
+        if (user_authorized()) 
+        {
+            printf('<li><a href="'.$document_root.'/login/profile/info/main">Мой профиль</a></li>');
+            printf('<li><a href="'.$document_root.'/login/profile/info/school">Учебное заведение</a></li>');
+            printf('<li><a href="'.$document_root.'/tipsling/team/my/">Мои команды</a></li>');
+            printf('<li><a href="'.$document_root.'/tipsling/payment/my">Мои платежи</a></li>');
+        }
+        if ($current_contest!='')
+        {
+            $it = contest_get_by_id($current_contest);
+            printf('<li>
+                        <a href="'.$document_root.'/tipsling/contest/">'.$it['name'].'</a><ul class="navMenu" type="circle">');
+                if (user_authorized())
+                {
+                    $query = arr_from_query ("select * ".
+                                       "from Admin_FamilyContest ".
+                                       "where family_contest_id=".$it['family_id']." and ".
+                                       "user_id=".user_id());
+                    if (count($query) > 0)
+                    {
+                        printf('<li><a href="'.$document_root.'/tipsling/contest/admin/">Администрирование</a></li>');
+                    }
+                    printf('<li><a href="'.$document_root.'/tipsling/contest/team/certificate/">Сертификаты</a></li>');
+                    printf('<li><a href="'.$document_root.'/tipsling/contest/team/my/">Мои команды</a></li>');
+                    printf('<li><a href="'.$document_root.'/tipsling/contest/payment/my">Мои платежи</a></li>');
+                    if (is_user_bookkeeper(user_id(), $current_contest))
+                    {
+                        printf('<li><a href="'.$document_root.'/tipsling/contest/payment/all">Все платежи</a></li>');
+                    }
+                }
+                printf('<li><a href="'.$document_root.'/tipsling/contest/team/all">Все команды</a></li>');
+                $contest_status = get_contest_status($current_contest);
+                if ($contest_status>2 && $contest_status<5)
+                    printf('<li><a href="'.$document_root.'/tipsling/contest/status">Монитор</a></li>');
+            printf('</ul></li>');
+        }
+      ?>
+      <li><a href="<?=$document_root?>/tipsling/contest/choose">Выбрать конкурс</a></li>
+      <?php
+        if (!user_authorized()) printf('<li><a href="'.$document_root.'/login">Войти</a></li>');
+        else printf('<li><a href="'.$document_root.'/?action=logout">Выйти</a></li>');
+      ?>
+    </ul>
+</div>
+</div>
+  <br/>
+<?php
   $tpl=manage_template_by_name ('Страница / Меню навигации');
   echo (wiki_menu_parse ($tpl->GetText ()));
 ?>
-  
-<!--<div class="menu">
-  <div class="cpt">Навигация</div>
-  <div class="body">
-    <ul>
-      <li><a href="http://www.trizformashka.land.ru/">Главная страница</a></li>
-      <li><a href=<?=$document_root?>>Новый сайт</a></li>
-      <li><a href="<?=$document_root?>/tipsling/team/all">Все команды конкурса</a></li>
-      <li><a href="<?=$document_root?>/tipsling/status">Монитор</a></li>
-      <li><a href="<?=$document_root?>/login">Войти</a></li>
-    </ul>
-  </div>
-</div>
+<!--
 <div class="menu" style="padding-top: 8px;">
   <div class="cpt">Wiki</div>
   <div class="body">

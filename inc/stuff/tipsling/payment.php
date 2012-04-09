@@ -18,18 +18,33 @@ if ($IFACE != "SPAWNING NEW IFACE" || $_GET['IFACE'] != '') {
 if ($_payment_included_ != '#payment_Included#') {
   $_payment_included_ = '#payment_Included#';
 
-  function payment_list($responsible_id = -1) {
+  function payment_list($responsible_id = -1, $contest_id = -1) {
     if ($responsible_id == '') {
       $responsible_id = -1;
     }
-
-    if ($responsible_id < 0) {
-      return arr_from_query('SELECT * FROM `payment` ORDER BY `date_arrival`, `date`');
+    
+    if ($contest_id == '') {
+      $contest_id = -1;
     }
+    
+    $sort="";
+    $where = "";
+    if ($contest_id != -1)
+        $where .= "where `payment`.`contest_id`=".$contest_id;
+     
+    if ($responsible_id != -1)
+    {
+        $sort = " ORDER BY `date`";
+        if ($where != "")
+            $where .= " AND\n`payment`.`responsible_id`=" . $responsible_id;
+        else
+            $where = " where `payment`.`responsible_id`=" . $responsible_id;
+    }
+    else
+        $sort = " ORDER BY `date`";
 
-    return arr_from_query('SELECT `payment`.* FROM `payment` ' .
-            'WHERE `payment`.`responsible_id`=' . $responsible_id .
-            ' ORDER BY `date`');
+    $sql='SELECT * FROM `payment` '.$where.$sort;
+    return arr_from_query($sql);
   }
 
   /**
@@ -39,7 +54,9 @@ if ($_payment_included_ != '#payment_Included#') {
     if ($update) {
       $p = payment_get_by_id($id);
       $b = group_get_by_name("Бухгалтеры");
-      if ($p['date_arrival'] != null && !is_user_in_group(user_id(), $b['id'])) {
+      $contest = contest_get_by_id($p['contest_id']);
+      $contest_status = get_contest_status($contest['id']);
+      if ($contest_status>2 && $p['date_arrival'] != null && !is_user_in_group(user_id(), $b['id'])) {
         add_info("Данный платеж не доступен для редактирования");
         return false;
       }
@@ -88,11 +105,10 @@ if ($_payment_included_ != '#payment_Included#') {
    * @param <type> $comment - Комментарий
    * @return <type>
    */
-  function payment_create($responsible_id, $date, $cheque_number, $payer_full_name, $amount, $comment) {
+  function payment_create($responsible_id, $contest_id, $date, $cheque_number, $payer_full_name, $amount, $comment) {
     if (!payment_check_fields($date, $cheque_number, $payer_full_name, $amount, $comment)) {
       return false;
     }
-
     // Checking has been passed
     $cheque_number = db_string($cheque_number);
     $payer_full_name = db_string($payer_full_name);
@@ -100,6 +116,7 @@ if ($_payment_included_ != '#payment_Included#') {
     $amount = str_replace(',', '.', $amount);
     $comment = db_string($comment);
     db_insert('payment', array('responsible_id' => $responsible_id,
+        'contest_id' => $contest_id,
         'date' => $date,
         'cheque_number' => $cheque_number,
         'payer_full_name' => $payer_full_name,
@@ -110,6 +127,8 @@ if ($_payment_included_ != '#payment_Included#') {
   }
 
   function payment_create_received() {
+    global $current_contest;
+    
     // Get post data
     $date = stripslashes(trim($_POST['date']));
     $cheque_number = stripslashes(trim($_POST['cheque_number']));
@@ -117,12 +136,16 @@ if ($_payment_included_ != '#payment_Included#') {
     $amount = stripslashes(trim($_POST['amount']));
     $comment = stripslashes(trim($_POST['comment']));
     $responsible_id = user_id();
-
-    if (payment_create($responsible_id, $date, $cheque_number, $payer_full_name, $amount, $comment)) {
+    $contest_id = stripslashes(trim($_POST['ContestGroup']));
+    if ($contest_id == '')
+        $contest_id = $current_contest;
+    
+    if (payment_create($responsible_id, $contest_id, $date, $cheque_number, $payer_full_name, $amount, $comment)) {
+    
       $_POST = array();
       return true;
     }
-
+    
     return false;
   }
 

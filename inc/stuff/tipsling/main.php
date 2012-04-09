@@ -19,6 +19,7 @@ function tipsling_initialize() {
   school_initialize();
   responsible_initialize();
   contest_initialize();
+  bookkeepers_initialize();
   if (config_get('check-database')) {
     db_create_table_safe('team', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
@@ -32,7 +33,9 @@ function tipsling_initialize() {
         'pupil2_full_name' => 'TEXT',
         'pupil3_full_name' => 'TEXT',
         'is_payment' => 'BOOLEAN',
-        'comment' => 'TEXT'));
+        'place' => 'INT DEFAULT NULL',
+        'common_place' => 'INT DEFAULT NULL',
+        'mark' => 'VARCHAR(11) DEFAULT NULL',));
 
     db_create_table_safe('payment', array(
         'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',

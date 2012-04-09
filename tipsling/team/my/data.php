@@ -24,26 +24,36 @@ if (!is_responsible(user_id())) {
 if (!is_responsible_has_school(user_id())) {
   redirect(config_get('document-root') . '/login/profile/info/school/?noschool=1');
 }
+
+$sql = "SELECT * FROM contest where ".
+        "DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')".
+        "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
+$reg_opened = arr_from_query($sql);
 ?>
+<<<<<<< HEAD
 <div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>--><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Мои команды</div>
+=======
+<div id="snavigator">Мои команды</div>
+>>>>>>> tipsling
 ${information}
 <div class="form">
   <div class="content">
     <?php
     global $DOCUMENT_ROOT, $action, $id;
-    include '../menu.php';
-    $team_menu->SetActive('my');
-
-    if ($action == 'create' && !opt_get('reg_off')) {
+    $allow_editing = false;
+    if ($id!='' && $id != -1)
+    {
+        $t = team_get_by_id($id);
+        $allow_editing = get_contest_status($t['contest_id'])<3 && user_id()==$t['responsible_id'];
+    }
+    if ($action == 'create') {
       team_create_received();
     }
 
-    $team_menu->Draw();
-
-    if ($action == 'edit' && !opt_get('reg_off')) {
+    if ($action == 'edit' && $allow_editing) {
       include 'edit.php';
     } else {
-      if (!opt_get('reg_off')) {
+      if ($allow_editing) {
         if ($action == 'save') {
           team_update_received($id);
         } else if ($action == 'delete') {
@@ -52,11 +62,10 @@ ${information}
       }
       $r = responsible_get_by_id(user_id());
       if ($r['school_id'] > 0 || user_is_system(user_id())) {
-        //BUG When you get team_list, you should show only teams for current contest
         $list = team_list(user_id());
         include 'list.php';
-
-        if (!opt_get('reg_off')) {
+        
+        if (count($reg_opened)) {
           include 'create_form.php';
         }
       } else {

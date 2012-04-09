@@ -106,6 +106,7 @@
           $this->PAGE->AddStyle ('pages');
           $this->PAGE->AddScript ('language=JavaScript;type=text/javascript', "\n".tpl ('common/globals', array (), false));
           $this->PAGE->AddScriptFile ('core.js');
+          $this->PAGE->AddScriptFile ('jquery-1.7.1.js');
           $this->PAGE->AddMeta ('http-equiv=content-language;content='.config_get ('content-language'));
           $this->PAGE->AddMeta ('name=url;content='.config_get ('meta-url'));
           $this->PAGE->AddMeta ('name=keywords;content='.config_get ('meta-keywords'));

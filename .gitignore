@@ -13,6 +13,12 @@ tools/logic/nbproject/private/
 tools/tableChecker/nbproject/private/
 tools/tipslingMailSorter/nbproject/private/
 *.patch
+redmine
+rm
+favicon.ico
+robots.txt
+yandex_*
+google*.html
 *.class
 tools/tableChecker/build
 tools/tableChecker/dist
@@ -20,3 +26,7 @@ tools/frameEditor/build
 tools/frameEditor/dist
 tools/logic/build
 tools/logic/dist
+tools/tipslingMailSorter/build
+tools/tipslingMailSorter/dist
+build-impl.xml
+genfiles.properties

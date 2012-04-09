@@ -122,13 +122,7 @@ dd_formo('title=Новая команда;');
             <td style="padding: 0 2px;">
                 <select id="ContestGroup" name ="ContestGroup">
                     <?php
-                        $sql = "SELECT\n"
-                        . " * \n"
-                        . "FROM\n"
-                        . " contest \n";
-                        $tmp = arr_from_query($sql);
-                
-                        foreach ($tmp as $k)
+                        foreach ($reg_opened as $k)
                         {
                             $selected = ($k['id'] == $_POST['grade']) ? ('selected') : ('');
                             echo('<option value = "' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');

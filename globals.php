@@ -15,7 +15,7 @@
   $IFACE = 'SPAWNING NEW IFACE';
 
   /* Relative directory name */
-  $relative = 'gate';
+  $relative = '';
 
   $s = $_SERVER['DOCUMENT_ROOT'];
 
@@ -26,4 +26,6 @@
 
   $DOCUMENT_ROOT = $s.$relative;
   $DOCUMENT_ROOT = preg_replace ('/\/*$/', '', $DOCUMENT_ROOT);
+  
+  session_register('current_contest');
 ?>

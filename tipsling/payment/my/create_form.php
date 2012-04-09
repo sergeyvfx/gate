@@ -117,7 +117,11 @@ dd_formo('title=Новый платеж;');
 </script>
 <div>
   <form action=".?action=create&page=<?=$page?>" method="POST" onsubmit="check(this); return false;">
+<<<<<<< HEAD
     <table class="clear" width="100%">
+=======
+      <table class="clear" width="100%">
+>>>>>>> tipsling
         <tr>
             <td width="30%" style="padding: 0 2px;">
                 Конкурс:
@@ -125,6 +129,7 @@ dd_formo('title=Новый платеж;');
             <td style="padding: 0 2px;">
                 <select id="ContestGroup" name ="ContestGroup">
                     <?php
+<<<<<<< HEAD
                         $sql = "SELECT\n"
                         . " * \n"
                         . "FROM\n"
@@ -132,6 +137,9 @@ dd_formo('title=Новый платеж;');
                         $tmp = arr_from_query($sql);
                 
                         foreach ($tmp as $k)
+=======
+                        foreach ($reg_contests as $k)
+>>>>>>> tipsling
                         {
                             $selected = ($k['id'] == $_POST['grade']) ? ('selected') : ('');
                             echo('<option value = "' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
@@ -142,7 +150,11 @@ dd_formo('title=Новый платеж;');
         </tr>
       </table>
       <div id="hr"></div>
+<<<<<<< HEAD
      <table class="clear" width="100%">
+=======
+      <table class="clear" width="100%">
+>>>>>>> tipsling
         <tr><td width="30%" style="padding: 0 2px;">
                 Дата платежа: <span class="error">*</span>
             </td>

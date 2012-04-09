@@ -17,7 +17,4 @@ global $DOCUMENT_ROOT;
 $payment_menu = new CVCMenu ();
 $payment_menu->Init('PaymentMenu', 'type=hor;colorized=true;hassubmenu=true;border=thin;');
 $payment_menu->AppendItem('Мои платежи', config_get('document-root') . '/tipsling/payment/my', 'my');
-if (is_bookkeeper(user_id())) {
-  $payment_menu->AppendItem('Все платежи', config_get('document-root') . '/tipsling/payment/all', 'all');
-}
 ?>

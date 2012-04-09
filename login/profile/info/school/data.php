@@ -41,7 +41,7 @@ $f = new CVCForm ();
 $f->Init('', 'action=.?action\=save' . (($redirect != '') ? ('&redirect=' . prepare_arg($redirect) . ';backlink=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;');
 
 if ($action == 'save') {
-  global $name, $school_status, $zipcode, $country, $country_name, $region, $region_name, $area, $area_name, $city_status, $city, $city_name, $street, $house, $building, $flat, $comment, $timezone;
+  global $name, $school_status, $zipcode, $country, $country_name, $region, $region_name, $area, $area_name, $city_status, $city, $city_name, $street, $house, $building, $flat, $comment, $whereHear, $timezone;
   $name = stripslashes($name);
   $school_status = stripslashes($school_status);
   $zipcode = stripslashes($zipcode);
@@ -55,7 +55,8 @@ if ($action == 'save') {
   $building = stripslashes($building);
   $flat = stripslashes($flat);
   $comment = stripslashes($comment);
-
+  $whereHear = stripslashes($whereHear);
+  
   $arr = array();
 
   $arr['timezone_id'] = $timezone;
@@ -73,7 +74,7 @@ if ($action == 'save') {
     $arr['zipcode'] = db_string($zipcode);
   else
     $err_string=$err_string==''?'Индекс':$err_string.', Индекс';
-  
+    
   if ($country>0)
     $arr['country_id'] = (int)$country;
   else if ($country_name!='')
@@ -159,15 +160,22 @@ if ($action == 'save') {
     $arr['house'] = db_string($house);
   else
     $err_string=$err_string==''?'Дом':$err_string.', Дом';
+  
   $arr['building'] = db_string($building);
   $arr['flat'] = db_string($flat);
   $arr['comment'] = db_string($comment);
   
+  if ($whereHear=='')
+    $err_string=$err_string==''?'Откуда Вы узнали о конкурсе':$err_string.', Откуда Вы узнали о конкурсе';
+    
   //save info about school
   if ($err_string=='')
   {
     if ($r['school_id']!='' && $r['school_id']!=-1){
         db_update('school', $arr, '`id`=' . $sc['id']);
+        $arr=array();
+        $arr['comment'] = db_string($whereHear);
+        db_update('responsible', $arr, '`user_id`='.$r['user_id']);
     }
     else
     {
@@ -175,6 +183,7 @@ if ($action == 'save') {
         $arr=array();
         //FIXME Why not used db_last_insert()?
         $arr['school_id'] = (int)db_max('school', 'id');
+        $arr['comment'] = db_string($whereHear);
         db_update('responsible', $arr, '`user_id`='.$r['user_id']);
     }
 
@@ -328,7 +337,8 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Дом: <span class="error">*</span></td><td><input id="house" name="house" type="text" class="txt block" onblur="check_frm_house ();" value="' . htmlspecialchars($sc['house']) . '"></td></tr></table><div id="house_check_res" style="display: none;"></div>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Корпус:</td><td><input id="building" name="building" type="text" class="txt block" value="' . htmlspecialchars($sc['building']) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Квартира:</td><td><input id="flat" name="flat" type="text" class="txt block" value="' . htmlspecialchars($sc['flat']) . '"></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Примечание:</td><td><input id="comment" name="comment" type="text" class="txt block" onblur="comment_frm_street ();" value="' . htmlspecialchars($sc['comment']) . '"></td></tr></table><div id="comment_check_res" style="display: none;"></div>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Примечание:</td><td><input id="comment" name="comment" type="text" class="txt block" value="' . htmlspecialchars($sc['comment']) . '"></td></tr></table>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Откуда Вы узнали о конкурсе?<span class="error">*</span></td><td><input id="whereHear" name="whereHear" type="text" class="txt block" onblur="check_frm_whereHear();" value="' . htmlspecialchars($r['comment']) . '"></td></tr></table><div id="whereHear_check_res" style="display: none;"></div>'));
 
 $sql = arr_from_query('SELECT * FROM timezone');
 $timezome = '';
@@ -362,6 +372,7 @@ if ($err_string!='')
       var street = getElementById("street").value;
       var house = getElementById("house").value;
       var comment = getElementById("comment").value;
+      var whereHear = getElementById("whereHear").value;
       
     if (qtrim(name)=='') {
         alert ('Поле "Название" обязательно для заполнения');
@@ -406,6 +417,11 @@ if ($err_string!='')
     if (comment.length > <?=opt_get('max_comment_len');?>) {
       alert('Поле "Комментарий" не может содержать более <?=opt_get('max_comment_len');?> символов');
       return false;
+    }
+    
+    if (qtrim(whereHear)=='') {
+        alert ('Поле "Откуда Вы узнали о конкурсе?" обязательно для заполнения');
+        return false;
     }
     return true;
   }
@@ -672,6 +688,16 @@ if ($err_string!='')
       hide_msg('comment_check_res');
   }
 
+  function check_frm_whereHear () {
+    var whereHear = getElementById ('whereHear').value;
+    
+    if (qtrim(whereHear)=='') {
+      show_msg ('whereHear_check_res', 'err', 'Это поле обязательно для заполнения');
+      return false;
+    }
+
+    hide_msg('whereHear_check_res');
+  }
 
 </script>
 

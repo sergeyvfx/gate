@@ -262,8 +262,7 @@
       }
 
       $sql = "INSERT INTO `$table` ($fields) VALUES($values)";
-
-      db_query ($sql);
+      return db_query ($sql);
     }
 
     function db_swap_values ($table, $id1, $id2, $field, $idfield = 'id') {

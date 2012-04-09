@@ -19,7 +19,7 @@ if ($_team_included_ != '#team_Included#') {
   $_team_included_ = '#team_Included#';
   $user_infos = array();
 
-  function team_list($responsible_id = -1, $sort = 1, $contest = -1) {
+  function team_list($responsible_id = -1, $sort = 1, $contest = -1, $filter=-1) {
     if ($responsible_id == '') {
       $responsible_id = -1;
     }
@@ -29,6 +29,8 @@ if ($_team_included_ != '#team_Included#') {
     }
     
     if ($contest == '') $contest = -1;
+    
+    if ($filter == '') $filter = -1;
 
     if ($sort == 1) {
       $sort = "ORDER BY team.grade, team.number";
@@ -46,6 +48,9 @@ if ($_team_included_ != '#team_Included#') {
     
     if ($contest != -1)
         $where .= "team.contest_id=".$contest." AND\n";
+    
+    if ($filter == 2)
+        $where .= "team.place>0 AND team.place<4 AND\n";
 
     $sql = "SELECT\n"
             . " team.*\n"
@@ -69,8 +74,11 @@ if ($_team_included_ != '#team_Included#') {
     if ($update) {
       $team = team_get_by_id($id);
       $g = group_get_by_name("Администраторы");
-      $has_access = is_user_in_group(user_id(), $g['id']) || user_access_root();
-      if ($team['is_payment'] > 0 && !$has_access) {
+      $has_access = is_user_bookkeeper(user_id(), $team['contest_id']) || is_user_in_group(user_id(), $g['id']) || user_access_root();
+      
+      $contest_stat = get_contest_status($team['contest_id']);
+      $allow_edit = $contest_stat==1 || $contest_stat==2;
+      if ($allow_edit && !$has_access) {
         add_info("Данная команда не доступна для редактирования");
         return false;
       }
@@ -151,6 +159,7 @@ if ($_team_included_ != '#team_Included#') {
 
   function team_create_received() {
     // Get post data
+    global $current_contest;
     $grade = stripslashes(trim($_POST['grade']));
     $teacher_full_name = stripslashes(trim($_POST['teacher_full_name']));
     $pupil1_full_name = stripslashes(trim($_POST['pupil1_full_name']));
@@ -163,6 +172,8 @@ if ($_team_included_ != '#team_Included#') {
     }
     $comment = stripslashes(trim($_POST['comment']));
     $contest_id = stripslashes(trim($_POST['ContestGroup']));
+    if ($contest_id == '')
+        $contest_id = $current_contest;
     
     $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
     $responsible_id = user_id();
@@ -176,8 +187,37 @@ if ($_team_included_ != '#team_Included#') {
 
     return false;
   }
+  
+  function team_register_again_received() {
+    // Get post data
+    global $current_contest;
+    $team_id = stripslashes(trim($_POST['Team']));
+    $this_team = team_get_by_id($team_id);
+    $grade = $this_team['grade']+1;
+    $teacher_full_name = $this_team['teacher_full_name'];
+    $pupil1_full_name = $this_team['pupil1_full_name'];
+    $pupil2_full_name = $this_team['pupil2_full_name'];
+    $pupil3_full_name = $this_team['pupil3_full_name'];
+    $payment_id = -1;
 
-  function team_update($id, $payment_id, $contest_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number, $comment) {
+    $comment = $this_team['comment'];
+    $contest_id = $current_contest;
+    
+    $responsible_id = $this_team['responsible_id'];
+    $is_payment = 0;
+    $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
+    
+    if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
+                    $teacher_full_name, $pupil1_full_name, $pupil2_full_name,
+                    $pupil3_full_name, $is_payment, $comment)) {
+      $_POST = array();
+      return true;
+    }
+
+    return false;
+  }
+
+  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number, $comment) {
     if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment, true, $id)) {
       return false;
     }
@@ -190,7 +230,6 @@ if ($_team_included_ != '#team_Included#') {
     //$number = db_string($number);
 
     $update = array('payment_id' => $payment_id,
-        'contest_id' => $contest_id,
         'grade' => $grade,
         'teacher_full_name' => $teacher_full_name,
         'pupil1_full_name' => $pupil1_full_name,
@@ -205,27 +244,29 @@ if ($_team_included_ != '#team_Included#') {
     return true;
   }
 
-  function team_update_received($id, $is_payment = 0) {
+  function team_update_received($id) {
     // Get post data
     $grade = stripslashes(trim($_POST['grade']));
     $teacher_full_name = stripslashes(trim($_POST['teacher_full_name']));
     $pupil1_full_name = stripslashes(trim($_POST['pupil1_full_name']));
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
-    $payment_id = stripslashes(trim($_POST['payment_id']));
-    if ($payment_id == '') {
-      $payment_id = -1;
-    }
     $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
-    $contest_id = stripslashes(trim($_POST['ContestGroup']));
-    if ($team['grade'] != $grade || $team['contest_id'] != $contest_id) {
-      $number = db_max('team','number',"`grade`=$grade AND `contest_id`=$contest_id") + 1;
+    $is_payment = stripslashes(trim($_POST['is_payment']));
+    if ($is_payment=='')
+        $is_payment = $team['is_payment'];
+    $payment_id = stripslashes(trim($_POST['payment_id']));
+    if ($payment_id == '') {
+      $payment_id = $team['payment_id'];
+    }
+    if ($team['grade'] != $grade) {
+      $number = db_max('team','number',"`grade`=$grade AND `contest_id`=".$team['contest_id']) + 1;
     } else {
       $number = $team['number'];
     }
 
-    if (team_update($id, $payment_id, $contest_id, $grade, $teacher_full_name,
+    if (team_update($id, $payment_id, $grade, $teacher_full_name,
                     $pupil1_full_name, $pupil2_full_name, $pupil3_full_name,
                     $is_payment, $number, $comment)) {
       $_POST = array();

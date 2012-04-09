@@ -1,17 +1,13 @@
 package tablechecker.core;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.HashMap;
-import java.util.Iterator;
 import tablechecker.core.parsers.HtmlParser;
 import tablechecker.core.parsers.WriterParser;
 import logic.frames.Frame;
@@ -19,7 +15,6 @@ import logic.frames.Frameset;
 import logic.frames.ISlot;
 import logic.frames.Slot;
 import logic.frames.Link;
-import logic.product.Value;
 
 public class Checker {
 
