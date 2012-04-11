@@ -12,9 +12,12 @@
     <ul class="navMenu" type="square">
       <li><a href="<?=$document_root . '/'?>">Главная страница</a></li>
       <li><a href="http://www.trizformashka.land.ru/">Старый сайт</a></li>
-      <li><a href="<?=$document_root . '/phpBB3'?>">Форум</a></li>
       <?php
         global $current_contest;
+        if (user_access_root ())
+        {
+            printf('<li><a href="'.$document_root . '/forum">Форум</a></li>');
+        }
         if (user_authorized()) 
         {
             printf('<li><a href="'.$document_root.'/login/profile/info/main">Мой профиль</a></li>');

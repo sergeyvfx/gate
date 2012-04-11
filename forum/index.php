@@ -1,4 +1,10 @@
 <?php
+include '../globals.php';
+include $DOCUMENT_ROOT . '/inc/include_for.php';
+if (!user_access_root()) {
+    on_construction ();
+    die;
+}
 /**
 *
 * @package phpBB3
