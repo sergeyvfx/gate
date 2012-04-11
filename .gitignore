@@ -31,3 +31,4 @@ tools/tipslingMailSorter/dist
 build-impl.xml
 genfiles.properties
 forum/config.php
+forum/cache
