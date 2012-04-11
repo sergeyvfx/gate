@@ -74,10 +74,6 @@ if (count($list) > 0) {
         <th width="10%">Населенный пункт</th>
         <th width="15%">Учитель</th>
         <th width="20%">Участники</th>
-<<<<<<< HEAD:tipsling/team/all/list.php
-        <th>Конкурс</th>
-=======
->>>>>>> tipsling:tipsling/contest/team/all/list.php
         <th width="10%">Статус платежа</th>' .
         (($has_access) ? ('<th width="48" class="last">&nbsp;</th>') : (''))
         . '</tr>' . "\n";
@@ -112,10 +108,6 @@ if (count($list) > 0) {
               '<td>' . $city . '</td>' .
               '<td>' . $teacher . '</td>' .
               '<td>' . $pupils . '</td>' .
-<<<<<<< HEAD:tipsling/team/all/list.php
-              '<td>' . $contest_name['name'] . '</td>' .
-=======
->>>>>>> tipsling:tipsling/contest/team/all/list.php
               '<td>' . $payment . '</td>' .
               $edit_delete .
               '</tr>' . "\n";

@@ -20,11 +20,7 @@ if ($current_contest=='' || $current_contest==-1)
 
 $contest = contest_get_by_id($current_contest);
 ?>
-<<<<<<< HEAD:tipsling/team/all/data.php
-<div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>--><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Все команды</div>
-=======
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/team" ?>">Команды</a>Все команды</div>
->>>>>>> tipsling:tipsling/contest/team/all/data.php
 ${information}
 <div class="form">
   <div class="content">

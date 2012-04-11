@@ -20,11 +20,7 @@ if ($current_contest =='' || $current_contest == -1)
 $contest = contest_get_by_id($current_contest);
 $task_count = 20;
 ?>
-<<<<<<< HEAD:tipsling/status/data.php
-<div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>-->Монитор</div>
-=======
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a>Монитор</div>
->>>>>>> tipsling:tipsling/contest/status/data.php
 ${information}
 <? formo('title=Состояние присланных заданий;'); ?>
 <div class="f" style="margin: 6px -6px 6px;">

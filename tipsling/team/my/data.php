@@ -30,11 +30,7 @@ $sql = "SELECT * FROM contest where ".
         "and DATE_FORMAT(registration_finish,'%Y-%m-%d')>=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')";
 $reg_opened = arr_from_query($sql);
 ?>
-<<<<<<< HEAD
-<div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>--><a href="<?= config_get('document-root') . "/tipsling/team" ?>">Команды</a>Мои команды</div>
-=======
 <div id="snavigator">Мои команды</div>
->>>>>>> tipsling
 ${information}
 <div class="form">
   <div class="content">

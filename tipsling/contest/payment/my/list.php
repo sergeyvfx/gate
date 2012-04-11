@@ -12,60 +12,9 @@ if ($PHP_SELF != '') {
   print ('HACKERS?');
   die;
 }
-<<<<<<< HEAD:tipsling/payment/all/list.php
-?>
-<div class="f" style="margin: 6px -6px 6px;">
-  <form action="." method="POST" onsubmit="update (); return false;" onkeypress="if (event.keyCode==13) update ();">
-    <table width="100%">
-      <tr>
-        <td>
-          <b>Конкурс: &nbsp;</b>
-          <select id="ContestGroup" onchange="update()">
-            <?php
-                echo('<option value="-1" selected>Все конкурсы</option>');
-                $sql = "SELECT\n"
-                . " * \n"
-                . "FROM\n"
-                . " contest \n";
-                $tmp = arr_from_query($sql);
-                
-                foreach ($tmp as $k)
-                {
-                    $selected = ($k['id'] == $contest) ? ('selected') : ('');
-                    echo('<option value ="' . $k['id'] . '" '.$selected.' >' . $k['name'] . '</option>');
-                }
-            ?>
-          </select>
-        </td>
-        <td style="text-align: right; padding-right: 5px;">
-          <b>
-            <?php
-              if (count($list) > 0) {
-                print "Всего платежей: " . count($list);
-              }
-            ?>
-          </b>
-        </td>
-      </tr>
-    </table>
-  </form>
-</div>
-<?php
-formo('title=Список всех платежей;');
-?>
-<script language="JavaScript" type="text/javascript">
-  function update () {
-    //var sort=getElementById ('sortGroup').value;
-    var contest=getElementById ('ContestGroup').value;
-    nav ('.?contest='+contest);
-  }
-</script>
-<?php
-=======
 
 formo('title=Список моих платежей;');
 
->>>>>>> tipsling:tipsling/contest/payment/my/list.php
 if (count($list) > 0) {
   global $page;
 

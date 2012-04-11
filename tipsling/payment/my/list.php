@@ -35,21 +35,12 @@ if (count($list) > 0) {
   while ($i < $n) {
     $c = 0;
     $pageSrc = '<table class="list">' . "\n";
-<<<<<<< HEAD
-    $pageSrc .= '<tr class="h"><th width="15%" style="text-align: center;">Дата платежа</th>
-        <th width="15%" style="text-align: left;">Номер чек-ордера</th>
-        <th width="15%" style="text-align: center;">Плательщик</th>
-        <th width="10%" style="text-align: center;">Сумма</th>
-        <th width="15%" style="text-align: center;">Конкурс</th>
-        <th width="15%" style="text-align: center;" align="right">Дата поступления</th>
-=======
     $pageSrc .= '<tr class="h"><th width="150" style="text-align: center;">Дата платежа</th>
         <th style="text-align: center;">Номер чек-ордера</th>
         <th style="text-align: center;">Плательщик</th>
         <th style="text-align: center;">Сумма</th>
         <th width="150" style="text-align: center;" align="right">Дата поступления</th>
         <th width="15%">Конкурс</th>
->>>>>>> tipsling
         <th width="48" class="last">&nbsp;</th></tr>' . "\n";
 
     while ($c < $perPage && $i < $n) {

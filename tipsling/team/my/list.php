@@ -37,18 +37,11 @@ if (count($list) > 0) {
     $pageSrc = '<table class="list">' . "\n";
     $pageSrc .= '<tr class="h">
         <th width="7%" align="center">Номер команды</th>
-<<<<<<< HEAD
-        <th width="16%">Учитель</th>
-        <th width="16%">Участник 1</th>
-        <th width="16%">Участник 2</th>
-        <th width="16%">Участник 3</th>
-=======
         <th width="15%">Учитель</th>
         <th width="15%">Участник 1</th>
         <th width="15%">Участник 2</th>
         <th width="15%">Участник 3</th>
         <th width="10%">Статус платежа</th>
->>>>>>> tipsling
         <th width="15%">Конкурс</th>
         <th width="10%">Статус платежа</th>
         <th width="48" class="last">&nbsp;</th></tr>' . "\n";

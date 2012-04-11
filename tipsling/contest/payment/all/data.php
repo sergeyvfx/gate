@@ -29,11 +29,7 @@ if (!is_user_bookkeeper(user_id(), $current_contest))
 
 $contest = contest_get_by_id($current_contest);
 ?>
-<<<<<<< HEAD:tipsling/payment/all/data.php
-<div id="snavigator"><!--<a href="<?= config_get('document-root') . "/tipsling/" ?>">Тризформашка-2011</a>--><a href="<?= config_get('document-root') . "/tipsling/payment" ?>">Платежи</a>Все платежи</div>
-=======
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/team" ?>">Платежи</a>Все платежи</div>
->>>>>>> tipsling:tipsling/contest/payment/all/data.php
 ${information}
 <div class="form">
   <div class="content">
