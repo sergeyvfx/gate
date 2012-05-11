@@ -15,12 +15,10 @@
       <li><a href="http://www.trizformashka.land.ru/">Старый сайт (trizformashka.land.ru)</a></li>
       <?php
       if (user_authorized()) 
-        {
-            printf('<li><a href="'.$document_root.'/login/profile/info/main">Мой профиль</a></li>');
-            printf('<li><a href="'.$document_root.'/login/profile/info/school">Учебное заведение</a></li>');
-            printf('<li><a href="'.$document_root.'/tipsling/team/my/">Мои команды</a></li>');
-            printf('<li><a href="'.$document_root.'/tipsling/payment/my">Мои платежи</a></li>');
-        }
+      {
+        printf('<li><a href="'.$document_root.'/login/profile/info/main">Мой профиль</a></li>');
+        printf('<li><a href="'.$document_root.'/login/profile/info/school">Учебное заведение</a></li>');
+      }
       ?>
       <li><a href="<?=$document_root . '/articles/rules'?>">Правила сайта</a></li>
       <li><a href="<?=$document_root?>/tipsling/contest/choose">Выбрать конкурс</a></li>
