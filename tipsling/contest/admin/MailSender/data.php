@@ -80,16 +80,19 @@ ${information}
         $addresses = $keywords = preg_split("/\n/", $POST['mailaddress']);
         foreach ($array as $value) 
         {
-            $to = $value;
-            $subject = $POST['mailsubject'];
-            $message = $POST['mailmessage'];
-            $additional_headers = 'FROM: '.$POST['mailsender'];
-            mail($to, $subject, $message, $additional_headers);
+            if (trim($value)!='')
+            {
+                $to = $value;
+                $subject = $POST['mailsubject'];
+                $message = $POST['mailmessage'];
+                $additional_headers = 'FROM: '.$POST['mailsender'];
+                mail($to, $subject, $message, $additional_headers);
+            }
         }
     }
     formo('title=Отправка письма');
     ?>
-  <form action=".?action=send&page=<?=$page?>" method="POST" onsubmit="check (this); return false;">
+  <form action=".?action=send" method="POST" onsubmit="check (this);">
     <table class="clear" width="100%">
         <tr>
             <td width="100%">
