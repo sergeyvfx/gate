@@ -27,108 +27,123 @@ if (count ($query) <= 0)
   print (content_error_page(403));
   return;
 }
+
 ?>
 
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest" ?>"><?=$it['name']?></a><a>Администрирование</a>Рассылка писем</div>
 ${information}
+
+<script language="JavaScript" type="text/JavaScript">
+  function check () {
+    return true;
+  }
+
+  function check_frm_email () {
+    
+  }
+  
+  function LoadAddressFromDatabase()
+  {
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+          document.getElementById("mailaddress").innerHTML=xmlhttp.responseText;
+      }
+    }
+    xmlhttp.open("GET","LoadAddressFromDatabase.php",true);
+    xmlhttp.send();
+  }
+</script>
+
 <div class="form">
   <div class="content">
     <?php
-    global $action;
+    global $action, $current_contest;
     
     include '../menu.php';
     $admin_menu->SetActive('MailSender');
     
     $admin_menu->Draw();
     
-    $to = 'keeperami@gmail.com';
-    $subject = 'Test info letter';
-    $message = 'Content\n';
-    $additional_headers = '';
-    mail($to, $subject, $message, $additional_headers);
-    
-    //sendmail_tpl(stripslashes("keeperami@gmail.com"), 'Тестовое информационное письмо', 'mail', array());
-    
-    /*if (mail("keeperami@gmail.com", "test", "text"))
+    if ($action=='edit')
     {
-        echo("<div>письмо ушло</div>");
+        $addresses = $keywords = preg_split("/\n/", $POST['mailaddress']);
+        foreach ($array as $value) 
+        {
+            $to = $value;
+            $subject = $POST['mailsubject'];
+            $message = $POST['mailmessage'];
+            $additional_headers = 'FROM: '.$POST['mailsender'];
+            mail($to, $subject, $message, $additional_headers);
+        }
     }
-    else
-        echo("<div>че-то не так</div>");
-    */
+    formo('title=Отправка письма');
     ?>
-  <form action=".?action=save&id=<?= $id; ?><?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
+  <form action=".?action=send&page=<?=$page?>" method="POST" onsubmit="check (this); return false;">
     <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
-                Получатель:
-            </td>
-            <td style="padding: 0 2px;">
-                <input type="text" id="address" name="address" onblur="check_frm_address ();" value="<?= $POST['address']; ?>" class="txt block"/>
+        <tr>
+            <td width="100%">
+                <table width="100%">
+                    <tr width="100%">
+                    <td width="35%" style="padding: 0 7px;">
+                        <table width="100%">
+                            <tr width="100%">
+                                <td width="105px">E-mail отправителя:</td>
+                                <td> <input type="text" id="mailsender" name="mailsender" onblur="check_frm_email ();" value="<?= $POST['mailsender']; ?>" class="txt block"/> </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="65%" style="padding: 0 7px;">
+                        <table width="100%">
+                            <tr width="100%">
+                                <td width="70px">Тема письма:</td>
+                                <td> <input type="text" id="mailsubject" name="mailsubject" onblur="check_frm_email ();" value="<?= $POST['mailsubject']; ?>" class="txt block"/> </td>
+                            </tr>
+                        </table>
+                    </td>
+                    </tr>
+                    <tr  width="100%">
+                        <td  width="35%" style="padding: 0 7px;">
+                            <table width="100%">
+                                <tr width="100%"> <td width="100%">Список рассылки:</td> </tr>
+                                <tr width="100%"> <td width="100%"> <textarea width="100%" rows="29" id="mailaddress" name="mailaddress" onblur="check_frm_email ();" class="txt block" style="resize:none;"><?= $POST['mailaddress']; ?></textarea></td></tr>
+                                <tr width="100%"> <td width="100%"> 
+                                    <!--<input type="button" value="импорт из файла" onclick="LoadAddressFromFile ()"/>-->
+                                    <input type="button" value="импорт из базы" onclick="LoadAddressFromDatabase ()"/></td></tr>
+                                <tr width="100%"> <td width="100%">Файлы:</td> </tr>
+                                <tr width="100%"> <td width="100%"> <select multiple size="5" id="mailfile" name="mailfile" style="width: 100%;"></select> </td></tr>
+                                <tr width="100%"> <td width="100%"> <input type="button" width="100%" value="Загрузить файл" onclick="LoadFile ()"/></td></tr>
+                            </table>
+                        </td>
+                        <td  width="65%" style="padding: 0 7px;">
+                            <table width="100%">
+                                <tr width="100%"> <td width="100%">Текст письма:</td> </tr>
+                                <tr width="100%"> <td width="100%"> <textarea width="100%" rows="40" id="mailtext" name="mailtext" onblur="check_frm_email ();" class="txt block" style="resize:none;"><?= $POST['mailtext']; ?></textarea></td></tr>
+                            </table>
+                        </td>
+                    </tr>                        
+                </table>
             </td>
         </tr>
     </table>
-    <div id="name_check_res" style="display: none;"></div>
-    <div id="hr"></div>
-    <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
-                Начало регистрации:
-            </td>
-            <td style="padding: 0 2px;">
-                <?= calendar('registration_start', htmlspecialchars($contest['registration_start'])) ?>
-            </td>
-        </tr>
-    </table>
-    <div id="r_s_check_res" style="display: none;"></div>
-    <div id="hr"></div>
-    <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
-                Конец регистрации:
-            </td>
-            <td style="padding: 0 2px;">
-                <?= calendar('registration_finish', htmlspecialchars($contest['registration_finish'])) ?>
-            </td>
-        </tr>
-    </table>
-    <div id="r_f_check_res" style="display: none;"></div>
-    <div id="hr"></div>
-    <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
-                Начало конкурса:
-            </td>
-            <td style="padding: 0 2px;">
-                <?= calendar('contest_start', htmlspecialchars($contest['contest_start'])) ?>
-            </td>
-        </tr>
-    </table>
-    <div id="c_s_check_res" style="display: none;"></div>
-    <div id="hr"></div>
-    <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
-                Конец конкурса:
-            </td>
-            <td style="padding: 0 2px;">
-                <?= calendar('contest_finish', htmlspecialchars($contest['contest_finish'])) ?>
-            </td>
-        </tr>
-    </table>
-    <div id="r_s_check_res" style="display: none;"></div>
-    <div id="hr"></div>
-    <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
-                Дата добавления в архив:
-            </td>
-            <td style="padding: 0 2px;">
-                <?= calendar('send_to_archive', htmlspecialchars($contest['send_to_archive'])) ?>
-            </td>
-        </tr>
-    </table>
-    <div id="s_to_a_check_res" style="display: none;"></div>
     <div id="hr"></div>
     
     <div class="formPast">
-      <button class="submitBtn block" type="submit">Сохранить</button>
+      <button class="submitBtn block" type="submit">Отправить</button>
     </div>
   </form>      
-
+<?php
+  formc ();
+?>
   </div>
 </div>
