@@ -41,7 +41,13 @@ ${information}
     
     $admin_menu->Draw();
     
-    sendmail_tpl(stripslashes("keeperami@gmail.com"), 'Тестовое информационное письмо', 'mail', array());
+    $to = 'keeperami@gmail.com';
+    $subject = 'Test info letter';
+    $message = 'Content\n';
+    $additional_headers = '';
+    mail($to, $subject, $message, $additional_headers);
+    
+    //sendmail_tpl(stripslashes("keeperami@gmail.com"), 'Тестовое информационное письмо', 'mail', array());
     
     /*if (mail("keeperami@gmail.com", "test", "text"))
     {
