@@ -29,18 +29,15 @@ if (count ($query) <= 0)
 }
 
 ?>
+<link href="<?= config_get('document-root') . "/scripts/jquery/jquery-ui.css"?>" rel="stylesheet" type="text/css"/>
+<script src="<?= config_get('document-root') . "/scripts/jquery/jquery-1.7.2.js"?>"></script>
+<script src="<?= config_get('document-root') . "/scripts/jquery/jquery-ui-1.8.21.min.js"?>"></script>
+  
 
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest" ?>"><?=$it['name']?></a><a>Администрирование</a>Рассылка писем</div>
 ${information}
 
 <script language="JavaScript" type="text/JavaScript">
-  function check () {
-    return true;
-  }
-
-  function check_frm_email () {
-    
-  }
   
   function LoadAddressFromDatabase()
   {
@@ -63,6 +60,42 @@ ${information}
     xmlhttp.open("GET","LoadAddressFromDatabase.php",true);
     xmlhttp.send();
   }
+  
+  function StartSending()
+  {
+      var subject = getElementById('mailsubject').value;
+      var message = getElementById('mailtext').value;
+      var sender = getElementById('mailsender').value;
+      var addr = getElementById('mailaddress').value;
+      var addresses = addr.split(/[\s,]+/);
+      var n = addresses.count;
+      var i=0;
+      for (var key in addresses) 
+      {
+          $("#progressbar").style.display = 'block';
+          if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+          }
+          else
+          {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+          
+          xmlhttp.onreadystatechange=function()
+          {        
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                alert("письмо "+i+" отправлено");
+            }
+          }
+          xmlhttp.open("GET","SendLetter.php?address="+key+"&subject="+subject+"&text="+message+"&sender="+sender,true);
+          xmlhttp.send();
+          $("#progressbar").progressbar({ value: i/n*100 });
+          i++;
+      }
+      $("#progressbar").progressbar({ value: 100 });
+  }
 </script>
 
 <div class="form">
@@ -77,23 +110,12 @@ ${information}
     
     if ($action=='send')
     {
-        $addresses = preg_split("/[\s,]+/", $_POST['mailaddress']);
-        foreach ($addresses as $value) 
-        {
-            if (trim($value)!='')
-            {
-                $to = $value;
-                $subject = $_POST['mailsubject'];
-                $message = $_POST['mailmessage'];
-                $additional_headers = 'FROM: '.$_POST['mailsender'];
-                mail($to, $subject, $message, $additional_headers);
-            }
-        }
+        include 'SendLetter.php';
     }
-    //formo('title=Отправка письма');
+    formo('title=Отправка письма');
     ?>
-  <form action=".?action=send" method="POST" onsubmit="check (this);">
-    <table class="clear" width="100%">
+    <form action=".?action=send" method="POST" onsubmit="check (this); return false;" enctype="multipart/form-data">
+      <table class="clear" width="100%">
         <tr>
             <td width="100%">
                 <table width="100%">
@@ -117,15 +139,17 @@ ${information}
                     </tr>
                     <tr  width="100%">
                         <td  width="35%" style="padding: 0 7px;">
-                            <table width="100%">
-                                <tr width="100%"> <td width="100%">Список рассылки:</td> </tr>
-                                <tr width="100%"> <td width="100%"> <textarea width="100%" rows="29" id="mailaddress" name="mailaddress" onblur="check_frm_email ();" class="txt block" style="resize:none;"><?= $_POST['mailaddress']; ?></textarea></td></tr>
-                                <tr width="100%"> <td width="100%"> 
-                                    <!--<input type="button" value="импорт из файла" onclick="LoadAddressFromFile ()"/>-->
-                                    <input type="button" value="импорт из базы" onclick="LoadAddressFromDatabase ()"/></td></tr>
-                                <tr width="100%"> <td width="100%">Файлы:</td> </tr>
-                                <tr width="100%"> <td width="100%"> <select multiple size="5" id="mailfile" name="mailfile" style="width: 100%;"></select> </td></tr>
-                                <tr width="100%"> <td width="100%"> <input type="button" width="100%" value="Загрузить файл" onclick="LoadFile ()"/></td></tr>
+                            <table width="100%" height="100%">
+                                <tr width="100%" style="vertical-align: top;"> <td width="100%">Список рассылки:</td> </tr>
+                                <tr width="100%" style="vertical-align: top;"> <td width="100%"> <textarea width="100%" rows="29" id="mailaddress" name="mailaddress" onblur="check_frm_email ();" class="txt block" style="resize:none;"><?= $_POST['mailaddress']; ?></textarea></td></tr>
+                                <tr width="100%" style="vertical-align: top;"> <td width="100%"> 
+                                    <input type="button" value="импорт из базы" onclick="LoadAddressFromDatabase ()"/>
+                                </td></tr>
+                                <tr><td><br/></td></tr>
+                                <tr width="100%" style="vertical-align: top;"> <td width="100%">Файлы:</td> </tr>
+                                <tr width="100%" style="vertical-align: bottom;"> <td width="100%">
+                                   <input type="file" name="mail_file[]" multiple="multiple" />
+                                </td></tr>
                             </table>
                         </td>
                         <td  width="65%" style="padding: 0 7px;">
@@ -142,11 +166,13 @@ ${information}
     <div id="hr"></div>
     
     <div class="formPast">
+      <!--<button class="submitBtn block" type="button" onclick="StartSending ()">Отправить</button>-->
       <button class="submitBtn block" type="submit">Отправить</button>
-    </div>
-  </form>      
+      <div id="progressbar" style="display: none;"></div>
+    </div>    
+    </form>
 <?php
-  //formc ();
+  formc ();
 ?>
   </div>
 </div>
