@@ -40,22 +40,23 @@ foreach ($addresses as $value)
         // Отправляем почтовое сообщение 
         if(count($picture) == 0)
             mail ($to, $subject, $message, "Content-type: text/plain; charset=windows-1251\nFrom:".$from);
-        else send_mail($to, $subject, $message, $picture); 
+        else send_mail($to, $from, $subject, $message, $picture); 
     }
 }
 
 // Вспомогательная функция для отправки почтового сообщения с вложением 
-function send_mail($to, $thm, $html, $files) 
+function send_mail($to, $from, $subject, $message, $files) 
 {
     $boundary = "--".md5(uniqid(time())); // генерируем пароль!!!!! 
     // echo "$boundary"; 
     $headers .= "MIME-Version: 1.0\n"; 
     $headers .="Content-Type: multipart/mixed; boundary=\"$boundary\"\n"; 
     $multipart .= "--$boundary\n"; 
-    $kod = 'windows-1251'; // или $kod = 'koi8-r'; 
-    $multipart .= "Content-Type: text/plain; charset=$kod\nFrom: my@mail.ru"; 
+    //$kod = 'windows-1251'; // или $kod = 'koi8-r'; 
+    //$multipart .= "Content-Type: text/plain; charset=$kod\nFrom: my@mail.ru"; 
+    $multipart .= "Content-Type: text/plain\nFrom:".$from; 
     $multipart .= "Content-Transfer-Encoding: Quot-Printed\n\n"; 
-    $multipart .= "$html\n\n";
+    $multipart .= "$message\n\n";
         
     $cnt = count($files);
     for($i = 0; $i < $cnt; ++$i) 
@@ -66,7 +67,7 @@ function send_mail($to, $thm, $html, $files)
             print "Файл $files[$i] не может быть прочитан"; 
             exit(); 
         } 
-        $file = fread($fp, filesize($files[$i])); 
+        $file = fread($fp, filesize('files/'.$files[$i])); 
         fclose($fp); 
 
         $message_part = "--$boundary\n"; 
@@ -77,7 +78,7 @@ function send_mail($to, $thm, $html, $files)
         $multipart .= $message_part."--$boundary--\n";
     }
 
-    if(!mail($to, $thm, $multipart, $headers)) 
+    if(!mail($to, $subject, $multipart, $headers)) 
     { 
         echo "К сожалению, письмо не отправлено"; 
         exit();
