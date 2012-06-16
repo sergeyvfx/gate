@@ -39,7 +39,7 @@ foreach ($addresses as $value)
 
         // Отправляем почтовое сообщение 
         if(count($picture) == 0)
-            mail ($to, $subject, $message, "Content-type: text/plain; charset=windows-1251\nFrom:".$from);
+            mail ($to, $subject, $message, "Content-type: text/plain\nFrom:".$from);
         else send_mail($to, $from, $subject, $message, $picture); 
     }
 }
@@ -51,16 +51,17 @@ function send_mail($to, $from, $subject, $message, $files)
     // echo "$boundary"; 
     $headers .= "MIME-Version: 1.0\n"; 
     $headers .="Content-Type: multipart/mixed; boundary=\"$boundary\"\n"; 
+    $headers .="From:".$from."\r\n";
+    
     $multipart .= "--$boundary\n"; 
-    //$kod = 'windows-1251'; // или $kod = 'koi8-r'; 
-    //$multipart .= "Content-Type: text/plain; charset=$kod\nFrom: my@mail.ru"; 
-    $multipart .= "Content-Type: text/plain\nFrom:".$from; 
+    $multipart .= "Content-Type: text/plain\n"; 
     $multipart .= "Content-Transfer-Encoding: Quot-Printed\n\n"; 
     $multipart .= "$message\n\n";
-        
+    
     $cnt = count($files);
     for($i = 0; $i < $cnt; ++$i) 
     {
+        echo "<center><br>".$files[$i]."<br></center>";
         $fp = fopen('files/'.$files[$i],"r"); 
         if (!$fp) 
         { 
@@ -70,14 +71,14 @@ function send_mail($to, $from, $subject, $message, $files)
         $file = fread($fp, filesize('files/'.$files[$i])); 
         fclose($fp); 
 
-        $message_part = "--$boundary\n"; 
+        $message_part = "--$boundary\n";
         $message_part .= "Content-Type: application/octet-stream\n"; 
         $message_part .= "Content-Transfer-Encoding: base64\n"; 
         $message_part .= "Content-Disposition: attachment; filename = \"".$files[$i]."\"\n\n"; 
         $message_part .= chunk_split(base64_encode($file))."\n"; 
-        $multipart .= $message_part."--$boundary--\n";
-    }
-
+    }    
+    $multipart .= $message_part."--$boundary--\n";
+    
     if(!mail($to, $subject, $multipart, $headers)) 
     { 
         echo "К сожалению, письмо не отправлено"; 
