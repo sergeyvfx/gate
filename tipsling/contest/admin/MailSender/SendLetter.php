@@ -58,6 +58,7 @@ function send_mail($to, $from, $subject, $message, $files)
     $multipart .= "Content-Transfer-Encoding: Quot-Printed\n\n"; 
     $multipart .= "$message\n\n";
     
+    $message_part="";
     $cnt = count($files);
     for($i = 0; $i < $cnt; ++$i) 
     {
@@ -71,7 +72,7 @@ function send_mail($to, $from, $subject, $message, $files)
         $file = fread($fp, filesize('files/'.$files[$i])); 
         fclose($fp); 
 
-        $message_part = "--$boundary\n";
+        $message_part .= "--$boundary\n";
         $message_part .= "Content-Type: application/octet-stream\n"; 
         $message_part .= "Content-Transfer-Encoding: base64\n"; 
         $message_part .= "Content-Disposition: attachment; filename = \"".$files[$i]."\"\n\n"; 
