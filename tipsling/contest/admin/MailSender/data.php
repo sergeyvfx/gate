@@ -28,11 +28,9 @@ if (count ($query) <= 0)
   return;
 }
 
-?>
-<link href="<?= config_get('document-root') . "/scripts/jquery/jquery-ui.css"?>" rel="stylesheet" type="text/css"/>
-<script src="<?= config_get('document-root') . "/scripts/jquery/jquery-1.7.2.js"?>"></script>
-<script src="<?= config_get('document-root') . "/scripts/jquery/jquery-ui-1.8.21.min.js"?>"></script>
-  
+?>  
+<script src="<?= config_get('document-root') . "/scripts/jquery/jquery-latest.js"?>" type="text/javascript" language="javascript"></script>
+<script src="<?= config_get('document-root') . "/scripts/jquery/jquery.MultiFile.js"?>" type="text/javascript" language="javascript"></script>
 
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest" ?>"><?=$it['name']?></a><a>Администрирование</a>Рассылка писем</div>
 ${information}
@@ -123,7 +121,7 @@ ${information}
                     <td width="35%" style="padding: 0 7px;">
                         <table width="100%">
                             <tr width="100%">
-                                <td width="105px">E-mail отправителя:</td>
+                                <td width="105px">E-mail отправителя:\n(Адреса должны быть разделены пробелом или переносом строки)</td>
                                 <td> <input type="text" id="mailsender" name="mailsender" onblur="check_frm_email ();" value="<?= $_POST['mailsender']; ?>" class="txt block"/> </td>
                             </tr>
                         </table>
@@ -148,7 +146,7 @@ ${information}
                                 <tr><td><br/></td></tr>
                                 <tr width="100%" style="vertical-align: top;"> <td width="100%">Файлы:</td> </tr>
                                 <tr width="100%" style="vertical-align: bottom;"> <td width="100%">
-                                   <input type="file" name="mail_file[]" multiple="multiple" />
+                                   <input type="file" name="mail_file[]" class="multi"/>
                                 </td></tr>
                             </table>
                         </td>

@@ -4,9 +4,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+global $DOCUMENT_ROOT;
 
+$folder = $DOCUMENT_ROOT.'/uploaded_files/email_attachment/';
 $cnt = count($_FILES['mail_file']['name']);
-$picture = array(); 
+$file_names = array(); 
 if($cnt > 0) 
 {
     for($i = 0; $i < $cnt; ++$i) 
@@ -15,12 +17,12 @@ if($cnt > 0)
         if (!empty($_FILES['mail_file']['tmp_name'][$i])) 
         { 
             // Закачиваем файл 
-            $path = 'files/'.$_FILES['mail_file']['name'][$i];
-            //$path = dirname($_SERVER['PHP_SELF']).'/files/'.$_FILES['mail_file']['name'][$i];
+            //$path = 'files/'.$_FILES['mail_file']['name'][$i];
+            $path = $folder.$_FILES['mail_file']['name'][$i];
             
             if (move_uploaded_file($_FILES['mail_file']['tmp_name'][$i], $path)) 
             {
-                $picture[$i] = $_FILES['mail_file']['name'][$i]; 
+                $file_names[$i] = $_FILES['mail_file']['name'][$i]; 
             }
         }
     }
@@ -38,14 +40,14 @@ foreach ($addresses as $value)
         $message = isset($_POST['mailtext']) ? htmlspecialchars(stripslashes($_POST['mailtext'])) : ''; 
 
         // Отправляем почтовое сообщение 
-        if(count($picture) == 0)
+        if(count($file_names) == 0)
             mail ($to, $subject, $message, "Content-type: text/plain\nFrom:".$from);
-        else send_mail($to, $from, $subject, $message, $picture); 
+        else send_mail($to, $from, $subject, $message, $file_names, $folder); 
     }
 }
 
 // Вспомогательная функция для отправки почтового сообщения с вложением 
-function send_mail($to, $from, $subject, $message, $files) 
+function send_mail($to, $from, $subject, $message, $files, $folder) 
 {
     $boundary = "--".md5(uniqid(time())); // генерируем пароль!!!!! 
     // echo "$boundary"; 
@@ -62,14 +64,13 @@ function send_mail($to, $from, $subject, $message, $files)
     $cnt = count($files);
     for($i = 0; $i < $cnt; ++$i) 
     {
-        echo "<center><br>".$files[$i]."<br></center>";
-        $fp = fopen('files/'.$files[$i],"r"); 
+        $fp = fopen($folder.$files[$i],"r"); 
         if (!$fp) 
         { 
             print "Файл $files[$i] не может быть прочитан"; 
             exit(); 
         } 
-        $file = fread($fp, filesize('files/'.$files[$i])); 
+        $file = fread($fp, filesize($folder.$files[$i])); 
         fclose($fp); 
 
         $message_part .= "--$boundary\n";
