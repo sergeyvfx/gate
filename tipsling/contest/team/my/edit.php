@@ -162,6 +162,19 @@ $team = team_get_by_id($id);
       <div id="hr"></div>
       <table class ="clear" width="100%">
         <tr><td width="30%">
+                В какую смену учится:
+            </td>
+            <td style="padding: 0 2px;">
+                <select id="smena" name="smena">
+                    <option value="1" <?= $team['smena']=='1'?'selected="selected"':'' ?>>1 смена (играет с 14 до 16 часов местного времени)</option>
+                    <option value="2" <?= $team['smena']=='2'?'selected="selected"':'' ?>>2 смена (играет с 11 до 13 часов местного времени)</option>
+                </select>
+            </td>
+        </tr>
+      </table>
+      <div id="hr"></div>
+      <table class ="clear" width="100%">
+        <tr><td width="30%">
                 Примечание:
             </td>
             <td style="padding: 0 2px;">

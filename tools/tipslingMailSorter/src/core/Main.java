@@ -34,7 +34,7 @@ public class Main {
       InputStream is = new FileInputStream(fileName);
       config.load(is);
     } catch (IOException ex) {
-      System.err.println("Не могу прочитать файл настроек!");
+      System.err.println("Can't read config file!");
       System.exit(1);
     }
   }
@@ -86,7 +86,7 @@ public class Main {
 
         Folder inbox = store.getFolder("INBOX");
         if (inbox == null) {
-          log("Почты нет", false);
+          log("There are no mail", false);
           return;
         }
         inbox.open(Folder.READ_WRITE);
@@ -106,9 +106,9 @@ public class Main {
           subject = subject.replaceAll("\\ ", "");
           subject = subject.replaceAll("\"", "");
           Matcher m = Pattern.compile("^[0-9]{0,}\\.[0-9]{0,}\\-[0-9]{0,}$").matcher(subject);
-          log("[" + subject + "] - Получено сообщение", false);
+              log("[" + subject + "] - message is recieved", false);
           if (!m.matches()) {
-            log("[" + subject + "] - Тема сообщения не соответствует формату", false);
+            log("[" + subject + "] - subject of message don't match contest format", false);
             messages[i].setFlag(Flags.Flag.DELETED, true);
           } else {
             Integer grade = new Integer(subject.substring(0, subject.indexOf(".")));
@@ -140,14 +140,14 @@ public class Main {
                     saveDir.setReadable(true, false);
                   }
                   if (new File(localPath, fileName).exists()) {
-                    log("[" + subject + "] - Такой файл уже есть на диске", false);
+                    log("[" + subject + "] - This file is already on disk", false);
                   } else {
                     File saveFile = new File(localPath, fileName);
                     size = saveFile(saveFile, p);
                     saveFile.setReadable(true, false);
                     saveFile.setWritable(true, false);
                     saveFile.setExecutable(false, false);
-                    log("[" + subject + "] - Размер вложения: " + size + " bytes", false);
+                    log("[" + subject + "] - The size of attachment: " + size + " bytes", false);
                   }
                 }
               }
@@ -206,7 +206,7 @@ public class Main {
            RequestSender sender = new RequestSender();
            String response = sender.sendPostRequest(page, params);
            if (response == null || "".equals(response.trim())) {
-               log("[" + subject + "] - Информация внесена в БД", false);
+               log("[" + subject + "] - The information entered into the database", false);
            } else {
                log(response, true);
            }

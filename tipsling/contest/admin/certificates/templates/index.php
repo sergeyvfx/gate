@@ -14,7 +14,7 @@ include $DOCUMENT_ROOT . '/inc/include.php';
 global $action;
 
 if ($action=='view')
-    include 'view.php';
+    include '../generating/view.php';
 else
     Main(dirname($PHP_SELF), false);
 ?>

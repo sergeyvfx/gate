@@ -133,195 +133,31 @@
       if ($skipId == '') {
         $skipId = -1;
       }
+      $sql = certificate_get_sql($type, $current_contest);
+      $result = db_query($sql);
       
-      $sql = '';
-      $values = '';
-      if ($type==1)
+      $cert = certificate_get_by_id($type);
+      $for = $cert['for'];
+      $print = '';
+      while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
       {
-          $sql = 'SELECT DISTINCT
-                    `team`.`pupil1_full_name` as pupil1,
-                    `team`.`pupil2_full_name` as pupil2,
-                    `team`.`pupil3_full_name` as pupil3,
-                    `team`.`grade`,
-                    `team`.`number`,
-                    `team`.`id` as team
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND
-                    `user`.`id`='.user_id().' AND 
-                    `contest`.`id`='.$current_contest.'
-                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
+          $cert_limit = '';
+          $for_copy = $for;
+          preg_match_all("/#[^#]+#/", $for_copy, $matchesarray);
+          $array = $matchesarray[0];
+          foreach ($array as $value) 
           {
-            $values .= ';'.$rows['pupil1'].'#'.$rows['team'].'.1';
-            if (trim($rows['pupil2'])!="")
-                $values .= ';'.$rows['pupil2'].'#'.$rows['team'].'.2';
-            if (trim($rows['pupil3'])!="")
-                $values .= ';'.$rows['pupil3'].'#'.$rows['team'].'.3';
+              $caption = substr($value, 1, strlen($value)-2);
+              $for_copy = str_replace($value, $rows[$caption], $for_copy);
+              $visible_field = visible_field_get_by_caption($caption);
+              $field = $visible_field['field'];
+              $table = db_field_value("visible_table", "table", "`id`=".$visible_field['table_id']);
+              $cert_limit .= '`'.$table.'`.`'.$field.'`=\''.$rows[$caption].'\' AND ';
           }
-          
-          $values = substr($values, 1);
-      }
-      else if ($type==2)
-      {
-          $sql = 'SELECT DISTINCT
-                    `team`.`grade`,
-                    `team`.`number`,
-                    `team`.`id` as team
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `contest`.`id`='.$current_contest.' AND
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND
-                    `user`.`id`='.user_id().' AND 
-                    `contest`.`id`='.$current_contest.'
-                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';Команда '.$rows['grade'].'.'.$rows['number'].'#'.$rows['team'];
-          $values = substr($values, 1);
-      }
-      else if ($type==3)
-      {
-          $sql = 'SELECT DISTINCT
-                    `team`.`pupil1_full_name` as pupil1,
-                    `team`.`pupil2_full_name` as pupil2,
-                    `team`.`pupil3_full_name` as pupil3,
-                    `team`.`grade`,
-                    `team`.`number`,
-                    `team`.`id` as team
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`place`>0 AND `team`.`place`<4 AND
-                    `team`.`grade`>1 AND `team`.`grade`<12 AND '//Условие только для этого конкурса, т.к. команд 1 класса и ВУЗОВ мало
-                    .'`user`.`id`='.user_id().' AND 
-                    `contest`.`id`='.$current_contest.'
-                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-          {
-              $values .= ';'.$rows['pupil1'].'#'.$rows['team'].'.1';
-              if (trim($rows['pupil2'])!="")
-                $values .= ';'.$rows['pupil2'].'#'.$rows['team'].'.2';
-              if (trim($rows['pupil3'])!="")
-                $values .= ';'.$rows['pupil3'].'#'.$rows['team'].'.3';
-          }
-          
-          $values = substr($values, 1);
-      }
-      else if ($type==4)
-      {
-          $sql = 'SELECT DISTINCT
-                    `team`.`grade`,
-                    `team`.`number`,
-                    `team`.`id` as team
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`place`>0 AND `team`.`place`<4 AND
-                    `team`.`grade`>1 AND `team`.`grade`<12 AND 
-                    `user`.`id`='.user_id().' AND 
-                    `contest`.`id`='.$current_contest.'
-                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-            $values .= ';Команда '.$rows['grade'].'.'.$rows['number'].'#'.$rows['team'];
-          $values = substr($values, 1);
-      }
-      else if ($type==5)
-      {
-          $sql = 'SELECT DISTINCT
-                    `team`.`teacher_full_name` as teacher,
-                    `team`.`id` as team,
-                    `team`.`grade` as grade,
-                    `team`.`number` as number
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`grade`<12 AND 
-                    `user`.`id`='.user_id().' AND 
-                    `contest`.`id`='.$current_contest.'
-                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
-          $result = db_query($sql);
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-          {
-              $i=0;
-              $teachers = split('[,]', $rows['teacher']);
-              while ($i<count($teachers))
-              {
-                  $values .= ';'.trim($teachers[$i]).' (команда '.$rows['grade'].'.'.$rows['number'].')#'.$rows['team'].'.'.$i;
-                  $i++;
-              }
-          }
-          $values = substr($values, 1);
-      }
-      else if ($type==6)
-      {
-          $sql = 'SELECT DISTINCT
-                    `team`.`teacher_full_name` as teacher,
-                    `team`.`id` as team,
-                    `team`.`grade` as grade,
-                    `team`.`number` as number
-                 FROM
-                    `team`,
-                    `contest`,
-                    `user`,
-                    `responsible`
-                 WHERE
-                    `team`.`responsible_id`=`user`.`id` AND
-                    `responsible`.`user_id`=`user`.`id` AND
-                    `team`.`contest_id`=`contest`.`id` AND
-                    `team`.`place`>0 AND `team`.`place`<4 AND
-                    `team`.`grade`>1 AND `team`.`grade`<12 AND 
-                    `user`.`id`='.user_id().' AND 
-                    `contest`.`id`='.$current_contest.'
-                 ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
-          $result = db_query($sql);
-          
-          while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-          {
-              $i=0;
-              $teachers = split('[,]', $rows['teacher']);
-              while ($i<count($teachers))
-              {
-                  $values .= ';'.trim($teachers[$i]).' (команда '.$rows['grade'].'.'.$rows['number'].')#'.$rows['team'].'.'.$i;
-                  $i++;
-              }
-          }
-          $values = substr($values, 1);
-      }
-      print ($values);
+          $cert_limit = substr($cert_limit, 0, strlen($cert_limit) - 5);
+          $print .= '<option value="'.$cert_limit.'">'.$for_copy.'</option>';
+      }      
+      print ($print);
     }
 
 

@@ -19,4 +19,6 @@ $certificate_menu->Init('ContestMenu', 'type=hor;colorized=true;hassubmenu=true;
 
 $certificate_menu->AppendItem('Шаблоны', config_get('document-root') . '/tipsling/contest/admin/certificates/templates', 'Templates');
 $certificate_menu->AppendItem('Сертификаты участников', config_get('document-root') . '/tipsling/contest/admin/certificates/certificates', 'Certificates');
+$certificate_menu->AppendItem('Файлы', config_get('document-root') . '/tipsling/contest/admin/certificates/files', 'Files');
+$certificate_menu->AppendItem('Ограничения', config_get('document-root') . '/tipsling/contest/admin/certificates/limits', 'Limits');
 ?>

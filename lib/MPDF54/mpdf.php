@@ -37,6 +37,7 @@ if (!defined('_MPDF_URI')) define('_MPDF_URI',_MPDF_PATH);
 
 require_once(_MPDF_PATH.'includes/functions.php');
 require_once(_MPDF_PATH.'config_cp.php');
+include '../../globals.php';
 
 if (!defined('_JPGRAPH_PATH')) define("_JPGRAPH_PATH", _MPDF_PATH.'jpgraph/'); 
 

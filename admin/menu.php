@@ -18,6 +18,7 @@
   /* Creating the developers' specified navigate menu */
   $datacontrol_menu = new CVCMenu ();
   $datacontrol_menu->Init ('dataManagmentMenu', 'type=hor;colorized=true;sublevel=1;border=thin;');
+  $datacontrol_menu->AppendItem ('Семейство конкурсов', config_get ('document-root').'/admin/contest_family/', 'contest_family');
   $datacontrol_menu->AppendItem ('Конкурсы', config_get ('document-root').'/admin/contest/', 'contest');
   $datacontrol_menu->AppendItem ('Разделы', config_get ('document-root').'/admin/content/', 'content');
   $datacontrol_menu->AppendItem ('Сервисы', config_get ('document-root').'/admin/service/', 'service');

@@ -34,7 +34,7 @@ if (count ($query) <= 0)
 }
 ?>
 
-<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest" ?>"><?=$it['name']?></a><a>Администрирование</a><a>Сертификаты</a>Шаблоны</div>
+<div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$it['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/admin" ?>">Администрирование</a><a href="<?= config_get('document-root') . "/tipsling/contest/admin/certificates" ?>">Сертификаты</a>Шаблоны</div>
 ${information}
 <div class="form">
   <div class="content">
@@ -52,11 +52,7 @@ ${information}
     $admin_menu->Draw();
     $certificate_menu->Draw();
     
-    if ($action=='view')
-    {
-        include 'view.php';
-    }
-    else if ($action == 'edit') {
+    if ($action == 'edit') {
       include 'edit.php';
     } else {
       if ($action == 'save') {
@@ -67,7 +63,7 @@ ${information}
       $contest = contest_get_by_id($current_contest);
       $list = certificate_list($contest['family_id']);
       include 'list.php';
-      //include 'create_form.php';
+      include 'create_form.php';
     }
     
     ?>

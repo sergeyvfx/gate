@@ -43,6 +43,8 @@ ${information}
 
 
 <!--
+Attemp to write not standart query to web site
+
 <script src="../../../../scripts/jquery-1.7.1.js"></script>
 <script src="../../../../scripts/jquery.semanticTabs.js"></script>
 <script language="JavaScript" type="text/javascript">

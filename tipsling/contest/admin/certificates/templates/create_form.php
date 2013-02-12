@@ -38,11 +38,30 @@ dd_formo('title=Новый сертификат');
 
     hide_msg('name_check_res');
   }
+  
+  function check_frm_for() {
+    var val = getElementById ('for').value;
+
+    if (qtrim(val)=='') {
+        show_msg ('for_check_res', 'err', 'Это поле обязательно для заполнения');
+        return;
+    }
+
+    hide_msg('for_check_res');
+  }
+  
+  function insertCaption(elem_to_insert, elem_to_get_value)
+  {
+      var for_elem = getElementById (elem_to_insert);
+      var field_elem = getElementById (elem_to_get_value);
+      
+      for_elem.value += "#"+field_elem.value+"#";
+  }
 </script>
 <div>
   <form action=".?action=create&page=<?=$page?>" method="POST" onsubmit="check(this); return false;">
     <table class="clear" width="100%">
-        <tr><td width="70px" style="padding: 0 2px;">
+        <tr><td width="110px" style="padding: 0 2px;">
                 Название: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
@@ -53,11 +72,81 @@ dd_formo('title=Новый сертификат');
     <div id="name_check_res" style="display: none;"></div>
     <div id="hr"></div>
     <table class="clear" width="100%">
-        <tr><td width="70px" style="padding: 0 2px;">
+        <tr><td width="110px" style="padding: 0 2px;">
+                Генерировать для: <span class="error">*</span>
+            </td>
+            <td width="50%px" style="padding: 0 2px;">
+                <input type="text" id="for" name="for" onblur="check_frm_for ();" value="<?= htmlspecialchars(stripslashes($_POST['for'])); ?>" class="txt block"/>
+            </td>
+            <td>&nbsp</td>
+            <td style="padding: 0 2px;">
+                <select id="field" name="field" class="txt block">
+                    <?php
+                        $query = "select * from `visible_field`";
+                        $result = mysql_query($query);
+                        while($row = mysql_fetch_array($result))
+                        {
+                            echo ('<option value="'.$row['caption'].'">'.$row['caption'].'</option>');
+                        }
+                    ?>
+                </select>
+            </td>
+            <td width="70px">
+                <input type="button" value="Вставить" onclick="insertCaption('for','field');"/>
+            </td>
+        </tr>
+    </table>
+    <div id="for_check_res" style="display: none;"></div>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+        <tr><td width="110px" style="padding: 0 2px;">
+                Ограничение:
+            </td>
+            <td style="padding: 0 2px;">
+                <select id="limit" name="limit" class="txt block">
+                    <option value="">нет ограничения</option>
+                    <?php
+                        $limit_list = limit_list();
+                        foreach ($limit_list as $lim) 
+                        {
+                            echo ('<option value='.$lim['id'].'>'.$lim['name'].'</option>');
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+        <tr><td width="110px" style="padding: 0 2px;">
                 Шаблон: 
             </td>
             <td style="padding: 0 2px;">
                 <textarea width="100%" rows="15" id="template" name="template" class="txt block"><?= htmlspecialchars(stripslashes($_POST['template'])); ?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <table width="100%">
+                    <tr width="100%">
+                        <td>
+                            <select id="field_for_template" name="field_for_template" class="txt block">
+                            <?php
+                                $query = "select * from `visible_field`";
+                                $result = mysql_query($query);
+                                while($row = mysql_fetch_array($result))
+                                {
+                                    echo ('<option value="'.$row['caption'].'">'.$row['caption'].'</option>');
+                                }
+                            ?>
+                            </select>
+                        </td>
+                        <td width="70px">
+                            <input type="button" value="Вставить" onclick="insertCaption('template', 'field_for_template');"/>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

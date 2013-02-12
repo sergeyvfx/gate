@@ -26,9 +26,10 @@ FROM user, team, responsible, school
 WHERE team.responsible_id = user.id
 AND responsible.user_id = user.id
 AND responsible.school_id = school.id
-AND team.contest_id =2
-ORDER BY team.grade ASC, team.number
+AND team.contest_id ='.$current_contest.
+' ORDER BY team.grade ASC, team.number
 LIMIT 0 , 150';
+
 $list = arr_from_query($query);
 if (count($list) > 0) {
   global $page;
@@ -46,6 +47,7 @@ if (count($list) > 0) {
 
   while ($i < $n) {
     $c = 0;
+    //$pageSrc = '<div>'.$query.'</div>';
     $pageSrc = '<table class="list">' . "\n";
     $pageSrc .= '<tr class="h"><th width="100" style="text-align: center;">Номер команды</th>
         <th style="text-align: center;">ФИО учителя</th>
@@ -72,7 +74,7 @@ if (count($list) > 0) {
   }
   $pages->Draw();
 } else {
-  info('Ошибка! Нет команд');
+  info('Нет команд.');
 }
 
 formc ();

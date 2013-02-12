@@ -19,12 +19,13 @@
     header ('Location: '.config_get ('document-root').'/admin');
   }
 
-  global $DOCUMENT_ROOT, $action, $id;
+  global $DOCUMENT_ROOT, $action, $section, $id;
   include $DOCUMENT_ROOT.'/admin/inc/menu.php';
 
   $printSection = true;
   $manage_menu->SetActive ('settings');
 
+    
   if ($action == 'create') {
     manage_settings_create_received ();
   }

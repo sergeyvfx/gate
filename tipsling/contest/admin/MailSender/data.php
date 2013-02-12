@@ -37,7 +37,7 @@ ${information}
 
 <script language="JavaScript" type="text/JavaScript">
   
-  function LoadAddressFromDatabase()
+  function LoadAddressFromDatabase(param)
   {
     if (window.XMLHttpRequest)
     {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -52,10 +52,10 @@ ${information}
         
       if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-          document.getElementById("mailaddress").innerHTML=xmlhttp.responseText;
+          document.getElementById("mailaddress").innerHTML+=xmlhttp.responseText;
       }
     }
-    xmlhttp.open("GET","LoadAddressFromDatabase.php",true);
+    xmlhttp.open("GET","LoadAddressFromDatabase.php?param="+param,true);
     xmlhttp.send();
   }
   
@@ -121,7 +121,7 @@ ${information}
                     <td width="35%" style="padding: 0 7px;">
                         <table width="100%">
                             <tr width="100%">
-                                <td width="105px">E-mail отправителя:\n(Адреса должны быть разделены пробелом или переносом строки)</td>
+                                <td width="105px">E-mail отправителя:</td>
                                 <td> <input type="text" id="mailsender" name="mailsender" onblur="check_frm_email ();" value="<?= $_POST['mailsender']; ?>" class="txt block"/> </td>
                             </tr>
                         </table>
@@ -138,10 +138,11 @@ ${information}
                     <tr  width="100%">
                         <td  width="35%" style="padding: 0 7px;">
                             <table width="100%" height="100%">
-                                <tr width="100%" style="vertical-align: top;"> <td width="100%">Список рассылки:</td> </tr>
+                                <tr width="100%" style="vertical-align: top;"> <td width="100%">Список рассылки:<br/>(Адреса должны быть разделены пробелом или переносом строки)</td> </tr>
                                 <tr width="100%" style="vertical-align: top;"> <td width="100%"> <textarea width="100%" rows="29" id="mailaddress" name="mailaddress" onblur="check_frm_email ();" class="txt block" style="resize:none;"><?= $_POST['mailaddress']; ?></textarea></td></tr>
                                 <tr width="100%" style="vertical-align: top;"> <td width="100%"> 
-                                    <input type="button" value="импорт из базы" onclick="LoadAddressFromDatabase ()"/>
+                                    <input type="button" value="импорт всех пользователей" onclick="LoadAddressFromDatabase ('all')"/>
+                                    <input type="button" value="импорт ответственных текущего конкурса" onclick="LoadAddressFromDatabase ('contest')"/>
                                 </td></tr>
                                 <tr><td><br/></td></tr>
                                 <tr width="100%" style="vertical-align: top;"> <td width="100%">Файлы:</td> </tr>

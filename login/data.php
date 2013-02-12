@@ -20,10 +20,25 @@ $authorized = false;
 if (trim($login) != '') {
   if (user_authorize(stripslashes($login), stripslashes($passwd))) {
     $authorized = true;
+    
+    //TODO:Убрать этот хак в дальнейшем (после конкурса Тризформашка 2013
     if (!is_responsible_has_school(user_id()) && $firstlogin) {
       $redirect = config_get('document-root') . '/login/profile/info/school/?firstlogin=1';
+    } 
+    else
+    {
+      $user_votes = arr_from_query('SELECT vote.id uservote_id, vote.user_id, voit.id voit_id, voit.text, voit.idvoit FROM `user_vote` vote, `voit` where vote.voit_id = voit.id AND voit.`idvoit`=1 AND  vote.`user_id`='.user_id()); 
+      if (count($user_votes)==0)
+          $redirect = config_get('document-root') . '/tipsling/contest/poll?action=tocurvote';
     }
-    redirect ();
+    redirect();
+    /*if (!is_responsible_has_school(user_id()) && $firstlogin) {
+      $redirect = config_get('document-root') . '/login/profile/info/school/?firstlogin=1';
+    } 
+    redirect ();*/
+    
+    
+    
   } else {
     add_info("Неверный логин или пароль. Пожалуйста, повторите попытку.");
   }
@@ -40,6 +55,7 @@ if (!$authorized) {
   }
 ?>
   <form action=".?redirect=<?= urlencode($redirect); ?>" method="POST" style="">
+  <!--<form action="?redirect=/tipsling/contest/poll?action=tocurvote" method="POST" style="">-->
     <div class="form" style="width: 460px; margin: 0 auto;">
       <div class="content">
         <h3>Введите ваше имя пользователя и пароль</h3>

@@ -66,39 +66,7 @@ ${information}
             <tr>
                 <td width="120px">Сертификат для:</td>
                 <td>
-                    <select id="select_value" name="select_value" class="block">
-                        <?php
-                            $sql = 'SELECT DISTINCT
-                                        `team`.`pupil1_full_name` as pupil1,
-                                        `team`.`pupil2_full_name` as pupil2,
-                                        `team`.`pupil3_full_name` as pupil3,
-                                        `team`.`grade`,
-                                        `team`.`number`,
-                                        `team`.`id` as team
-                                    FROM
-                                        `team`,
-                                        `contest`,
-                                        `user`,
-                                        `responsible`
-                                    WHERE
-                                        `team`.`responsible_id`=`user`.`id` AND
-                                        `responsible`.`user_id`=`user`.`id` AND
-                                        `team`.`contest_id`=`contest`.`id` AND
-                                        `user`.`id`='.user_id().' AND 
-                                        `contest`.`id`='.$current_contest.'
-                                    ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
-                            $result = db_query($sql);
-                            while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-                            {
-                                $values .= ';'.$rows['pupil1'].'#'.$rows['team'].'.1';
-                                echo('<option value="'.$rows['team'].'.1">'.$rows['pupil1'].'</option>');
-                                if (trim($rows['pupil2'])!="")
-                                    echo('<option value="'.$rows['team'].'.2">'.$rows['pupil2'].'</option>');
-                                if (trim($rows['pupil3'])!="")
-                                    echo('<option value="'.$rows['team'].'.3">'.$rows['pupil3'].'</option>');
-                            }
-                        ?>
-                    </select>
+                    <select id="select_value" name="select_value" class="block"></select>
                 </td>
             </tr>
         </table>
@@ -111,6 +79,10 @@ ${information}
 
 
 <script type="text/JavaScript"  language="JavaScript">
+    $(document).ready(function(){
+        var type = getElementById("select_type").options[0].value;
+        ipc_send_request ('/', 'ipc=find_values&type='+type, update_value_select);
+    })
 
 function cert_generate()
   {    
@@ -127,10 +99,9 @@ function cert_generate()
     }
   }
 
-function select_type_changed()
+  function select_type_changed()
   {    
     var type_select = getElementById("select_type");
-    
     ipc_send_request ('/', 'ipc=find_values&type='+type_select.value, update_value_select);
   }
     
@@ -138,22 +109,7 @@ function select_type_changed()
   {
       if (http_request.readyState == 4) {
         var value_select = getElementById("select_value");
-
-        value_select.length=0;
-        var values = http_request.responseText.split(";");
-        
-        for (i = 0; i < values.length; i++){
-            if (document.createElement){
-                var newListOption = document.createElement("OPTION");
-                newListOption.text = values[i].split("#")[0];
-                newListOption.value = values[i].split("#")[1];
-                // тут мы используем для добавления элемента либо метод IE, либо DOM, которые, alas, не совпадают по параметрам…
-                (value_select.options.add) ? value_select.options.add(newListOption) : value_select.add(newListOption, null);
-            }else{
-                // для NN3.x-4.x
-                value_select.options[i] = new Option(values[i].split("#")[0], values[i].split("#")[1], false, false);
-            }
-        }
+        value_select.innerHTML = http_request.responseText;
     }
   }  
 </script>

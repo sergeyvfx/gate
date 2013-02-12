@@ -22,4 +22,5 @@
   $manage_menu->AppendItem ('Пользователи и группы', config_get ('document-root').'/admin/usergroup/user', 'usergroup');
   $manage_menu->AppendItem ('Настройки',             config_get ('document-root').'/admin/settings',       'settings');
   $manage_menu->AppendItem ('Разработчику',          config_get ('document-root').'/admin/dev/datatype',   'to-developer');
+  $manage_menu->AppendItem ('Таблицы БД',            config_get ('document-root').'/admin/database',       'database');
 ?>

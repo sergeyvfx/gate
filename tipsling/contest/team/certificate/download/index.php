@@ -7,247 +7,153 @@
 include '../../../../../globals.php';
 include $DOCUMENT_ROOT . '/inc/include.php';
 
-global $certificate, $param;
+global $certificate, $param, $current_contest;
 db_connect (config_get ('check-database'));
-
 $c = certificate_get_by_id($certificate);
 if ($c==false)
     return;
-
-$sql='';
-if ($certificate==1 || $certificate==3 || $certificate==5 || $certificate==6)
+$template = $c['template'];
+$for = $c['for'];
+$limit_id = $c['limit_id'];
+$limit = limit_get_by_id($limit_id);
+            
+$select = 'SELECT DISTINCT ';
+if ($current_contest != -1 && $current_contest!='')
 {
-    $tmp = split('[.]', $param);
-    $team = $tmp[0];
-    $number = $tmp[1];
+    $from = 'FROM `team`, ';
+    $where = 'WHERE `team`.`contest_id`='.$current_contest.' AND ';
+    $table_team_id = db_field_value('visible_table', 'id', "`table`='team'");
+    $tables = array($table_team_id);
 }
 else
-    $team = $param;
+{
+    $from = 'FROM ';
+    $where = ($limit['limit']==''?'':'WHERE ');
+    $tables = array();
+}
+$fields = array();
 
-if ($certificate==1)
-{
-    $sql = 'SELECT DISTINCT
-                `team`.`pupil'.$number.'_full_name` as pupil,
-                `school`.`name` as school,
-                `city`.`name` as city,
-                `city_status`.`short_name` as city_status,
-                `region`.`name` as region,
-                `contest`.`name` as contest
-            FROM
-                `team`,
-                `school`,
-                `region`,
-                `city`,
-                `city_status`,
-                `contest`,
-                `user`,
-                `responsible`
-            WHERE
-                `team`.`responsible_id`=`user`.`id` AND
-                `responsible`.`user_id`=`user`.`id` AND
-                `school`.`id`=`responsible`.`school_id` AND
-                `city`.`region_id`=`region`.`id` AND
-                `city`.`status_id`=`city_status`.`id` AND
-                `school`.`city_id`=`city`.`id` AND
-                `team`.`contest_id`=`contest`.`id` AND
-                `user`.`id`='.user_id().' AND 
-                `contest`.`id`='.$current_contest.' AND
-                `team`.`id`='.$team;
-}
-else if ($certificate==2)
-{
-    $sql = 'SELECT DISTINCT
-                if (`team`.`grade`<12, concat(`team`.`grade`," класса "), "") as grade,
-                `team`.`number` as number,
-                `team`.`pupil1_full_name` as pupil1,
-                if (`team`.`pupil2_full_name`="","",concat(",\n",`team`.`pupil2_full_name`)) as pupil2,
-                if (`team`.`pupil3_full_name`="","",concat(",\n",`team`.`pupil3_full_name`)) as pupil3,
-                if (`team`.`grade`<12, concat("Руководитель команды:\n", `team`.`teacher_full_name`),"") as teacher,
-                `team`.`mark` as mark,
-                `team`.`common_place` as place,
-                `school`.`name` as school,
-                `city`.`name` as city,
-                `city_status`.`short_name` as city_status,
-                `region`.`name` as region,
-                `contest`.`name` as contest
-            FROM
-                `team`,
-                `contest`,
-                `user`,
-                `responsible`,
-                `school`,
-                `city`,
-                `city_status`,
-                `region`
-            WHERE
-                `contest`.`id`='.$current_contest.' AND
-                `team`.`responsible_id`=`user`.`id` AND
-                `responsible`.`user_id`=`user`.`id` AND
-                `team`.`contest_id`=`contest`.`id` AND
-                `responsible`.`school_id`=`school`.`id` AND
-                `school`.`city_id`=`city`.`id` AND
-                `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND
-                `user`.`id`='.user_id().' AND 
-                `team`.`id`='.$team;
-}
-else if ($certificate==3)
-{
-    $sql = 'SELECT DISTINCT
-                `team`.`pupil'.$number.'_full_name` as pupil,
-                `school`.`name` as school,
-                `city`.`name` as city,
-                `city_status`.`short_name` as city_status,
-                `region`.`name` as region,
-                `team`.`place` as place,
-                `team`.`grade` as grade,
-                `team`.`mark` as mark,
-                `contest`.`name` as contest
-            FROM
-                `team`,
-                `contest`,
-                `user`,
-                `responsible`,
-                `school`,
-                `city`,
-                `city_status`,
-                `region`
-            WHERE
-                `team`.`responsible_id`=`user`.`id` AND
-                `responsible`.`user_id`=`user`.`id` AND
-                `team`.`contest_id`=`contest`.`id` AND
-                `team`.`place`>0 AND `team`.`place`<4 AND
-                `responsible`.`school_id`=`school`.`id` AND
-                `school`.`city_id`=`city`.`id` AND
-                `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND
-                `user`.`id`='.user_id().' AND 
-                `contest`.`id`='.$current_contest.' AND 
-                `team`.`id`='.$team;
-}
-else if ($certificate==4)
-{
-    $sql = 'SELECT DISTINCT
-                `team`.`grade` as grade,
-                `team`.`number` as number,
-                `team`.`pupil1_full_name` as pupil1,
-                if (`team`.`pupil2_full_name`="","",concat(",\n",`team`.`pupil2_full_name`)) as pupil2,
-                if (`team`.`pupil3_full_name`="","",concat(",\n",`team`.`pupil3_full_name`)) as pupil3,
-                `team`.`teacher_full_name` as teacher,
-                `team`.`place` as place,
-                `team`.`mark` as mark,
-                `school`.`name` as school,
-                `city`.`name` as city,
-                `city_status`.`short_name` as city_status,
-                `region`.`name` as region,
-                `contest`.`name` as contest
-            FROM
-                `team`,
-                `contest`,
-                `user`,
-                `responsible`,
-                `school`,
-                `city`,
-                `city_status`,
-                `region`
-            WHERE
-                `team`.`responsible_id`=`user`.`id` AND
-                `responsible`.`user_id`=`user`.`id` AND
-                `team`.`contest_id`=`contest`.`id` AND
-                `team`.`place`>0 AND `team`.`place`<4 AND
-                `responsible`.`school_id`=`school`.`id` AND
-                `school`.`city_id`=`city`.`id` AND
-                `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND
-                `user`.`id`='.user_id().' AND 
-                `contest`.`id`='.$current_contest.' AND 
-                `team`.`id`='.$team;
-}
-else if ($certificate==5)
-{
-    $sql = 'SELECT DISTINCT
-                `team`.`teacher_full_name` as teacher,
-                `team`.`grade`,
-                `contest`.`name` as contest,
-                `school`.`name` as school,
-                `city`.`name` as city,
-                `city_status`.`short_name` as city_status,
-                `region`.`name` as region
-            FROM
-                `team`,
-                `contest`,
-                `user`,
-                `responsible`,
-                `school`,
-                `city`,
-                `city_status`,
-                `region`
-            WHERE
-                `team`.`responsible_id`=`user`.`id` AND
-                `responsible`.`user_id`=`user`.`id` AND
-                `team`.`contest_id`=`contest`.`id` AND
-                `responsible`.`school_id`=`school`.`id` AND
-                `school`.`city_id`=`city`.`id` AND
-                `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND
-                `user`.`id`='.user_id().' AND 
-                `contest`.`id`='.$current_contest.' AND 
-                `team`.`id`='.$team;
-}
-else if ($certificate==6)
-{
-    $sql = 'SELECT DISTINCT
-                `team`.`teacher_full_name` as teacher,
-                `team`.`grade`,
-                `contest`.`name` as contest,
-                `school`.`name` as school,
-                `city`.`name` as city,
-                `city_status`.`short_name` as city_status,
-                `region`.`name` as region
-            FROM
-                `team`,
-                `contest`,
-                `user`,
-                `responsible`,
-                `school`,
-                `city`,
-                `city_status`,
-                `region`
-            WHERE
-                `team`.`responsible_id`=`user`.`id` AND
-                `responsible`.`user_id`=`user`.`id` AND
-                `team`.`contest_id`=`contest`.`id` AND
-                `responsible`.`school_id`=`school`.`id` AND
-                `school`.`city_id`=`city`.`id` AND
-                `city`.`status_id`=`city_status`.`id` AND
-                `city`.`region_id`=`region`.`id` AND
-                `team`.`place`>0 AND `team`.`place`<4 AND
-                `user`.`id`='.user_id().' AND 
-                `contest`.`id`='.$current_contest.' AND 
-                `team`.`id`='.$team;
+echo('<div>test1</div>');
+  
+preg_match_all("/#([^#]+)#/", $for, $matchesarray, PREG_SET_ORDER);
+foreach ($matchesarray as $value) {
+    $field = visible_field_get_by_caption($value[1]);
+    $table = visible_table_get_by_id($field['table_id']);
+    if (!inarr($tables, $table['id']))
+    {
+        $tables[count($tables)]=$table['id'];
+        $from .= $table['table'].', ';
+    }
 }
 
+echo('<div>test2</div>');
+
+preg_match_all("/#([^#]+)#/", $template, $matchesarray, PREG_SET_ORDER);
+foreach ($matchesarray as $value) {
+    $field = visible_field_get_by_caption($value[1]);
+    $table = visible_table_get_by_id($field['table_id']);
+    if (!inarr($tables, $table['id']))
+    {
+        $tables[count($tables)]=$table['id'];
+        $from .= $table['table'].', ';
+    }
+    if (!inarr($fields, $value[1]))
+    {
+        $fields[count($fields)]=$value[1];
+        $select .= '`'.$table['table'].'`.`'.$field['field'].'` as '.db_string($value[1]).', ';
+    }
+}
+
+echo('<div>test3</div>');
+          
+preg_match_all('/(\d+) (<|<=|=|>|>=|<>|is null|is not null) (\S*) (OR|AND)/', $limit['limit'], $limits, PREG_SET_ORDER);
+$i=0;
+foreach ($limits as $value) {
+    $field_id = $value[1];
+    $operation = $value[2];
+    $val = $value[3];
+    $connection = $value[4];
+        
+    $field = visible_field_get_by_id($field_id);
+    $table = visible_table_get_by_id($field['table_id']);
+    if (!inarr($tables, $table['id']))
+    {
+        $tables[count($tables)]=$table['id'];
+        $from .= $table['table'].', ';
+    }
+        
+    $where .= '`'.$table['table'].'`.`'.$field['field'].'`'.$operation.db_string($val).' '.$connection.' ';
+}
+      
+if ($where != '')
+{
+    $where = substr($where, 0, strlen($where)-4);
+    $where .= ' AND ';
+}
+      
+echo('<div>test4</div>');
+
+$have_new=true;
+while ($have_new)
+{
+    $have_new=false;
+    $n = count($tables);
+    for ($i=0; $i<$n; $i++)
+        for ($j=$i+1; $j<$n; $j++)
+        {
+            $connection = db_row_value('table_connections', "`table1_id`=".$tables[$i]." AND `table2_id`=".$tables[$j]);
+            if (!$connection)
+                $connection = db_row_value('table_connections', "`table1_id`=".$tables[$j]." AND `table2_id`=".$tables[$i]);
+            if ($connection!=false)
+            {
+                $connect = $connection['connection'];
+                if ($connect=='')
+                {
+                    $table = db_row_value("visible_table", "`id`=".$connection['connect_table_id']);
+                    if (!inarr($tables, $table['id']))
+                    {
+                        $have_new = true;
+                        $tables[count($tables)]=$table['id'];
+                        $from .= $table['table'].', ';
+                    }
+                }
+            }
+        }
+}
+$n = count($tables);
+for ($i=0; $i<$n; $i++)
+    for ($j=$i+1; $j<$n; $j++)
+        {
+            $connection = db_row_value('table_connections', "`table1_id`=".$tables[$i]." AND `table2_id`=".$tables[$j]);
+            if (!$connection)
+                $connection = db_row_value('table_connections', "`table1_id`=".$tables[$j]." AND `table2_id`=".$tables[$i]);
+            $connect = $connection['connection'];
+            if ($connect != '')
+                $where .= $connect.' AND ';
+        }
+      
+$select = substr($select, 0, strlen($select) - 2);
+$from = substr($from, 0, strlen($from)-2);
+
+echo('<div>test5</div>');
+
+$where .= $param;
+$sql = $select.' '.$from.' '.$where;
 $t = db_row(db_query($sql));
 if ($t==false)
     return;
-if ($certificate==3||$certificate==4)
-{
-    if ($t['place']==1)
-        $t['place'] = I;
-    else if ($t['place']==2)
-        $t['place'] = II;
-    else if ($t['place']==3)
-        $t['place'] = III;
-}
-else if ($certificate==5||$certificate==6)
-{
-    $teachers = split('[,]', $t['teacher']);
-    $t['teacher'] = trim($teachers[$number]);
-}
 
-$template = $c['template'];
+if ($t['Место в параллели']==1)
+    $t['Место в параллели'] = I;
+else if ($t['Место в параллели']==2)
+    $t['Место в параллели'] = II;
+else if ($t['Место в параллели']==3)
+    $t['Место в параллели'] = III;
+
+echo('<div>test6</div>');
+
 $matchearray = array();
-preg_match_all("/#\w+#/", $template, $matchearray);
+preg_match_all("/#[^#]+#/", $template, $matchearray);
 $n = count($matchearray[0]);
 $i=0;
 while ($i<$n)
@@ -257,10 +163,10 @@ while ($i<$n)
     $i++;
 }    
 
-
+echo('<div>test7</div>');
 
 include("../../../../../lib/MPDF54/mpdf.php");
 $mpdf=new mPDF();
-$mpdf->WriteHTML($template);
+$mpdf->WriteHTML(eval_code('<?php global $DOCUMENT_ROOT; ?>'.$template));
 $mpdf->Output($c['name'].'.pdf','D');
 ?>

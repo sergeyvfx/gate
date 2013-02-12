@@ -35,8 +35,10 @@ if (count($list) > 0) {
   while ($i < $n) {
     $c = 0;
     $pageSrc = '<table class="list">' . "\n";
-    $pageSrc .= '<tr class="h"><th width="70%" style="text-align: center;">Название</th>
-        <th width="20%" style="text-align: center;">Шаблон</th>
+    $pageSrc .= '<tr class="h"><th width="25%" style="text-align: center;">Название</th>
+        <th width="30%" style="text-align: center;">Для кого</th>
+        <th width="25%" style="text-align: center;">Ограничение</th>
+        <th width="100" style="text-align: center;">Шаблон</th>
         <th width="48" class="last">&nbsp;</th></tr>' . "\n";
 
     
@@ -44,9 +46,13 @@ if (count($list) > 0) {
       $it = $list[$i];
       $name = $it['name'];
       $template = $it['template'];
+      $limit = $it['limit_name'];
+      $for = $it['for'];
       
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
       '<td class="n"><a href=".?action=edit&id=' . $it['id'] . '">' . $name . '</td>' .
+      '<td align="center">' . $for . '</td>' .
+      '<td align="center">' . ($limit==''?'Нет': $limit) . '</td>' .
       '<td align="center">' . ($template==''?'Не задан':'<a href=".?action=view&id=' . $it['id'] . '">' . 'Просмотр') . '</td>' .
       '<td align="right">' .
         stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить сертификат') .
