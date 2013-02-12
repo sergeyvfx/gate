@@ -25,7 +25,7 @@ if (!$go) {
     {
         $row = $result[$i];
         echo "<tr>
-                <td width=100>
+                <td>
                     <p><span>
                             <input type=$input"; 
         if ($type=="2")  
