@@ -29,14 +29,38 @@ function poll_create($name, $type) {
 
 function poll_create_received() {
     // Get post data
-    $name = stripslashes(trim($_POST['name']));
-    $type = $_POST['type'];
-    if (poll_create($name, $type)) {
-      $_POST = array();
-      return true;
+    $num = $_POST['num'];
+    $typeopr = $_POST['typeopr'];
+    $zagol = stripslashes(trim($_POST['zagol']));
+    
+    $numers=$num;
+    if ($typeopr=="1" or $typeopr=="2") {
+        while ($numers!="0") {
+            $postname = 'otvet'.$numers;
+            $otvet = $_POST[$postname];
+            if ($otvet == "" or $otvet == " ") 
+                {   } 
+            else {
+                $otv[]=$otvet;
+            }
+            $numers--;
+        }
+        $num_elsements=count($otv);
+        if ($num_elsements<2) 
+            echo "Обычно в вопросах не меньше 2 ответов"; 
+        else {
+            $dats=time();
+            mysql_query("INSERT INTO allvoits VALUES ( '', '$zagol', '$typeopr') ") or die("Ошибка");
+            $id=mysql_insert_id();
+            $num_elsements=count($otv);
+            for ($idx=0; $idx<$num_elsements; ++$idx) {
+                $insert=mysql_query("INSERT INTO voit VALUES ('','$otv[$idx]','0','$id') ") or die("Ошибка2"); 
+            }
+        }
     }
-    return false;
-  }
+    $_POST = array();
+    return true;
+}
 
 
 function poll_list() {

@@ -257,9 +257,9 @@ if ($_team_included_ != '#team_Included#') {
     $smena = stripslashes(trim($_POST['smena']));
     $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
-    $is_payment = stripslashes(trim($_POST['is_payment']));
+    $is_payment = stripslashes(trim($_POST['is_payment_value']));
     if ($is_payment=='')
-        $is_payment = $team['is_payment'];
+        $is_payment = $team['is_payment_value'];
     $payment_id = stripslashes(trim($_POST['payment_id']));
     if ($payment_id == '') {
       $payment_id = $team['payment_id'];
