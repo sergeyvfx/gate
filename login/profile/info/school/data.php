@@ -340,7 +340,7 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Примечание:</td><td><input id="comment" name="comment" type="text" class="txt block" value="' . htmlspecialchars($sc['comment']) . '"></td></tr></table>'));
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Откуда Вы узнали о конкурсе?<span class="error">*</span></td><td><input id="whereHear" name="whereHear" type="text" class="txt block" onblur="check_frm_whereHear();" value="' . htmlspecialchars($r['comment']) . '"></td></tr></table><div id="whereHear_check_res" style="display: none;"></div>'));
 
-$sql = arr_from_query('SELECT * FROM timezone');
+$sql = arr_from_query('SELECT * FROM timezone order by offset ASC, id ASC');
 $timezome = '';
 foreach ($sql as $k) {
   $sign = ($k['offset'] > 0) ? ('+') : ('');
