@@ -17,15 +17,18 @@ formo('title=Инфорация о командах и их ответствен
 
 $query = 'SELECT 
     concat(team.grade,".",team.number) as "Номер команды", 
+    timezone.offset as "Часовой пояс",    
+    team.smena as "Смена",
     team.teacher_full_name as "ФИО учителя",
     concat(user.surname, " ", user.name, " ", user.patronymic) as "ФИО ответственного",
     user.email as "email ответственного", 
     user.phone as "Телефон ответственного",
     school.name as "Учебное заведение"
-FROM user, team, responsible, school
+FROM user, team, responsible, school, timezone
 WHERE team.responsible_id = user.id
 AND responsible.user_id = user.id
 AND responsible.school_id = school.id
+AND school.timezone_id = timezone.id
 AND team.contest_id ='.$current_contest.
 ' ORDER BY team.grade ASC, team.number
 LIMIT 0 , 150';
@@ -50,6 +53,8 @@ if (count($list) > 0) {
     //$pageSrc = '<div>'.$query.'</div>';
     $pageSrc = '<table class="list">' . "\n";
     $pageSrc .= '<tr class="h"><th width="100" style="text-align: center;">Номер команды</th>
+        <th style="text-align: center;">Часовой пояс</th>
+        <th style="text-align: center;">Смена</th>
         <th style="text-align: center;">ФИО учителя</th>
         <th style="text-align: center;">ФИО ответственного</th>
         <th style="text-align: center;">email ответственного</th>
@@ -60,6 +65,8 @@ if (count($list) > 0) {
       $it = $list[$i];
       $pageSrc .= 
       '<td class="center">' . $it["Номер команды"] . '</td>' .
+      '<td class="center">' . ($it["Часовой пояс"]<0?$it["Часовой пояс"]:'+'. $it["Часовой пояс"]) . '</td>' .
+      '<td class="center">' . $it["Смена"] . '</td>' .
       '<td align="center">' . $it["ФИО учителя"] . '</td>' .
       '<td align="center">' . $it["ФИО ответственного"] . '</td>' .
       '<td align="center">' . $it["email ответственного"] . '</td>' .
