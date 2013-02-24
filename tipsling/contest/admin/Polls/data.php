@@ -35,6 +35,8 @@ ${information}
     $admin_menu->Draw();
     if ($action == 'edit') {
       include 'edit.php';
+    } else if ($action == 'results'){
+      include 'results.php';  
     } else {
       if ($action == 'save') {
         poll_update_received($id);

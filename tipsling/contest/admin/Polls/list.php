@@ -36,7 +36,7 @@ if (count($list) > 0) {
     $c = 0;
     $pageSrc = '<table class="list">' . "\n";
     $pageSrc .= '<tr class="h"><th style="text-align: center;">Название</th>
-        <th style="text-align: center;">Тип</th>
+        <th width="75" style="text-align: center;">&nbsp;</th>
         <th width="48" class="last">&nbsp;</th></tr>' . "\n";
     
     while ($c < $perPage && $i < $n) {
@@ -44,8 +44,8 @@ if (count($list) > 0) {
       $name = $it['vopros'];
       
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td align="center"><a href=".?action=edit&id=' . $it['id'] . '">' . $name . '</td>' .
-      '<td align="center">' . $type . '</td>' .
+      '<td align="center"><a href=".?action=edit&id=' . $it['id'] . '">' . $name . '</a></td>' .
+      '<td align="center"><a href=".?action=results&id=' . $it['id'] . '">Результаты</a></td>' .
       '<td align="right">' .
         stencil_ibtnav('edit.gif', '?action=edit&id=' . $it['id'] . '&' . $pageid, 'Изменить информацию о конкурсе') .
         stencil_ibtnav('cross.gif', '?action=delete&id=' . $it['id'] . '&' . $pageid, 'Удалить конкурс', 'Удалить этот конкурс?') .

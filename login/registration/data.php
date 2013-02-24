@@ -261,7 +261,7 @@ if ($action == 'register') {
     $id = user_id_by_login(stripslashes($login));
     $reglink = config_get('http-document-root') . '/login/registration/confirm/?id=' . $id . '&hash=' . md5(stripslashes($login) . '##VERY_RANDOM_SEED##' . stripslashes($email) . '##' . $id);
     $restorelink = config_get('http-document-root') . '/login/restore';
-    $contestname = 'Тризформашка-2011';
+    $contestname = 'Тризформашка';
     sendmail_tpl(stripslashes($email), 'Регистрация в конкурсе Тризформашка', 'registration', array('login' => stripslashes($login),
         'passwd' => stripslashes($passwd), 'reglink' => $reglink, 'restorelink' => $restorelink, 'contestname' => $contestname));
     add_info('Новый пользователь был успешно добавлен в базу, но в данный момент он неактивирован и вход в систему от его имени пока невозможен. ' .
