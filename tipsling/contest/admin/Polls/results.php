@@ -17,13 +17,20 @@ $poll = poll_get_by_id($id);
 $name=$poll['vopros'];
 $type=$poll['type'];
 
-$sql = "SELECT voit.text as answer, 
-                (select count(*) from team where team.responsible_id = user_vote.user_id and team.contest_id = ".$current_contest.") as 'count'
+$sql = "SELECT  voit.text AS answer, 
+               (SELECT count(*)
+                FROM team
+                WHERE team.contest_id = $current_contest
+                      AND exists (SELECT * 
+                                  FROM user_vote 
+                                  WHERE user_vote.voit_id = voit.id 
+                                    and user_vote.user_id = team.responsible_id)) AS 'count'
         FROM voit
-            LEFT JOIN `user_vote` on voit.id=user_vote.voit_id
-            JOIN allvoits on allvoits.id = voit.idvoit
-        WHERE allvoits.id = ".$id.
-        " GROUP BY voit.text";
+            JOIN allvoits ON allvoits.id = voit.idvoit
+        WHERE allvoits.id =$id
+        GROUP BY voit.text
+        ORDER BY voit.id";
+
 $answers = mysql_query($sql);
 $count=0;
 while ($row = mysql_fetch_array($answers, MYSQL_ASSOC)) {
