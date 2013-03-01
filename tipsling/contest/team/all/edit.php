@@ -13,9 +13,9 @@ if ($PHP_SELF != '') {
 }
 
 global $id, $page;
-formo('title=Редактирование команды;');
-
 $team = team_get_by_id($id);
+formo('title=Редактирование команды '.$team['grade'].'.'.$team['number'].' (номер при регистрации: '.$team['grade'].'.'.$team['reg_number'].');');
+
 ?>
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
@@ -106,20 +106,26 @@ $team = team_get_by_id($id);
 </script>
 
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
-      <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
+    <table class="clear" width="100%">
+        <tr><td width="275px">
                 Класс участников: <span class="error">*</span>
+                <br/><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д.)</i>
             </td>
             <td style="padding: 0 2px;">
-                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
+                <input <?=$is_user_admin?'':'readonly="readonly"'?> type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
+            </td>
+            <td width="85px" style="padding-left: 20px;">
+                Номер команды:
+            </td>
+            <td style="padding: 0 2px;">
+                <input type="text" <?=$is_user_admin?'':'readonly="readonly"'?> class="txt block" id="number" name="number" value="<?= $team['number']; ?>">
             </td>
         </tr>
-        <tr><td><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д.)</i></td></tr>
       </table>
     <div id="grade_check_res" style="display: none;"></div>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Полное имя учителя: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
@@ -130,7 +136,7 @@ $team = team_get_by_id($id);
       <div id="teacher_check_res" style="display: none;"></div>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Полное имя 1-го участника: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
@@ -141,7 +147,7 @@ $team = team_get_by_id($id);
       <div id="pupil_check_res" style="display: none;"></div>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Полное имя 2-го участника:
             </td>
             <td style="padding: 0 2px;">
@@ -151,7 +157,7 @@ $team = team_get_by_id($id);
       </table>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Полное имя 3-го участника:
             </td>
             <td style="padding: 0 2px;">
@@ -161,7 +167,7 @@ $team = team_get_by_id($id);
       </table>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 В какую смену учится:
             </td>
             <td style="padding: 0 2px;">
@@ -174,7 +180,7 @@ $team = team_get_by_id($id);
       </table>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Примечание:
             </td>
             <td style="padding: 0 2px;">
@@ -185,7 +191,7 @@ $team = team_get_by_id($id);
       <div id="comment_check_res" style="display: none;"></div>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Платеж подтвержден:
             </td>
             <td style="padding: 0 2px;">

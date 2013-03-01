@@ -33,7 +33,7 @@ else
 }
 $fields = array();
 
-echo('<div>test1</div>');
+//echo('<div>test1</div>');
   
 preg_match_all("/#([^#]+)#/", $for, $matchesarray, PREG_SET_ORDER);
 foreach ($matchesarray as $value) {
@@ -46,7 +46,7 @@ foreach ($matchesarray as $value) {
     }
 }
 
-echo('<div>test2</div>');
+//echo('<div>test2</div>');
 
 preg_match_all("/#([^#]+)#/", $template, $matchesarray, PREG_SET_ORDER);
 foreach ($matchesarray as $value) {
@@ -64,7 +64,7 @@ foreach ($matchesarray as $value) {
     }
 }
 
-echo('<div>test3</div>');
+//echo('<div>test3</div>');
           
 preg_match_all('/(\d+) (<|<=|=|>|>=|<>|is null|is not null) (\S*) (OR|AND)/', $limit['limit'], $limits, PREG_SET_ORDER);
 $i=0;
@@ -91,7 +91,7 @@ if ($where != '')
     $where .= ' AND ';
 }
       
-echo('<div>test4</div>');
+//echo('<div>test4</div>');
 
 $have_new=true;
 while ($have_new)
@@ -135,11 +135,29 @@ for ($i=0; $i<$n; $i++)
 $select = substr($select, 0, strlen($select) - 2);
 $from = substr($from, 0, strlen($from)-2);
 
-echo('<div>test5</div>');
+//echo('<div>test5</div>');
 
 $where .= $param;
 $sql = $select.' '.$from.' '.$where;
-$t = db_row(db_query($sql));
+//echo('<div>'.$sql.'</div>');
+
+$result = db_query($sql);
+$t = db_row_array($result);
+
+//TODO: It's hack. Need to find normal solution for printing details with separator between them.
+if ($t['ФИО ученика'] != "" || $t['ФИО учителя'] != "")
+{
+    while ($row = db_row_array($result))
+    {
+        if ($row['ФИО ученика'] != "" && strpos($t['ФИО ученика'], $row['ФИО ученика'])===false){
+            $t['ФИО ученика'] .= '<br/>'.$row['ФИО ученика'];
+        }
+        if ($row['ФИО учителя'] != "" && strpos($t['ФИО учителя'], $row['ФИО учителя'])===false){
+            $t['ФИО учителя'] .= ', '.$row['ФИО учителя'];
+        }
+    }
+}
+
 if ($t==false)
     return;
 
@@ -150,7 +168,7 @@ else if ($t['Место в параллели']==2)
 else if ($t['Место в параллели']==3)
     $t['Место в параллели'] = III;
 
-echo('<div>test6</div>');
+//echo('<div>test6</div>');
 
 $matchearray = array();
 preg_match_all("/#[^#]+#/", $template, $matchearray);
@@ -162,8 +180,6 @@ while ($i<$n)
     $template = str_replace($matchearray[0][$i], $t[$match], $template);
     $i++;
 }    
-
-echo('<div>test7</div>');
 
 include("../../../../../lib/MPDF54/mpdf.php");
 $mpdf=new mPDF();

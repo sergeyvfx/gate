@@ -23,7 +23,7 @@ $task_count = 20;
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a>Монитор</div>
 ${information}
 <? formo('title=Состояние присланных заданий;'); ?>
-<div class="f" style="margin: 6px -6px 6px;">
+<!--<div class="f" style="margin: 6px -6px 6px;">
   <form action="." method="POST" onsubmit="update (); return false;" onkeypress="if (event.keyCode==13) update ();">
     <table width="100%">
       <tr>
@@ -49,7 +49,7 @@ ${information}
       </tr>
     </table>
   </form>
-</div>
+</div>-->
 <script language="JavaScript" type="text/javascript">
   function update () {
     //var sort=getElementById ('sortGroup').value;
@@ -77,7 +77,7 @@ ${information}
     $teams = team_list('','',$current_contest);
     foreach ($teams as $t) {
       $status = arr_from_query(
-                      "SELECT
+          "SELECT
             `contest_status`.`time`, `contest_status`.`task`, `contest_status`.`size`
            FROM
             `contest_status`

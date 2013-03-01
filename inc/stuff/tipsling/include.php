@@ -29,5 +29,6 @@ if ($_tipsling_Included_ != '#tipsling_Included#') {
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/contest.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/poll.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/certificate.php';
+  include $DOCUMENT_ROOT . '/inc/stuff/tipsling/check_allowed_operations.php';
 }
 ?>

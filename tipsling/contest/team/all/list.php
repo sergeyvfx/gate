@@ -102,7 +102,9 @@ if (count($list) > 0) {
       }
 
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-              '<td class="n">' . $number . '</td>' .
+              '<td class="n">' . $number . 
+                '<br/><i style="font-weight: normal">(рег. '.$it['grade'].'.'.$it['reg_number'].')<i/>'.
+              '</td>' . 
               '<td>' . $school_name . '</td>' .
               '<td>' . $region . '</td>' .
               '<td>' . $city . '</td>' .

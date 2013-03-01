@@ -134,6 +134,7 @@
         $skipId = -1;
       }
       $sql = certificate_get_sql($type, $current_contest);
+      print ($sql);
       $result = db_query($sql);
       
       $cert = certificate_get_by_id($type);

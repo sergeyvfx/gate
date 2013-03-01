@@ -16,6 +16,6 @@ if ($PHP_SELF != '') {
 if (!user_authorized ()) {
   header('Location: ../login');
 } else {
-  header('Location: team');
+  header('Location: contest/team');
 }
 ?>

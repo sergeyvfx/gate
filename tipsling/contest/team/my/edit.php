@@ -13,9 +13,8 @@ if ($PHP_SELF != '') {
 }
 
 global $id, $page;
-formo('title=Редактирование команды;');
-
 $team = team_get_by_id($id);
+formo('title=Редактирование команды '.$team['grade'].'.'.$team['number'].' (номер при регистрации: '.$team['grade'].'.'.$team['reg_number'].');');
 ?>
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
@@ -107,19 +106,19 @@ $team = team_get_by_id($id);
 
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
     <table class="clear" width="100%">
-        <tr><td width="30%" style="padding: 0 2px;">
+        <tr><td width="275px">
                 Класс участников: <span class="error">*</span>
+                <br/><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д.)</i>
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
+                <input type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" <?=check_can_user_edit_teamgrade_field($team)?'':'readonly="readonly"' ?> value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
             </td>
         </tr>
-        <tr><td><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д.)</i></td></tr>
       </table>
     <div id="grade_check_res" style="display: none;"></div>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Полное имя учителя: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
@@ -130,7 +129,7 @@ $team = team_get_by_id($id);
       <div id="teacher_check_res" style="display: none;"></div>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Полное имя 1-го участника: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
@@ -141,7 +140,7 @@ $team = team_get_by_id($id);
       <div id="pupil_check_res" style="display: none;"></div>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Полное имя 2-го участника:
             </td>
             <td style="padding: 0 2px;">
@@ -151,7 +150,7 @@ $team = team_get_by_id($id);
       </table>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Полное имя 3-го участника:
             </td>
             <td style="padding: 0 2px;">
@@ -161,11 +160,11 @@ $team = team_get_by_id($id);
       </table>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 В какую смену учится:
             </td>
             <td style="padding: 0 2px;">
-                <select id="smena" name="smena">
+                <select id="smena" name="smena" <?=check_can_user_edit_teamsmena_field($team)?'':'disabled' ?>>
                     <option value="1" <?= $team['smena']=='1'?'selected="selected"':'' ?>>1 смена (играет с 14 до 16 часов местного времени)</option>
                     <option value="2" <?= $team['smena']=='2'?'selected="selected"':'' ?>>2 смена (играет с 11 до 13 часов местного времени)</option>
                 </select>
@@ -174,7 +173,7 @@ $team = team_get_by_id($id);
       </table>
       <div id="hr"></div>
       <table class ="clear" width="100%">
-        <tr><td width="30%">
+        <tr><td width="275px">
                 Примечание:
             </td>
             <td style="padding: 0 2px;">
@@ -182,6 +181,7 @@ $team = team_get_by_id($id);
             </td>
         </tr>
       </table>
+      <input type="hidden" value="<?=($team['is_payment'])?'1':'0'?>" id="is_payment_value" name="is_payment_value"></input>
       <div id="comment_check_res" style="display: none;"></div>
 
   <div class="formPast">

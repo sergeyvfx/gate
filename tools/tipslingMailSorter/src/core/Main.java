@@ -22,6 +22,9 @@ import javax.mail.*;
 import javax.mail.internet.MailDateFormat;
 import javax.mail.internet.MimeUtility;
 
+enum MessageType {
+    error, warning, empty
+}
 
 public class Main {
 
@@ -32,9 +35,11 @@ public class Main {
     String fileName = "tipslingMailSorter.cfg";
     try {
       InputStream is = new FileInputStream(fileName);
+      System.err.println(fileName);
       config.load(is);
     } catch (IOException ex) {
       System.err.println("Can't read config file!");
+      System.err.println(ex.getMessage());
       System.exit(1);
     }
   }
@@ -53,7 +58,7 @@ public class Main {
       System.out.println(msg);
     }
   }
-
+  
   private class Receiver implements Runnable {
 
     private int TIMEOUT = Integer.parseInt(config.getProperty("mail.timeout", "30000"));
@@ -64,8 +69,12 @@ public class Main {
     private String path = new File(config.getProperty("store.path")).getAbsolutePath();
     private String page = config.getProperty("tipsling.page");
     private String code = config.getProperty("tipsling.MonitorCode");
+    private String contest_id = config.getProperty("tipsling.contest_id");
+    private String log_file = config.getProperty("log.path");
     private Properties props = new Properties();
     private Connection conn = null;
+    
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
     @Override
     public void run() {
@@ -75,6 +84,28 @@ public class Main {
           Thread.sleep(TIMEOUT);
         } catch (InterruptedException ex) {
         }
+      }
+    }
+    
+    private void log_to_file(String msg, MessageType type) {
+      Date d = new Date();
+      String msg_type;
+      if (type == MessageType.error)
+          msg_type = "ОШИБКА! ";
+      else if (type == MessageType.warning)
+          msg_type = "Внимание! ";
+      else
+          msg_type = "Действие выполнено. ";
+      msg = dateFormat.format(d) + " : " + msg_type + msg + "\n";
+      try
+      {
+        FileWriter wrt = new FileWriter(log_file, true);
+        wrt.append(msg);
+        wrt.flush();
+      }
+      catch (Exception ex)
+      {
+          log(ex.getMessage(), true);
       }
     }
 
@@ -87,6 +118,7 @@ public class Main {
         Folder inbox = store.getFolder("INBOX");
         if (inbox == null) {
           log("There are no mail", false);
+          log_to_file("Нет почты", MessageType.empty);
           return;
         }
         inbox.open(Folder.READ_WRITE);
@@ -106,9 +138,13 @@ public class Main {
           subject = subject.replaceAll("\\ ", "");
           subject = subject.replaceAll("\"", "");
           Matcher m = Pattern.compile("^[0-9]{0,}\\.[0-9]{0,}\\-[0-9]{0,}$").matcher(subject);
+          {
               log("[" + subject + "] - message is recieved", false);
+              log_to_file("["+subject+"] - Получено сообщение", MessageType.empty);
+          }
           if (!m.matches()) {
             log("[" + subject + "] - subject of message don't match contest format", false);
+            log_to_file("["+subject+"] - Тема письма не совпадает с форматом конкурса", MessageType.warning);
             messages[i].setFlag(Flags.Flag.DELETED, true);
           } else {
             Integer grade = new Integer(subject.substring(0, subject.indexOf(".")));
@@ -120,6 +156,7 @@ public class Main {
             Date recieveDate = f.parse(recieve);
             recieveDate.setTime(recieveDate.getTime() + 3600000);
             log("[" + subject + "] - " + recieveDate.toString(), false);
+            log_to_file("["+subject+"] - Дата получения письма: " + dateFormat.format(recieveDate), MessageType.empty);
             messages[i].setFlag(Flags.Flag.DELETED, true);
             Object content = messages[i].getContent();
             if (content instanceof Multipart) {
@@ -141,6 +178,7 @@ public class Main {
                   }
                   if (new File(localPath, fileName).exists()) {
                     log("[" + subject + "] - This file is already on disk", false);
+                    log_to_file("["+subject+"] - Файл уже существует на диске", MessageType.warning);
                   } else {
                     File saveFile = new File(localPath, fileName);
                     size = saveFile(saveFile, p);
@@ -148,10 +186,11 @@ public class Main {
                     saveFile.setWritable(true, false);
                     saveFile.setExecutable(false, false);
                     log("[" + subject + "] - The size of attachment: " + size + " bytes", false);
+                    log_to_file("["+subject+"] - Размер вложения: " + size + " байт", MessageType.empty);
                   }
                 }
               }
-              SendPostQuery(grade, number, task, recieveDate, size, subject, code);
+              SendPostQuery(grade, number, task, recieveDate, size, subject, code, contest_id);
             }
           }
         }
@@ -167,6 +206,7 @@ public class Main {
         }
       } catch (Exception ex) {
         log(ex.getMessage(), true);
+        log_to_file(ex.getMessage(), MessageType.error);
       }
     }
 
@@ -187,7 +227,7 @@ public class Main {
       return count;
     }
     
-    private void SendPostQuery(int grade, int number, int task, Date date, int size, String subject, String code)
+    private void SendPostQuery(int grade, int number, int task, Date date, int size, String subject, String code, String contest_id)
     {
        DateFormat df = new SimpleDateFormat("HH:mm:ss");
         
@@ -199,7 +239,7 @@ public class Main {
        params.add(new String[]{"task", String.valueOf(task)});
        params.add(new String[]{"date", df.format(date)});
        params.add(new String[]{"size", String.valueOf(size)});
-       params.add(new String[]{"contest_id", String.valueOf(2)});
+       params.add(new String[]{"contest_id", contest_id});
        
        try {
            //отправляем запрос
@@ -207,11 +247,14 @@ public class Main {
            String response = sender.sendPostRequest(page, params);
            if (response == null || "".equals(response.trim())) {
                log("[" + subject + "] - The information entered into the database", false);
+               log_to_file("[" + subject + "] - Информация внесена в БД", MessageType.empty);
            } else {
                log(response, true);
+               log_to_file(response, MessageType.error);
            }
        } catch (IOException ex) {
            log(ex.getMessage(), true);
+           log_to_file(ex.getMessage(), MessageType.error);
        }
     }    
   }

@@ -173,10 +173,11 @@ function certificate_update_received($id) {
       foreach ($matchesarray as $value) {
           $field = visible_field_get_by_caption($value[1]);
           $table = visible_table_get_by_id($field['table_id']);
+          
           if (!inarr($tables, $table['id']))
           {
               $tables[count($tables)]=$table['id'];
-              $from .= $table['table'].', ';
+              $from .= '`'.$table['table'].'`, ';
           }
           if (!inarr($fields, $value[1]))
           {
@@ -184,7 +185,7 @@ function certificate_update_received($id) {
               $select .= '`'.$table['table'].'`.`'.$field['field'].'` as '.db_string($value[1]).', ';
           }
       }
-          
+                
       preg_match_all('/(\d+) (<|<=|=|>|>=|<>|is null|is not null) (\S*) (OR|AND)/', $limit['limit'], $limits, PREG_SET_ORDER);
       $i=0;
       foreach ($limits as $value) {
@@ -224,10 +225,11 @@ function certificate_update_received($id) {
                 $connect = $connection['connection'];
                 if ($connect=='')
                 {
-                    $have_new = true;
                     $table = db_row_value("visible_table", "`id`=".$connection['connect_table_id']);
+                    
                     if (!inarr($tables, $table['id']))
                     {
+                        $have_new = true;
                         $tables[count($tables)]=$table['id'];
                         $from .= $table['table'].', ';
                     }

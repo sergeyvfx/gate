@@ -73,16 +73,12 @@ if ($_team_included_ != '#team_Included#') {
   function team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment, $update=false, $id=-1) {
     if ($update) {
       $team = team_get_by_id($id);
-      $g = group_get_by_name("Администраторы");
-      $has_access = is_user_bookkeeper(user_id(), $team['contest_id']) || is_user_in_group(user_id(), $g['id']) || user_access_root();
-      
-      $contest_stat = get_contest_status($team['contest_id']);
-      $allow_edit = $contest_stat==1 || $contest_stat==2;
-      if ($allow_edit && !$has_access) {
+      $has_access = check_contestbookkeeper_rights($team['contest_id']);
+      if (!check_edit_team_allow($team['contest_id']) && !$has_access) {
         add_info("Данная команда не доступна для редактирования");
         return false;
       }
-      if ($team['responsible_id'] != user_id() && !$has_access) {
+      if (!check_is_team_owner($team) && !$has_access) {
         add_info('Вы не можете редактировать эту команду');
         return false;
       }
@@ -142,7 +138,8 @@ if ($_team_included_ != '#team_Included#') {
     $pupil2_full_name = db_string($pupil2_full_name);
     $pupil3_full_name = db_string($pupil3_full_name);
     $comment = db_string($comment);
-    db_insert('team', array('number' => $number,
+    db_insert('team', array('reg_number' => $number,
+        'number' => $number,
         'responsible_id' => $responsible_id,
         'contest_id' => $contest_id,
         'payment_id' => $payment_id,
@@ -177,7 +174,7 @@ if ($_team_included_ != '#team_Included#') {
     if ($contest_id == '')
         $contest_id = $current_contest;
     
-    $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
+    $number=db_max('team','reg_number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
     $responsible_id = user_id();
     $is_payment = 0;
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
@@ -200,6 +197,10 @@ if ($_team_included_ != '#team_Included#') {
     $pupil1_full_name = $this_team['pupil1_full_name'];
     $pupil2_full_name = $this_team['pupil2_full_name'];
     $pupil3_full_name = $this_team['pupil3_full_name'];
+    $smena = $this_team['smena'];
+    
+    print $pupil1_full_name;
+    print $smena;
     $payment_id = -1;
 
     $comment = $this_team['comment'];
@@ -207,11 +208,11 @@ if ($_team_included_ != '#team_Included#') {
     
     $responsible_id = $this_team['responsible_id'];
     $is_payment = 0;
-    $number=db_max('team','number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
+    $number=db_max('team','reg_number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
     
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
                     $teacher_full_name, $pupil1_full_name, $pupil2_full_name,
-                    $pupil3_full_name, $is_payment, $comment)) {
+                    $pupil3_full_name, $is_payment, $smena, $comment)) {
       $_POST = array();
       return true;
     }
@@ -219,18 +220,17 @@ if ($_team_included_ != '#team_Included#') {
     return false;
   }
 
-  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $number, $smena, $comment) {
+  function team_update($id, $payment_id, $grade, $teacher_full_name, $pupil1_full_name, $pupil2_full_name, $pupil3_full_name, $is_payment, $reg_number, $number, $smena, $comment) {
     if (!team_check_fields($grade, $teacher_full_name, $pupil1_full_name, $comment, true, $id)) {
       return false;
     }
-
+    
     $teacher_full_name = db_string($teacher_full_name);
     $pupil1_full_name = db_string($pupil1_full_name);
     $pupil2_full_name = db_string($pupil2_full_name);
     $pupil3_full_name = db_string($pupil3_full_name);
     $comment = db_string($comment);
-    //$number = db_string($number);
-
+    
     $update = array('payment_id' => $payment_id,
         'grade' => $grade,
         'teacher_full_name' => $teacher_full_name,
@@ -238,12 +238,12 @@ if ($_team_included_ != '#team_Included#') {
         'pupil2_full_name' => $pupil2_full_name,
         'pupil3_full_name' => $pupil3_full_name,
         'is_payment' => $is_payment,
+        'reg_number' => $reg_number,
         'number' => $number,
         'smena' => $smena,
         'comment' => $comment);
-
+    
     db_update('team', $update, "`id`=$id");
-
     return true;
   }
 
@@ -254,25 +254,35 @@ if ($_team_included_ != '#team_Included#') {
     $pupil1_full_name = stripslashes(trim($_POST['pupil1_full_name']));
     $pupil2_full_name = stripslashes(trim($_POST['pupil2_full_name']));
     $pupil3_full_name = stripslashes(trim($_POST['pupil3_full_name']));
-    $smena = stripslashes(trim($_POST['smena']));
     $comment = stripslashes(trim($_POST['comment']));
     $team = team_get_by_id($id);
-    $is_payment = stripslashes(trim($_POST['is_payment_value']));
-    if ($is_payment=='')
-        $is_payment = $team['is_payment_value'];
-    $payment_id = stripslashes(trim($_POST['payment_id']));
-    if ($payment_id == '') {
-      $payment_id = $team['payment_id'];
+    $is_payment = $team['is_payment'];
+    $payment_id = $team['payment_id'];
+    $number = $team['number'];
+    $smena = $team['smena'];
+    
+    if (check_contestbookkeeper_rights($team['contest_id'])) {
+        if ($_POST['is_payment_value']!='')
+            $is_payment = stripslashes(trim($_POST['is_payment_value']));
+        if ($_POST['payment_id']!='')
+            $payment_id = stripslashes(trim($_POST['payment_id']));
     }
-    if ($team['grade'] != $grade) {
+    if (check_contestadmin_rights() && stripslashes(trim($_POST['number']))!=''){
+        $number = stripslashes(trim($_POST['number']));
+    }    
+    if (check_can_user_edit_teamsmena_field($team)){
+        $smena = stripslashes(trim($_POST['smena']));
+    }    
+    if ($team['grade'] != $grade && check_can_user_edit_teamgrade_field($team)) {
       $number = db_max('team','number',"`grade`=$grade AND `contest_id`=".$team['contest_id']) + 1;
+      $reg_number = $number;
     } else {
-      $number = $team['number'];
+      $reg_number = $team['reg_number'];
     }
 
     if (team_update($id, $payment_id, $grade, $teacher_full_name,
                     $pupil1_full_name, $pupil2_full_name, $pupil3_full_name,
-                    $is_payment, $number, $smena, $comment)) {
+                    $is_payment, $reg_number, $number, $smena, $comment)) {
       $_POST = array();
     }
   }
@@ -285,13 +295,12 @@ if ($_team_included_ != '#team_Included#') {
 
   function team_can_delete($id) {
     $team = team_get_by_id($id);
-    $g = group_get_by_name("Администраторы");
-    $has_access = is_user_in_group(user_id(), $g['id']) || user_access_root();
+    $has_access = check_contestadmin_rights();
     if ($team['is_payment'] > 0 && !$has_access) {
       add_info("Данную команду нельзя удалить");
       return false;
     }
-    if ($team['responsible_id'] != user_id() && !$has_access) {
+    if (!check_is_team_owner($team) && !$has_access) {
       add_info('Вы не можете удалять эту команду');
       return false;
     }
