@@ -36,7 +36,6 @@ public class Main {
     try {
       InputStream is = new FileInputStream(fileName);
       System.err.println(fileName);
-      config.load(is);
     } catch (IOException ex) {
       System.err.println("Can't read config file!");
       System.err.println(ex.getMessage());
@@ -70,7 +69,9 @@ public class Main {
     private String page = config.getProperty("tipsling.page");
     private String code = config.getProperty("tipsling.MonitorCode");
     private String contest_id = config.getProperty("tipsling.contest_id");
-    private String log_file = config.getProperty("log.path");
+    private String log_file = config.getProperty("log.file");
+    private String log_error = config.getProperty("log.error");
+    private String log_warning = config.getProperty("log.warning");
     private Properties props = new Properties();
     private Connection conn = null;
     
@@ -89,17 +90,19 @@ public class Main {
     
     private void log_to_file(String msg, MessageType type) {
       Date d = new Date();
-      String msg_type;
-      if (type == MessageType.error)
-          msg_type = "ОШИБКА! ";
-      else if (type == MessageType.warning)
-          msg_type = "Внимание! ";
-      else
-          msg_type = "Действие выполнено. ";
-      msg = dateFormat.format(d) + " : " + msg_type + msg + "\n";
+      msg = dateFormat.format(d) + " : " + msg + "\n";
+      FileWriter wrt;
       try
       {
-        FileWriter wrt = new FileWriter(log_file, true);
+          if (type == MessageType.warning) {
+            wrt = new FileWriter(log_warning, true);
+          }
+          else if (type == MessageType.error) {
+            wrt = new FileWriter(log_error, true);
+          }
+          else {
+            wrt = new FileWriter(log_file, true);
+          }
         wrt.append(msg);
         wrt.flush();
       }
