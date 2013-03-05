@@ -21,7 +21,8 @@ $select = 'SELECT DISTINCT ';
 if ($current_contest != -1 && $current_contest!='')
 {
     $from = 'FROM `team`, ';
-    $where = 'WHERE `team`.`contest_id`='.$current_contest.' AND ';
+    $where = 'WHERE `team`.`contest_id`='.$current_contest.' AND `team`.`responsible_id`='.user_id().' AND ';
+    $order = 'ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
     $table_team_id = db_field_value('visible_table', 'id', "`table`='team'");
     $tables = array($table_team_id);
 }
@@ -43,6 +44,12 @@ foreach ($matchesarray as $value) {
     {
         $tables[count($tables)]=$table['id'];
         $from .= $table['table'].', ';
+        if ($table['table'] == 'pupil_team'){
+            $order .= ', `pupil_team`.`number` ASC';
+        }                  
+        if ($table['table'] == 'teacher_team'){
+            $order .= ', `teacher_team`.`number` ASC';
+        }
     }
 }
 
@@ -56,6 +63,12 @@ foreach ($matchesarray as $value) {
     {
         $tables[count($tables)]=$table['id'];
         $from .= $table['table'].', ';
+        if ($table['table'] == 'pupil_team'){
+            $order .= ', `pupil_team`.`number` ASC';
+        }                  
+        if ($table['table'] == 'teacher_team'){
+            $order .= ', `teacher_team`.`number` ASC';
+        }
     }
     if (!inarr($fields, $value[1]))
     {
@@ -80,6 +93,12 @@ foreach ($limits as $value) {
     {
         $tables[count($tables)]=$table['id'];
         $from .= $table['table'].', ';
+        if ($table['table'] == 'pupil_team'){
+            $order .= ', `pupil_team`.`number` ASC';
+        }                  
+        if ($table['table'] == 'teacher_team'){
+            $order .= ', `teacher_team`.`number` ASC';
+        }
     }
         
     $where .= '`'.$table['table'].'`.`'.$field['field'].'`'.$operation.db_string($val).' '.$connection.' ';
@@ -115,6 +134,12 @@ while ($have_new)
                         $have_new = true;
                         $tables[count($tables)]=$table['id'];
                         $from .= $table['table'].', ';
+                        if ($table['table'] == 'pupil_team'){
+                            $order .= ', `pupil_team`.`number` ASC';
+                        }                  
+                        if ($table['table'] == 'teacher_team'){
+                            $order .= ', `teacher_team`.`number` ASC';
+                        }
                     }
                 }
             }
@@ -138,7 +163,7 @@ $from = substr($from, 0, strlen($from)-2);
 //echo('<div>test5</div>');
 
 $where .= $param;
-$sql = $select.' '.$from.' '.$where;
+$sql = $select.' '.$from.' '.$where.' '.$order;
 //echo('<div>'.$sql.'</div>');
 
 $result = db_query($sql);

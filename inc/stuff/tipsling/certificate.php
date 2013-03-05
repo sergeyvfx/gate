@@ -157,7 +157,8 @@ function certificate_update_received($id) {
       if ($current_contest != -1)
       {
           $from = 'FROM `team`, ';
-          $where = 'WHERE `team`.`contest_id`='.$current_contest.' AND ';
+          $where = 'WHERE `team`.`contest_id`='.$current_contest.' AND `team`.`responsible_id`='.user_id().' AND ';
+          $order = 'ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $table_team_id = db_field_value('visible_table', 'id', "`table`='team'");
           $tables = array($table_team_id);
       }
@@ -178,6 +179,12 @@ function certificate_update_received($id) {
           {
               $tables[count($tables)]=$table['id'];
               $from .= '`'.$table['table'].'`, ';
+              if ($table['table'] == 'pupil_team'){
+                  $order .= ', `pupil_team`.`number` ASC';
+              }                  
+              if ($table['table'] == 'teacher_team'){
+                  $order .= ', `teacher_team`.`number` ASC';
+              }
           }
           if (!inarr($fields, $value[1]))
           {
@@ -200,8 +207,13 @@ function certificate_update_received($id) {
         {
             $tables[count($tables)]=$table['id'];
             $from .= $table['table'].', ';
-        }
-        
+            if ($table['table'] == 'pupil_team'){
+                $order .= ', `pupil_team`.`number` ASC';
+            }                  
+              if ($table['table'] == 'teacher_team'){
+                $order .= ', `teacher_team`.`number` ASC';
+            }
+        }        
         $where .= '`'.$table['table'].'`.`'.$field['field'].'`'.$operation.db_string($val).' '.$connection.' ';
       }
       
@@ -232,6 +244,12 @@ function certificate_update_received($id) {
                         $have_new = true;
                         $tables[count($tables)]=$table['id'];
                         $from .= $table['table'].', ';
+                        if ($table['table'] == 'pupil_team'){
+                            $order .= ', `pupil_team`.`number` ASC';
+                        }                  
+                        if ($table['table'] == 'teacher_team'){
+                            $order .= ', `teacher_team`.`number` ASC';
+                        }
                     }
                 }
             }
@@ -254,7 +272,7 @@ function certificate_update_received($id) {
       if ($where != '')
           $where = substr ($where, 0, strlen($where)-5);
       
-      $sql = $select.' '.$from.' '.$where;
+      $sql = $select.' '.$from.' '.$where.' '.$order;
       return $sql;
   }
   

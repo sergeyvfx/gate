@@ -79,7 +79,9 @@
                 {
                     printf('<li><a href="'.$document_root.'/tipsling/contest/admin/">Администрирование</a></li>');
                 }
-                //printf('<li><a href="'.$document_root.'/tipsling/contest/team/certificate/">Сертификаты</a></li>');
+                if (get_contest_status($current_contest)==4){
+                    printf('<li><a href="'.$document_root.'/tipsling/contest/team/certificate/">Сертификаты</a></li>');
+                }
                 printf('<li><a href="'.$document_root.'/tipsling/contest/team/my/">Мои команды</a></li>');
                 printf('<li><a href="'.$document_root.'/tipsling/contest/payment/my">Мои платежи</a></li>');
                 if (is_user_bookkeeper(user_id(), $current_contest))

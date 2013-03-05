@@ -53,7 +53,7 @@ ${information}
                 <td>
                     <select id="select_type" name="select_type" class="block" onchange="select_type_changed();">
                         <?php
-                            $sql = 'select * from certificate order by id';
+                            $sql = 'select * from certificate where actual = 1 order by id';
                             $result = db_query($sql);
                             while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
                                 echo('<option value="'.$rows["id"].'">'.$rows['name'].'</option>');
