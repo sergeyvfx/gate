@@ -19,6 +19,7 @@ $admin_menu->Init('ContestMenu', 'type=hor;colorized=true;hassubmenu=true;border
 
 $admin_menu->AppendItem('Мои конкурсы', config_get('document-root') . '/tipsling/contest/admin/MyContests', 'MyContest');
 $admin_menu->AppendItem('Статистическая инфорация', config_get('document-root') . '/tipsling/contest/admin/Information', 'Information');
+$admin_menu->AppendItem('Результаты конкурса', config_get('document-root') . '/tipsling/contest/admin/results', 'Results');
 $admin_menu->AppendItem('Рассылка писем', config_get('document-root') . '/tipsling/contest/admin/MailSender', 'MailSender');
 $admin_menu->AppendItem('Сертификаты', config_get('document-root') . '/tipsling/contest/admin/certificates', 'Certificates');
 $admin_menu->AppendItem('Опросы', config_get('document-root') . '/tipsling/contest/admin/Polls', 'Polls');

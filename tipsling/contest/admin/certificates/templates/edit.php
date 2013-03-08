@@ -69,6 +69,13 @@ $certificate = certificate_get_by_id($id);
             <td style="padding: 0 2px;">
                 <input type="text" id="name" name="name" onblur="check_frm_name ();" value="<?= $certificate['name']; ?>" class="txt block"/>
             </td>
+            <td width="60px" style="padding-left: 20px;">
+                Актуально:
+            </td>
+            <td width="25px" style="padding: 0 2px;">
+                <input type="checkbox" value="1" <?=($certificate['actual'])?'CHECKED':''?> id="actual" name="actual" onchange="document.getElementById('actual_value').value = document.getElementById('actual').checked ? 1 :0;"/>
+                <input type="hidden" value="<?=($certificate['actual'])?'1':'0'?>" id="actual_value" name="actual_value"/>
+            </td>
         </tr>
     </table>
     <div id="name_check_res" style="display: none;"></div>

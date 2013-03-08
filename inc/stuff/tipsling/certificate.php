@@ -34,7 +34,7 @@ function certificate_check_fields($name, $family_id, $for, $id=-1) {
     return true;
   }
 
-function certificate_create($name, $family_id, $for, $template = '', $limit='') {
+function certificate_create($name, $family_id, $for, $template = '', $limit='', $actual=1) {
     global $current_contest;
     if ($family_id==''||$family_id<1)
     {
@@ -45,13 +45,17 @@ function certificate_create($name, $family_id, $for, $template = '', $limit='') 
         $limit = 'null';
     else
         $limit = db_string($limit);
+    if ($actual == ''){
+        $actual = 0;
+    }
     
     if (!certificate_check_fields($name, $family_id, $for)) 
     { return false; }
     
     $certificate_name = db_string($name);
     db_insert('certificate', array('name' => $certificate_name, 'family_id'=>$family_id, 
-        'template' => db_string($template), 'limit_id'=>$limit, 'for'=>  db_string($for)));
+        'template' => db_string($template), 'limit_id'=>$limit, 'for'=>  db_string($for),
+        'actual' => $actual));
     return true;
 }
 
@@ -62,7 +66,8 @@ function certificate_create_received() {
     $template = $_POST['template'];
     $limit = $_POST['limit'];
     $for = $_POST['for'];
-    if (certificate_create($name, $family_id, $for, $template, $limit)) {
+    $actual = $_POST['actual'];
+    if (certificate_create($name, $family_id, $for, $template, $limit, $actual)) {
       $_POST = array();
       return true;
     }
@@ -84,7 +89,7 @@ function certificate_list($family_id) {
                            WHERE family_id='.$family_id.' ORDER BY `id`');
 }
 
-function certificate_update($id, $name, $for, $family_id, $template = '', $limit='') {
+function certificate_update($id, $name, $for, $family_id, $template = '', $limit='', $actual=1) {
     global $current_contest;
     if ($family_id==''||$family_id<1)
     {
@@ -95,6 +100,9 @@ function certificate_update($id, $name, $for, $family_id, $template = '', $limit
         $limit = 'null';
     else
         $limit = db_string($limit);
+    if ($actual == ''){
+        $actual = 0;
+    }
     
     if (!certificate_check_fields($name, $family_id, $for, $id)) {
       return false;
@@ -105,7 +113,7 @@ function certificate_update($id, $name, $for, $family_id, $template = '', $limit
     
     $update = array('name' => $certificate_name, 'family_id'=>$family_id,
         'template' => db_string($template!=''?$template:$it['template']),
-        'limit_id'=>$limit, 'for'=>db_string($for));
+        'limit_id'=>$limit, 'for'=>db_string($for), 'actual'=>$actual);
 
     db_update('certificate', $update, "`id`=$id");
 
@@ -119,7 +127,8 @@ function certificate_update_received($id) {
     $template = $_POST['template'];
     $limit = $_POST['limit'];
     $for = $_POST['for'];
-    if (certificate_update($id, $name, $for, $family_id, $template, $limit)) {
+    $actual = $_POST['actual_value'];
+    if (certificate_update($id, $name, $for, $family_id, $template, $limit, $actual)) {
       $_POST = array();
     }
   }

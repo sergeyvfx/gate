@@ -67,6 +67,12 @@ dd_formo('title=Новый сертификат');
             <td style="padding: 0 2px;">
                 <input type="text" id="name" name="name" onblur="check_frm_name ();" value="<?= htmlspecialchars(stripslashes($_POST['name'])); ?>" class="txt block"/>
             </td>
+            <td width="60px" style="padding-left: 20px;">
+                Актуально:
+            </td>
+            <td width="25px" style="padding: 0 2px;">
+                <input type="checkbox" value="1" CHECKED id="actual" name="actual" />
+            </td>
         </tr>
     </table>
     <div id="name_check_res" style="display: none;"></div>

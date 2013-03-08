@@ -322,6 +322,28 @@ if ($_team_included_ != '#team_Included#') {
   function teams_count_is_payment($id) {
     return db_count('team', '`payment_id`=' . $id . ' AND `is_payment`=1');
   }
-
+  
+  function team_update_results_received($list, $contest_id='') {
+      global $current_contest;
+      if ($contest_id==''){
+          $contest_id = $current_contest;
+      }
+      $list = team_list('','',$current_contest);
+      foreach ($list as &$team) {
+          $team_id = $team['id'];
+          $mark = stripslashes(trim($_POST["mark"]["$team_id"]));
+          $place = stripslashes(trim($_POST["place"]["$team_id"]));
+          $common_place = stripslashes(trim($_POST["common_place"]["$team_id"]));
+          if ($mark == '') $mark = '0';
+          if ($place == '') $place = '0';
+          if ($common_place == '') $common_place = '0';
+          team_update_results($team_id, $mark, $place, $common_place);          
+      }
+  }
+  
+  function team_update_results($id, $mark, $place, $common_place){
+      $update = array('mark' => $mark, 'place' => $place, 'common_place'=>$common_place);
+      db_update('team', $update, "`id`=$id");
+  }
 }
 ?>
