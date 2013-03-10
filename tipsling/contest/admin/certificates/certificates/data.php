@@ -59,11 +59,20 @@ ${information}
             <?php
                 echo('<tr class="h"><th width="8%" style="text-align:center;">Номер команды</th>');
                 $c = contest_get_by_id($current_contest);
-                $sql = "select * from certificate where family_id=".$c['family_id']." order by id";
+                $sql = "select * from certificate where actual=1 and family_id=".$c['family_id']." order by id";
                 $q = db_query($sql);
                 $percent = 80/count($q)+1;
-                while ($r = mysql_fetch_array($q))
+                $certificate_teams_array = array();
+                while ($r = mysql_fetch_array($q)){
                     echo('<th width="'.$percent.'" style="text-align:center;">'.$r['name'].'</th>');
+                    
+                    $certificate_sql = certificate_get_sql($r['id'], $current_contest, '', false);
+                    $result_sql = db_query($certificate_sql);
+                    $array = array();
+                    while ($row = db_row($result_sql)) $array[] = $row;
+                    $certificate_teams_array[count($certificate_teams_array)] = array('teams'=>$array,
+                                                                                      'cert_id'=>$r['id']);
+                }
                 echo('<th width="12%"></th></tr>');
             
                 $teams = team_list("", "", $current_contest, $filter);
@@ -73,13 +82,19 @@ ${information}
                 {
                     $team = $teams[$i];
                     echo('<tr name="'.$i.'"><td>'.$team["grade"].'.'.$team["number"].'</td>');
-                    $q = db_query($sql);
-                    while ($r = mysql_fetch_array($q))
-                    {
-                        $is_show=($r['id']==1 || $r['id']==2 || (($r['id']==3 || $r['id']==4) && $team['grade']>1 && $team['grade']<12 && $team['place']>0 && $team['place']<4) || ($r['id']==5 && $team['grade']<12) || ($r['id']==6 && $team['grade']<12 && $team['place']>0 && $team['place']<4));
-                        $input = $is_show?'<input type="checkbox" name="'.$team["id"].'.'.$r["id"].'" id="'.$team["id"].'.'.$r["id"].'"></input>':'';
-                        echo('<td name="'.$r['id'].'">'.$input.'</td>');
+                    
+                    foreach ($certificate_teams_array as $certificate_teams) {
+                        $is_show = false;
+                        foreach ($certificate_teams['teams'] as $value) {
+                            if ($value['id_команды']==$team['id']){
+                                $is_show = true;
+                                break;
+                            }                                
+                        }
+                        $input = $is_show?'<input type="checkbox" name="'.$team["id"].'.'.$certificate_teams['cert_id'].'" id="'.$team["id"].'.'.$certificate_teams['cert_id'].'"></input>':'';
+                        echo('<td name="'.$certificate_teams['cert_id'].'">'.$input.'</td>');
                     }
+                    
                     echo('<td><a style="cursor:pointer;" onclick="check_all_in_row('.$i.');">Выбрать все</a><br/><a style="cursor:pointer;" onclick="uncheck_all_in_row('.$i.');">Снять все</a></td> </tr>');
                     $i++;
                 }

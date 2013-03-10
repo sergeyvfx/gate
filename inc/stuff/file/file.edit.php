@@ -21,11 +21,14 @@
     $s->Unlink ($value);
     $value='';
 ?>
-    <script language="JavaScript" type="text/javascript">window.parent.CDCFile_OnFileUpload ('<?=$field;?>', '<?=$formname;?>', '', '');</script>
+    <script language="JavaScript" type="text/javascript">
+        window.parent.CDCFile_OnFileUpload ('<?=$field;?>', '<?=$formname;?>', '', '');
+    </script>
 <?php
   } else
   if (isset ($_FILES['uploading'])) {
     $data=$_FILES['uploading'];
+    include 'file_validator.php';
     $err=validate_file ($data, $size);
     if ($err=='') {
       $s=manage_spawn_storage ($storage);

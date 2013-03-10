@@ -80,18 +80,13 @@ ${information}
 
 <script type="text/JavaScript"  language="JavaScript">
     $(document).ready(function(){
-        var type = getElementById("select_type").options[0].value;
-        ipc_send_request ('/', 'ipc=find_values&type='+type, update_value_select);
+        ipc_send_request ('/', 'ipc=find_values&type='+$('#select_type').val(), update_value_select);
     })
 
 function cert_generate()
   {    
-    var type_select = getElementById("select_type");
-    var value_select = getElementById("select_value");
-    
-    var certificate = type_select.value;
-    var param = value_select.value;
-    
+    var certificate = $('#select_type').val();
+    var param = $('#select_value').val();
     if (param!="undefined")
     {
         var url = './download/?certificate='+certificate+'&param='+param;
@@ -101,15 +96,13 @@ function cert_generate()
 
   function select_type_changed()
   {    
-    var type_select = getElementById("select_type");
-    ipc_send_request ('/', 'ipc=find_values&type='+type_select.value, update_value_select);
+    ipc_send_request ('/', 'ipc=find_values&type='+$('#select_type').val(), update_value_select);
   }
     
   function update_value_select(http_request)
   {
       if (http_request.readyState == 4) {
-        var value_select = getElementById("select_value");
-        value_select.innerHTML = http_request.responseText;
+          $('#select_value').html(http_request.responseText);
     }
   }  
 </script>

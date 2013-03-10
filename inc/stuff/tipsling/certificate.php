@@ -155,18 +155,22 @@ function certificate_update_received($id) {
     return db_delete('certificate', 'id=' . $id);
   }
   
-  function certificate_get_sql($id, $current_contest=-1)
+  function certificate_get_sql($id, $current_contest=-1, $param='', $include_template = true)
   {
       $cert = certificate_get_by_id($id);
       $for = $cert['for'];
       $limit_id = $cert['limit_id'];
       $limit = limit_get_by_id($limit_id);
+      $template = $cert['template'];
             
-      $select = 'SELECT DISTINCT ';
+      $select = 'SELECT DISTINCT `team`.`id` as "id_команды", ';
       if ($current_contest != -1)
       {
           $from = 'FROM `team`, ';
-          $where = 'WHERE `team`.`contest_id`='.$current_contest.' AND `team`.`responsible_id`='.user_id().' AND ';
+          $where = 'WHERE `team`.`contest_id`='.$current_contest.' AND `team`.`is_payment`=1 AND ';
+          if (!check_contestadmin_rights()) {
+              $where .= '`team`.`responsible_id`='.user_id().' AND ';
+          }
           $order = 'ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
           $table_team_id = db_field_value('visible_table', 'id', "`table`='team'");
           $tables = array($table_team_id);
@@ -199,6 +203,30 @@ function certificate_update_received($id) {
           {
               $fields[count($fields)]=$value[1];
               $select .= '`'.$table['table'].'`.`'.$field['field'].'` as '.db_string($value[1]).', ';
+          }
+      }
+      
+      if ($include_template) {
+          preg_match_all("/#([^#]+)#/", $template, $matchesarray, PREG_SET_ORDER);
+          foreach ($matchesarray as $value) {
+            $field = visible_field_get_by_caption($value[1]);
+            $table = visible_table_get_by_id($field['table_id']);
+            if (!inarr($tables, $table['id']))
+            {
+              $tables[count($tables)]=$table['id'];
+              $from .= '`'.$table['table'].'`, ';
+              if ($table['table'] == 'pupil_team'){
+                  $order .= ', `pupil_team`.`number` ASC';
+              }                  
+              if ($table['table'] == 'teacher_team'){
+                  $order .= ', `teacher_team`.`number` ASC';
+              }
+            }
+            if (!inarr($fields, $value[1]))
+            {
+              $fields[count($fields)]=$value[1];
+              $select .= '`'.$table['table'].'`.`'.$field['field'].'` as '.db_string($value[1]).', ';
+            }
           }
       }
                 
@@ -242,22 +270,26 @@ function certificate_update_received($id) {
             {
                 $connection = db_row_value('table_connections', "`table1_id`=".$tables[$i]." AND `table2_id`=".$tables[$j]);
                 if (!$connection)
-                    $connection = db_row_value('table_connections', "`table1_id`=".$tables[$j]." AND `table2_id`=".$tables[$i]);
-                $connect = $connection['connection'];
-                if ($connect=='')
                 {
-                    $table = db_row_value("visible_table", "`id`=".$connection['connect_table_id']);
-                    
-                    if (!inarr($tables, $table['id']))
+                    $connection = db_row_value('table_connections', "`table1_id`=".$tables[$j]." AND `table2_id`=".$tables[$i]);
+                }
+                if ($connection!=''){
+                $connect = $connection['connection'];
+                    if ($connect=='')
                     {
-                        $have_new = true;
-                        $tables[count($tables)]=$table['id'];
-                        $from .= $table['table'].', ';
-                        if ($table['table'] == 'pupil_team'){
-                            $order .= ', `pupil_team`.`number` ASC';
-                        }                  
-                        if ($table['table'] == 'teacher_team'){
-                            $order .= ', `teacher_team`.`number` ASC';
+                        $table = db_row_value("visible_table", "`id`=".$connection['connect_table_id']);
+                    
+                        if (!inarr($tables, $table['id']))
+                        {
+                            $have_new = true;
+                            $tables[count($tables)]=$table['id'];
+                            $from .= '`'.$table['table'].'`, ';
+                            if ($table['table'] == 'pupil_team'){
+                                $order .= ', `pupil_team`.`number` ASC';
+                            }                  
+                            if ($table['table'] == 'teacher_team'){
+                                $order .= ', `teacher_team`.`number` ASC';
+                            }
                         }
                     }
                 }
@@ -278,11 +310,60 @@ function certificate_update_received($id) {
       
       $select = substr($select, 0, strlen($select) - 2);
       $from = substr($from, 0, strlen($from)-2);
-      if ($where != '')
+      if ($param != '')
+          $where .= $param;
+      else if ($where != '')
           $where = substr ($where, 0, strlen($where)-5);
       
       $sql = $select.' '.$from.' '.$where.' '.$order;
       return $sql;
+  }
+  
+  function certificate_get_html($id, $current_contest=-1, $param='')
+  {
+    $c = certificate_get_by_id($id);
+    if ($c==false)
+        return;
+    $template = $c['template'];
+    $sql = certificate_get_sql($id, $current_contest, $param, true);
+    
+    $result = db_query($sql);
+    $t = db_row_array($result);
+    //TODO: It's hack. Need to find normal solution for printing details with separator between them.
+    if ($t['ФИО ученика'] != "" || $t['ФИО учителя'] != "")
+    {
+        while ($row = db_row_array($result)) 
+        {
+            if ($row['ФИО ученика'] != "" && strpos($t['ФИО ученика'], $row['ФИО ученика'])===false){
+                $t['ФИО ученика'] .= '<br/>'.$row['ФИО ученика'];
+            }
+            if ($row['ФИО учителя'] != "" && strpos($t['ФИО учителя'], $row['ФИО учителя'])===false){
+                $t['ФИО учителя'] .= ', '.$row['ФИО учителя'];
+            }
+        }
+    }
+
+    if ($t==false)
+        return;
+
+    if ($t['Место в параллели']==1)
+        $t['Место в параллели'] = I;
+    else if ($t['Место в параллели']==2)
+        $t['Место в параллели'] = II;
+    else if ($t['Место в параллели']==3)
+        $t['Место в параллели'] = III;
+
+    $matchearray = array();
+    preg_match_all("/#[^#]+#/", $template, $matchearray);
+    $n = count($matchearray[0]);
+    $i=0;
+    while ($i<$n)
+    {
+        $match = substr($matchearray[0][$i], 1, count($matchearray[0][$i])-2);
+        $template = str_replace($matchearray[0][$i], $t[$match], $template);
+        $i++;
+    }
+    return $template;
   }
   
   //----------------limit functions--------------------
