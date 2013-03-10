@@ -10,6 +10,7 @@ include("../../../../../lib/MPDF54/mpdf.php");
 
 global $certificate, $param, $current_contest;
 db_connect (config_get ('check-database'));
+$c = certificate_get_by_id($certificate);
 $template = certificate_get_html($certificate, $current_contest, $param);
 
 $mpdf=new mPDF();
