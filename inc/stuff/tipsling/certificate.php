@@ -162,7 +162,7 @@ function certificate_update_received($id) {
       $limit_id = $cert['limit_id'];
       $limit = limit_get_by_id($limit_id);
       $template = $cert['template'];
-            
+      
       $select = 'SELECT DISTINCT `team`.`id` as "id_команды", ';
       if ($current_contest != -1)
       {
@@ -182,50 +182,68 @@ function certificate_update_received($id) {
           $tables = array();
       }
       $fields = array();
-      
       preg_match_all("/#([^#]+)#/", $for, $matchesarray, PREG_SET_ORDER);
       foreach ($matchesarray as $value) {
-          $field = visible_field_get_by_caption($value[1]);
-          $table = visible_table_get_by_id($field['table_id']);
+          $val = $value[1];
+          $val_copy = $val;
+          preg_match_all("/@([^@]+)@/", $val, $matches, PREG_SET_ORDER);
           
-          if (!inarr($tables, $table['id']))
-          {
-              $tables[count($tables)]=$table['id'];
-              $from .= '`'.$table['table'].'`, ';
-              if ($table['table'] == 'pupil_team'){
-                  $order .= ', `pupil_team`.`number` ASC';
-              }                  
-              if ($table['table'] == 'teacher_team'){
-                  $order .= ', `teacher_team`.`number` ASC';
-              }
+          foreach ($matches as $match) {
+            $field = visible_field_get_by_caption($match[1]);
+            $table = visible_table_get_by_id($field['table_id']);
+            
+            $val = str_replace('@'.$match[1].'@', '`'.$table['table'].'`.`'.$field['field'].'`', $val);
+          
+            if (!inarr($tables, $table['id']))
+            {
+                $tables[count($tables)]=$table['id'];
+                $from .= '`'.$table['table'].'`, ';
+                if ($table['table'] == 'pupil_team'){
+                    $order .= ', `pupil_team`.`number` ASC';
+                }                  
+                if ($table['table'] == 'teacher_team'){
+                    $order .= ', `teacher_team`.`number` ASC';
+                }
+            }
           }
-          if (!inarr($fields, $value[1]))
+          
+          if (!inarr($fields, $val))
           {
-              $fields[count($fields)]=$value[1];
-              $select .= '`'.$table['table'].'`.`'.$field['field'].'` as '.db_string($value[1]).', ';
+              $fields[count($fields)]=$val_copy;
+              $select .= $val.' as '.db_string($val_copy).', ';
           }
       }
       
       if ($include_template) {
           preg_match_all("/#([^#]+)#/", $template, $matchesarray, PREG_SET_ORDER);
           foreach ($matchesarray as $value) {
-            $field = visible_field_get_by_caption($value[1]);
-            $table = visible_table_get_by_id($field['table_id']);
-            if (!inarr($tables, $table['id']))
-            {
-              $tables[count($tables)]=$table['id'];
-              $from .= '`'.$table['table'].'`, ';
-              if ($table['table'] == 'pupil_team'){
-                  $order .= ', `pupil_team`.`number` ASC';
-              }                  
-              if ($table['table'] == 'teacher_team'){
-                  $order .= ', `teacher_team`.`number` ASC';
-              }
+            $val = $value[1];
+            $val_copy = $val;
+            preg_match_all("/@([^@]+)@/", $val, $matches, PREG_SET_ORDER);
+          
+            foreach ($matches as $match) {
+                $field = visible_field_get_by_caption($match[1]);
+                $table = visible_table_get_by_id($field['table_id']);
+            
+                $val = str_replace('@'.$match[1].'@', '`'.$table['table'].'`.`'.$field['field'].'`', $val);
+              
+                if (!inarr($tables, $table['id']))
+                {
+                    $tables[count($tables)]=$table['id'];
+                    $from .= '`'.$table['table'].'`, ';
+                    if ($table['table'] == 'pupil_team'){
+                        $order .= ', `pupil_team`.`number` ASC';
+                    }                  
+                    if ($table['table'] == 'teacher_team'){
+                        $order .= ', `teacher_team`.`number` ASC';
+                    }
+                }
             }
+            
             if (!inarr($fields, $value[1]))
             {
-              $fields[count($fields)]=$value[1];
-              $select .= '`'.$table['table'].'`.`'.$field['field'].'` as '.db_string($value[1]).', ';
+              $fields[count($fields)]=$val_copy;
+              $select .= $val.' as '.db_string($val_copy).', ';
             }
           }
       }
@@ -330,29 +348,22 @@ function certificate_update_received($id) {
     $result = db_query($sql);
     $t = db_row_array($result);
     //TODO: It's hack. Need to find normal solution for printing details with separator between them.
-    if ($t['ФИО ученика'] != "" || $t['ФИО учителя'] != "")
+    if ($t['@ФИО ученика@'] != "" || $t['@ФИО учителя@'] != "")
     {
         while ($row = db_row_array($result)) 
         {
-            if ($row['ФИО ученика'] != "" && strpos($t['ФИО ученика'], $row['ФИО ученика'])===false){
-                $t['ФИО ученика'] .= '<br/>'.$row['ФИО ученика'];
+            if ($row['@ФИО ученика@'] != "" && strpos($t['@ФИО ученика@'], $row['@ФИО ученика@'])===false){
+                $t['@ФИО ученика@'] .= '<br/>'.$row['@ФИО ученика@'];
             }
-            if ($row['ФИО учителя'] != "" && strpos($t['ФИО учителя'], $row['ФИО учителя'])===false){
-                $t['ФИО учителя'] .= ', '.$row['ФИО учителя'];
+            if ($row['@ФИО учителя@'] != "" && strpos($t['@ФИО учителя@'], $row['@ФИО учителя@'])===false){
+                $t['@ФИО учителя@'] .= ', '.$row['@ФИО учителя@'];
             }
         }
     }
 
     if ($t==false)
         return;
-
-    if ($t['Место в параллели']==1)
-        $t['Место в параллели'] = I;
-    else if ($t['Место в параллели']==2)
-        $t['Место в параллели'] = II;
-    else if ($t['Место в параллели']==3)
-        $t['Место в параллели'] = III;
-
+    
     $matchearray = array();
     preg_match_all("/#[^#]+#/", $template, $matchearray);
     $n = count($matchearray[0]);

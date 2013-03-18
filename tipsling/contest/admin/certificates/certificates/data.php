@@ -74,6 +74,12 @@ ${information}
                                                                                       'cert_id'=>$r['id']);
                 }
                 echo('<th width="12%"></th></tr>');
+                
+                echo('<tr><td/>');
+                $q = db_query($sql);
+                while ($r = mysql_fetch_array($q))
+                    echo('<td style="padding:5px 5px 5px 5px;"><a style="cursor:pointer;" onclick="check_all_in_column('.$r["id"].');">Выбрать&nbspвсе</a> / <a style="cursor:pointer;" onclick="uncheck_all_in_column('.$r["id"].');">Снять&nbspвсе</a></td>');
+                echo('</tr>');
             
                 $teams = team_list("", "", $current_contest, $filter);
                 $n = count($teams);
@@ -97,12 +103,7 @@ ${information}
                     
                     echo('<td><a style="cursor:pointer;" onclick="check_all_in_row('.$i.');">Выбрать все</a><br/><a style="cursor:pointer;" onclick="uncheck_all_in_row('.$i.');">Снять все</a></td> </tr>');
                     $i++;
-                }
-                echo('<tr><td/>');
-                $q = db_query($sql);
-                while ($r = mysql_fetch_array($q))
-                    echo('<td style="padding:5px 5px 5px 5px;"><a style="cursor:pointer;" onclick="check_all_in_column('.$r["id"].');">Выбрать&nbspвсе</a> / <a style="cursor:pointer;" onclick="uncheck_all_in_column('.$r["id"].');">Снять&nbspвсе</a></td>');
-                echo('</tr>');
+                }                
             ?>            
         </table>
         <div width = "100%" class="formPast">

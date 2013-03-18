@@ -135,7 +135,6 @@
       }
       $sql = certificate_get_sql($type, $current_contest, '', false);
       $result = db_query($sql);
-      
       $cert = certificate_get_by_id($type);
       $for = $cert['for'];
       $print = '';
@@ -149,10 +148,19 @@
           {
               $caption = substr($value, 1, strlen($value)-2);
               $for_copy = str_replace($value, $rows[$caption], $for_copy);
-              $visible_field = visible_field_get_by_caption($caption);
-              $field = $visible_field['field'];
-              $table = db_field_value("visible_table", "table", "`id`=".$visible_field['table_id']);
-              $cert_limit .= '`'.$table.'`.`'.$field.'`=\''.$rows[$caption].'\' AND ';
+              $expr_value = $rows[$caption];
+              
+              preg_match_all("/@[^@]+@/", $caption, $matches);
+              $arr = $matches[0];
+              foreach ($arr as $val) 
+              {              
+                  $field_caption = substr($val, 1, strlen($val)-2);
+                  $visible_field = visible_field_get_by_caption($field_caption);
+                  $field = $visible_field['field'];
+                  $table = db_field_value("visible_table", "table", "`id`=".$visible_field['table_id']);
+                  $caption = str_replace('@'.$field_caption.'@', '`'.$table.'`.`'.$field.'`', $caption);
+              }              
+              $cert_limit .= $caption.'=\''.$expr_value.'\' AND ';
           }
           $cert_limit = substr($cert_limit, 0, strlen($cert_limit) - 5);
           $print .= '<option value="'.$cert_limit.'">'.$for_copy.'</option>';
