@@ -89,9 +89,7 @@ if (count($list) > 0) {
       $region = school_get_region_name($r['school_id']);
       $city = school_get_city_name($r['school_id']);
       $teacher = $it['teacher_full_name'];
-      $pupils = $it['pupil1_full_name'] .
-              (($it['pupil2_full_name'] == '') ? ('') : (', ' . $it['pupil2_full_name'])) .
-              (($it['pupil3_full_name'] == '') ? ('') : (', ' . $it['pupil3_full_name']));
+      $pupils = $it['pupils'];
       $payment = (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>'));
       if ($has_access) {
         $edit_delete =

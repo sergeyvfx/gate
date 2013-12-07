@@ -19,8 +19,8 @@ dd_formo('title=Новая команда;');
 <script language="JavaScript" type="text/javascript">
   function check(frm) {   
     var grade  = getElementById ('grade').value;
-    var teacher_full_name = getElementById('teacher_full_name').value;
     var pupil1_full_name   = getElementById ('pupil1_full_name').value;
+    var $teachers = $('input[name="teachers[]"]');
     var comment = qtrim(getElementById('comment').value);
     
     if (qtrim(grade)==''){
@@ -38,7 +38,14 @@ dd_formo('title=Новая команда;');
         return;
     }
 
-    if (qtrim(teacher_full_name)==''){
+    var isTeacherEmpty=true;
+    for(var i=0; i<$teachers.length; i++){
+        if (qtrim($teachers[i].value) != ''){
+            isTeacherEmpty=false;
+            break;
+        }
+    }
+    if (isTeacherEmpty){
       alert('ФИО учителя не может быть пустым');
       return;
     }
@@ -78,14 +85,16 @@ dd_formo('title=Новая команда;');
   }
 
   function check_frm_teacher() {
-      var teacher = getElementById ('teacher_full_name').value;
-
-      if (qtrim(teacher)==''){
-          show_msg ('teacher_check_res', 'err', 'Это поле обзательно для заполнения');
-          return;
+      var $teachers = $('input[name="teachers[]"]');
+      
+      for(var i=0; i<$teachers.length; i++){
+          if (qtrim($teachers[i].value) != ''){
+              hide_msg('teacher_check_res');      
+              return;
+          }
       }
 
-      hide_msg('teacher_check_res');
+      show_msg ('teacher_check_res', 'err', 'Это поле обзательно для заполнения');
   }
 
   function check_frm_pupil() {
@@ -109,6 +118,20 @@ dd_formo('title=Новая команда;');
 
       hide_msg('comment_check_res');
   }
+    
+  $(function (){
+    var AddTeacherField = function(){
+            $('#teachers').find('tr:last').after("<tr><td><input type='text' class='txt block' name='teachers[]' onblur='check_frm_teacher ();' value=''/></td><td width='24' style='text-align:right;'><img class='btn' src='<?=config_get('document-root')?>/pics/cross.gif'/></td></tr>");
+        },
+        RemoveTeacherField = function(){
+            $rows = $(this).parents('table:first').find('tr');
+            if ($rows.length>1){
+                $(this).parents('tr:first').remove();
+            }
+        };
+    $('#addTeacher').on('click', AddTeacherField);
+    $('#teachers').on('click', 'img',  RemoveTeacherField);
+  });
 
 </script>
 <div>
@@ -132,15 +155,14 @@ dd_formo('title=Новая команда;');
                 Полное имя учителя: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
-    <?php
-    $teacher_full_name = htmlspecialchars(stripslashes($_POST['teacher_full_name']));
-    if ($teacher_full_name == '') {
-      $u = user_get_by_id(user_id());
-      $teacher_full_name = $u['surname'] . ' ' . $u['name'] .
-              (($u['patronymic'] == '') ? ('') : (' ' . $u['patronymic']));
-    }
-    print('<input type="text" class="txt block"  id="teacher_full_name" name="teacher_full_name" onblur="check_frm_teacher ();" value="' . $teacher_full_name . '">');
-    ?>
+                <table width="100%" id="teachers">
+                <?php
+                    $u = user_get_by_id(user_id());
+                    $teacher_full_name = $u['surname'] . ' ' . $u['name'] . (($u['patronymic'] == '') ? ('') : (' ' . $u['patronymic']));
+                    print("<tr><td><input type='text' class='txt block' name='teachers[]' value='" . $teacher_full_name . "'/><input type='hidden' name='teacher_team[]'/></td><td width='24' style='text-align:right;'><img class='btn' src='".config_get('document-root')."/pics/cross.gif'/></td></tr>");
+                ?>
+                </table>
+                <button id="addTeacher" type="button" class="submitBtn">Добавить</button>
             </td>
         </tr>
       </table>
@@ -151,7 +173,7 @@ dd_formo('title=Новая команда;');
                 Полное имя 1-го участника: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="pupil1_full_name" name="pupil1_full_name" onblur="check_frm_pupil ();" value="<?= htmlspecialchars(stripslashes($_POST['pupil1_full_name'])); ?>">
+                <input type="text" class="txt block" id="pupil1_full_name" name="pupils[]" onblur="check_frm_pupil ();" value="">
             </td>
         </tr>
       </table>
@@ -162,7 +184,7 @@ dd_formo('title=Новая команда;');
                 Полное имя 2-го участника:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil2_full_name'])); ?>">
+                <input type="text" class="txt block" id="pupil2_full_name" name="pupils[]" value="">
             </td>
         </tr>
       </table>
@@ -172,7 +194,7 @@ dd_formo('title=Новая команда;');
                 Полное имя 3-го участника:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars(stripslashes($_POST['pupil3_full_name'])); ?>">
+                <input type="text" class="txt block" id="pupil3_full_name" name="pupils[]" value="">
             </td>
         </tr>
       </table>
@@ -228,7 +250,12 @@ dd_formo('title=Новая команда;');
                 $whereContests .= 'contest_id = '.$contest_list[$i]['id'];
         }
         
-        $sql = "SELECT * FROM team where responsible_id=".user_id(). " and (".$whereContests.")";
+        $sql = "SELECT team.id, team.grade, team.number, team.contest_id, "
+              ." (SELECT pupil.FIO FROM pupil JOIN pupil_team on pupil_team.pupil_id=pupil.id WHERE pupil_team.team_id = team.id AND pupil_team.number=1) as pupil1, "
+              ." (SELECT pupil.FIO FROM pupil JOIN pupil_team on pupil_team.pupil_id=pupil.id WHERE pupil_team.team_id = team.id AND pupil_team.number=2) as pupil2, "
+              ." (SELECT pupil.FIO FROM pupil JOIN pupil_team on pupil_team.pupil_id=pupil.id WHERE pupil_team.team_id = team.id AND pupil_team.number=3) as pupil3 "
+              ."FROM team "
+              ."WHERE responsible_id=".user_id(). " AND (".$whereContests.")";
         $team_list = arr_from_query($sql);
         
         if (count($contest_list)>0 && count($team_list)>0)
@@ -249,11 +276,11 @@ dd_formo('title=Новая команда;');
                 echo('<option value = "' . $t['id'] . '" >' . 
                      $t['grade'].'.'.$t['number'].' ('.
                      $t_contest['name'].
-                     ') - '.$t['pupil1_full_name'].
-                     ($t['pupil2_full_name']!=null
-                     ?', '.$t['pupil2_full_name']:'').
-                     ($t['pupil3_full_name']!=null
-                     ?', '.$t['pupil3_full_name']:'').
+                     ') - '.$t['pupil1'].
+                     ($t['pupil2']!=null
+                     ?', '.$t['pupil2']:'').
+                     ($t['pupil3']!=null
+                     ?', '.$t['pupil3']:'').
                      '</option>');
              }
              echo('

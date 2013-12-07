@@ -20,6 +20,7 @@ if ($IFACE != "SPAWNING NEW IFACE" || $_GET['IFACE'] != '') {
 if ($_tipsling_Included_ != '#tipsling_Included#') {
   $_tipsling_Included_ = '#tipsling_Included#';
 
+  include $DOCUMENT_ROOT . '/inc/stuff/tipsling/common.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/school.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/responsible.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/bookkeeper.php';
@@ -30,5 +31,7 @@ if ($_tipsling_Included_ != '#tipsling_Included#') {
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/poll.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/certificate.php';
   include $DOCUMENT_ROOT . '/inc/stuff/tipsling/check_allowed_operations.php';
+  include $DOCUMENT_ROOT . '/inc/stuff/tipsling/pupil.php';
+  include $DOCUMENT_ROOT . '/inc/stuff/tipsling/teacher.php';
 }
 ?>

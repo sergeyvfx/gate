@@ -214,7 +214,7 @@ body {
 #content div.alist button       { margin-left: 4px; }
 
 /* Messages */
-#content img.btn        { cursor: pointer; margin: 0 1px; padding: 2px; }
+#content img.btn        { cursor: pointer; margin: 0 1px; padding: 2px; vertical-align: middle; }
 #content img.btn:hover  { border: 1px #777 solid; padding: 0; background: #eee; padding: 1px; }
 #content img.btnd { cursor: pointer; margin: 0 1px; padding: 2px; }
 

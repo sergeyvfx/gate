@@ -14,14 +14,19 @@ if ($PHP_SELF != '') {
 
 global $id, $page;
 $team = team_get_by_id($id);
+$pupils = pupil_list_by_team_id($id);
+$teachers = teacher_list_by_team_id($id);
 formo('title=Редактирование команды '.$team['grade'].'.'.$team['number'].' (номер при регистрации: '.$team['grade'].'.'.$team['reg_number'].');');
 
 ?>
+
+<script src="<?= config_get('document-root') . "/scripts/autocomplete.js" ?>"></script>
+
 <script language="JavaScript" type="text/javascript">
   function check (frm) {
     var grade  = getElementById ('grade').value;
-    var teacher_full_name = getElementById('teacher_full_name').value;
     var pupil1_full_name   = getElementById ('pupil1_full_name').value;
+    var $teachers = $('input[name="teachers[]"]');
 
     if (qtrim(grade)==''){
       alert('Укажите класс команды')
@@ -38,7 +43,14 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
         return;
     }
 
-    if (qtrim(teacher_full_name)==''){
+    var isTeacherEmpty=true;
+    for(var i=0; i<$teachers.length; i++){
+        if (qtrim($teachers[i].value) != ''){
+            isTeacherEmpty=false;
+            break;
+        }
+    }
+    if (isTeacherEmpty){
       alert('ФИО учителя не может быть пустым');
       return;
     }
@@ -72,14 +84,16 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
   }
 
   function check_frm_teacher() {
-      var teacher = getElementById ('teacher_full_name').value;
-
-      if (qtrim(teacher)==''){
-          show_msg ('teacher_check_res', 'err', 'Это поле обзательно для заполнения');
-          return;
+      var $teachers = $('input[name="teachers[]"]');
+      
+      for(var i=0; i<$teachers.length; i++){
+          if (qtrim($teachers[i].value) != ''){
+              hide_msg('teacher_check_res');      
+              return;
+          }
       }
 
-      hide_msg('teacher_check_res');
+      show_msg ('teacher_check_res', 'err', 'Это поле обзательно для заполнения');
   }
 
   function check_frm_pupil() {
@@ -103,9 +117,27 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
 
       hide_msg('comment_check_res');
   }
-</script>
+  
+  $(function (){
+    var AddTeacherField = function(){
+            $('#teachers').find('tr:last').after("<tr><td><input <?=($is_user_admin?'':'readonly="true"')?> type='text' class='txt block' name='teachers[]' onblur='check_frm_teacher ();' value=''/><input type='hidden' name='teacher_team[]'/></td><td width='24' style='text-align:right;'><img class='btn' src='<?=config_get('document-root')?>/pics/cross.gif'/></td></tr>");
+        },
+        RemoveTeacherField = function(){
+            $rows = $(this).parents('table:first').find('tr');
+            if ($rows.length>1){
+                $(this).parents('tr:first').remove();
+            }
+        };
+  
+    $('#addTeacher').on('click', AddTeacherField);
+    $('#teachers').on('click', 'img',  RemoveTeacherField);
+  });
+  
+  
+  </script>
 
-<form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
+  
+  <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
     <table class="clear" width="100%">
         <tr><td width="275px">
                 Класс участников: <span class="error">*</span>
@@ -122,14 +154,26 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             </td>
         </tr>
       </table>
-    <div id="grade_check_res" style="display: none;"></div>
+      <div id="grade_check_res" style="display: none;"></div>
       <div id="hr"></div>
       <table class ="clear" width="100%">
         <tr><td width="275px">
                 Полное имя учителя: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
-                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block"  id="teacher_full_name" name="teacher_full_name" onblur="check_frm_teacher ();" value="<?= htmlspecialchars(stripslashes($team['teacher_full_name']));?>">
+                <table width="100%" id="teachers">
+                <?php
+                    if (count($teachers)>0){
+                        foreach ($teachers as $teacher) {
+                            echo("<tr><td><input ".($is_user_admin?'':'readonly="true"')." type='text' class='txt block' name='teachers[]' onblur='check_frm_teacher ();' value='".htmlspecialchars(stripslashes($teacher['FIO']))."'><input type='hidden' name='teacher_team[]' value='".$teacher['idOfTeacher_team']."'/></td><td width='24' style='text-align:right;'><img class='btn' src='".config_get('document-root')."/pics/cross.gif'/></td></tr>");
+                        }
+                    }
+                    else {
+                        echo("<tr><td><input ".($is_user_admin?'':'readonly="true"')." type='text' class='txt block' name='teachers[]'/><input type='hidden' name='teacher_team[]'/></td><td width='24' style='text-align:right;'><img class='btn' src='".config_get('document-root')."/pics/cross.gif'/></td></tr>");                        
+                    }
+                ?>
+                </table>
+                <button id="addTeacher" type="button" class="submitBtn">Добавить</button>
             </td>
         </tr>
       </table>
@@ -140,7 +184,8 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 Полное имя 1-го участника: <span class="error">*</span>
             </td>
             <td style="padding: 0 2px;">
-                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block" id="pupil1_full_name" name="pupil1_full_name" onblur="check_frm_pupil ();" value="<?= htmlspecialchars(stripslashes($team['pupil1_full_name'])); ?>">
+                <input type="text" class="txt block" id="pupil1_full_name" name="pupils[]" onblur="check_frm_pupil ();" value="<?= htmlspecialchars(stripslashes($pupils[0]["FIO"])); ?>">
+                <input type='hidden' name='pupil_team[]' value='<?=$pupils[0]['idOfPupil_team']?>'/>
             </td>
         </tr>
       </table>
@@ -151,17 +196,19 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 Полное имя 2-го участника:
             </td>
             <td style="padding: 0 2px;">
-                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block" id="pupil2_full_name" name="pupil2_full_name" value="<?= htmlspecialchars(stripslashes($team['pupil2_full_name'])); ?>">
+                <input type="text" class="txt block" id="pupil2_full_name" name="pupils[]" value="<?= htmlspecialchars(stripslashes($pupils[1]["FIO"])); ?>">
+                <input type='hidden' name='pupil_team[]' value='<?=$pupils[1]['idOfPupil_team']?>'/>
             </td>
         </tr>
       </table>
       <div id="hr"></div>
-      <table class ="clear" width="100%">
+      <table class="clear" width="100%">
         <tr><td width="275px">
                 Полное имя 3-го участника:
             </td>
             <td style="padding: 0 2px;">
-                <input <?=$is_user_admin?'':'readonly="true"'?> type="text" class="txt block" id="pupil3_full_name" name="pupil3_full_name" value="<?= htmlspecialchars(stripslashes($team['pupil3_full_name'])); ?>">
+                <input type="text" class="txt block" id="pupil3_full_name" name="pupils[]" value="<?= htmlspecialchars(stripslashes($pupils[2]["FIO"])); ?>">
+                <input type='hidden' name='pupil_team[]' value='<?=$pupils[2]['idOfPupil_team']?>'/>
             </td>
         </tr>
       </table>

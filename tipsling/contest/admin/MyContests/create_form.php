@@ -47,64 +47,6 @@ dd_formo('title=Новый конкурс;');
 
     frm.submit ();
   }
-
-  function check_frm_date() {
-    var date = getElementById ('date').value;
-
-    if (qtrim(date)=='') {
-        show_msg ('date_check_res', 'err', 'Это поле обязательно для заполнения');
-        return;
-    }
-
-    hide_msg('date_check_res');
-  }
-
-  function check_frm_cheque() {
-    var cheque = getElementById ('cheque_number').value;
-
-    if (qtrim(cheque)=='') {
-        show_msg ('cheque_check_res', 'err', 'Это поле обязательно для заполнения');
-        return;
-    }
-
-    hide_msg('cheque_check_res');
-  }
-
-  function check_frm_payer() {
-    var payer = getElementById ('payer_full_name').value;
-
-    if (qtrim(payer)=='') {
-        show_msg ('payer_check_res', 'err', 'Это поле обязательно для заполнения');
-        return;
-    }
-
-    hide_msg('payer_check_res');
-  }
-  function check_frm_amount() {
-    var amount = getElementById ('amount').value;
-
-    if (qtrim(amount)=='') {
-        show_msg ('amount_check_res', 'err', 'Это поле обязательно для заполнения');
-        return;
-    }
-    if (!isRealNumber(amount)) {
-        show_msg ('amount_check_res', 'err', 'Поле заполненно некорректно');
-        return;
-    }
-
-    hide_msg('amount_check_res');
-  }
-  function check_frm_comment() {
-    var comment = getElementById ('comment').value;
-
-    if (comment.length > <?=opt_get('max_comment_len');?>) {
-        show_msg ('comment_check_res', 'err', 'Поле "Комментарий" не может содержать более <?=opt_get('max_comment_len');?> символов');
-        return;
-    }
-
-    hide_msg('comment_check_res');
-  }
-
 </script>
 <div>
   <form action=".?action=create&page=<?=$page?>" method="POST" onsubmit="check(this); return false;">

@@ -30,6 +30,37 @@
 
     frm.submit ();
   }
+  
+  function check(frm) {
+    var contest_name = qtrim(getElementById ('name').value);
+    var r_s = qtrim(getElementById('registration_start').value);
+    var r_f = qtrim(getElementById('registration_finish').value);
+    var c_s = qtrim(getElementById('contest_start').value);
+    var c_f = qtrim(getElementById('contest_finish').value);
+    var s_to_a = qtrim(getElementById('send_to_archive').value);
+    
+    if (contest_name == '') {
+      alert("Поле \"Название\" обязательно для заполнения");
+      return;
+    }
+    
+    if (r_s!=null && r_f!=null && r_s>r_f) {
+      alert("Конец регистрации не может быть раньше, чем ее начало");
+      return;
+    }
+    
+    if (c_s!=null && c_f!=null && c_s>c_f) {
+      alert("Конец конкурса не может быть раньше, чем его начало");
+      return;
+    }
+    
+    if (s_to_a!=null && c_f!=null && s_to_a<c_f) {
+      alert("Незавершенный конкурс не может быть добавлен в архивные");
+      return;
+    }        
+
+    frm.submit ();
+  }
 </script>
 
 <form action=".?action=save&id=<?=$id;?>" method="post" onsubmit="check (this); return false;">

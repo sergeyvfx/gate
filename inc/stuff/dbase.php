@@ -210,7 +210,7 @@
       if (count ($arr) <= 0) {
         return;
       }
-
+      
       $sql = '';
       foreach ($arr as $k => $v) {
         $sql .= (($sql!='')?(','):(''))."`$k`=".$v;
@@ -218,7 +218,7 @@
       $sql = "UPDATE `$table` SET $sql".(($clause!='')?(" WHERE $clause"):(''));
       db_query ($sql);
     }
-
+    
     function db_select ($table, $arr = array ('*'), $clause = '', $suffix = '') {
       if (count ($arr) <= 0) {
         return;
@@ -239,12 +239,12 @@
       $sql = "DELETE  FROM `$table`".(($clause!='')?(" WHERE $clause"):(''));
       db_query ($sql);
     }
-
+    
     function db_insert ($table, $arr) {
       if (count ($arr) <= 0) {
         return;
       }
-
+      
       $fields = '';
       $values = '';
 
@@ -261,10 +261,10 @@
         $values .= $v;
       }
 
-      $sql = "INSERT INTO `$table` ($fields) VALUES($values)";
+      $sql = "INSERT INTO `$table` ($fields) VALUES($values)";      
       return db_query ($sql);
     }
-
+    
     function db_swap_values ($table, $id1, $id2, $field, $idfield = 'id') {
       $r = db_row (db_query ("SELECT `$field` FROM `$table` ".
                              "WHERE `$idfield`=$id1"));
@@ -352,6 +352,11 @@
     function db_last_query () {
       global $db_last_query;
       return $db_last_query;
+    }
+    
+    function db_last_insert_id(){
+        $r = db_row(db_query('select last_insert_id() as id'));
+        return $r['id'];
     }
 
     function db_html_string ($s) {
