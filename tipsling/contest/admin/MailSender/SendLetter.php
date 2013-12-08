@@ -38,10 +38,14 @@ foreach ($addresses as $value)
         $from = isset($_POST['mailsender']) ? htmlspecialchars(stripslashes($_POST['mailsender'])) : ''; 
         $subject = isset($_POST['mailsubject']) ? htmlspecialchars(stripslashes($_POST['mailsubject'])) : ''; 
         $message = isset($_POST['mailtext']) ? htmlspecialchars(stripslashes($_POST['mailtext'])) : ''; 
+        $headers = "Content-type: text/plain; charset=\"utf-8\"\r\n"; 
+        $headers .= "From: <". $from .">\r\n"; 
+        $headers .= "MIME-Version: 1.0\r\n"; 
+        $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n"; 
 
         // Отправляем почтовое сообщение 
         if(count($file_names) == 0)
-            mail ($to, $subject, $message, "Content-type: text/plain\nFrom:".$from);
+            mail ($to, $subject, $message, $headers);
         else send_mail($to, $from, $subject, $message, $file_names, $folder); 
     }
 }
@@ -51,12 +55,19 @@ function send_mail($to, $from, $subject, $message, $files, $folder)
 {
     $boundary = "--".md5(uniqid(time())); // генерируем пароль!!!!! 
     // echo "$boundary"; 
+    
+    $headers = "Content-type: text/plain; charset=\"utf-8\"\r\n"; 
+        $headers .= "From: <". $from .">\r\n"; 
+        $headers .= "MIME-Version: 1.0\r\n"; 
+        $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n"; 
+    
     $headers .= "MIME-Version: 1.0\n"; 
+    $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n"; 
     $headers .="Content-Type: multipart/mixed; boundary=\"$boundary\"\n"; 
-    $headers .="From:".$from."\r\n";
+    $headers .= "From: <". $from .">\r\n"; 
     
     $multipart .= "--$boundary\n"; 
-    $multipart .= "Content-Type: text/plain\n"; 
+    $multipart .= "Content-Type: text/plain; charset=\"utf-8\"\r\n";
     $multipart .= "Content-Transfer-Encoding: Quot-Printed\n\n"; 
     $multipart .= "$message\n\n";
     
