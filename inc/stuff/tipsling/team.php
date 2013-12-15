@@ -455,7 +455,15 @@ if ($_team_included_ != '#team_Included#') {
       return false;
     }
 
-    return db_delete('team', 'id=' . $id);
+    db_delete('team', 'id=' . $id);
+    $pupils = pupil_list_by_team_id($id);
+    foreach ($pupils as $pupil) {
+        pupil_team_delete($pupil['idOfPupil_team']);
+    }
+    $teachers = teacher_list_by_team_id($id);
+    foreach ($teachers as $teacher) {
+        teacher_team_delete($teacher['idOfTeacher_team']);
+    }
   }
 
   function team_get_by_id($id) {
