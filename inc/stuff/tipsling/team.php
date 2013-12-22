@@ -497,8 +497,8 @@ if ($_team_included_ != '#team_Included#') {
       if ($contest_id==''){
           $contest_id = $current_contest;
       }
-      $team_list()=array();
-      $team_list_by_grade()=array();
+      $team_list=array();
+      $team_list_by_grade=array();
       $list = team_list('','',$current_contest);
       
       //get array of teams with marks
@@ -509,13 +509,17 @@ if ($_team_included_ != '#team_Included#') {
             $team['mark'] = (float)$team['mark'];
             $team_list[] = $team;
           }
+          else {
+              $sql = "UPDATE `team` SET `mark`=null, `place`=null, `common_place`=null WHERE `id`=$team_id";
+              db_query ($sql);
+          }          
       }
       
       //sort array of teams
       $tmp = Array(); 
-      foreach($team_list as &$tmp_team) 
+      foreach($team_list as &$tmp_team)
         $tmp[] = &$tmp_team['mark'];
-      array_multisort($tmp, $team_list); 
+      array_multisort($tmp, SORT_DESC, SORT_NUMERIC, $team_list); 
       
       $team_list[0]['common_place']=1;
       $team_list[0]['place']=1;
@@ -545,10 +549,10 @@ if ($_team_included_ != '#team_Included#') {
           else {
               $team_list[$i]['place']=$team_list_by_grade[$team_grade][$team_grade_count-1]['place'];
           }              
-      }
+      }      
       
       foreach($team_list as $team) {
-          team_update_results($team['id'], $team['mark'], '0', $team['common_place']);
+          team_update_results($team['id'], $team['mark'], $team['place'], $team['common_place']);
       }
   }
   
