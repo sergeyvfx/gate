@@ -75,6 +75,21 @@ if ($_team_included_ != '#team_Included#') {
             . $sort;
     return arr_from_query($sql);
   }
+  
+  function team_list_sort_by_mark($contest_id)
+  {
+      if ($contest_id == '') $contest_id = $current_contest;
+      
+      $sql = "SELECT\n"
+            . " team.*, "
+            . "FROM \n"
+            . " team \n"
+            . "WHERE \n"
+            . " team.contest_id=$contest_id AND"
+            . " team.mark is not null \n"
+            . "SORT BY team.mark";
+      return arr_from_query($sql);
+  }
 
   /**
    * Проверка корректности заполнения полей
@@ -482,16 +497,58 @@ if ($_team_included_ != '#team_Included#') {
       if ($contest_id==''){
           $contest_id = $current_contest;
       }
+      $team_list()=array();
+      $team_list_by_grade()=array();
       $list = team_list('','',$current_contest);
+      
+      //get array of teams with marks
       foreach ($list as &$team) {
           $team_id = $team['id'];
-          $mark = stripslashes(trim($_POST["mark"]["$team_id"]));
-          $place = stripslashes(trim($_POST["place"]["$team_id"]));
-          $common_place = stripslashes(trim($_POST["common_place"]["$team_id"]));
-          if ($mark == '') $mark = '0';
-          if ($place == '') $place = '0';
-          if ($common_place == '') $common_place = '0';
-          team_update_results($team_id, $mark, $place, $common_place);          
+          $team['mark'] = stripslashes(trim($_POST["mark"]["$team_id"]));
+          if ($team['mark'] != '') {
+            $team['mark'] = (float)$team['mark'];
+            $team_list[] = $team;
+          }
+      }
+      
+      //sort array of teams
+      $tmp = Array(); 
+      foreach($team_list as &$tmp_team) 
+        $tmp[] = &$tmp_team['mark'];
+      array_multisort($tmp, $team_list); 
+      
+      $team_list[0]['common_place']=1;
+      $team_list[0]['place']=1;
+      $team_list_by_grade[$team_list[0]['grade']][]=$team_list[0];
+      $n = count($team_list);
+      for ($i=1; $i<$n; $i++){
+          //set common place
+          if ($team_list[$i]['mark']<$team_list[$i-1]['mark']){
+              $team_list[$i]['common_place']=$i+1;
+          }
+          else {
+              $team_list[$i]['common_place']=$team_list[$i-1]['common_place'];
+          }
+          
+          //set place in grade
+          $team_grade = $team_list[$i]['grade'];
+          $team_list_by_grade[$team_grade][]=$team_list[$i];
+          $team_grade_count = count($team_list_by_grade[$team_grade]);
+          if ($team_grade_count == 1){
+              $team_list[$i]['place']=1;
+              $team_list_by_grade[$team_grade][$team_grade_count]['place']=1;
+          }
+          else if ($team_list_by_grade[$team_grade][$team_grade_count]['mark']<$team_list_by_grade[$team_grade][$team_grade_count-1]['mark']){
+              $team_list[$i]['place']=$team_grade_count;
+              $team_list_by_grade[$team_grade][$team_grade_count]['place']=$team_grade_count;
+          }
+          else {
+              $team_list[$i]['place']=$team_list_by_grade[$team_grade][$team_grade_count-1]['place'];
+          }              
+      }
+      
+      foreach($team_list as $team) {
+          team_update_results($team['id'], $team['mark'], '0', $team['common_place']);
       }
   }
   

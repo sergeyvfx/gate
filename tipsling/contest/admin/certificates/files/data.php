@@ -31,7 +31,7 @@ ${information}
 <div class="form">
   <div class="content">    
     <?php
-      global $DOCUMENT_ROOT, $action;
+      global $DOCUMENT_ROOT, $action, $filename;
       include '../../menu.php';
       include '../menu.php';
     
@@ -46,9 +46,31 @@ ${information}
       <input type="submit" value="Загрузить"/>
     </form>
     <?php
+      $directory = $DOCUMENT_ROOT."/uploaded_files/certificate";
       if ($action=='upload')
       {
-        include 'upload.php';
+          // Проверяем загружен ли файл
+          if(is_uploaded_file($_FILES["filename"]["tmp_name"]))
+          {
+              move_uploaded_file($_FILES["filename"]["tmp_name"], $directory."/".$_FILES["filename"]["name"]);
+          }
+          //include 'upload.php';
+      }
+      if ($action=='delete')
+      {
+          $dir = opendir($directory); 
+          // считываем содержание директории 
+          while(($file = readdir($dir))) 
+          { 
+              // Если это файл и он равен удаляемому ... 
+              if((is_file("$directory/$file")) && ("$directory/$file" == "$directory/$filename")) 
+              {
+                  // ...удаляем его. 
+                  unlink("$directory/$file");                  
+              } 
+          } 
+          // Закрываем дескриптор директории. 
+          closedir($dir);
       }
       include 'list.php';
     ?>
