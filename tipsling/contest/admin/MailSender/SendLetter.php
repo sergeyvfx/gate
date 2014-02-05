@@ -4,66 +4,56 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-global $DOCUMENT_ROOT;
+include '../../../../globals.php';
+include $DOCUMENT_ROOT . '/inc/include.php';
 
-$folder = $DOCUMENT_ROOT.'/uploaded_files/email_attachment/';
-$cnt = count($_FILES['mail_file']['name']);
-$file_names = array(); 
-if($cnt > 0) 
+$file_names = array();
+if ($_POST['files'] != '')
+    $file_names = explode('|',$_POST['files']);
+
+$logfile = isset($_POST['logfile']) ? htmlspecialchars(stripslashes($_POST['logfile'])) : '';
+$logfile = iconv("UTF-8","WINDOWS-1251",$logfile);
+$folder = isset($_POST['folder']) ? htmlspecialchars(stripslashes($_POST['folder'])) : '';
+$to = isset($_POST['address']) ? htmlspecialchars(stripslashes($_POST['address'])) : '';
+$from = isset($_POST['mailsender']) ? htmlspecialchars(stripslashes($_POST['mailsender'])) : ''; 
+$subject = isset($_POST['mailsubject']) ? htmlspecialchars(stripslashes($_POST['mailsubject'])) : ''; 
+$message = isset($_POST['mailtext']) ? htmlspecialchars(stripslashes($_POST['mailtext'])) : ''; 
+$headers = "Content-type: text/plain; charset=\"utf-8\"\r\n"; 
+$headers .= "From: <". $from .">\r\n"; 
+$headers .= "MIME-Version: 1.0\r\n"; 
+$headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n"; 
+
+// Отправляем почтовое сообщение 
+if(count($file_names) == 0)
 {
-    for($i = 0; $i < $cnt; ++$i) 
-    {
-        // Если поле выбора вложения не пустое - закачиваем его на сервер 
-        if (!empty($_FILES['mail_file']['tmp_name'][$i])) 
-        { 
-            // Закачиваем файл 
-            //$path = 'files/'.$_FILES['mail_file']['name'][$i];
-            $path = $folder.$_FILES['mail_file']['name'][$i];
-            
-            if (move_uploaded_file($_FILES['mail_file']['tmp_name'][$i], $path)) 
-            {
-                $file_names[$i] = $_FILES['mail_file']['name'][$i]; 
-            }
-        }
+    if(!mail($to, $subject, $message, $headers)) 
+    { 
+        $msg = $to.". К сожалению, письмо не отправлено.\n";        
     }
+    else
+    {
+        $msg = $to.". Письмо успешно отправлено.\n";
+    }
+    file_put_contents('log/'.$logfile, $msg, FILE_APPEND|LOCK_EX);
 }
-
-
-$addresses = preg_split("/[\s,]+/", $_POST['mailaddress']);
-foreach ($addresses as $value) 
+else 
 {
-    if (trim($value)!='')
-    {
-        $to = htmlspecialchars(stripslashes($value));
-        $from = isset($_POST['mailsender']) ? htmlspecialchars(stripslashes($_POST['mailsender'])) : ''; 
-        $subject = isset($_POST['mailsubject']) ? htmlspecialchars(stripslashes($_POST['mailsubject'])) : ''; 
-        $message = isset($_POST['mailtext']) ? htmlspecialchars(stripslashes($_POST['mailtext'])) : ''; 
-        $headers = "Content-type: text/plain; charset=\"utf-8\"\r\n"; 
-        $headers .= "From: <". $from .">\r\n"; 
-        $headers .= "MIME-Version: 1.0\r\n"; 
-        $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n"; 
-
-        // Отправляем почтовое сообщение 
-        if(count($file_names) == 0)
-            mail ($to, $subject, $message, $headers);
-        else send_mail($to, $from, $subject, $message, $file_names, $folder); 
-    }
+    send_mail($to, $from, $subject, $message, $file_names, $folder, $logfile);
 }
 
 // Вспомогательная функция для отправки почтового сообщения с вложением 
-function send_mail($to, $from, $subject, $message, $files, $folder) 
+function send_mail($to, $from, $subject, $message, $files, $folder, $logfile) 
 {
     $boundary = "--".md5(uniqid(time())); // генерируем пароль!!!!! 
-    // echo "$boundary"; 
     
     $headers = "Content-type: text/plain; charset=\"utf-8\"\r\n"; 
-        $headers .= "From: <". $from .">\r\n"; 
-        $headers .= "MIME-Version: 1.0\r\n"; 
-        $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n"; 
+    $headers .= "From: <". $from .">\r\n"; 
+    $headers .= "MIME-Version: 1.0\r\n"; 
+    $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n"; 
     
     $headers .= "MIME-Version: 1.0\n"; 
     $headers .= "Date: ". date('D, d M Y h:i:s O') ."\r\n"; 
-    $headers .="Content-Type: multipart/mixed; boundary=\"$boundary\"\n"; 
+    $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\n"; 
     $headers .= "From: <". $from .">\r\n"; 
     
     $multipart .= "--$boundary\n"; 
@@ -71,14 +61,15 @@ function send_mail($to, $from, $subject, $message, $files, $folder)
     $multipart .= "Content-Transfer-Encoding: Quot-Printed\n\n"; 
     $multipart .= "$message\n\n";
     
-    $message_part="";
+    $message_part = "";
     $cnt = count($files);
     for($i = 0; $i < $cnt; ++$i) 
     {
         $fp = fopen($folder.$files[$i],"r"); 
         if (!$fp) 
         { 
-            print "Файл $files[$i] не может быть прочитан"; 
+            $msg = $to.". Файл ".$files[$i]." не может быть прочитан.\n";
+            file_put_contents('log/'.$logfile, $msg, FILE_APPEND|LOCK_EX);
             exit(); 
         } 
         $file = fread($fp, filesize($folder.$files[$i])); 
@@ -94,8 +85,12 @@ function send_mail($to, $from, $subject, $message, $files, $folder)
     
     if(!mail($to, $subject, $multipart, $headers)) 
     { 
-        echo "К сожалению, письмо не отправлено"; 
-        exit();
-    } 
+        $msg = $to.". К сожалению, письмо не отправлено.\n";
+    }
+    else
+    {
+        $msg = $to.". Письмо успешно отправлено.\n";
+    }
+    file_put_contents('log/'.$logfile, $msg, FILE_APPEND|LOCK_EX);
 } 
 ?>

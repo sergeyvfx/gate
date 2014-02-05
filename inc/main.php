@@ -108,7 +108,7 @@
           $this->PAGE->AddScript ('language=JavaScript;type=text/javascript', "\n".tpl ('common/globals', array (), false));
           $this->PAGE->AddScriptFile ('core.js');
           $this->PAGE->AddScriptFile ('jquery-1.10.2.js');
-          $this->PAGE->AddScriptFile ('jquery-ui-1.10.3.custom.js');
+          $this->PAGE->AddScriptFile ('jquery-ui-1.10.4.js');
           $this->PAGE->AddMeta ('http-equiv=content-language;content='.config_get ('content-language'));
           $this->PAGE->AddMeta ('name=url;content='.config_get ('meta-url'));
           $this->PAGE->AddMeta ('name=keywords;content='.config_get ('meta-keywords'));
