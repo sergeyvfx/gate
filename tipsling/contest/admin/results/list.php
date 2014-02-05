@@ -53,8 +53,8 @@ if (count($list) > 0) {
                 '<br/><i style="font-weight: normal">(рег. '.$team['grade'].'.'.$team['reg_number'].')<i/>'.
               '</td>' . 
               '<td align="center"><input type=text name="mark['.$team['id'].']" value="' . $team['mark'] . '"/></td>' .
-              '<td align="center"><input type=text name="place['.$team['id'].']" value="' . $team['place'] . '"/></td>' .
-              '<td align="center"><input type=text name="common_place['.$team['id'].']" value="' . $team['common_place'] . '"/></td>' .
+              '<td align="center"><input type=text readonly="readonly" name="place['.$team['id'].']" value="' . $team['place'] . '"/></td>' .
+              '<td align="center"><input type=text readonly="readonly" name="common_place['.$team['id'].']" value="' . $team['common_place'] . '"/></td>' .
               '</tr>' . "\n";
       $c++;
       $i++;
