@@ -12,7 +12,6 @@
     <ul class="navMenu" type="square">
       <li><a href="<?=$document_root . '/articles/news'?>">Новости</a></li>
       <li><a href="<?=$document_root . '/'?>">Главная страница</a></li>
-      <li><a href="http://www.trizformashka.land.ru/">Старый сайт (trizformashka.land.ru)</a></li>
       <?php
       if (user_authorized()) 
       {
@@ -104,6 +103,18 @@
     </ul>
 </div>
 </div>
+
+<br/>
+<div class="menu">
+  <div class="cpt">Тризформашка в соцсетях</div>
+  <div class="body">
+    <ul class="navMenu" type="square">
+        <li><a href="http://vk.com/trizformashka" target="_blank">В контакте</a></li>
+        <li><a href="https://www.facebook.com/groups/trizformashka/" target="_blank">Facebook</a></li>
+    </ul>
+  </div>
+</div>
+
 
 <!--. [url href="$document_root/articles/news"]Новости[/url]
 . [url href="$document_root/articles/regrules"]Правила регистрации[/url]
