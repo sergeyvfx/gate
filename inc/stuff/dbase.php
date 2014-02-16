@@ -92,6 +92,7 @@
       }
 
       db_query ('/*!40101 SET NAMES \''.config_get ('db-codepage').'\' */');
+      db_query ('SET SQL_BIG_SELECTS=1');//need for host database
 
       if ($create) {
         db_safecreate (config_get ('db-name'));
