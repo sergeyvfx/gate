@@ -224,7 +224,8 @@ ${information}
     return false;
   }
 
-  return user_create_received(false);
+  //return user_create_received(false);
+  return user_create_received(true);
 }
 
 $f = new CVCForm ();
@@ -258,7 +259,8 @@ if ($action == 'register') {
     $f->Draw();
     formc ();
   } else {
-    $id = user_id_by_login(stripslashes($login));
+    redirect(config_get('document-root') . '/login?firstlogin=1&username=' . $login);
+    /*$id = user_id_by_login(stripslashes($login));
     $reglink = config_get('http-document-root') . '/login/registration/confirm/?id=' . $id . '&hash=' . md5(stripslashes($login) . '##VERY_RANDOM_SEED##' . stripslashes($email) . '##' . $id);
     $restorelink = config_get('http-document-root') . '/login/restore';
     $contestname = 'Тризформашка';
@@ -267,6 +269,7 @@ if ($action == 'register') {
     add_info('Новый пользователь был успешно добавлен в базу, но в данный момент он неактивирован и вход в систему от его имени пока невозможен. ' .
             'Письмо с подробной информации об активации пользователя было выслано по электронному адресу ' . $email .
             (($redirect != '') ? ('<br><br><a href="' . htmlspecialchars($redirect) . '">Вернуться в предыдущий раздел</a>') : ('')));
+     */
   }
 } else {
   formo('title=Форма регистрации пользователя');
