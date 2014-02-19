@@ -50,7 +50,7 @@ if ($_payment_included_ != '#payment_Included#') {
   /**
    * Проверка корректности заполнения полей
    */
-  function payment_check_fields($date, $cheque_number, $payer_full_name, $amount, $comment, $update = false, $id = -1) {
+  function payment_check_fields($payment_option, $date, $amount, $team_numbers, $payer_full_name, $cheque_number, $comment, $update = false, $id = -1) {
     if ($update) {
       $p = payment_get_by_id($id);
       $b = group_get_by_name("Бухгалтеры");
@@ -61,18 +61,14 @@ if ($_payment_included_ != '#payment_Included#') {
         return false;
       }
     }
+    
+    if ($payment_option == '') {
+      add_info("Поле \"Вариант оплаты\" обязательно для заполнения");
+      return false;
+    }
+    
     if ($date == '') {
       add_info("Поле \"Дата\" обязательно для заполнения");
-      return false;
-    }
-
-    if ($cheque_number == '') {
-      add_info("Поле \"Номер чека-ордера\" обязательно для заполнения");
-      return false;
-    }
-
-    if ($payer_full_name == '') {
-      add_info("Поле \"Полное имя плательщика\" обязательно для заполнения");
       return false;
     }
 
@@ -80,9 +76,24 @@ if ($_payment_included_ != '#payment_Included#') {
       add_info("Поле \"Сумма платежа\" обязательно для заполнения");
       return false;
     }
-
+    
     if (!isRealNumber($amount)) {
       add_info("В поле \"Сумма платежа\" должно быть число с двумя знаками после запятой");
+      return false;
+    }
+
+    if ($team_numbers == '') {
+      alert("Поле \"Номера команд, за которых оплачено\" обязательно для заполнения");
+      return;
+    }
+            
+    if ($payer_full_name == '') {
+      add_info("Поле \"Полное имя плательщика\" обязательно для заполнения");
+      return false;
+    }
+
+    if ($payment_option == 1 && $cheque_number == '') {
+      add_info("Поле \"Номер чека-ордера\" обязательно для заполнения");
       return false;
     }
 
@@ -105,22 +116,28 @@ if ($_payment_included_ != '#payment_Included#') {
    * @param <type> $comment - Комментарий
    * @return <type>
    */
-  function payment_create($responsible_id, $contest_id, $date, $cheque_number, $payer_full_name, $amount, $comment) {
-    if (!payment_check_fields($date, $cheque_number, $payer_full_name, $amount, $comment)) {
+  function payment_create($responsible_id, $contest_id, $payment_option, $date, $amount, $team_numbers, $payer_full_name, $cheque_number, $reposts, $comment) {
+    if (!payment_check_fields($payment_option, $date, $amount, $team_numbers, $payer_full_name, $cheque_number, $comment)) {
       return false;
     }
     // Checking has been passed
-    $cheque_number = db_string($cheque_number);
-    $payer_full_name = db_string($payer_full_name);
+    $payment_option = db_string($payment_option);
     $date = db_string(date('Y-m-d H:i:s', strtotime($date)));
     $amount = str_replace(',', '.', $amount);
+    $team_numbers = db_string($team_numbers);
+    $payer_full_name = db_string($payer_full_name);
+    $cheque_number = db_string($cheque_number);
+    $reposts = db_string($reposts);
     $comment = db_string($comment);
     db_insert('payment', array('responsible_id' => $responsible_id,
         'contest_id' => $contest_id,
+        'payment_option' => $payment_option,
         'date' => $date,
-        'cheque_number' => $cheque_number,
-        'payer_full_name' => $payer_full_name,
         'amount' => $amount,
+        'team_numbers' => $team_numbers,
+        'payer_full_name' => $payer_full_name,
+        'cheque_number' => $cheque_number,
+        'reposts' => $reposts,
         'comment' => $comment));
 
     return true;
@@ -130,17 +147,19 @@ if ($_payment_included_ != '#payment_Included#') {
     global $current_contest;
     
     // Get post data
+    $payment_option = $_POST['paymentOption'];
     $date = stripslashes(trim($_POST['date']));
-    $cheque_number = stripslashes(trim($_POST['cheque_number']));
-    $payer_full_name = stripslashes(trim($_POST['payer_full_name']));
     $amount = stripslashes(trim($_POST['amount']));
+    $team_numbers = stripslashes(trim($_POST['teamNumbers']));
+    $payer_full_name = stripslashes(trim($_POST['payer_full_name']));
+    $cheque_number = stripslashes(trim($_POST['cheque_number']));
+    $reposts = join(';', $_POST['repost']);
     $comment = stripslashes(trim($_POST['comment']));
-    $responsible_id = user_id();
-    $contest_id = stripslashes(trim($_POST['ContestGroup']));
-    if ($contest_id == '')
-        $contest_id = $current_contest;
+    //$file = stripslashes(trim($_POST['file']));
     
-    if (payment_create($responsible_id, $contest_id, $date, $cheque_number, $payer_full_name, $amount, $comment)) {
+    $responsible_id = user_id();
+    
+    if (payment_create($responsible_id, $current_contest, $payment_option, $date, $amount, $team_numbers, $payer_full_name, $cheque_number, $reposts, $comment)) {
     
       $_POST = array();
       return true;
@@ -149,41 +168,48 @@ if ($_payment_included_ != '#payment_Included#') {
     return false;
   }
 
-  function payment_update($id, $date, $cheque_number, $payer_full_name, $amount, $comment) {
-
-    if (!payment_check_fields($date, $cheque_number, $payer_full_name, $amount, $comment, true, $id)) {
+  function payment_update($id, $payment_option, $date, $amount, $team_numbers, $payer_full_name, $cheque_number, $reposts, $comment) {
+    if (!payment_check_fields($payment_option, $date, $amount, $team_numbers, $payer_full_name, $cheque_number, $comment)) {
       return false;
     }
-
-    $cheque_number = db_string($cheque_number);
-    $payer_full_name = db_string($payer_full_name);
+    
+    $payment_option = db_string($payment_option);
     $date = db_string(date('Y-m-d H:i:s', strtotime($date)));
     $amount = str_replace(',', '.', $amount);
+    $team_numbers = db_string($team_numbers);
+    $payer_full_name = db_string($payer_full_name);
+    $cheque_number = db_string($cheque_number);
+    $reposts = db_string($reposts);
     $comment = db_string($comment);
 
-    $update = array('date' => $date,
-        'cheque_number' => $cheque_number,
-        'payer_full_name' => $payer_full_name,
+    $update = array('payment_option' => $payment_option,
+        'date' => $date,
         'amount' => $amount,
+        'team_numbers' => $team_numbers,
+        'payer_full_name' => $payer_full_name,
+        'cheque_number' => $cheque_number,
+        'reposts' => $reposts,
         'comment' => $comment);
-
+    
     db_update('payment', $update, "`id`=$id");
-
     return true;
   }
 
   function payment_update_received($id) {
     // Get post data
+    $payment_option = $_POST['paymentOption'];
     $date = stripslashes(trim($_POST['date']));
-    $cheque_number = stripslashes(trim($_POST['cheque_number']));
-    $payer_full_name = stripslashes(trim($_POST['payer_full_name']));
     $amount = stripslashes(trim($_POST['amount']));
+    $team_numbers = stripslashes(trim($_POST['teamNumbers']));
+    $payer_full_name = stripslashes(trim($_POST['payer_full_name']));
+    $cheque_number = stripslashes(trim($_POST['cheque_number']));
+    $reposts = join(';', $_POST['repost']);
     $comment = stripslashes(trim($_POST['comment']));
-    $responsible_id = user_id();
-
-    if (payment_update($id, $date, $cheque_number, $payer_full_name, $amount, $comment)) {
-      $_POST = array();
-    }
+    //$file = stripslashes(trim($_POST['file']));
+    
+    if (payment_update($id, $payment_option, $date, $amount, $team_numbers, $payer_full_name, $cheque_number, $reposts, $comment)) {
+        $_POST = array();
+    }  
   }
 
   function payment_apply($id) {

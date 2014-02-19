@@ -65,8 +65,9 @@ ${information}
       $list = payment_list(user_id(), $current_contest);
       include 'list.php';
       
-      if ($allow_create)
+      if ($allow_create){
         include 'create_form.php';
+      }
     }
     ?>
   </div>

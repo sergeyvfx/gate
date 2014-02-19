@@ -111,7 +111,28 @@ $payment = payment_get_by_id($id);
 </script>
 
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
-  <table class="clear" width="100%">
+    <table class="clear" width="100%">
+        <tr><td width="30%" style="padding: 0 2px;">
+                Вариант оплаты:
+            </td>
+            <td style="padding: 0 2px;">
+                <?
+                  switch ($payment['payment_option']){
+                      case 1: $payment_option_name = 'Учебный центр "Информатика" (банковский перевод)'; break;
+                      case 2: $payment_option_name = 'Учебный центр "Информатика" (безналичный расчет)'; break;
+                      case 3: $payment_option_name = 'Учебный центр "Информатика" (в кассе)'; break;
+                      case 4: $payment_option_name = 'Яндекс.Деньги'; break;
+                      case 5: $payment_option_name = 'Перевод на карту Сбербанка (по номеру карты)'; break;
+                      case 6: $payment_option_name = 'Перевод на карту Сбербанка (по реквизитам)'; break;
+                      case -1: $payment_option_name = 'Другое (указать в примечании)'; break;
+                  }
+                  echo $payment_option_name;
+                ?>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
                 Дата платежа:
             </td>
@@ -123,10 +144,20 @@ $payment = payment_get_by_id($id);
     <div id="hr"></div>
     <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
-                Номер чека-ордера:
+                Сумма платежа:
             </td>
             <td style="padding: 0 2px;">
-                <?= htmlspecialchars(stripslashes($payment['cheque_number'])); ?>
+                <?= htmlspecialchars(stripslashes($payment['amount'])); ?>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+        <tr><td width="30%" style="padding: 0 2px;">
+                Номера команд, за которых оплачено:
+            </td>
+            <td style="padding: 0 2px;">
+                <?= htmlspecialchars(stripslashes($payment['team_numbers'])); ?>
             </td>
         </tr>
     </table>
@@ -143,10 +174,27 @@ $payment = payment_get_by_id($id);
     <div id="hr"></div>
     <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
-                Сумма платежа:
+                Номер чека-ордера:
             </td>
             <td style="padding: 0 2px;">
-                <?= htmlspecialchars(stripslashes($payment['amount'])); ?>
+                <?= htmlspecialchars(stripslashes($payment['cheque_number'])); ?>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+        <tr><td width="30%" style="padding: 0 2px;">
+                Адреса репостов:
+            </td>
+            <td style="padding: 0 2px;">
+                <table width="100%" id="reposts">
+                    <?php
+                        $reposts = preg_split('/;/', $payment['reposts']);
+                        foreach ($reposts as $k => $repost) {
+                            print("<tr><td>" . $repost . "</td></tr>");
+                        }
+                    ?>
+                </table>
             </td>
         </tr>
     </table>
