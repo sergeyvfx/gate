@@ -16,6 +16,7 @@ global $id, $page;
 formo('title=Редактирование платежа;');
 
 $payment = payment_get_by_id($id);
+$user = user_get_by_id($payment['responsible_id']);
 
 ?>
 <script language="JavaScript" type="text/javascript">
@@ -111,6 +112,16 @@ $payment = payment_get_by_id($id);
 </script>
 
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
+    <table class="clear" width="100%">
+        <tr><td width="30%" style="padding: 0 2px;">
+                Пользователь, создавший платеж:
+            </td>
+            <td style="padding: 0 2px;">
+                <?= $user['surname'].' '.$user['name'].' '.$user['patronymic'] ?>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
     <table class="clear" width="100%">
         <tr><td width="30%" style="padding: 0 2px;">
                 Вариант оплаты:
@@ -226,10 +237,10 @@ $payment = payment_get_by_id($id);
         <td style="padding: 0 2px;">
           <?php
           $responsible_id = $payment['responsible_id'];
-          $teams = arr_from_query("SELECT * FROM `team` WHERE `team`.`is_payment`=0 AND `team`.`responsible_id`=" . $responsible_id . " AND `team`.`contest_id`=".$current_contest." ORDER BY `team`.`grade`, `team`.`number`");
+          $teams = arr_from_query("SELECT * FROM `team` WHERE (`team`.`is_payment`=0 OR `team`.`payment_id`=".$id.") AND `team`.`responsible_id`=" . $responsible_id . " AND `team`.`contest_id`=".$current_contest." ORDER BY `team`.`grade`, `team`.`number`");
           foreach ($teams as $team) {
           ?>
-              <input type="checkbox" name=<?="team_".$team['id']?> value=<?="team_".$team['id']?>>
+              <input type="checkbox" name=<?="team_".$team['id']?> value=<?="team_".$team['id']?> <?=$team['is_payment']==1?"checked='checked'":"" ?>>
               <?=$team['grade'] . '.' . $team['number']?>
               <div id="hr"></div>
           <?php

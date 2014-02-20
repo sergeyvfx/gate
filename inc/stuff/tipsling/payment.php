@@ -213,8 +213,11 @@ if ($_payment_included_ != '#payment_Included#') {
   }
 
   function payment_apply($id) {
+    global $current_contest;
     $date_arrival = stripslashes(trim($_POST['date_arrival']));
-    foreach ($_POST as $p) {
+    $payment = payment_get_by_id($id);
+    db_query("UPDATE `team` SET `team`.`is_payment`=0, `team`.`payment_id`=null WHERE (`team`.`is_payment`=0 OR `team`.`payment_id`=".$id.") AND `team`.`responsible_id`=" . $payment['responsible_id'] . " AND `team`.`contest_id`=".$current_contest." ORDER BY `team`.`grade`, `team`.`number`");
+    foreach ($_POST as $p => $value) {
       if (preg_match("/^team_(?P<id>\d+)$/", $p, $t) > 0) {
         team_update_is_payment($t['id'], $id, 1);
       }
