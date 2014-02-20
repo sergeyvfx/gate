@@ -8,6 +8,7 @@
 ?>
 
 <div class="menu">
+  <div class="cpt">Основное меню сайта</div>
   <div class="body">
     <ul class="navMenu" type="square">
       <li><a href="<?=$document_root . '/articles/news'?>">Новости</a></li>
@@ -36,14 +37,7 @@
 <br/> 
 
 <div class="menu">
-  <?php
-    if ($current_contest!='')
-    {
-        $it = contest_get_by_id($current_contest);
-        printf('<div class="cpt">'.$it['name'].'</div>');
-    }
-  ?>
-        
+  <div class="cpt">Документы</div>
   <div class="body">
     <ul class="navMenu" type="square">
         <li><a href="<?=$document_root . '/articles/docs/regulations'?>">Положение о конкурсе</a></li>
@@ -59,7 +53,16 @@
   </div>
 </div>
 
+<br/> 
+
 <div class="menu">
+  <?php
+    if ($current_contest!='')
+    {
+        $it = contest_get_by_id($current_contest);
+        printf('<div class="cpt">'.$it['name'].'</div>');
+    }
+  ?>
   <div class="body">
     <ul class="navMenu" type="square">
 
