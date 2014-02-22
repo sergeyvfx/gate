@@ -19,19 +19,21 @@ $query = 'SELECT
     concat(team.grade,".",team.number) as "Номер команды", 
     timezone.offset as "Часовой пояс",    
     team.smena as "Смена",
-    team.teacher_full_name as "ФИО учителя",
+    GROUP_CONCAT(DISTINCT teacher.FIO ORDER BY teacher_team.number ASC SEPARATOR  \', \') as "ФИО учителя",
     concat(user.surname, " ", user.name, " ", user.patronymic) as "ФИО ответственного",
     user.email as "email ответственного", 
     user.phone as "Телефон ответственного",
     school.name as "Учебное заведение"
-FROM user, team, responsible, school, timezone
+FROM user, team, responsible, school, timezone, teacher, teacher_team
 WHERE team.responsible_id = user.id
 AND responsible.user_id = user.id
 AND responsible.school_id = school.id
 AND school.timezone_id = timezone.id
+AND teacher_team.team_id = team.id
+AND teacher.id = teacher_team.teacher_id
 AND team.contest_id ='.$current_contest.
-' ORDER BY team.grade ASC, team.number
-LIMIT 0 , 150';
+' GROUP BY team.id
+ORDER BY team.grade ASC, team.number';
 
 $list = arr_from_query($query);
 if (count($list) > 0) {
