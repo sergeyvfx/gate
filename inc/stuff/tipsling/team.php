@@ -169,6 +169,7 @@ if ($_team_included_ != '#team_Included#') {
     for ($i=0; $i<count($pupils); $i++){
         $pupils[$i]=db_string($pupils[$i]);
     }
+    $contest_day = db_string($contest_day);
     $comment = db_string($comment);
     db_insert('team', array('reg_number' => $number,
         'number' => $number,
@@ -307,7 +308,6 @@ if ($_team_included_ != '#team_Included#') {
     }
     
     $contest_day = db_string($contest_day);
-    $payment_id = db_string($payment_id);
     $comment = db_string($comment);
     for ($i=0; $i<count($teachers); $i++){
         $teachers[$i]['FIO']=db_string($teachers[$i]['FIO']);
@@ -430,8 +430,11 @@ if ($_team_included_ != '#team_Included#') {
     if (check_contestbookkeeper_rights($team['contest_id'])) {
         if ($_POST['is_payment_value']!='')
             $is_payment = stripslashes(trim($_POST['is_payment_value']));
-        if ($_POST['payment_id']!='')
+        if ($is_payment == '1' && $_POST['payment_id']!='')
             $payment_id = stripslashes(trim($_POST['payment_id']));
+        else {
+            $payment_id = '-1';
+        }
     }
     if (check_contestadmin_rights() && stripslashes(trim($_POST['number']))!=''){
         $number = stripslashes(trim($_POST['number']));

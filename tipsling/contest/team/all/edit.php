@@ -272,6 +272,17 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             </td>
             <td style="padding: 0 2px;">
                 <input type="checkbox" value="1" <?=($team['is_payment'])?'CHECKED':''?> id="is_payment" name="is_payment" onchange="document.getElementById('is_payment_value').value = document.getElementById('is_payment').checked ? 1 :0;"></input>
+                <?php
+                    if ($team['payment_id']!='' && $team['payment_id']!='-1')
+                    {
+                        echo('<a href="../../payment/all/?action=edit&id='.$team['payment_id'].'">Просмотр</a>');
+                    }
+                    else
+                    {
+                        echo('<label>Просмотр</label>');
+                    }
+                ?>
+                
                 <input type="hidden" value="<?=($team['is_payment'])?'1':'0'?>" id="is_payment_value" name="is_payment_value"></input>
             </td>
         </tr>

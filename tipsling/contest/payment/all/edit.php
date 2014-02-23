@@ -241,7 +241,7 @@ $user = user_get_by_id($payment['responsible_id']);
           foreach ($teams as $team) {
           ?>
               <input type="checkbox" name=<?="team_".$team['id']?> value=<?="team_".$team['id']?> <?=$team['is_payment']==1?"checked='checked'":"" ?>>
-              <?=$team['grade'] . '.' . $team['number']?>
+              <a href="../../team/all/?action=edit&id=<?=$team['id']?>"><?=$team['grade'] . '.' . $team['number']?></a>
               <div id="hr"></div>
           <?php
           }
