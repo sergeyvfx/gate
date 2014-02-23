@@ -120,17 +120,33 @@ dd_formo('title=Новая команда;');
   }
     
   $(function (){
-    var AddTeacherField = function(){
-            $('#teachers').find('tr:last').after("<tr><td><input type='text' class='txt block' name='teachers[]' onblur='check_frm_teacher ();' value=''/></td><td width='24' style='text-align:right;'><img class='btn' src='<?=config_get('document-root')?>/pics/cross.gif'/></td></tr>");
+    var $teachers = $('#teachers'),
+        $smena = $('#smena'),
+        $contest_day = $('#contest_day'),
+        AddTeacherField = function(){
+            $teachers.find('tr:last').after("<tr><td><input type='text' class='txt block' name='teachers[]' onblur='check_frm_teacher ();' value=''/></td><td width='24' style='text-align:right;'><img class='btn' src='<?=config_get('document-root')?>/pics/cross.gif'/></td></tr>");
         },
         RemoveTeacherField = function(){
-            $rows = $(this).parents('table:first').find('tr');
+            var $rows = $(this).parents('table:first').find('tr');
             if ($rows.length>1){
                 $(this).parents('tr:first').remove();
             }
+        },
+        ContestDayChanged = function(){
+            var $table = $smena.closest('table');
+            if ($contest_day.val()=='сб'){
+                $table.show();
+                $table.nextAll('div:first').show();
+            }
+            else if ($contest_day.val()=='вс'){
+                $table.hide();
+                $table.nextAll('div:first').hide();
+            }            
         };
     $('#addTeacher').on('click', AddTeacherField);
-    $('#teachers').on('click', 'img',  RemoveTeacherField);
+    $teachers.on('click', 'img',  RemoveTeacherField);
+    $contest_day.on('change', ContestDayChanged);
+    ContestDayChanged();
   });
 
 </script>
@@ -195,6 +211,19 @@ dd_formo('title=Новая команда;');
             </td>
             <td style="padding: 0 2px;">
                 <input type="text" class="txt block" id="pupil3_full_name" name="pupils[]" value="">
+            </td>
+        </tr>
+      </table>
+      <div id="hr"></div>
+      <table class ="clear" width="100%">
+        <tr><td width="30%">
+                В какой день участвует:
+            </td>
+            <td style="padding: 0 2px;">
+                <select id="contest_day" name="contest_day" <?=check_can_user_edit_teamsmena_field($team)?'':'disabled' ?>>
+                    <option value="сб" <?= $team['contest_day']=='сб'?'selected="selected"':'' ?>>суббота</option>
+                    <option value="вс" <?= $team['contest_day']=='вс'?'selected="selected"':'' ?>>воскресенье</option>
+                </select>
             </td>
         </tr>
       </table>

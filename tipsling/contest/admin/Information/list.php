@@ -18,6 +18,7 @@ formo('title=Инфорация о командах и их ответствен
 $query = 'SELECT 
     concat(team.grade,".",team.number) as "Номер команды", 
     timezone.offset as "Часовой пояс",    
+    team.contest_day as "День",
     team.smena as "Смена",
     GROUP_CONCAT(DISTINCT teacher.FIO ORDER BY teacher_team.number ASC SEPARATOR  \', \') as "ФИО учителя",
     concat(user.surname, " ", user.name, " ", user.patronymic) as "ФИО ответственного",
@@ -56,6 +57,7 @@ if (count($list) > 0) {
     $pageSrc = '<table class="list">' . "\n";
     $pageSrc .= '<tr class="h"><th width="100" style="text-align: center;">Номер команды</th>
         <th style="text-align: center;">Часовой пояс</th>
+        <th style="text-align: center;">День</th>
         <th style="text-align: center;">Смена</th>
         <th style="text-align: center;">ФИО учителя</th>
         <th style="text-align: center;">ФИО ответственного</th>
@@ -68,7 +70,8 @@ if (count($list) > 0) {
       $pageSrc .= 
       '<td class="center">' . $it["Номер команды"] . '</td>' .
       '<td class="center">' . ($it["Часовой пояс"]<0?$it["Часовой пояс"]:'+'. $it["Часовой пояс"]) . '</td>' .
-      '<td class="center">' . $it["Смена"] . '</td>' .
+      '<td class="center">' . $it["День"] . '</td>' .
+      '<td class="center">' . ($it["День"]=="вс" ? "" : $it["Смена"]) . '</td>' .
       '<td align="center">' . $it["ФИО учителя"] . '</td>' .
       '<td align="center">' . $it["ФИО ответственного"] . '</td>' .
       '<td align="center">' . $it["email ответственного"] . '</td>' .
