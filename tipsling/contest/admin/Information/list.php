@@ -15,7 +15,13 @@ if ($PHP_SELF != '') {
 
 formo('title=Инфорация о командах и их ответственных;');
 
+?>
+
+<form action=".?action=save<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST">
+    
+<?php
 $query = 'SELECT 
+    team.id as "id", 
     concat(team.grade,".",team.number) as "Номер команды", 
     timezone.offset as "Часовой пояс",    
     team.contest_day as "День",
@@ -24,7 +30,8 @@ $query = 'SELECT
     concat(user.surname, " ", user.name, " ", user.patronymic) as "ФИО ответственного",
     user.email as "email ответственного", 
     user.phone as "Телефон ответственного",
-    school.name as "Учебное заведение"
+    school.name as "Учебное заведение",
+    team.service as "Служебное"
 FROM user, team, responsible, school, timezone, teacher, teacher_team
 WHERE team.responsible_id = user.id
 AND responsible.user_id = user.id
@@ -64,6 +71,7 @@ if (count($list) > 0) {
         <th style="text-align: center;">email ответственного</th>
         <th style="text-align: center;">Телефон ответственного</th>
         <th style="text-align: center;">Учебное заведение</th>
+        <th style="text-align: center;">Служебное</th>
         </tr>' . "\n";
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
@@ -77,6 +85,7 @@ if (count($list) > 0) {
       '<td align="center">' . $it["email ответственного"] . '</td>' .
       '<td align="center">' . $it["Телефон ответственного"] . '</td>' .
       '<td align="center">' . $it["Учебное заведение"] . '</td>' .
+      '<td align="center"><input type=text name="service['.$it['id'].']" value="' . $it['Служебное'] . '"/></td>' .
       '</tr>' . "\n";
       $c++;
       $i++;
@@ -88,6 +97,12 @@ if (count($list) > 0) {
 } else {
   info('Нет команд.');
 }
+?>
+    <div class="formPast">
+      <button class="submitBtn block" type="submit">Сохранить</button>
+    </div>
+  </form>
+<?php
 
 formc ();
 ?>

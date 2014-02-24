@@ -571,5 +571,21 @@ if ($_team_included_ != '#team_Included#') {
       $update = array('mark' => $mark, 'place' => $place, 'common_place'=>$common_place);
       db_update('team', $update, "`id`=$id");
   }
+  
+  function team_update_service_received($contest_id='') {
+      global $current_contest;
+      if ($contest_id==''){
+          $contest_id = $current_contest;
+      }
+      $list = team_list('','',$current_contest);
+      
+      //get array of teams with marks
+      foreach ($list as $team) {
+          $team_id = $team['id'];
+          $service = stripslashes(trim($_POST["service"]["$team_id"]));
+          $update = array('service' => db_string($service));
+          db_update('team', $update, "`id`=$team_id");
+      }
+  }
 }  
 ?>

@@ -12,7 +12,7 @@ if ($PHP_SELF != '') {
   die;
 }
 
-global $current_contest, $document_root;
+global $current_contest, $action, $document_root;
 
 if (!user_authorized ()) {
   header('Location: ../../../../login');
@@ -38,6 +38,10 @@ ${information}
     $admin_menu->SetActive('Information');
     
     $admin_menu->Draw();
+    if ($action == 'save') {
+        team_update_service_received();
+    }
+    
     include 'list.php';
     ?>
 
