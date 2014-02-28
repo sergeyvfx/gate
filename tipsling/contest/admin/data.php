@@ -23,7 +23,7 @@ if (!user_authorized ()) {
                      "where family_contest_id=".$it['family_id']." and ".
                      "user_id=".user_id());
   if (count($query) > 0)
-    header('Location: MyContests');
+    header('Location: Information');
   else 
   {
     print (content_error_page(403));

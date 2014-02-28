@@ -18,6 +18,9 @@ formo('title=Инфорация о командах и их ответствен
 ?>
 
 <form action=".?action=save<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST">
+    <div style="padding-bottom: 6px;">
+      <button class="submitBtn block" type="submit">Сохранить</button>
+    </div>
     
 <?php
 $query = 'SELECT 

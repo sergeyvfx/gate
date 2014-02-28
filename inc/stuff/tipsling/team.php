@@ -256,7 +256,7 @@ if ($_team_included_ != '#team_Included#') {
     $grade = $this_team['grade']+1;
     $teachers = gate_array_column($this_team['teachers'], 'FIO');
     $pupils = gate_array_column($this_team['pupils'], 'FIO');
-    $contest_day = $this_team['contest_day'];
+    $contest_day = $this_team['contest_day'] == '' ? 'сб' : $this_team['contest_day'];
     $smena = $this_team['smena'];
     
     $payment_id = -1;

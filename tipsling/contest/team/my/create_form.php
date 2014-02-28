@@ -220,7 +220,7 @@ dd_formo('title=Новая команда;');
                 В какой день участвует:
             </td>
             <td style="padding: 0 2px;">
-                <select id="contest_day" name="contest_day" <?=check_can_user_edit_teamsmena_field($team)?'':'disabled' ?>>
+                <select id="contest_day" name="contest_day">
                     <option value="сб" <?= $team['contest_day']=='сб'?'selected="selected"':'' ?>>суббота</option>
                     <option value="вс" <?= $team['contest_day']=='вс'?'selected="selected"':'' ?>>воскресенье</option>
                 </select>
