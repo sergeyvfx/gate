@@ -70,7 +70,7 @@ if (count($list) > 0) {
     $pageSrc .= '<tr class="h">
         <th width="7%" align="center">Номер команды</th>
         <th width="15%">Учебное заведение</th>
-        <th width="13%">Регион</th>
+        <th width="13%">Регион/***Страна</th>
         <th width="10%">Населенный пункт</th>
         <th width="15%">Учитель</th>
         <th width="20%">Участники</th>
@@ -102,7 +102,7 @@ if (count($list) > 0) {
                 '<br/><i style="font-weight: normal">(рег. '.$it['grade'].'.'.$it['reg_number'].')<i/>'.
               '</td>' . 
               '<td>' . $school_name . '</td>' .
-              '<td>' . $region . '</td>' .
+              '<td>' . ($it['country_id']=='1' ? $region : '***'.$it['country']) . '</td>' .
               '<td>' . $city . '</td>' .
               '<td>' . $teacher . '</td>' .
               '<td>' . $pupils . '</td>' .
