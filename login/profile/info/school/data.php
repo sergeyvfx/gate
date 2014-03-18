@@ -75,42 +75,40 @@ if ($action == 'save') {
   else
     $err_string=$err_string==''?'Индекс':$err_string.', Индекс';
     
-  if ($country>0)
-    $arr['country_id'] = (int)$country;
-  else if ($country_name!='')
+  if ($country<0)
   {
-      $country_name = stripslashes($country_name);
-      $country_fields = array();
-      $country_fields['name'] = db_string($country_name);
-      db_insert('country', $country_fields);
-      $country_id = (int)db_max('country', 'id');
-      $arr['country_id'] = $country_id;
-  }
-  else
-    $err_string=$err_string==''?'Страна':$err_string.', Страна';
-  
-  if ($region>0)
-    $arr['region_id'] = (int)$region;
-  else if ($region_name!='')
-  {
-      $region_name = stripslashes($region_name);
-      $region_fields = array();
-      $region_fields['name'] = db_string($region_name);
-      if ($country>0)
-          $region_fields['country_id']=$country;
-      else if ($country_name!=''){
-          $region_fields['country_id']=$country_id;
+      if ($country_name!='')
+      {
+          $country_name = stripslashes($country_name);
+          $country_fields = array();
+          $country_fields['name'] = db_string($country_name);
+          db_insert('country', $country_fields);
+          $country_id = db_last_insert_id();
       }
-      db_insert('region', $region_fields);
-      $region_id = (int)db_max('region', 'id');
-      $arr['region_id'] = $region_id;
+      else
+        $err_string=$err_string==''?'Страна':$err_string.', Страна';
   }
-  else
-    $err_string=$err_string==''?'Регион':$err_string.', Регион';
   
-  if ($area>0)
-    $arr['area_id'] = (int)$area;
-  else if ($area_name!='')
+  if ($region<0)
+  {
+      if ($region_name!='')
+      {
+          $region_name = stripslashes($region_name);
+          $region_fields = array();
+          $region_fields['name'] = db_string($region_name);
+          if ($country>0)
+              $region_fields['country_id']=$country;
+          else if ($country_name!=''){
+              $region_fields['country_id']=$country_id;
+          }
+          db_insert('region', $region_fields);
+          $region_id = db_last_insert_id();
+      }
+      else
+        $err_string=$err_string==''?'Регион':$err_string.', Регион';
+  }
+  
+  if ($area<0 && $area_name!='')
   {
       $area_name = stripslashes($area_name);
       $area_fields = array();
@@ -121,11 +119,8 @@ if ($action == 'save') {
           $area_fields['region_id']=$region_id;
       }
       db_insert('area', $area_fields);
-      $area_id = (int)db_max('area', 'id');
-      $arr['area_id'] = $area_id;
+      $area_id = db_last_insert_id();
   }
-  else
-      $arr['area_id'] = $area;
   
   if ($city>0)
     $arr['city_id'] = (int)$city;
@@ -146,7 +141,7 @@ if ($action == 'save') {
           $city_fields['area_id']=$area_id;
       }
       db_insert('city', $city_fields);
-      $arr['city_id'] = (int)db_max('city', 'id');
+      $arr['city_id'] = db_last_insert_id();
       $city = $arr['city_id'];
   }
   else
@@ -181,26 +176,19 @@ if ($action == 'save') {
     {
         db_insert('school', $arr);
         $arr=array();
-        //FIXME Why not used db_last_insert()?
-        $arr['school_id'] = (int)db_max('school', 'id');
+        $arr['school_id'] = db_last_insert_id();
         $arr['comment'] = db_string($whereHear);
         db_update('responsible', $arr, '`user_id`='.$r['user_id']);
     }
-
-    //save city status
-    /*$arr= array();
-    $arr['status_id'] = $city_status;
-    if (count($arr) > 0)
-        db_update('city', $arr, '`id`=' . $city);*/
-
-//    $f->AppendCustomField(array('src' => '<div align="center">Сохранение прошло успешно</div>'));
   }
 }
-
 
 $r = responsible_get_by_id(user_id());
 $sc = school_get_by_id($r['school_id']);
 $cit = city_get_by_id($sc['city_id']);
+$area_obj = area_get_by_id($cit['area_id']);
+$region_obj = region_get_by_id($cit['region_id']);
+$country_obj = country_get_by_id($region_obj['country_id']);
 
 //find all school statuses
 $query = "select * from `school_status`";
@@ -222,7 +210,7 @@ $result = db_query($query);
 while($rows = mysql_fetch_array($result, MYSQL_ASSOC)){
     if ($country=='-1')
           $country=$rows['id'];
-    if ($rows['id']==$sc['country_id']){
+    if ($rows['id']==$country_obj['id']){
         $countries .= '<option value='.$rows["id"].' selected>'.$rows["name"].'</option> ';
         $country = $rows['id'];
     }
@@ -246,19 +234,20 @@ else
 $result = db_query($query);
 
 while ($rows = mysql_fetch_array($result, MYSQL_ASSOC)) {
-  if ($rows['country_id']==$sc['country_id'] || $sc==''){
+  if ($rows['country_id']==$country_obj['id'] || $sc==''){
     if ($region==-1)
         $region=$rows['id'];
-    if ($sc['region_id'] <= 0 || $sc['region_id'] == '') {
+    if ($region_obj == '') {
       $selected = ($rows['name'] == 'Пермский край') ? ('selected') : ('');
       $region=($rows['name'] == 'Пермский край') ? $rows['id']: $region;
     } else {
-      $selected = ($rows['id'] == $sc['region_id']) ? ('selected') : ('');
-      $region=($rows['id'] == $sc['region_id']) ? $rows['id'] : $region;
+      $selected = ($rows['id'] == $region_obj['id']) ? ('selected') : ('');
+      $region=($rows['id'] == $region_obj['id']) ? $rows['id'] : $region;
     }
     $regions .= '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
   }
 }
+
 if ($regions!='') {
     $regions .='<option value="-1">Другой</option>';
     $f->AppendCustomField(array('src' => '<table width="100%" class="clear"><tr><td width="30%">Регион: <span class="error">*</span></td><td><select id="region" name="region" class="block" onchange="other_region()">'.addslashes($regions).'</select></td></tr><tr><td width="30%"></td><td><div id="other_region" name="other_region" style="display: none; margin-top:3px"></div></td></tr></table><div id="region_check_res" style="display: none;"></div>'));
@@ -274,11 +263,11 @@ else
     $query = "select * from `area`";
 $result = db_query($query);
 while ($rows = mysql_fetch_array($result, MYSQL_ASSOC)) {
-  if ($rows['region_id'] == $sc['region_id'] || $sc == '') {
+  if ($rows['region_id'] == $region_obj['id'] || $sc == '') {
     if ($area == -1) {
       $area = $rows['id'];
     }
-    if ($rows['id'] == $sc['area_id']) {
+    if ($rows['id'] == $area_obj['id']) {
       $areas .= '<option value=' . $rows["id"] . ' selected>' . $rows["name"] . '</option> ';
       $area = $rows['id'];
     } else {
@@ -286,7 +275,8 @@ while ($rows = mysql_fetch_array($result, MYSQL_ASSOC)) {
     }
   }
 }
-if ($areas!='' && !($sc['area_id'] <= 0 || $sc['area_id'] == '')){
+
+if ($areas!='' && !($area_obj == '')){
   $areas .='<option value="-1">Другой</option>';
   $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Район: </td><td><select id="area" name="area" class="block" onchange="other_area()">' . addslashes($areas) . '</select></td></tr><tr><td width="30%"></td><td><div id="other_area" name="other_area" style="display: none; margin-top:3px"></div></td></tr></table>'));
 } else {
@@ -314,11 +304,12 @@ else if ($region!=-1)
     $query = 'select * from `city` where (`status_id`=NULL or `status_id`='.$city_status.') and (`area_id` IS NULL or `area_id`=-1) and `region_id`='.$region;
 else
     $query = 'select * from `city` where `status_id`=NULL or `status_id`='.$city_status;
+
 $result = db_query($query);
 while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
-    if ($sc=='' || ($rows['area_id']==$sc['area_id'] && $sc['area_id']!=NULL && $sc['area_id']>0)||
-            ($rows['region_id']==$sc['region_id'] && ($sc['area_id']!=NULL || $sc['area_id']>0)))
-        if ($rows['id']==$sc['city_id'])
+    if ($sc=='' || ($rows['area_id']==$area_obj['id'] && $area_obj!='' && $area_obj['id']>0)||
+            ($rows['region_id']==$region_obj['id'] && ($area_obj=='' || $area_obj['id']<0)))
+        if ($rows['id']==$cit['id'])
             $cities .= '<option value='.$rows["id"].' selected>'.$rows["name"].'</option> ';
         else
             $cities .= '<option value='.$rows["id"].'>'.$rows["name"].'</option> ';

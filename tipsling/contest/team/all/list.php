@@ -82,12 +82,10 @@ if (count($list) > 0) {
       $it = $list[$i];
       $d = $is_user_admin;
       $ps = $it['is_payment'];
-      $r = responsible_get_by_id($it['responsible_id']);
-      $s = school_get_by_id($r['school_id']);
       $number = $it['grade'].'.'.$it['number'];
-      $school_name = $s['name'];
-      $region = school_get_region_name($r['school_id']);
-      $city = school_get_city_name($r['school_id']);
+      $school_name = $it['school'];
+      $region = $it['region'];
+      $city = $it['city'];
       $teacher = $it['teacher_full_name'];
       $pupils = $it['pupils'];
       $payment = (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>'));

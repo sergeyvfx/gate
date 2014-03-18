@@ -54,6 +54,9 @@ if ($_team_included_ != '#team_Included#') {
 
     $sql = "SELECT\n"
             . " team.*, "
+            . " region.name as region, "
+            . " city.name as city, "
+            . " school.name as school, "
             . " (SELECT pupil.FIO FROM pupil JOIN pupil_team on pupil_team.pupil_id=pupil.id WHERE pupil_team.team_id = team.id AND pupil_team.number=1) as pupil1_full_name, "
             . " (SELECT pupil.FIO FROM pupil JOIN pupil_team on pupil_team.pupil_id=pupil.id WHERE pupil_team.team_id = team.id AND pupil_team.number=2) as pupil2_full_name, "
             . " (SELECT pupil.FIO FROM pupil JOIN pupil_team on pupil_team.pupil_id=pupil.id WHERE pupil_team.team_id = team.id AND pupil_team.number=3) as pupil3_full_name, "
@@ -65,8 +68,8 @@ if ($_team_included_ != '#team_Included#') {
             . $where
             . " team.responsible_id=responsible.user_id AND\n"
             . " responsible.school_id = school.id AND\n"
-            . " region.id = school.region_id AND\n"
             . " city.id = school.city_id AND\n"
+            . " region.id = city.region_id AND\n"
             . " pupil_team.team_id = team.id AND\n"
             . " pupil.id = pupil_team.pupil_id AND\n"
             . " teacher_team.team_id = team.id AND\n"

@@ -22,9 +22,6 @@ function school_initialize() {
         'name' => 'TEXT',
         'status_id' => 'INT',
         'zipcode' => 'TEXT',
-        'country_id' => 'INT',
-        'region_id' => 'INT',
-        'area_id' => 'INT',
         'city_id' => 'INT',
         'street' => 'TEXT',
         'house' => 'TEXT',
@@ -82,13 +79,6 @@ function school_get_by_id($id) {
   return db_row_value('school', "`id`=$id");
 }
 
-function school_get_region_name($id) {
-  $s = school_get_by_id($id);
-  $rid = $s['region_id'];
-  $r = db_row_value('region', "`id`=$rid");
-  return $r['name'];
-}
-
 function school_get_city_name($id) {
   $s = school_get_by_id($id);
   $cid = $s['city_id'];
@@ -100,19 +90,19 @@ function school_status_get_by_id($id) {
   return db_row_value('school_status', "`id`=$id");
 }
 
-function country_get_by_id($id) {
-  return db_row_value('country', "`id`=$id");
-}
-
-function region_get_by_id($id) {
-  return db_row_value('region', "`id`=$id");
+function city_get_by_id($id) {
+  return db_row_value('city', "`id`=$id");
 }
 
 function area_get_by_id($id) {
   return db_row_value('area', "`id`=$id");
 }
 
-function city_get_by_id($id) {
-  return db_row_value('city', "`id`=$id");
+function region_get_by_id($id) {
+  return db_row_value('region', "`id`=$id");
+}
+
+function country_get_by_id($id) {
+  return db_row_value('country', "`id`=$id");
 }
 ?>
