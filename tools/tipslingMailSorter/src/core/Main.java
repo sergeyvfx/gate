@@ -36,6 +36,7 @@ public class Main {
     try {
       InputStream is = new FileInputStream(fileName);
       System.err.println(fileName);
+      config.load(is);
     } catch (IOException ex) {
       System.err.println("Can't read config file!");
       System.err.println(ex.getMessage());
