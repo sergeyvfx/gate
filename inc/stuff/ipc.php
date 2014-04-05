@@ -162,7 +162,7 @@
               }              
               $cert_limit .= $caption.'=\''.$expr_value.'\' AND ';
           }
-          $cert_limit = substr($cert_limit, 0, strlen($cert_limit) - 5);
+          $cert_limit = str_replace("\"","&quot;",substr($cert_limit, 0, strlen($cert_limit) - 5));
           $print .= '<option value="'.$cert_limit.'">'.$for_copy.'</option>';
       }      
       print ($print);
