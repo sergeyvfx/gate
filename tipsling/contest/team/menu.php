@@ -21,4 +21,5 @@ if (is_responsible(user_id())) {
   //$team_menu->AppendItem('Сертификаты', config_get('document-root') . '/tipsling/contest/team/certificate', 'certificate');
 }
 $team_menu->AppendItem('Все команды', config_get('document-root') . '/tipsling/contest/team/all', 'all');
+$team_menu->AppendItem('Калькулятор скидок', config_get('document-root') . '/tipsling/contest/team/calc', 'calc');
 ?>
