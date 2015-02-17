@@ -49,28 +49,31 @@ ${information}
     ?>
       <br/>
       Выберите применяемые скидки:</br>
-      <input type="checkbox" id="repost" value="200">Скидка за распространение информации о конкурсе (не менее 10 сообщений о конкурсе в сети)</br>
-      <input type="checkbox" id="early" value="100">Скидка за раннюю оплату (до 1 марта)</br>
-      <input type="checkbox" id="years" value="100">Скидка за возраст (для команд с 1 по 9 класс)</br>
-      <input type="checkbox" id="participant" value="100">Скидка участникам предыдущих конкурсов (хотя бы один из учеников уже принимал участие в конкурсе)</br>
-      <input type="checkbox" id="veteran" value="100">Скидка "ветеранам" конкурса (хотя бы один из учеников принимал участие в конкурсе 3 и более раз)</br>
-      <input type="checkbox" id="winer" value="100">Скидка призерам предыдущих конкурсов (хотя бы один из учеников занимал призовое место в одном из предыдущих конкурсов)</br>
-      <input type="checkbox" id="teacher_participant" value="100">Скидка учителям-участникам прежних конкурсов</br>
-      <input type="checkbox" id="teacher_winer" value="100">Скидка учителям-победителям прежних конкурсов</br>
+      <input type="checkbox" id="repost" value="200">[200р]Скидка за распространение информации о конкурсе (не менее 10 сообщений о конкурсе в сети)</br>
+      <input type="checkbox" id="early" value="100">[100р]Скидка за раннюю оплату (до 1 марта)</br>
+      <input type="checkbox" id="years" value="100">[100р]Скидка за возраст (для команд с 1 по 9 класс)</br>
+      <input type="checkbox" id="participant" value="100">[100р]Скидка участникам предыдущих конкурсов (хотя бы один из учеников уже принимал участие в конкурсе)</br>
+      <input type="checkbox" id="veteran" value="100">[100р]Скидка "ветеранам" конкурса (хотя бы один из учеников принимал участие в конкурсе 3 и более раз)</br>
+      <input type="checkbox" id="winer" value="100">[100р]Скидка призерам предыдущих конкурсов (хотя бы один из учеников занимал призовое место в одном из предыдущих конкурсов)</br>
+      <input type="checkbox" id="teacher_participant" value="100">[100р]Скидка учителям-участникам прежних конкурсов</br>
+      <input type="checkbox" id="teacher_winer" value="100">[100р]Скидка учителям-победителям прежних конкурсов</br>
       </br>
       </br>
-      Итого: <input type="text" id="result" disabled="disabled" value="1300"/>
+      Суммарная скидка: <input type="text" id="discount" readonly="readonly" value="0"/>
+      Оргвзнос: <input type="text" id="result" readonly="readonly" value="1300"/>
   </div>
 </div>
 
 <script>
     $(function(){
        $('input[type="checkbox"]').on('change', function(){
-           var value = 1300;
+           var maxvalue = 1300,
+               discount = 0;
            $('input:checked').each(function(){
-               value -= $(this).val();
+               discount += parseInt($(this).val());
            });
-           $('#result').val(value);
+           $('#discount').val(discount);
+           $('#result').val(maxvalue-discount);           
        });
     });
 </script>

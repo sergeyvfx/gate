@@ -156,10 +156,10 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 <input type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" <?=check_can_user_edit_teamgrade_field($team)?'':'readonly="readonly"' ?> value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
             </td>
         </tr>
-      </table>
-      <div id="grade_check_res" style="display: none;"></div>
-      <div id="hr"></div>      
-      <table class ="clear" width="100%">
+    </table>
+    <div id="grade_check_res" style="display: none;"></div>
+    <div id="hr"></div>      
+    <table class ="clear" width="100%">
         <tr><td width="275px">
                 Полное имя учителя: <span class="error">*</span>
             </td>
@@ -179,10 +179,10 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 <button id="addTeacher" type="button" class="submitBtn">Добавить</button>
             </td>
         </tr>
-      </table>
-      <div id="teacher_check_res" style="display: none;"></div>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="teacher_check_res" style="display: none;"></div>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="275px">
                 Полное имя 1-го участника: <span class="error">*</span>
             </td>
@@ -191,10 +191,10 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 <input type='hidden' name='pupil_team[]' value='<?=$pupils[0]['idOfPupil_team']?>'/>
             </td>
         </tr>
-      </table>
-      <div id="pupil_check_res" style="display: none;"></div>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="pupil_check_res" style="display: none;"></div>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="275px">
                 Полное имя 2-го участника:
             </td>
@@ -203,9 +203,9 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 <input type='hidden' name='pupil_team[]' value='<?=$pupils[1]['idOfPupil_team']?>'/>
             </td>
         </tr>
-      </table>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="275px">
                 Полное имя 3-го участника:
             </td>
@@ -214,9 +214,9 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 <input type='hidden' name='pupil_team[]' value='<?=$pupils[2]['idOfPupil_team']?>'/>
             </td>
         </tr>
-      </table>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="275px">
                 В какой день участвует:
             </td>
@@ -227,9 +227,9 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 </select>
             </td>
         </tr>
-      </table>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="275px">
                 В какую смену учится:
             </td>
@@ -240,9 +240,37 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 </select>
             </td>
         </tr>
-      </table>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+        <tr><td width="275px">
+                Дата оплаты оргвзноса:
+            </td>
+            <td style="padding: 0 2px;">
+                <?= calendar('date', htmlspecialchars($team['payment_date'])) ?>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+        <tr><td width="275px">
+                Адреса репостов:
+            </td>
+            <td style="padding: 0 2px;">
+                <table width="100%" id="reposts">
+                    <?php
+                        $reposts = preg_split('/;/', $team['reposts']);
+                        foreach ($reposts as $k => $repost) {
+                            print("<tr><td><input type='text' class='txt block' name='repost[]' value='" . $repost . "'/></td><td width='24' style='text-align:right;'><img class='btn' src='".config_get('document-root')."/pics/cross.gif'/></td></tr>");
+                        }
+                    ?>
+                </table>
+                <button id="addRepost" type="button" class="submitBtn">Добавить</button>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="275px">
                 Примечание:
             </td>
@@ -250,15 +278,31 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 <input type="text" id="comment" name="comment" onblur="check_frm_comment ();" value="<?= htmlspecialchars(stripslashes($team['comment'])); ?>" class="txt block">
             </td>
         </tr>
-      </table>
-      <input type="hidden" value="<?=($team['is_payment'])?'1':'0'?>" id="is_payment_value" name="is_payment_value"></input>
-      <div id="comment_check_res" style="display: none;"></div>
+    </table>
+    <input type="hidden" value="<?=($team['is_payment'])?'1':'0'?>" id="is_payment_value" name="is_payment_value"></input>
+    <div id="comment_check_res" style="display: none;"></div>
 
-  <div class="formPast">
+    <div class="formPast">
     <button class="submitBtn" type="button" onclick="nav ('.?<?= (($page != '') ? ('&page=' . $page) : ('')); ?>');">Назад</button>
     <button class="submitBtn" type="submit">Сохранить</button>
   </div>
 </form>
+<script>
+    $(function(){
+        var AddRepostField = function(){
+                $('#reposts').find('tr:last').after("<tr><td><input type='text' class='txt block' name='repost[]' value=''/></td><td width='24' style='text-align:right;'><img class='btn' src='<?=config_get('document-root')?>/pics/cross.gif'/></td></tr>");
+            },
+            RemoveRepostField = function(){
+                var $rows = $(this).closest('table').find('tr');
+                if ($rows.length>1){
+                    $(this).closest('tr').remove();
+                }
+            };
+        
+        $('#addRepost').on('click', AddRepostField);
+        $('#reposts').on('click', 'img',  RemoveRepostField); 
+    });
+</script>
 <?php
     formc ();
 ?>

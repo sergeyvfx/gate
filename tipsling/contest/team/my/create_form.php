@@ -151,9 +151,8 @@ dd_formo('title=Новая команда;');
 
 </script>
 <div>
-
   <form action=".?action=create&page=<?= $page ?>" method="POST" onsubmit="check (this); return false;">
-      <table class="clear" width="100%">
+    <table class="clear" width="100%">
         <tr>
             <td width="30%" style="padding: 0 2px;">
                 Класс участников: <span class="error">*</span>
@@ -163,10 +162,10 @@ dd_formo('title=Новая команда;');
             </td>
         </tr>
         <tr><td><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д).</i></td></tr>
-      </table>
-      <div id="grade_check_res" style="display: none;"></div>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="grade_check_res" style="display: none;"></div>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="30%">
                 Полное имя учителя: <span class="error">*</span>
             </td>
@@ -181,10 +180,10 @@ dd_formo('title=Новая команда;');
                 <button id="addTeacher" type="button" class="submitBtn">Добавить</button>
             </td>
         </tr>
-      </table>
-      <div id="teacher_check_res" style="display: none;"></div>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="teacher_check_res" style="display: none;"></div>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="30%">
                 Полное имя 1-го участника: <span class="error">*</span>
             </td>
@@ -192,10 +191,10 @@ dd_formo('title=Новая команда;');
                 <input type="text" class="txt block" id="pupil1_full_name" name="pupils[]" onblur="check_frm_pupil ();" value="">
             </td>
         </tr>
-      </table>
-      <div id="pupil_check_res" style="display: none;"></div>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="pupil_check_res" style="display: none;"></div>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="30%">
                 Полное имя 2-го участника:
             </td>
@@ -203,9 +202,9 @@ dd_formo('title=Новая команда;');
                 <input type="text" class="txt block" id="pupil2_full_name" name="pupils[]" value="">
             </td>
         </tr>
-      </table>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">     
+    </table>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">     
         <tr><td width="30%">
                 Полное имя 3-го участника:
             </td>
@@ -213,9 +212,9 @@ dd_formo('title=Новая команда;');
                 <input type="text" class="txt block" id="pupil3_full_name" name="pupils[]" value="">
             </td>
         </tr>
-      </table>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="30%">
                 В какой день участвует:
             </td>
@@ -226,9 +225,9 @@ dd_formo('title=Новая команда;');
                 </select>
             </td>
         </tr>
-      </table>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="30%">
                 В какую смену учится:
             </td>
@@ -239,9 +238,39 @@ dd_formo('title=Новая команда;');
                 </select>
             </td>
         </tr>
-      </table>
-      <div id="hr"></div>
-      <table class ="clear" width="100%">
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+        <tr><td width="30%" style="padding: 0 2px;">
+                Дата оплаты оргвзноса:
+            </td>
+            <td style="padding: 0 2px;">
+                <?= calendar('date') ?>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
+    <table class="clear" width="100%">
+        <tr><td width="30%" style="padding: 0 2px;">
+                Адреса репостов:
+            </td>
+            <td style="padding: 0 2px;">
+                <table width="100%" id="reposts">
+                    <tr>
+                        <td>
+                            <input type='text' class='txt block' name='repost[]'/>
+                        </td>
+                        <td width='24' style='text-align:right;'>
+                            <img class='btn' src='<?=config_get('document-root')?>/pics/cross.gif'/>
+                        </td>
+                    </tr>
+                </table>
+                <button id="addRepost" type="button" class="submitBtn">Добавить</button>
+            </td>
+        </tr>
+    </table>
+    <div id="hr"></div>
+    <table class ="clear" width="100%">
         <tr><td width="30%">
                 Примечание:
             </td>
@@ -256,6 +285,24 @@ dd_formo('title=Новая команда;');
     </div>
   </form>
 </div>
+
+<script>
+    $(function(){
+        var AddRepostField = function(){
+            $('#reposts').find('tr:last').after("<tr><td><input type='text' class='txt block' name='repost[]' value=''/></td><td width='24' style='text-align:right;'><img class='btn' src='<?=config_get('document-root')?>/pics/cross.gif'/></td></tr>");
+        },
+        RemoveRepostField = function(){
+            var $rows = $(this).closest('table').find('tr');
+            if ($rows.length>1){
+                $(this).closest('tr').remove();
+            }
+        };
+        
+        $('#addRepost').on('click', AddRepostField);
+        $('#reposts').on('click', 'img',  RemoveRepostField);        
+    });
+</script>
+
 
 <?php
       dd_formc ();

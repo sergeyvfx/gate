@@ -164,7 +164,7 @@ if ($_team_included_ != '#team_Included#') {
    * @return <type> Вернет true если команда успешно создана, в противном случае
    *                вернет false
    */
-  function team_create($number, $responsible_id, $contest_id, $payment_id, $grade, $teachers, $pupils, $is_payment, $contest_day, $smena, $comment) {
+  function team_create($number, $responsible_id, $contest_id, $payment_id, $grade, $teachers, $pupils, $is_payment, $contest_day, $smena, $date, $reposts, $comment) {
     if (!team_check_fields($grade, $teachers, $pupils, $comment)) {
       return false;
     }
@@ -176,6 +176,8 @@ if ($_team_included_ != '#team_Included#') {
         $pupils[$i]=db_string($pupils[$i]);
     }
     $contest_day = db_string($contest_day);
+    $date = db_string(date('Y-m-d H:i:s', strtotime($date)));
+    $reposts = db_string($reposts);
     $comment = db_string($comment);
     db_insert('team', array('reg_number' => $number,
         'number' => $number,
@@ -186,6 +188,8 @@ if ($_team_included_ != '#team_Included#') {
         'is_payment' => $is_payment,
         'contest_day' => $contest_day,
         'smena' => $smena,
+        'payment_date' => $date,
+        'reposts' => $reposts,
         'comment' => $comment));
     
     $team_id = db_last_insert_id();
@@ -222,6 +226,8 @@ if ($_team_included_ != '#team_Included#') {
     $all_pupils = $_POST['pupils'];
     $contest_day = stripslashes(trim($_POST['contest_day']));
     $smena = stripslashes(trim($_POST['smena']));
+    $date = stripslashes(trim($_POST['date']));
+    $reposts = join(';', $_POST['repost']);
     $payment_id = stripslashes(trim($_POST['payment_id']));
     
     if ($payment_id == '') {
@@ -246,7 +252,7 @@ if ($_team_included_ != '#team_Included#') {
         $pupils[]=stripslashes(trim($value));
     }
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
-                    $teachers, $pupils, $is_payment, $contest_day, $smena, $comment)) {
+                    $teachers, $pupils, $is_payment, $contest_day, $smena, $date, $reposts, $comment)) {
       $_POST = array();
       return true;
     }
@@ -275,7 +281,7 @@ if ($_team_included_ != '#team_Included#') {
     $number=db_max('team','reg_number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
     
     if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
-                    $teachers, $pupils, $is_payment, $contest_day, $smena, $comment)) {
+                    $teachers, $pupils, $is_payment, $contest_day, $smena, null, null, $comment)) {
       $_POST = array();
       return true;
     }
@@ -283,7 +289,7 @@ if ($_team_included_ != '#team_Included#') {
     return false;
   }
 
-  function team_update($id, $payment_id, $grade, $all_teachers, $all_teachers_team, $all_pupils, $all_pupils_team, $is_payment, $reg_number, $number, $contest_day, $smena, $comment) {
+  function team_update($id, $payment_id, $grade, $all_teachers, $all_teachers_team, $all_pupils, $all_pupils_team, $is_payment, $reg_number, $number, $contest_day, $smena, $date, $reposts, $comment) {
       if (count($all_teachers)!=count($all_teachers_team)){
           add_info('Неверно заполнена информация об учителе, попробуйте еще раз.');
           return false;
@@ -314,6 +320,8 @@ if ($_team_included_ != '#team_Included#') {
     }
     
     $contest_day = db_string($contest_day);
+    $date = db_string(date('Y-m-d H:i:s', strtotime($date)));
+    $reposts = db_string($reposts);
     $comment = db_string($comment);
     for ($i=0; $i<count($teachers); $i++){
         $teachers[$i]['FIO']=db_string($teachers[$i]['FIO']);
@@ -329,6 +337,8 @@ if ($_team_included_ != '#team_Included#') {
         'number' => $number,
         'contest_day' => $contest_day,
         'smena' => $smena,
+        'payment_date' => $date,
+        'reposts' => $reposts,
         'comment' => $comment);
     db_update('team', $update, "`id`=$id").'; ';
     
@@ -432,6 +442,8 @@ if ($_team_included_ != '#team_Included#') {
     $number = $team['number'];
     $contest_day = $team['contest_day'];
     $smena = $team['smena'];
+    $date = stripslashes(trim($_POST['date']));
+    $reposts = join(';', $_POST['repost']);
     
     if (check_contestbookkeeper_rights($team['contest_id'])) {
         if ($_POST['is_payment_value']!='')
@@ -457,7 +469,7 @@ if ($_team_included_ != '#team_Included#') {
     }
 
     if (team_update($id, $payment_id, $grade, $teachers, $teachers_team, $pupils, $pupils_team,
-                    $is_payment, $reg_number, $number, $contest_day, $smena, $comment)) {
+                    $is_payment, $reg_number, $number, $contest_day, $smena, $date, $reposts, $comment)) {
       $_POST = array();
     }
   }
