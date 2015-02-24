@@ -242,7 +242,7 @@ function contest_list($family_id='') {
                                DATE_FORMAT(`contest_start`,"%d-%m-%Y") as contest_start,
                                DATE_FORMAT(`contest_finish`,"%d-%m-%Y") as contest_finish,
                                DATE_FORMAT(`send_to_archive`,"%d-%m-%Y") as send_to_archive
-                               FROM `contest` ORDER BY `id`');
+                               FROM `contest` ORDER BY `contest_start`, `contest_finish`, `id`');
     else
         return arr_from_query('SELECT id, name, 
                                DATE_FORMAT(`registration_start`,"%d-%m-%Y") as registration_start,
@@ -250,7 +250,20 @@ function contest_list($family_id='') {
                                DATE_FORMAT(`contest_start`,"%d-%m-%Y") as contest_start,
                                DATE_FORMAT(`contest_finish`,"%d-%m-%Y") as contest_finish,
                                DATE_FORMAT(`send_to_archive`,"%d-%m-%Y") as send_to_archive
-                               FROM `contest` where family_id='.$family_id.' ORDER BY `id`');
+                               FROM `contest` where family_id='.$family_id.'
+                               ORDER BY `contest_start`, `contest_finish`, `id`');
+}
+
+function get_prev_contest_list($family_id=''){
+    $query = ($family_id=='')
+            ? "select * from contest 
+               where DATE_FORMAT(contest_finish,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d')
+               order by contest_start, contest_finish, id"
+            : "select * from contest 
+               where DATE_FORMAT(contest_finish,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') 
+                and family_id=".$family_id."
+               order by contest_start, contest_finish, id";
+    return arr_from_query($query);
 }
 
 function contest_update($id, $name, $family_id, $registration_start = '', $registration_finish = '', 
