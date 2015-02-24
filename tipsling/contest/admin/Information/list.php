@@ -34,6 +34,7 @@ $query = 'SELECT
     user.email as "email ответственного", 
     user.phone as "Телефон ответственного",
     school.name as "Учебное заведение",
+    team.payment_sum as "Оргвзнос",
     team.service as "Служебное"
 FROM user, team, responsible, school, timezone, teacher, teacher_team
 WHERE team.responsible_id = user.id
@@ -74,6 +75,7 @@ if (count($list) > 0) {
         <th style="text-align: center;">email ответственного</th>
         <th style="text-align: center;">Телефон ответственного</th>
         <th style="text-align: center;">Учебное заведение</th>
+        <th style="text-align: center;">Оргвзнос</th>
         <th style="text-align: center;">Служебное</th>
         </tr>' . "\n";
     while ($c < $perPage && $i < $n) {
@@ -88,6 +90,7 @@ if (count($list) > 0) {
       '<td align="center">' . $it["email ответственного"] . '</td>' .
       '<td align="center">' . $it["Телефон ответственного"] . '</td>' .
       '<td align="center">' . $it["Учебное заведение"] . '</td>' .
+      '<td align="center">' . $it["Оргвзнос"] . '</td>' .
       '<td align="center"><input type=text name="service['.$it['id'].']" value="' . $it['Служебное'] . '"/></td>' .
       '</tr>' . "\n";
       $c++;

@@ -95,10 +95,10 @@
             $contest_status = get_contest_status($current_contest);
             if ($contest_status>2 && $contest_status<5)
                 printf('<li><a href="'.$document_root.'/tipsling/contest/status">Монитор</a></li>');
-            if (user_authorized())
+            /*if (user_authorized())
             {
                 printf('<li><a href="'.$document_root.'/tipsling/contest/poll?action=vote&id=1">Опрос</a></li>');
-            }
+            }*/
             printf('</ul></li>');
         }
       ?>

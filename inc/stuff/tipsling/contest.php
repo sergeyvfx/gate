@@ -262,7 +262,7 @@ function get_prev_contest_list($family_id=''){
             : "select * from contest 
                where DATE_FORMAT(contest_finish,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') 
                 and family_id=".$family_id."
-               order by contest_start, contest_finish, id";
+               order by contest_start desc, contest_finish desc, id desc";
     return arr_from_query($query);
 }
 

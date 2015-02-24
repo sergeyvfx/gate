@@ -461,14 +461,14 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 Калькулятор скидок:
             </td>
             <td style="padding: 0 2px;">
-                <input type="checkbox" id="repost" value="200">[200р]Скидка за распространение информации о конкурсе (не менее 10 сообщений о конкурсе в сети)</br>
-                <input type="checkbox" id="payment" value="100">[100р]Скидка за раннюю оплату (до 1 марта)</br>
-                <input type="checkbox" id="years" value="100">[100р]Скидка за возраст (для команд с 1 по 9 класс)</br>
-                <input type="checkbox" id="participant" value="100">[100р]Скидка участникам предыдущих конкурсов (хотя бы один из учеников уже принимал участие в конкурсе)</br>
-                <input type="checkbox" id="veteran" value="100">[100р]Скидка "ветеранам" конкурса (хотя бы один из учеников принимал участие в конкурсе 3 и более раз)</br>
-                <input type="checkbox" id="winner" value="100">[100р]Скидка призерам предыдущих конкурсов (хотя бы один из учеников занимал призовое место в одном из предыдущих конкурсов)</br>
-                <input type="checkbox" id="teacher_participant" value="100">[100р]Скидка учителям-участникам прежних конкурсов</br>
-                <input type="checkbox" id="teacher_winner" value="100">[100р]Скидка учителям-победителям прежних конкурсов</br>
+                <input type="checkbox" disabled="disabled" id="repost" value="200">[200р]Скидка за распространение информации о конкурсе (не менее 10 сообщений о конкурсе в сети)</br>
+                <input type="checkbox" disabled="disabled" id="payment" value="100">[100р]Скидка за раннюю оплату (до 1 марта)</br>
+                <input type="checkbox" disabled="disabled" id="years" value="100">[100р]Скидка за возраст (для команд с 1 по 9 класс)</br>
+                <input type="checkbox" disabled="disabled" id="participant" value="100">[100р]Скидка участникам предыдущих конкурсов (хотя бы один из учеников уже принимал участие в конкурсе)</br>
+                <input type="checkbox" disabled="disabled" id="veteran" value="100">[100р]Скидка "ветеранам" конкурса (хотя бы один из учеников принимал участие в конкурсе 3 и более раз)</br>
+                <input type="checkbox" disabled="disabled" id="winner" value="100">[100р]Скидка призерам предыдущих конкурсов (хотя бы один из учеников занимал призовое место в одном из предыдущих конкурсов)</br>
+                <input type="checkbox" disabled="disabled" id="teacher_participant" value="100">[100р]Скидка учителям-участникам прежних конкурсов</br>
+                <input type="checkbox" disabled="disabled" id="teacher_winner" value="100">[100р]Скидка учителям-победителям прежних конкурсов</br>
                 </br>
                 Макс. сумма оргвзноса: <input type="text" readonly="readonly" value="1300" style="width:75px"/>
                 Суммарная скидка: <input type="text" id="discount" readonly="readonly" value="0" style="width:75px"/>
@@ -494,7 +494,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                discount += parseInt($(this).val());
            });
            $('#discount').val(discount);
-           $('#result').val(maxvalue-discount);           
+           $('#result').val(maxvalue-discount);
        });
     });
     
