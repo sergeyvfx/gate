@@ -77,6 +77,7 @@ if (count($list) > 0) {
         <th style="text-align: center;">Учебное заведение</th>
         <th style="text-align: center;">Оргвзнос</th>
         <th style="text-align: center;">Служебное</th>
+        <th width="24" class="last">&nbsp;</th>
         </tr>' . "\n";
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
@@ -92,6 +93,9 @@ if (count($list) > 0) {
       '<td align="center">' . $it["Учебное заведение"] . '</td>' .
       '<td align="center">' . $it["Оргвзнос"] . '</td>' .
       '<td align="center"><input type=text name="service['.$it['id'].']" value="' . $it['Служебное'] . '"/></td>' .
+      '<td align="right">' .
+        stencil_ibtnav('edit.gif', '/tipsling/contest/team/all?action=edit&id=' . $it['id'], 'Изменить информацию о команде') .
+      '</td>'.
       '</tr>' . "\n";
       $c++;
       $i++;

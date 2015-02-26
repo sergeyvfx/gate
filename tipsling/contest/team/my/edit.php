@@ -474,6 +474,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 Суммарная скидка: <input type="text" id="discount" readonly="readonly" value="0" style="width:75px"/>
                 Оргвзнос: <input type="text" id="result" name="payment_sum" readonly="readonly" value="1300" style="width:75px" />
             </td>
+        </tr>
     </table>
     <div id="hr"></div>
     

@@ -58,7 +58,7 @@ if (count($list) > 0) {
   }
   $pages->Draw();
 } else {
-  info('Ошибка! У вас нет конкурсов');
+  info('У вас нет опросов');
 }
 
 formc ();
