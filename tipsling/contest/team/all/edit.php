@@ -50,7 +50,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
     });
 
     var val = $('#date').val();
-    $('#payment').prop('checked', val < '2015-03-01').trigger('change');
+    $('#payment').prop('checked', val < '2015-03-02').trigger('change');
 
 
     if (qtrim(grade)==''){
