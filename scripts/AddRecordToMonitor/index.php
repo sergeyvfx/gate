@@ -4,8 +4,8 @@
     db_connect (config_get ('check-database'));
     $MonitorCode = opt_get("MonitorCode");
     
-    global $id, $contest_id, $grade, $number, $task, $date, $size;
-    if ($id==$MonitorCode)
+    global $id, $contest_id, $grade, $number, $task, $date, $size, $action;
+    if ($id == $MonitorCode)
     {
         $sql = "SELECT `team`.`id` FROM `team` WHERE `team`.`grade`=".$grade." AND `team`.`number`=".$number." AND `team`.`contest_id`=".$contest_id;
         $res = arr_from_query($sql);
@@ -13,15 +13,31 @@
         {
             $team = $res[0];
             $teamId = $team['id'];
-            $result = db_insert('contest_status', 
-                      array('contest_id' => db_string($contest_id),
-                            'task' => db_string($task),
-                            'team_id' => db_string($teamId),
-                            'time' => db_string($date),
-                            'size' => db_string($size)));
-            if ($result==false)
+            if ($action == 'add')
             {
-                echo('Не удалось внести запись в БД(contest_id='.$contest_id.', task='.$task.', team_id='.$teamId.')');
+                $sql = "SELECT * FROM `contest_status` WHERE `team_id`=".$teamId." AND `task`=".$task." AND `contest_id`=".$contest_id;
+                $statuses = arr_from_query($sql);
+                if (count($statuses)==0){
+                    $result = db_insert('contest_status', 
+                              array('contest_id' => db_string($contest_id),
+                                    'task' => db_string($task),
+                                    'team_id' => db_string($teamId),
+                                    'time' => db_string($date),
+                                    'size' => db_string(0)));
+                    if ($result==false)
+                    {
+                        echo('Не удалось внести запись в БД(contest_id='.$contest_id.', task='.$task.', team_id='.$teamId.')');
+                    }
+                }
+                else {
+                    echo('Решение данной задачи уже было прислано ранее');
+                }
+            }
+            else
+            {
+                db_update('contest_status', 
+                          array('size' => db_string($size)),
+                          "`team_id`=".$teamId." AND `task`=".$task." AND `contest_id`=".$contest_id);
             }
         }
         else

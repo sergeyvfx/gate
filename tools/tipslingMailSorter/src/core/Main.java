@@ -116,8 +116,8 @@ public class Main {
     public void main() {
       try {
         Session session = Session.getDefaultInstance(props, null);
-        Store store = session.getStore(provider);
-        store.connect(host, login, password);
+        com.sun.mail.pop3.POP3Store store = new com.sun.mail.pop3.POP3Store(session, new URLName("pop3"), "pop3", 995, true);
+        store.connect(host, 995, login, password);
 
         Folder inbox = store.getFolder("INBOX");
         if (inbox == null) {
@@ -163,14 +163,20 @@ public class Main {
             log_to_file("["+subject+"] - Дата получения письма: " + dateFormat.format(recieveDate), MessageType.empty);
             messages[i].setFlag(Flags.Flag.DELETED, true);
             Object content = messages[i].getContent();
+            Part attachmentPart = null;
             if (content instanceof Multipart) {
               Multipart mp = (Multipart) content;
-              int size = 0;
               for (int j = 0; j < mp.getCount(); j++) {
                 Part p = mp.getBodyPart(j);
                 String disposition = p.getDisposition();
                 if ((disposition != null) && (disposition.equals(Part.ATTACHMENT))) {
-                  String fileName = MimeUtility.decodeText(p.getFileName());
+                  attachmentPart = p;
+                  break;                  
+                }
+              }
+              
+              if (attachmentPart != null && SendPostQuery(grade, number, task, recieveDate, subject, code, contest_id)){
+                  String fileName = MimeUtility.decodeText(attachmentPart.getFileName());
                   fileName = subject + fileName.substring(fileName.lastIndexOf("."), fileName.length());
                   String localPath = path + File.separator + task.toString();
                   File saveDir = new File(localPath);
@@ -183,18 +189,21 @@ public class Main {
                   if (new File(localPath, fileName).exists()) {
                     log("[" + subject + "] - This file is already on disk", false);
                     log_to_file("["+subject+"] - Файл уже существует на диске", MessageType.warning);
-                  } else {
-                    File saveFile = new File(localPath, fileName);
-                    size = saveFile(saveFile, p);
-                    saveFile.setReadable(true, false);
-                    saveFile.setWritable(true, false);
-                    saveFile.setExecutable(false, false);
-                    log("[" + subject + "] - The size of attachment: " + size + " bytes", false);
-                    log_to_file("["+subject+"] - Размер вложения: " + size + " байт", MessageType.empty);
                   }
-                }
+                  
+                  File saveFile = new File(localPath, fileName);
+                  int size = saveFile(saveFile, attachmentPart);
+                  saveFile.setReadable(true, false);
+                  saveFile.setWritable(true, false);
+                  saveFile.setExecutable(false, false);
+                  log("[" + subject + "] - The size of attachment: " + size + " bytes", false);
+                  log_to_file("["+subject+"] - Размер вложения: " + size + " байт", MessageType.empty);
+                  UpdateSizeSendPostQuery(grade, number, task, size, code, contest_id);
               }
-              SendPostQuery(grade, number, task, recieveDate, size, subject, code, contest_id);
+              else{
+                  log("[" + subject + "] - No attachment", false);
+                  log_to_file("["+subject+"] - Нет вложения", MessageType.empty);
+              }
             }
           }
         }
@@ -217,7 +226,7 @@ public class Main {
     private int saveFile(File saveFile, Part part) throws Exception {
 
       BufferedOutputStream bos = new BufferedOutputStream(
-              new FileOutputStream(saveFile));
+              new FileOutputStream(saveFile, false));
 
       byte[] buff = new byte[2048];
       InputStream is = part.getInputStream();
@@ -231,18 +240,18 @@ public class Main {
       return count;
     }
     
-    private void SendPostQuery(int grade, int number, int task, Date date, int size, String subject, String code, String contest_id)
+    private boolean SendPostQuery(int grade, int number, int task, Date date, String subject, String code, String contest_id)
     {
        DateFormat df = new SimpleDateFormat("HH:mm:ss");
         
        //создаём лист параметров для запроса
        java.util.List<String[]> params = new LinkedList<String[]>();
+       params.add(new String[]{"action", "add"});
        params.add(new String[]{"id", code});
        params.add(new String[]{"grade", String.valueOf(grade)});
        params.add(new String[]{"number", String.valueOf(number)});
        params.add(new String[]{"task", String.valueOf(task)});
        params.add(new String[]{"date", df.format(date)});
-       params.add(new String[]{"size", String.valueOf(size)});
        params.add(new String[]{"contest_id", contest_id});
        
        try {
@@ -252,15 +261,44 @@ public class Main {
            if (response == null || "".equals(response.trim())) {
                log("[" + subject + "] - The information entered into the database", false);
                log_to_file("[" + subject + "] - Информация внесена в БД", MessageType.empty);
+               return true;
            } else {
                log(response, true);
                log_to_file(response, MessageType.error);
+               return false;
            }
        } catch (IOException ex) {
            log(ex.getMessage(), true);
            log_to_file(ex.getMessage(), MessageType.error);
        }
+       return false;
     }    
+    
+    private boolean UpdateSizeSendPostQuery(int grade, int number, int task, int size, String code, String contest_id)
+    {
+       DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        
+       //создаём лист параметров для запроса
+       java.util.List<String[]> params = new LinkedList<String[]>();
+       params.add(new String[]{"action", "update"});
+       params.add(new String[]{"id", code});
+       params.add(new String[]{"grade", String.valueOf(grade)});
+       params.add(new String[]{"number", String.valueOf(number)});
+       params.add(new String[]{"task", String.valueOf(task)});
+       params.add(new String[]{"size", String.valueOf(size)});
+       params.add(new String[]{"contest_id", contest_id});
+       
+       try {
+           //отправляем запрос
+           RequestSender sender = new RequestSender();
+           String response = sender.sendPostRequest(page, params);           
+           log(response, true);
+       } catch (IOException ex) {
+           log(ex.getMessage(), true);
+           log_to_file(ex.getMessage(), MessageType.error);
+       }
+       return false;
+    }
   }
 
   public static void main(String[] args) {
