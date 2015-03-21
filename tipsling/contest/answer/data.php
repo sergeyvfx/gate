@@ -54,12 +54,16 @@ ${information}
                           </script>');
                 }
                 else {
+                    $offset = date("Z");
+                    $offset = (-1)*parseint($offset)+5*60*60; //PERM OFFSET FROM SERVER TIME
+                    $original_time = date("Y-m-d H:i:s", time()); //server time
+                    $prm_time = date("H:i:s", strtotime($original_time." ".$offset." Seconds")); //perm time
                     move_uploaded_file($_FILES["answer_file"]["tmp_name"], $directory."/".$team['grade'].'.'.$team['number'].'-'.$answer_task.strrchr($_FILES["answer_file"]["name"], '.'));
                     db_insert('contest_status', 
                               array('contest_id' => db_string($current_contest),
                                     'task' => db_string($answer_task),
                                     'team_id' => db_string($answer_team),
-                                    'time' => db_string(date('H:i:s')),
+                                    'time' => db_string($prm_time),
                                     'size' => db_string($_FILES["answer_file"]["size"])));
                     echo('<script type="text/javascript">
                             alert("Решение было успешно отправлено");
