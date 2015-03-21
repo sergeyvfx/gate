@@ -12,7 +12,7 @@
             $res = arr_from_query($sql);
             if (count($res)>0){
                 $contest = $res[0];
-                $directory = iconv("UTF-8", "cp1251", $DOCUMENT_ROOT."/uploaded_files/answers/".$contest['name']."/".$task);
+                $directory = $DOCUMENT_ROOT."/uploaded_files/answers/".$task;
                 $folder = opendir($directory);
                 $result = "";
                 while($file = readdir($folder)) 

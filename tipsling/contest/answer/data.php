@@ -35,7 +35,7 @@ ${information}
     {
         global $answer_team, $answer_task, $answer_file;
         $team = team_get_by_id($answer_team);
-        $directory = iconv("UTF-8", "cp1251", $DOCUMENT_ROOT."/uploaded_files/answers/".$contest['name']."/".$answer_task);
+        $directory = $DOCUMENT_ROOT."/uploaded_files/answers/".$answer_task;
         
         if (!file_exists($directory)){
             mkdir($directory, 0777, true);

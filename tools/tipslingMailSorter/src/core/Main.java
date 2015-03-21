@@ -47,8 +47,8 @@ public class Main {
   }
 
   public void start() {
-    Thread receiver = new Thread(new Receiver());
-    receiver.start();
+    /*Thread receiver = new Thread(new Receiver());
+    receiver.start();*/
     
     Thread filegetter = new Thread(new FilesGetter());
     filegetter.start();
@@ -69,6 +69,7 @@ public class Main {
     private String page = config.getProperty("tipsling.page");
     private String code = config.getProperty("tipsling.MonitorCode");
     private String contest_id = config.getProperty("tipsling.contest_id");
+    private String domain = config.getProperty("tipsling.domain");
     
       @Override
     public void run() {
@@ -104,7 +105,7 @@ public class Main {
                 for (int j=0; j<filecount; j++) {
                     String filename = filenames[j];
                     if (!new File(taskPath, filename).exists()) {
-                        URL connection = new URL("http://gate.www:8888/uploaded_files/answers/ТРИЗформашка-2015/"+String.valueOf(i)+"/"+filename);
+                        URL connection = new URL(domain+"/uploaded_files/answers/"+String.valueOf(i)+"/"+filename);
                         HttpURLConnection urlconn;
                         urlconn = (HttpURLConnection) connection.openConnection();
                         urlconn.setRequestMethod("GET");
