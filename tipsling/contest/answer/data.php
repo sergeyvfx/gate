@@ -48,7 +48,6 @@ ${information}
             $res = arr_from_query($sql);
             if (count($res)==0){
                 if (intval($_FILES["answer_file"]["size"]) > (5*1024*1024)){        
-                    echo('test');
                     echo('<script type="text/javascript">
                             alert("Размер файла не должен превышать 5Мб");
                           </script>');

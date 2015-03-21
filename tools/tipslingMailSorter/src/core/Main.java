@@ -10,10 +10,12 @@
 package core;
 
 import java.io.*;
+import java.net.*;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -47,6 +49,9 @@ public class Main {
   public void start() {
     Thread receiver = new Thread(new Receiver());
     receiver.start();
+    
+    Thread filegetter = new Thread(new FilesGetter());
+    filegetter.start();
   }
 
   private void log(String msg, boolean err) {
@@ -57,6 +62,99 @@ public class Main {
     } else {
       System.out.println(msg);
     }
+  }
+  
+  private class FilesGetter implements Runnable {
+    private String path = new File(config.getProperty("store.path")).getAbsolutePath();
+    private String page = config.getProperty("tipsling.page");
+    private String code = config.getProperty("tipsling.MonitorCode");
+    private String contest_id = config.getProperty("tipsling.contest_id");
+    
+      @Override
+    public void run() {
+      while (true) {
+        main();
+        try {
+          Thread.sleep(600000);//10 минут
+        } catch (InterruptedException ex) {
+        }
+      }
+    }
+    
+    public void main() {
+        try {
+            for (int i=1; i<=20; i++){
+                String taskPath = path + File.separator + String.valueOf(i);
+                File saveDir = new File(taskPath);
+                if (!saveDir.exists()) {
+                  saveDir.mkdir();
+                  saveDir.setExecutable(true, false);
+                  saveDir.setWritable(true, false);
+                  saveDir.setReadable(true, false);
+                }
+                
+                java.util.List<String[]> params = new LinkedList<String[]>();
+                params.add(new String[]{"action", "getfilelist"});
+                params.add(new String[]{"id", code});
+                params.add(new String[]{"task", String.valueOf(i)});
+                params.add(new String[]{"contest_id", contest_id});
+                
+                String[] filenames = SendPostQuery(params);
+                int filecount = filenames.length;
+                for (int j=0; j<filecount; j++) {
+                    String filename = filenames[j];
+                    if (!new File(taskPath, filename).exists()) {
+                        URL connection = new URL("http://gate.www:8888/uploaded_files/answers/ТРИЗформашка-2015/"+String.valueOf(i)+"/"+filename);
+                        HttpURLConnection urlconn;
+                        urlconn = (HttpURLConnection) connection.openConnection();
+                        urlconn.setRequestMethod("GET");
+                        urlconn.connect();
+                        InputStream in = null;
+                        in = urlconn.getInputStream();
+
+                        OutputStream writer = new FileOutputStream(taskPath+File.separator+filename);
+                        byte buffer[] = new byte[1024];
+                        int c = in.read(buffer);
+                        while (c > 0) {
+                            writer.write(buffer, 0, c);
+                            c = in.read(buffer);
+                        }
+                        writer.flush();
+                        writer.close();
+                        in.close();
+                        log("File "+filename+" downloaded", false);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+    
+    private String[] SendPostQuery(java.util.List<String[]> params)
+    {
+       try {
+           //отправляем запрос
+           RequestSender sender = new RequestSender();
+           String response = sender.sendPostRequest(page, params).trim();
+           if (response.startsWith("list of files:")) {
+               response = response.replace("list of files:", "");
+               log(response, false);
+               return response.split("\\|");
+           } else {
+               if (response.equals("")){
+                   log("no files for task", false);
+               }               
+               else {                   
+                   log(response, true);
+               }
+               return new String[0];
+           }
+       } catch (IOException ex) {
+           log(ex.getMessage(), true);
+       }
+       return new String[0];
+    }    
   }
   
   private class Receiver implements Runnable {
@@ -158,7 +256,7 @@ public class Main {
             recieve = recieve.substring(recieve.lastIndexOf(";") + 1, recieve.length());
             DateFormat f = new MailDateFormat();
             Date recieveDate = f.parse(recieve);
-            recieveDate.setTime(recieveDate.getTime() + 3600000);
+            recieveDate.setTime(recieveDate.getTime() - 3600000);
             log("[" + subject + "] - " + recieveDate.toString(), false);
             log_to_file("["+subject+"] - Дата получения письма: " + dateFormat.format(recieveDate), MessageType.empty);
             messages[i].setFlag(Flags.Flag.DELETED, true);
@@ -292,7 +390,6 @@ public class Main {
            //отправляем запрос
            RequestSender sender = new RequestSender();
            String response = sender.sendPostRequest(page, params);           
-           log(response, true);
        } catch (IOException ex) {
            log(ex.getMessage(), true);
            log_to_file(ex.getMessage(), MessageType.error);
