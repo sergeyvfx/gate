@@ -242,7 +242,7 @@ function contest_list($family_id='') {
                                DATE_FORMAT(`contest_start`,"%d-%m-%Y") as contest_start,
                                DATE_FORMAT(`contest_finish`,"%d-%m-%Y") as contest_finish,
                                DATE_FORMAT(`send_to_archive`,"%d-%m-%Y") as send_to_archive
-                               FROM `contest` ORDER BY `contest_start`, `contest_finish`, `id`');
+                               FROM `contest` ORDER BY DATE(`contest_start`), DATE(`contest_finish`), `id`');
     else
         return arr_from_query('SELECT id, name, 
                                DATE_FORMAT(`registration_start`,"%d-%m-%Y") as registration_start,
@@ -251,7 +251,7 @@ function contest_list($family_id='') {
                                DATE_FORMAT(`contest_finish`,"%d-%m-%Y") as contest_finish,
                                DATE_FORMAT(`send_to_archive`,"%d-%m-%Y") as send_to_archive
                                FROM `contest` where family_id='.$family_id.'
-                               ORDER BY `contest_start`, `contest_finish`, `id`');
+                               ORDER BY DATE(`contest_start`), DATE(`contest_finish`), `id`');
 }
 
 function get_prev_contest_list($family_id=''){

@@ -141,7 +141,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
 
 <form action=".?action=save&id=<?= $id; ?>&<?= (($page != '') ? ('&page=' . $page) : ('')); ?>" method="POST" onsubmit="check (this); return false;">
     <table class="clear" width="100%">
-        <tr><td width="275px">
+        <tr><td width="30%">
                 Класс участников: <span class="error">*</span>
                 <br/><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д.)</i>
             </td>
@@ -154,10 +154,11 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
     <div id="hr"></div>      
     <table class ="clear" width="100%" id="teachers">
         <tr>
-            <th style="min-width: 275px; text-align: left; font-weight: normal;">Учителя: <span class="error">*</span></th>
-            <th width="30%">ФИО</th>                        
-            <th width="30%">Ранее подготовил команду для конкурсов:</th>
-            <th width="30%">Ранее подготовил команду-призера для конкурсов:</th>                        
+            <th style="width: 30%; text-align: left; font-weight: normal;">Учителя: <span class="error">*</span></th>
+            <th width="19%">ФИО</th>                        
+            <th width="17%">Ранее подготовил команду для конкурсов:</th>
+            <th width="17%">Ранее подготовил команду-призера для конкурсов:</th>   
+            <th width="17%">Ранее участвовал в других конкурсах по ТРИЗ:</th>
         </tr>
         <?php
             if (count($teachers)>0){
@@ -201,7 +202,8 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                     foreach ($contest_list as $key => $value) {
                         echo('<option value="'.$value['id'].'">'.$value['name'].'</option>');
                     }
-                    echo("</select></span></td>");                            
+                    echo("</select></span></td>");
+                    echo("<td><input type='text' class='txt block other_contest' name='teacher_other_contest[]' value='".$teacher['other_contest']."'</td>");
                     echo("</tr>");
                 }
             }
@@ -225,22 +227,24 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                     echo('<option value="'.$value['id'].'">'.$value['name'].'</option>');
                 }
                 echo("</select></span></td>");
+                echo("<td><input type='text' class='txt block other_contest' name='teacher_other_contest[]' </td>");
                 echo("</tr>");
             }
         ?>
         <tr>
             <td></td>
-            <td colspan="3"><button id="addTeacher" type="button" class="submitBtn block">Добавить</button></td>
+            <td colspan="4"><button id="addTeacher" type="button" class="submitBtn block">Добавить</button></td>
         </tr>
     </table>
     <div id="teacher_check_res" style="display: none;"></div>
     <div id="hr"></div>
     <table class ="clear pupil_table" width="100%">
         <tr>
-            <th style="min-width: 275px; text-align: left; font-weight: normal;">1-ый участник: <span class="error">*</span></th>
-            <th width="30%">ФИО</th>                        
-            <th width="30%">Ранее участвовал в конкурсах:</th>
-            <th width="30%">Ранее становился призером в конкурсах:</th>                        
+            <th style="width: 30%; text-align: left; font-weight: normal;">1-ый участник: <span class="error">*</span></th>
+            <th width="19%">ФИО</th>                        
+            <th width="17%">Ранее участвовал в конкурсах:</th>
+            <th width="17%">Ранее становился призером в конкурсах:</th>      
+            <th width="17%">Ранее участвовал в других конкурсах по ТРИЗ:</th>
         </tr>
         <tr>
             <?php
@@ -283,6 +287,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                     echo('<option value="'.$value['id'].'">'.$value['name'].'</option>');
                 }
                 echo("</select></span></td>");
+                echo("<td><input type='text' class='txt block other_contest' name='pupil_other_contest[]' value='".$pupils[0]['other_contest']."'</td>");
             ?>
         </tr>        
     </table>
@@ -290,10 +295,11 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
     <div id="hr"></div>
     <table class ="clear pupil_table" width="100%">
         <tr>
-            <th style="min-width: 275px; text-align: left; font-weight: normal;">2-ой участник:</th>
-            <th width="30%">ФИО</th>                        
-            <th width="30%">Ранее участвовал в конкурсах:</th>
-            <th width="30%">Ранее становился призером в конкурсах:</th>                        
+            <th style="width: 30%; text-align: left; font-weight: normal;">2-ой участник:</th>
+            <th width="19%">ФИО</th>                        
+            <th width="17%">Ранее участвовал в конкурсах:</th>
+            <th width="17%">Ранее становился призером в конкурсах:</th>                        
+            <th width="17%">Ранее участвовал в других конкурсах по ТРИЗ:</th>
         </tr>
         <tr>
             <?php
@@ -336,16 +342,18 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                     echo('<option value="'.$value['id'].'">'.$value['name'].'</option>');
                 }
                 echo("</select></span></td>");
+                echo("<td><input type='text' class='txt block other_contest' name='pupil_other_contest[]' value='".$pupils[1]['other_contest']."'</td>");
             ?>
         </tr>        
     </table>
     <div id="hr"></div>
     <table class ="clear pupil_table" width="100%">
         <tr>
-            <th style="min-width: 275px; text-align: left; font-weight: normal;">3-ий участник:</th>
-            <th width="30%">ФИО</th>                        
-            <th width="30%">Ранее участвовал в конкурсах:</th>
-            <th width="30%">Ранее становился призером в конкурсах:</th>                        
+            <th style="width: 30%; text-align: left; font-weight: normal;">3-ий участник:</th>
+            <th width="19%">ФИО</th>                        
+            <th width="17%">Ранее участвовал в конкурсах:</th>
+            <th width="17%">Ранее становился призером в конкурсах:</th>     
+            <th width="17%">Ранее участвовал в других конкурсах по ТРИЗ:</th>
         </tr>
         <tr>
             <?php
@@ -388,12 +396,13 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                     echo('<option value="'.$value['id'].'">'.$value['name'].'</option>');
                 }
                 echo("</select></span></td>");
+                echo("<td><input type='text' class='txt block other_contest' name='pupil_other_contest[]' value='".$pupils[2]['other_contest']."'</td>");
             ?>
         </tr>        
     </table>
     <div id="hr"></div>
     <table class ="clear" width="100%">
-        <tr><td width="275px">
+        <tr><td width="30%">
                 В какой день участвует:
             </td>
             <td style="padding: 0 2px;">
@@ -406,7 +415,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
     </table>
     <div id="hr"></div>
     <table class ="clear" width="100%">
-        <tr><td width="275px">
+        <tr><td width="30%">
                 В какую смену учится:
             </td>
             <td style="padding: 0 2px;">
@@ -419,7 +428,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
     </table>
     <div id="hr"></div>
     <table class="clear" width="100%">
-        <tr><td width="275px">
+        <tr><td width="30%">
                 Дата оплаты оргвзноса:
             </td>
             <td style="padding: 0 2px;">
@@ -429,7 +438,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
     </table>
     <div id="hr"></div>
     <table class="clear" width="100%">
-        <tr><td width="275px">
+        <tr><td width="30%">
                 Адреса репостов:
             </td>
             <td style="padding: 0 2px;">
@@ -447,7 +456,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
     </table>
     <div id="hr"></div>
     <table class ="clear" width="100%">
-        <tr><td width="275px">
+        <tr><td width="30%">
                 Примечание:
             </td>
             <td style="padding: 0 2px;">
@@ -457,11 +466,11 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
     </table>
     <div id="hr"></div>
     <table class="clear" width="100%">
-        <tr><td width="275px">
+        <tr><td width="30%">
                 Калькулятор скидок:
             </td>
             <td style="padding: 0 2px;">
-                <input type="checkbox" disabled="disabled" id="repost" value="200">[200р]Скидка за распространение информации о конкурсе (не менее 10 сообщений о конкурсе в сети)</br>
+                <input type="checkbox" disabled="disabled" id="repost" value="100">[100р]Скидка за распространение информации о конкурсе (не менее 10 сообщений о конкурсе в сети)</br>
                 <input type="checkbox" disabled="disabled" id="payment" value="100">[100р]Скидка за раннюю оплату (до 1 марта)</br>
                 <input type="checkbox" disabled="disabled" id="years" value="100">[100р]Скидка за возраст (для команд с 1 по 9 класс)</br>
                 <input type="checkbox" disabled="disabled" id="participant" value="100">[100р]Скидка участникам предыдущих конкурсов (хотя бы один из учеников уже принимал участие в конкурсе)</br>
@@ -469,6 +478,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 <input type="checkbox" disabled="disabled" id="winner" value="100">[100р]Скидка призерам предыдущих конкурсов (хотя бы один из учеников занимал призовое место в одном из предыдущих конкурсов)</br>
                 <input type="checkbox" disabled="disabled" id="teacher_participant" value="100">[100р]Скидка учителям-участникам прежних конкурсов</br>
                 <input type="checkbox" disabled="disabled" id="teacher_winner" value="100">[100р]Скидка учителям-победителям прежних конкурсов</br>
+                <input type="checkbox" disabled="disabled" id="other_contest" value="100">[100р]Скидка за участие в других конкурсах по ТРИЗ</br>
                 </br>
                 Макс. сумма оргвзноса: <input type="text" readonly="readonly" value="1300" style="width:75px"/>
                 Суммарная скидка: <input type="text" id="discount" readonly="readonly" value="0" style="width:75px"/>
@@ -529,7 +539,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             
             SetPaymentDiscount = function(){
                 var val = $('#date').val();
-                $('#payment').prop('checked', val < '2015-03-02').trigger('change');
+                $('#payment').prop('checked', val < '2016-03-02').trigger('change');
             },
         
             SetYearsDiscount = function(){
@@ -563,6 +573,11 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             SetTeacherWinnerDiscount = function(){
                 var values = getDistinctValues($('#teachers .teacher_winner select'), -1);
                 $('#teacher_winner').prop('checked', values.length >= 1).trigger('change');
+            },
+            
+            SetOtherContestDiscount = function(){
+                var values = getDistinctValues($('.other_contest'), "");
+                $('#other_contest').prop('checked', values.length >= 1).trigger('change');
             },
         
             AddRepostField = function(){
@@ -691,12 +706,16 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             SetPupilContestDiscount();
         }).on('change', '.pupil_winner', function(){
             SetPupilWinnerDiscount();
+        }).on('change', '.other_contest', function(){
+            SetOtherContestDiscount();
         });
         
         $('#teachers').on('change', '.teacher_contest', function(){
             SetTeacherContestDiscount();
         }).on('change', '.teacher_winner', function(){
             SetTeacherWinnerDiscount();
+        }).on('change', '.other_contest', function(){
+            SetOtherContestDiscount();
         });
         
         $('#grade').on('input', function(){
@@ -717,6 +736,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
         SetPupilWinnerDiscount();
         SetTeacherContestDiscount();
         SetTeacherWinnerDiscount();
+        SetOtherContestDiscount();
     });
 </script>
 <?php

@@ -176,12 +176,14 @@ if ($_team_included_ != '#team_Included#') {
         $teachers[$i]['FIO']=db_string($teachers[$i]['FIO']);
         $teachers[$i]['contests']=db_string($teachers[$i]['contests']);
         $teachers[$i]['winners']=db_string($teachers[$i]['winners']);
+        $teachers[$i]['other_contest']=db_string($teachers[$i]['other_contest']);
     }    
     
     for ($i=0; $i<count($pupils); $i++){
         $pupils[$i]['FIO']=db_string($pupils[$i]['FIO']);
         $pupils[$i]['contests']=db_string($pupils[$i]['contests']);
         $pupils[$i]['winners']=db_string($pupils[$i]['winners']);
+        $pupils[$i]['other_contest']=db_string($pupils[$i]['other_contest']);
     }
     $contest_day = db_string($contest_day);
     $date = $date !=null ? db_string(date('Y-m-d H:i:s', strtotime($date))) : 'null';
@@ -207,7 +209,10 @@ if ($_team_included_ != '#team_Included#') {
     for ($i=0; $i<$pupils_count; $i++){
         if ($pupils[$i]['FIO']!='""'){
             //добавление нового ученика
-            db_insert('pupil', array('FIO'=>$pupils[$i]['FIO'], 'contests'=>$pupils[$i]['contests'], 'winners'=>$pupils[$i]['winners']));
+            db_insert('pupil', array('FIO' => $pupils[$i]['FIO'], 
+                                     'contests' => $pupils[$i]['contests'], 
+                                     'winners' => $pupils[$i]['winners'],
+                                     'other_contest' => $pupils[$i]['other_contest']));
             $pupil_id = db_last_insert_id();
             db_insert('pupil_team', array('team_id'=>$team_id,'number'=>$number,'pupil_id'=>$pupil_id));
             $number+=1;                
@@ -218,7 +223,10 @@ if ($_team_included_ != '#team_Included#') {
     for ($i=0; $i<$teachers_count; $i++){
         if ($teachers[$i]['FIO']!='""'){
             //добавление нового учителя
-            db_insert('teacher', array('FIO'=>$teachers[$i]['FIO'], 'contests'=>$teachers[$i]['contests'], 'winners'=>$teachers[$i]['winners']));
+            db_insert('teacher', array('FIO' => $teachers[$i]['FIO'], 
+                                        'contests' => $teachers[$i]['contests'], 
+                                        'winners' => $teachers[$i]['winners'],
+                                        'other_contest' => $teachers[$i]['other_contest']));
             $teacher_id = db_last_insert_id();
             db_insert('teacher_team', array('team_id'=>$team_id,'number'=>$number,'teacher_id'=>$teacher_id));
             $number+=1;                
@@ -241,10 +249,12 @@ if ($_team_included_ != '#team_Included#') {
     $pupil_winner_count = $_POST['pupil_winner_count'];
     $pupil_contest = $_POST['pupil_contest_value'];
     $pupil_winner = $_POST['pupil_winner_value'];
+    $pupil_other_contest = $_POST['pupil_other_contest'];
     $teacher_contest_count = $_POST['teacher_contest_count'];
     $teacher_winner_count = $_POST['teacher_winner_count'];
     $teacher_contest = $_POST['teacher_contest_value'];
     $teacher_winner = $_POST['teacher_winner_value'];
+    $teacher_other_contest = $_POST['teacher_other_contest'];
     $payment_sum = stripslashes(trim($_POST['payment_sum']));
     $payment_id = stripslashes(trim($_POST['payment_id']));
     
@@ -291,6 +301,7 @@ if ($_team_included_ != '#team_Included#') {
         
         $tmp_teacher['contests']=stripslashes(implode(';',$contests));
         $tmp_teacher['winners']=stripslashes(implode(';',$winners));
+        $tmp_teacher['other_contest']=stripslashes($teacher_other_contest[$key]);
         
         $teachers[]=$tmp_teacher;
         $i++;
@@ -325,6 +336,7 @@ if ($_team_included_ != '#team_Included#') {
         
         $tmp_pupil['contests']=stripslashes(implode(';',$contests));
         $tmp_pupil['winners']=stripslashes(implode(';',$winners));
+        $tmp_pupil['other_contest']=stripslashes($pupil_other_contest[$key]);
         
         $pupils[]=$tmp_pupil;
         $i++;
@@ -391,9 +403,9 @@ if ($_team_included_ != '#team_Included#') {
   function team_update($id, $payment_id, $grade, $all_teachers, $all_teachers_team, 
                        $all_pupils, $all_pupils_team, $is_payment, $reg_number, $number, 
                        $contest_day, $smena, $date, $reposts, $pupil_contest_count, 
-                       $pupil_winner_count, $pupil_contest, $pupil_winner, $teacher_contest_count, 
-                       $teacher_winner_count, $teacher_contest, $teacher_winner, 
-                       $payment_sum, $comment) {
+                       $pupil_winner_count, $pupil_contest, $pupil_winner, $pupil_other_contest,
+                       $teacher_contest_count, $teacher_winner_count, $teacher_contest, 
+                       $teacher_winner, $teacher_other_contest, $payment_sum, $comment) {
       if (count($all_teachers)!=count($all_teachers_team)){
           add_info('Неверно заполнена информация об учителе, попробуйте еще раз.');
           return false;
@@ -411,6 +423,7 @@ if ($_team_included_ != '#team_Included#') {
     foreach ($all_teachers as $key => $value){
         $teachers[$i]['FIO']=stripslashes(trim($value));
         $teachers[$i]['teacher_team_id']=$all_teachers_team[$i];
+        $teachers[$i]['other_contest']=$teacher_other_contest[$i];
         
         $count = $teacher_contest_count[$i];
         $contests = array();
@@ -443,6 +456,7 @@ if ($_team_included_ != '#team_Included#') {
     foreach ($all_pupils as $key => $value){
         $pupils[$i]['FIO']=stripslashes(trim($value));
         $pupils[$i]['pupil_team_id']=$all_pupils_team[$i];
+        $pupils[$i]['other_contest']=$pupil_other_contest[$i];
         
         $count = $pupil_contest_count[$i];
         $contests = array();
@@ -481,11 +495,13 @@ if ($_team_included_ != '#team_Included#') {
         $teachers[$i]['FIO']=db_string($teachers[$i]['FIO']);
         $teachers[$i]['contests']=db_string($teachers[$i]['contests']);
         $teachers[$i]['winners']=db_string($teachers[$i]['winners']);
+        $teachers[$i]['other_contest']=db_string($teachers[$i]['other_contest']);
     }    
     for ($i=0; $i<count($pupils); $i++){
         $pupils[$i]['FIO']=db_string($pupils[$i]['FIO']);
         $pupils[$i]['contests']=db_string($pupils[$i]['contests']);
         $pupils[$i]['winners']=db_string($pupils[$i]['winners']);
+        $pupils[$i]['other_contest']=db_string($pupils[$i]['other_contest']);
     }
     
     $update = array('payment_id' => $payment_id,
@@ -508,7 +524,10 @@ if ($_team_included_ != '#team_Included#') {
         if ($pupils[$i]['pupil_team_id']==''){
             if ($pupils[$i]['FIO']!='""'){
                 //добавление нового ученика
-                db_insert('pupil', array('FIO'=>$pupils[$i]['FIO'], 'contests'=>$pupils[$i]['contests'], 'winners'=>$pupils[$i]['winners']));
+                db_insert('pupil', array('FIO'=>$pupils[$i]['FIO'], 
+                                         'contests'=>$pupils[$i]['contests'], 
+                                         'winners'=>$pupils[$i]['winners'],
+                                         'other_contest'=>$pupils[$i]['other_contest']));
                 $pupil_id = db_last_insert_id();
                 db_insert('pupil_team', array('team_id'=>$id,'number'=>$number,'pupil_id'=>$pupil_id));
                 $number+=1;                
@@ -527,7 +546,12 @@ if ($_team_included_ != '#team_Included#') {
                 //обновление ученика
                 $pupil_team_id=$pupils[$i]['pupil_team_id'];
                 $pupil_id = db_field_value('pupil_team', 'pupil_id', "`id`=$pupil_team_id");
-                db_update('pupil', array('FIO'=>$pupils[$i]['FIO'], 'contests'=>$pupils[$i]['contests'], 'winners'=>$pupils[$i]['winners']),"`id`=$pupil_id");
+                db_update('pupil', 
+                          array('FIO'=>$pupils[$i]['FIO'], 
+                                'contests'=>$pupils[$i]['contests'], 
+                                'winners'=>$pupils[$i]['winners'],
+                                'other_contest'=>$pupils[$i]['other_contest']),
+                          "`id`=$pupil_id");
                 db_update('pupil_team', array('number'=>$number),"`id`=$pupil_team_id");
                 if (array_key_exists($pupil_team_id, $exist_pupils)){
                     unset($exist_pupils[$pupil_team_id]);
@@ -550,7 +574,10 @@ if ($_team_included_ != '#team_Included#') {
         if ($teachers[$i]['teacher_team_id']==''){
             if ($teachers[$i]['FIO']!='""'){
                 //добавление нового учителя
-                db_insert('teacher', array('FIO'=>$teachers[$i]['FIO'], 'contests'=>$teachers[$i]['contests'], 'winners'=>$teachers[$i]['winners']));
+                db_insert('teacher', array('FIO'=>$teachers[$i]['FIO'], 
+                                           'contests'=>$teachers[$i]['contests'], 
+                                           'winners'=>$teachers[$i]['winners'],
+                                           'other_contest'=>$teachers[$i]['other_contest']));
                 $teacher_id = db_last_insert_id();
                 db_insert('teacher_team', array('team_id'=>$id,'number'=>$number,'teacher_id'=>$teacher_id));
                 $number+=1;                
@@ -569,7 +596,12 @@ if ($_team_included_ != '#team_Included#') {
                 //обновление учителя
                 $teacher_team_id=$teachers[$i]['teacher_team_id'];
                 $teacher_id = db_field_value('teacher_team', 'teacher_id', "`id`=$teacher_team_id");
-                db_update('teacher', array('FIO'=>$teachers[$i]['FIO'], 'contests'=>$teachers[$i]['contests'], 'winners'=>$teachers[$i]['winners']),"`id`=$teacher_id");
+                db_update('teacher', 
+                          array('FIO'=>$teachers[$i]['FIO'], 
+                                'contests'=>$teachers[$i]['contests'], 
+                                'winners'=>$teachers[$i]['winners'],
+                                'other_contest'=>$teachers[$i]['other_contest']),
+                          "`id`=$teacher_id");
                 db_update('teacher_team', array('number'=>$number),"`id`=$teacher_team_id");
                 if (array_key_exists($teacher_team_id, $exist_teachers)){
                     unset($exist_teachers[$teacher_team_id]);
@@ -607,10 +639,12 @@ if ($_team_included_ != '#team_Included#') {
     $pupil_winner_count = $_POST['pupil_winner_count'];
     $pupil_contest = $_POST['pupil_contest_value'];
     $pupil_winner = $_POST['pupil_winner_value'];
+    $pupil_other_contest = $_POST['pupil_other_contest'];
     $teacher_contest_count = $_POST['teacher_contest_count'];
     $teacher_winner_count = $_POST['teacher_winner_count'];
     $teacher_contest = $_POST['teacher_contest_value'];
     $teacher_winner = $_POST['teacher_winner_value'];
+    $teacher_other_contest = $_POST['teacher_other_contest'];
     $payment_sum = stripslashes(trim($_POST['payment_sum']));
     
     if (check_contestbookkeeper_rights($team['contest_id'])) {
@@ -638,9 +672,9 @@ if ($_team_included_ != '#team_Included#') {
 
     if (team_update($id, $payment_id, $grade, $teachers, $teachers_team, $pupils, $pupils_team,
                     $is_payment, $reg_number, $number, $contest_day, $smena, $date, $reposts, 
-                    $pupil_contest_count, $pupil_winner_count, $pupil_contest, $pupil_winner,
+                    $pupil_contest_count, $pupil_winner_count, $pupil_contest, $pupil_winner, $pupil_other_contest,
                     $teacher_contest_count, $teacher_winner_count, $teacher_contest, 
-                    $teacher_winner, $payment_sum, $comment)) {
+                    $teacher_winner, $teacher_other_contest, $payment_sum, $comment)) {
       $_POST = array();
     }
   }
