@@ -170,7 +170,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             <th width="20%">ФИО</th>                        
             <th width="18%">Ранее подготовил команду для конкурсов:</th>
             <th width="18%">Ранее подготовил команду-призера для конкурсов:</th>                        
-            <th width="18%">Ранее участвовал в других конкурсах по ТРИЗ:</th>
+            <th width="18%">Ранее участвовал в конкурсах РА ТРИЗ или ТРИЗ-Саммита:</th>
         </tr>
         <?php
             if (count($teachers)>0){
@@ -256,7 +256,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             <th width="20%">ФИО</th>                        
             <th width="18%">Ранее участвовал в конкурсах:</th>
             <th width="18%">Ранее становился призером в конкурсах:</th>                        
-            <th width="18%">Ранее участвовал в других конкурсах по ТРИЗ:</th>
+            <th width="18%">Ранее участвовал в конкурсах РА ТРИЗ или ТРИЗ-Саммита:</th>
         </tr>
         <tr>
             <?php
@@ -311,7 +311,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             <th width="20%">ФИО</th>                        
             <th width="18%">Ранее участвовал в конкурсах:</th>
             <th width="18%">Ранее становился призером в конкурсах:</th>
-            <th width="18%">Ранее участвовал в других конкурсах по ТРИЗ:</th>
+            <th width="18%">Ранее участвовал в конкурсах РА ТРИЗ или ТРИЗ-Саммита:</th>
         </tr>
         <tr>
             <?php
@@ -365,7 +365,7 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
             <th width="20%">ФИО</th>                        
             <th width="18%">Ранее участвовал в конкурсах:</th>
             <th width="18%">Ранее становился призером в конкурсах:</th>
-            <th width="18%">Ранее участвовал в других конкурсах по ТРИЗ:</th>
+            <th width="18%">Ранее участвовал в конкурсах РА ТРИЗ или ТРИЗ-Саммита:</th>
         </tr>
         <tr>
             <?php
@@ -487,11 +487,11 @@ formo('title=Редактирование команды '.$team['grade'].'.'.$t
                 <input type="checkbox" disabled="disabled" id="payment" value="100">[100р]Скидка за раннюю оплату (до 1 марта)</br>
                 <input type="checkbox" disabled="disabled" id="years" value="100">[100р]Скидка за возраст (для команд с 1 по 9 класс)</br>
                 <input type="checkbox" disabled="disabled" id="participant" value="100">[100р]Скидка участникам предыдущих конкурсов (хотя бы один из учеников уже принимал участие в конкурсе)</br>
-                <input type="checkbox" disabled="disabled" id="veteran" value="100">[100р]Скидка "ветеранам" конкурса (хотя бы один из учеников принимал участие в конкурсе 3 и более раз)</br>
+                <input type="checkbox" disabled="disabled" id="veteran" value="100">[100р]Скидка "ветеранам" конкурса (хотя бы один из учеников принимал участие в конкурсе 3 или более раз)</br>
                 <input type="checkbox" disabled="disabled" id="winner" value="100">[100р]Скидка призерам предыдущих конкурсов (хотя бы один из учеников занимал призовое место в одном из предыдущих конкурсов)</br>
                 <input type="checkbox" disabled="disabled" id="teacher_participant" value="100">[100р]Скидка учителям-участникам прежних конкурсов</br>
                 <input type="checkbox" disabled="disabled" id="teacher_winner" value="100">[100р]Скидка учителям-победителям прежних конкурсов</br>
-                <input type="checkbox" disabled="disabled" id="other_contest" value="100">[100р]Скидка за участие в других конкурсах по ТРИЗ</br>
+                <input type="checkbox" disabled="disabled" id="other_contest" value="100">[100р]Скидка за участие в конкурсах Российской ассоциации ТРИЗ и ТРИЗ-Саммита</br>
                 </br>
                 Макс. сумма оргвзноса: <input type="text" readonly="readonly" value="1300" style="width:75px"/>
                 Суммарная скидка: <input type="text" id="discount" readonly="readonly" value="0" style="width:75px"/>
