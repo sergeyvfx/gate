@@ -47,8 +47,8 @@ public class Main {
   }
 
   public void start() {
-    /*Thread receiver = new Thread(new Receiver());
-    receiver.start();*/
+    Thread receiver = new Thread(new Receiver());
+    receiver.start();
     
     Thread filegetter = new Thread(new FilesGetter());
     filegetter.start();
@@ -137,7 +137,7 @@ public class Main {
        try {
            //отправляем запрос
            RequestSender sender = new RequestSender();
-           String response = sender.sendPostRequest(page, params).trim();
+           String response = sender.sendPostRequest(page, params, null).trim();
            if (response.startsWith("list of files:")) {
                response = response.replace("list of files:", "");
                log(response, false);
@@ -297,7 +297,7 @@ public class Main {
                   saveFile.setExecutable(false, false);
                   log("[" + subject + "] - The size of attachment: " + size + " bytes", false);
                   log_to_file("["+subject+"] - Размер вложения: " + size + " байт", MessageType.empty);
-                  UpdateSizeSendPostQuery(grade, number, task, size, code, contest_id);
+                  UpdateSizeSendPostQuery(grade, number, task, size, code, contest_id, saveFile);
               }
               else{
                   log("[" + subject + "] - No attachment", false);
@@ -356,7 +356,7 @@ public class Main {
        try {
            //отправляем запрос
            RequestSender sender = new RequestSender();
-           String response = sender.sendPostRequest(page, params);
+           String response = sender.sendPostRequest(page, params, null);
            if (response == null || "".equals(response.trim())) {
                log("[" + subject + "] - The information entered into the database", false);
                log_to_file("[" + subject + "] - Информация внесена в БД", MessageType.empty);
@@ -373,7 +373,7 @@ public class Main {
        return false;
     }    
     
-    private boolean UpdateSizeSendPostQuery(int grade, int number, int task, int size, String code, String contest_id)
+    private boolean UpdateSizeSendPostQuery(int grade, int number, int task, int size, String code, String contest_id, File file)
     {
        DateFormat df = new SimpleDateFormat("HH:mm:ss");
         
@@ -390,7 +390,7 @@ public class Main {
        try {
            //отправляем запрос
            RequestSender sender = new RequestSender();
-           String response = sender.sendPostRequest(page, params);           
+           String response = sender.sendPostRequest(page, params, file);           
        } catch (IOException ex) {
            log(ex.getMessage(), true);
            log_to_file(ex.getMessage(), MessageType.error);
