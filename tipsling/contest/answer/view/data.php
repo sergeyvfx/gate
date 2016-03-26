@@ -80,7 +80,6 @@ ${information}
         
         foreach ($answers as $value) {
             $filename = '';
-            print $value['grade'].'.'.$value['number'].'-'.$task;
             foreach ($files as $name) {
                 $pos = strpos($name, $value['grade'].'.'.$value['number'].'-'.$task);
                 if ($pos !== false && $pos >= 0) {
