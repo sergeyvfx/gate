@@ -12,6 +12,7 @@ tools/frameEditor/nbproject/private/
 tools/logic/nbproject/private/
 tools/tableChecker/nbproject/private/
 tools/tipslingMailSorter/nbproject/private/
+tools/filteremail/nbproject/private/
 *.patch
 redmine
 rm
@@ -28,6 +29,8 @@ tools/logic/build
 tools/logic/dist
 tools/tipslingMailSorter/build
 tools/tipslingMailSorter/dist
+tools/filteremail/build
+tools/filteremail/dist
 build-impl.xml
 genfiles.properties
 forum/config.php

@@ -774,14 +774,14 @@ if ($_team_included_ != '#team_Included#') {
           $team_grade_count = count($team_list_by_grade[$team_grade]);
           if ($team_grade_count == 1){
               $team_list[$i]['place']=1;
-              $team_list_by_grade[$team_grade][$team_grade_count]['place']=1;
+              $team_list_by_grade[$team_grade][$team_grade_count - 1]['place']=1;
           }
-          else if ($team_list_by_grade[$team_grade][$team_grade_count]['mark']<$team_list_by_grade[$team_grade][$team_grade_count-1]['mark']){
+          else if ($team_list_by_grade[$team_grade][$team_grade_count - 1]['mark']<$team_list_by_grade[$team_grade][$team_grade_count-2]['mark']){
               $team_list[$i]['place']=$team_grade_count;
-              $team_list_by_grade[$team_grade][$team_grade_count]['place']=$team_grade_count;
+              $team_list_by_grade[$team_grade][$team_grade_count - 1]['place']=$team_grade_count;
           }
           else {
-              $team_list[$i]['place']=$team_list_by_grade[$team_grade][$team_grade_count-1]['place'];
+              $team_list[$i]['place']=$team_list_by_grade[$team_grade][$team_grade_count-2]['place'];
           }              
       }      
       
