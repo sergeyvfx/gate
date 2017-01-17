@@ -33,11 +33,11 @@ if ($_team_included_ != '#team_Included#') {
     if ($filter == '') $filter = -1;
 
     if ($sort == 1) {
-      $sort = "ORDER BY team.grade, team.number";
+      $sort = "ORDER BY team.reg_grade, team.number";
     } elseif ($sort == 2) {
-      $sort = "ORDER BY region.name, team.grade, team.number";
+      $sort = "ORDER BY region.name, team.reg_grade, team.number";
     } elseif ($sort == 3) {
-      $sort = "ORDER BY region.name, city.name, school.name, team.grade, team.number";
+      $sort = "ORDER BY region.name, city.name, school.name, team.reg_grade, team.number";
     }
 
     if ($responsible_id < 0) {
@@ -54,6 +54,8 @@ if ($_team_included_ != '#team_Included#') {
 
     $sql = "SELECT\n"
             . " team.*, "
+            . " team_type.id as team_type_id, "
+            . " team_type.name as team_type, "
             . " region.name as region, "
             . " city.name as city, "
             . " school.name as school, "
@@ -65,9 +67,10 @@ if ($_team_included_ != '#team_Included#') {
             . " GROUP_CONCAT(DISTINCT pupil.FIO ORDER BY pupil_team.number ASC SEPARATOR  ', ') as pupils, \n"
             . " GROUP_CONCAT(DISTINCT teacher.FIO ORDER BY teacher_team.number ASC SEPARATOR  ', ') as teacher_full_name \n"
             . "FROM\n"
-            . " team, country, region, responsible, school, city, pupil, pupil_team, teacher, teacher_team \n"
+            . " team, team_type, country, region, responsible, school, city, pupil, pupil_team, teacher, teacher_team \n"
             . "WHERE\n"
             . $where
+            . " team.team_type_id=team_type.id AND\n"
             . " team.responsible_id=responsible.user_id AND\n"
             . " responsible.school_id = school.id AND\n"
             . " city.id = school.city_id AND\n"
@@ -150,6 +153,7 @@ if ($_team_included_ != '#team_Included#') {
 
   /**
    * Создание новой команды
+   * @param <type> $team_type_id - Тип команды
    * @param <type> $number - Номер команды
    * @param <type> $responsible_id - ID Ответственного
    * @param <type> $contest_id - ID конкурса
@@ -164,9 +168,9 @@ if ($_team_included_ != '#team_Included#') {
    * @return <type> Вернет true если команда успешно создана, в противном случае
    *                вернет false
    */
-  function team_create($number, $responsible_id, $contest_id, $payment_id, $grade, $teachers, 
-                       $pupils, $is_payment, $contest_day, $smena, $date, $reposts, 
-                       $payment_sum, $comment) {
+  function team_create($team_type_id, $number, $responsible_id, $contest_id, $payment_id, 
+                       $grade, $reg_grade, $teachers, $pupils, $is_payment, $contest_day, 
+                       $smena, $date, $reposts, $payment_sum, $comment) {
     if (!team_check_fields($grade, $teachers, $pupils, $comment)) {
       return false;
     }
@@ -189,12 +193,14 @@ if ($_team_included_ != '#team_Included#') {
     $date = $date !=null ? db_string(date('Y-m-d H:i:s', strtotime($date))) : 'null';
     $reposts = db_string($reposts);
     $comment = db_string($comment);
-    db_insert('team', array('reg_number' => $number,
+    db_insert('team', array('team_type_id' => $team_type_id,
+        'reg_number' => $number,
         'number' => $number,
         'responsible_id' => $responsible_id,
         'contest_id' => $contest_id,
         'payment_id' => $payment_id,
         'grade' => $grade,
+        'reg_grade' => $reg_grade,
         'is_payment' => $is_payment,
         'contest_day' => $contest_day,
         'smena' => $smena,
@@ -238,6 +244,7 @@ if ($_team_included_ != '#team_Included#') {
   function team_create_received() {
     // Get post data
     global $current_contest;
+    $team_type = stripslashes(trim($_POST['team_type']));
     $grade = stripslashes(trim($_POST['grade']));
     $all_teachers = $_POST['teachers'];
     $all_pupils = $_POST['pupils'];
@@ -266,7 +273,9 @@ if ($_team_included_ != '#team_Included#') {
     if ($contest_id == '')
         $contest_id = $current_contest;
     
-    $number=db_max('team','reg_number', "`grade`=$grade AND `contest_id`=$contest_id")+1;
+    $team_type_object = teamType_get_by_id($team_type);
+    $reg_grade = $grade + $team_type_object['grade_offset_number'];
+    $number=db_max('team','reg_number', "`reg_grade`=$reg_grade AND `contest_id`=$contest_id")+1;
     $responsible_id = user_id();
     $is_payment = 0;
     
@@ -342,9 +351,9 @@ if ($_team_included_ != '#team_Included#') {
         $i++;
     }
     
-    if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
-                    $teachers, $pupils, $is_payment, $contest_day, $smena, $date, 
-                    $reposts, $payment_sum, $comment)) {
+    if (team_create($team_type, $number, $responsible_id, $contest_id, $payment_id, 
+                    $grade, $reg_grade, $teachers, $pupils, $is_payment, $contest_day, 
+                    $smena, $date, $reposts, $payment_sum, $comment)) {
       $_POST = array();
       return true;
     }
@@ -400,20 +409,20 @@ if ($_team_included_ != '#team_Included#') {
     return false;
   }
 
-  function team_update($id, $payment_id, $grade, $all_teachers, $all_teachers_team, 
+  function team_update($id, $team_type_id, $payment_id, $grade, $reg_grade, $all_teachers, $all_teachers_team, 
                        $all_pupils, $all_pupils_team, $is_payment, $reg_number, $number, 
                        $contest_day, $smena, $date, $reposts, $pupil_contest_count, 
                        $pupil_winner_count, $pupil_contest, $pupil_winner, $pupil_other_contest,
                        $teacher_contest_count, $teacher_winner_count, $teacher_contest, 
                        $teacher_winner, $teacher_other_contest, $payment_sum, $comment) {
-      if (count($all_teachers)!=count($all_teachers_team)){
-          add_info('Неверно заполнена информация об учителе, попробуйте еще раз.');
-          return false;
-      }
-      if (count($all_pupils)!=count($all_pupils_team)){
-          add_info('Неверно заполнена информация об учениках, попробуйте еще раз.');
-          return false;
-      }
+    if (count($all_teachers)!=count($all_teachers_team)){
+        add_info('Неверно заполнена информация об учителе, попробуйте еще раз.');
+        return false;
+    }
+    if (count($all_pupils)!=count($all_pupils_team)){
+        add_info('Неверно заполнена информация об учениках, попробуйте еще раз.');
+        return false;
+    }
     $teachers=array();
     $pupils=array();
     
@@ -504,8 +513,10 @@ if ($_team_included_ != '#team_Included#') {
         $pupils[$i]['other_contest']=db_string($pupils[$i]['other_contest']);
     }
     
-    $update = array('payment_id' => $payment_id,
+    $update = array('team_type_id' => team_type_id,
+        'payment_id' => $payment_id,
         'grade' => $grade,
+        'reg_grade' => $reg_grade,
         'is_payment' => $is_payment,
         'reg_number' => $reg_number,
         'number' => $number,
@@ -621,6 +632,7 @@ if ($_team_included_ != '#team_Included#') {
 
   function team_update_received($id) {
     // Get post data
+    $team_type = stripslashes(trim($_POST['team_type']));
     $teachers = $_POST['teachers'];
     $teachers_team = $_POST['teacher_team'];
     $pupils = $_POST['pupils'];
@@ -663,18 +675,23 @@ if ($_team_included_ != '#team_Included#') {
         $contest_day = stripslashes(trim($_POST['contest_day']));
         $smena = stripslashes(trim($_POST['smena']));
     }    
-    if ($team['grade'] != $grade && check_can_user_edit_teamgrade_field($team)) {
-      $number = db_max('team','number',"`grade`=$grade AND `contest_id`=".$team['contest_id']) + 1;
+    
+    $team_type_object = teamType_get_by_id($team_type);
+    $reg_grade = $grade + $team_type_object['grade_offset_number'];
+    if (($team['reg_grade'] != $grade) && check_can_user_edit_teamgrade_field($team)) {
+      $number = db_max('team','number',"`reg_grade`=$grade AND `contest_id`=".$team['contest_id']) + 1;
       $reg_number = $number;
     } else {
       $reg_number = $team['reg_number'];
     }
 
-    if (team_update($id, $payment_id, $grade, $teachers, $teachers_team, $pupils, $pupils_team,
-                    $is_payment, $reg_number, $number, $contest_day, $smena, $date, $reposts, 
-                    $pupil_contest_count, $pupil_winner_count, $pupil_contest, $pupil_winner, $pupil_other_contest,
-                    $teacher_contest_count, $teacher_winner_count, $teacher_contest, 
-                    $teacher_winner, $teacher_other_contest, $payment_sum, $comment)) {
+    if (team_update($team_type, $id, $payment_id, $grade, $reg_grade, $teachers, $teachers_team, 
+                    $pupils, $pupils_team, $is_payment, $reg_number, $number, 
+                    $contest_day, $smena, $date, $reposts, $pupil_contest_count, 
+                    $pupil_winner_count, $pupil_contest, $pupil_winner, 
+                    $pupil_other_contest, $teacher_contest_count, $teacher_winner_count, 
+                    $teacher_contest, $teacher_winner, $teacher_other_contest, 
+                    $payment_sum, $comment)) {
       $_POST = array();
     }
   }

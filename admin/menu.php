@@ -22,4 +22,5 @@
   $datacontrol_menu->AppendItem ('Конкурсы', config_get ('document-root').'/admin/contest/', 'contest');
   $datacontrol_menu->AppendItem ('Разделы', config_get ('document-root').'/admin/content/', 'content');
   $datacontrol_menu->AppendItem ('Сервисы', config_get ('document-root').'/admin/service/', 'service');
+  $datacontrol_menu->AppendItem ('Типы команд', config_get ('document-root').'/admin/team_type/', 'team_type');
 ?>

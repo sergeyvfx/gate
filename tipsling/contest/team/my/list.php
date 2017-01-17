@@ -37,11 +37,12 @@ if (count($list) > 0) {
     $pageSrc = '<table class="list">' . "\n";
     $pageSrc .= '<tr class="h">
         <th width="7%" align="center">Номер команды</th>
-        <th width="18%">Учитель</th>
-        <th width="18%">Участник 1</th>
-        <th width="18%">Участник 2</th>
-        <th width="18%">Участник 3</th>
-        <th width="16%">Статус платежа</th>
+        <th width="10%" align="center">Тип</th>
+        <th width="16%">Учитель</th>
+        <th width="16%">Участник 1</th>
+        <th width="16%">Участник 2</th>
+        <th width="16%">Участник 3</th>
+        <th width="14%">Статус платежа</th>
         <th width="48" class="last">&nbsp;</th></tr>' . "\n";
 
     while ($c < $perPage && $i < $n) {
@@ -49,10 +50,10 @@ if (count($list) > 0) {
       $ps = $it['is_payment'];
       $d = !$ps;
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .  
-      '<td class="n">' . (($allow_edit) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')).$it['grade'].'.'. $it['number'] . (($allow_edit) ? ('</a>') : ('')) . 
-              '<br/><i style="font-weight: normal">(рег. '.$it['grade'].'.'.$it['reg_number'].')<i/>'.
+      '<td class="n">' . (($allow_edit) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')).$it['reg_grade'].'.'. $it['number'] . (($allow_edit) ? ('</a>') : ('')) . 
+              '<br/><i style="font-weight: normal">(рег. '.$it['reg_grade'].'.'.$it['reg_number'].')<i/>'.
       '</td>' .
-              
+      '<td>' . $it['team_type'] . '</td>' .        
       '<td>' . $it['teacher_full_name'] . '</td><td>' . $it['pupil1_full_name'] . '</td>' .
       '<td>' . $it['pupil2_full_name'] . '<td>' . $it['pupil3_full_name'] . '</td>' .
       '<td>' . (($ps) ? ('<span style="color: green">Подтвержден</span>') : ('<span style="color: red">Не подтвержден</span>')) . '</td>' .

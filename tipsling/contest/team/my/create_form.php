@@ -16,149 +16,176 @@ global $page, $current_contest;
 
 $contest = contest_get_by_id($current_contest);
 $contest_list = get_prev_contest_list($contest['family_id']);
+$team_type_list = manage_teamType_get_list();
 
 dd_formo('title=Новая команда;');
 ?>
-<script language="JavaScript" type="text/javascript">
-  function check(frm) {   
-    var grade  = getElementById ('grade').value;
-    var pupil1_full_name   = getElementById ('pupil1_full_name').value;
-    var $teachers = $('input[name="teachers[]"]');
-    var comment = qtrim(getElementById('comment').value);
-    
-    $('#teachers tr').each(function(index, elem){
-        if (index == 0) return;
+<script>
+    $(function(){
+        var team_type_list = [];
+        <?php
+            foreach ($team_type_list as $key => $value) {
+                echo('team_type_list.push({
+                        "id":"'.$value['id'].'",
+                        "name":"'.$value['name'].'",
+                        "grade_name":"'.$value['grade_name'].'",
+                        "grade_start_number":"'.$value['grade_start_number'].'",
+                        "grade_max_number":"'.$value['grade_max_number'].'"                
+                      });'
+                    );
+            }
+        ?>
+                
+        var get_current_team_type = function() {
+            var team_type_id = $('#team_type').val();
+            var results = $.grep(team_type_list, function(e){ return e.id == team_type_id; });
+            return results[0];
+        };
 
-        var count = $('.teacher_contest select', $(this)).length;
-        $('input[name="teacher_contest_count[]"]', $(this)).val(count);
+        var team_type_changed = function() {
+            var team_type = get_current_team_type();
+            $('.grade_name').text(team_type.grade_name);
+        };
+        
+        var check = function() {   
+            $('#teachers tr').each(function(index, elem){
+                if (index === 0) return;
 
-        count = $('.teacher_winner select', $(this)).length;
-        $('input[name="teacher_winner_count[]"]', $(this)).val(count);
-    });
+                var count = $('.teacher_contest select', $(this)).length;
+                $('input[name="teacher_contest_count[]"]', $(this)).val(count);
 
-    $('.pupil_table').each(function(index, elem){
-        var count = $('.pupil_contest select', $(this)).length;
-        $('input[name="pupil_contest_count[]"]', $(this)).val(count);
+                count = $('.teacher_winner select', $(this)).length;
+                $('input[name="teacher_winner_count[]"]', $(this)).val(count);
+            });
 
-        count = $('.pupil_winner select', $(this)).length;
-        $('input[name="pupil_winner_count[]"]', $(this)).val(count);
-    });
+            $('.pupil_table').each(function(index, elem){
+                var count = $('.pupil_contest select', $(this)).length;
+                $('input[name="pupil_contest_count[]"]', $(this)).val(count);
 
-    var val = $('#date').val();
-    $('#payment').prop('checked', val < '2015-03-02').trigger('change');
-    
-    if (qtrim(grade)==''){
-      alert('Укажите класс команды');
-      return;
-    }
+                count = $('.pupil_winner select', $(this)).length;
+                $('input[name="pupil_winner_count[]"]', $(this)).val(count);
+            });
 
-    if (!isnumber(grade)){
-      alert('Класс должен быть целым положительным числом от 1 до 17 (1-11 для школьников, 12-17 для студентов)');
-      return;
-    }
+            var val = $('#date').val();
+            $('#payment').prop('checked', val < '2015-03-02').trigger('change');
+            
+            var result = true;
+            result = result && check_frm_grade();
+            result = result && check_frm_teacher();
+            result = result && check_frm_pupil();
+            result = result && check_frm_comment();
+            
+            if (result) 
+                $(this).submit();
+            
+            return false;
+        };  
+         
+        var check_frm_grade = function() {
+            var grade = $('#grade').val();
+            var team_type = get_current_team_type();
+            
+            if (team_type.grade_name) {
+                if (qtrim(grade) === ''){
+                    show_msg ('grade_check_res', 'err', '<span class="grade_name">' + team_type.grade_name + '</span>' + ' команды не указан');
+                    return false;
+                }
 
-    if (grade<1||grade>17){
-        alert('Класс должен быть целым положительным числом от 1 до 17 (1-11 для школьников, 12-17 для студентов)');
-        return;
-    }
+                var wrongNumberMsg = '<span class="grade_name">' + team_type.grade_name + '</span>' + ' должен быть целым положительным числом от ' + team_type.grade_start_number + ' до ' + team_type.grade_max_number;
+                if (!isnumber(grade)){
+                    show_msg ('grade_check_res', 'err', wrongNumberMsg);
+                    return false;
+                }
+                
+                var grade = Number(grade);
+                if (grade < team_type.grade_start_number || grade > team_type.grade_max_number) {
+                    show_msg ('grade_check_res', 'err', wrongNumberMsg);
+                    return false;
+                }
+            }
 
-    var isTeacherEmpty=true;
-    for(var i=0; i<$teachers.length; i++){
-        if (qtrim($teachers[i].value) != ''){
-            isTeacherEmpty=false;
-            break;
-        }
-    }
-    if (isTeacherEmpty){
-      alert('ФИО учителя не может быть пустым');
-      return;
-    }
+            hide_msg('grade_check_res');
+            return true;
+        };
 
-    if (qtrim(pupil1_full_name)==''){
-      alert('ФИО первого участника не может быть пустым');
-      return;
-    }
+        var check_frm_teacher = function() {
+            var $teachers = $('input[name="teachers[]"]');
 
-    if (comment.length > <?=opt_get('max_comment_len');?>) {
-      alert("Поле \"Комментарий\" не может содержать более <?=opt_get('max_comment_len');?> символов");
-      return;
-    }
+            for(var i=0; i<$teachers.length; i++){
+                if (qtrim($teachers[i].value) !== ''){
+                    hide_msg('teacher_check_res');      
+                    return true;
+                }
+            }
 
-    frm.submit ();
-  }
+            show_msg ('teacher_check_res', 'err', 'Это поле обзательно для заполнения');
+            return false;
+        };
 
-  function check_frm_grade() {
-      var grade = getElementById ('grade').value;
+        var check_frm_pupil = function() {
+            var pupil = $('#pupil1_full_name').val();
 
-      if (qtrim(grade)==''){
-          show_msg ('grade_check_res', 'err', 'Укажите класс команды');
-          return;
-      }
+            if (qtrim(pupil)==='') {
+                show_msg ('pupil_check_res', 'err', 'Это поле обязательно для заполнения');
+                return false;
+            }
 
-      if (!isnumber(grade)){
-          show_msg ('grade_check_res', 'err', 'Класс должен быть целым положительным числом от 1 до 17 <i>(1-11 для школьников, 12-17 для студентов)</i>');
-          return;
-      }
+            hide_msg('pupil_check_res');
+            return true;
+        };
 
-      if (grade<1 || grade>17){
-          show_msg('grade_check_res','err','Класс должен быть целым положительным числом от 1 до 17 <i>(1-11 для школьников, 12-17 для студентов)</i>');
-          return;
-      }
+        var check_frm_comment = function() {
+            var comment = $('#comment').val();
 
-      hide_msg('grade_check_res');
-  }
+            if (comment.length > <?=opt_get('max_comment_len');?>) {
+                show_msg ('comment_check_res', 'err', 'Поле "Комментарий" не может содержать более <?=opt_get('max_comment_len');?> символов');
+                return false;
+            }
 
-  function check_frm_teacher() {
-      var $teachers = $('input[name="teachers[]"]');
-      
-      for(var i=0; i<$teachers.length; i++){
-          if (qtrim($teachers[i].value) != ''){
-              hide_msg('teacher_check_res');      
-              return;
-          }
-      }
-
-      show_msg ('teacher_check_res', 'err', 'Это поле обзательно для заполнения');
-  }
-
-  function check_frm_pupil() {
-      var pupil = getElementById ('pupil1_full_name').value;
-
-      if (qtrim(pupil)=='') {
-          show_msg ('pupil_check_res', 'err', 'Это поле обязательно для заполнения');
-          return;
-      }
-
-      hide_msg('pupil_check_res');
-  }
-
-  function check_frm_comment() {
-      var comment = getElementById ('comment').value;
-
-      if (comment.length > <?=opt_get('max_comment_len');?>) {
-          show_msg ('comment_check_res', 'err', 'Поле "Комментарий" не может содержать более <?=opt_get('max_comment_len');?> символов');
-          return;
-      }
-
-      hide_msg('comment_check_res');
-  }
+            hide_msg('comment_check_res');
+            return true;
+        };
+        
+        $('#team_type').on('change', team_type_changed);
+        $('#grade').on('blur', check_frm_grade);
+        $('#teachers').on('blur', check_frm_teacher);
+        $('#pupil1_full_name').on('blur', check_frm_pupil);
+        $('#comment').on('blur', check_frm_comment);
+        $('#create_form').on('submit', check);
+    });  
 </script>
 <div>
-  <form action=".?action=create&page=<?= $page ?>" method="POST" onsubmit="check (this); return false;">
+  <form id="create_form" action=".?action=create&page=<?= $page ?>" method="POST">
     <table class="clear" width="100%">
         <tr>
             <td width="30%" style="padding: 0 2px;">
-                Класс участников: <span class="error">*</span>
+                Тип команды:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="grade" name="grade" onblur="check_frm_grade ();" value="<?= htmlspecialchars(stripslashes($_POST['grade'])); ?>">
+                <select id='team_type' name='team_type' style='vertical-align: middle;'>
+                    <?php
+                        foreach ($team_type_list as $key => $value) {
+                            echo('<option value="'.$value['id'].'">'.$value['name'].'</option>');
+                        }
+                    ?>
+                </select>
             </td>
         </tr>
-        <tr><td><i>(Для ВУЗов: 1 курс = 12 класс, 2 курс = 13 и т.д).</i></td></tr>
+    </table>
+    <div id="hr"></div>      
+    <table class="clear grade_table" width="100%">
+        <tr>
+            <td width="30%" style="padding: 0 2px;">
+                <span class='grade_name'>Класс</span> участников: <span class="error">*</span>
+            </td>
+            <td style="padding: 0 2px;">
+                <input type="text" class="txt block" id="grade" name="grade">
+            </td>
+        </tr>
     </table>
     <div id="grade_check_res" style="display: none;"></div>
     <div id="hr"></div>
-    <table class ="clear" width="100%" id="teachers">
+    <table class ="clear" width="100%">
         <tr>
             <th style='width: 30%; text-align: left; font-weight: normal;'>Учителя: <span class="error">*</span></th>
             <th width="19%">ФИО</th>                        
@@ -168,7 +195,7 @@ dd_formo('title=Новая команда;');
         </tr>
         <tr>
             <td style='text-align:right; vertical-align: top;'><img class='btn' src='<?=config_get('document-root')?>/pics/cross.gif'/></td>
-            <td style="vertical-align: top;"><input type='text' class='txt block' name='teachers[]' onblur='check_frm_teacher ();'/>
+            <td style="vertical-align: top;"><input type='text' class='txt block' id = 'teachers' name='teachers[]'/>
                 <input type='hidden' name='teacher_team[]'/>
                 <input type='hidden' name='teacher_contest_count[]'/>
                 <input type='hidden' name='teacher_winner_count[]'/>
@@ -219,7 +246,7 @@ dd_formo('title=Новая команда;');
         <tr>
             <td></td>
             <td style='vertical-align:top;'>
-                <input type='text' class='txt block' id='pupil1_full_name' name='pupils[]' onblur='check_frm_pupil ();'>
+                <input type='text' class='txt block' id='pupil1_full_name' name='pupils[]'>
                 <input type='hidden' name='pupil_team[]'/>
                 <input type='hidden' name='pupil_contest_count[]'/>
                 <input type='hidden' name='pupil_winner_count[]'/>
@@ -408,7 +435,7 @@ dd_formo('title=Новая команда;');
                 Примечание:
             </td>
             <td style="padding: 0 2px;">
-                <input type="text" id="comment" name="comment" onblur="check_frm_comment ();" value="<?= htmlspecialchars(stripslashes($_POST['comment'])); ?>" class="txt block">
+                <input type="text" id="comment" name="comment" class="txt block">
             </td>
         </tr>
     </table>
@@ -525,6 +552,27 @@ dd_formo('title=Новая команда;');
     });
     
     $(function(){
+        var team_type_list = [];
+        <?php
+            foreach ($team_type_list as $key => $value) {
+                echo('team_type_list.push({
+                        "id":"'.$value['id'].'",
+                        "name":"'.$value['name'].'",
+                        "grade_name":"'.$value['grade_name'].'",
+                        "grade_start_number":"'.$value['grade_start_number'].'",
+                        "grade_max_number":"'.$value['grade_max_number'].'",
+                        "grade_offset_number":"'.$value['grade_offset_number'].'"
+                      });'
+                    );
+            }
+        ?>
+                
+        var get_current_team_type = function() {
+            var team_type_id = $('#team_type').val();
+            var results = $.grep(team_type_list, function(e){ return e.id == team_type_id; });
+            return results[0];
+        };
+        
         var $teachers = $('#teachers'),
             $smena = $('#smena'),
             $contest_day = $('#contest_day'),
@@ -558,8 +606,14 @@ dd_formo('title=Новая команда;');
             },
         
             SetYearsDiscount = function(){
-                var val = $('#grade').val();
-                $('#years').prop('checked', val>=1 && val<=9).trigger('change');            
+                var grade = $('#grade').val();
+                var team_type = get_current_team_type();
+                
+                if (isnumber(grade)){
+                    grade = Number(grade) + Number(team_type['grade_offset_number']);
+                }
+                
+                $('#years').prop('checked', grade>=1 && grade<=9).trigger('change');
             },
         
             SetPupilContestDiscount = function(){
@@ -731,6 +785,10 @@ dd_formo('title=Новая команда;');
             SetTeacherWinnerDiscount();
         }).on('change', '.other_contest', function(){
             SetOtherContestDiscount();
+        });
+        
+        $('#team_type').on('input', function(){
+            SetYearsDiscount();
         });
         
         $('#grade').on('input', function(){

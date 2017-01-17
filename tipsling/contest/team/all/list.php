@@ -69,11 +69,12 @@ if (count($list) > 0) {
     $pageSrc = '<table class="list">' . "\n";
     $pageSrc .= '<tr class="h">
         <th width="7%" align="center">Номер команды</th>
-        <th width="15%">Учебное заведение</th>
-        <th width="13%">Регион/***Страна</th>
+        <th width="10%" align="center">Тип</th>
+        <th width="13%">Учебное заведение</th>
+        <th width="12%">Регион/***Страна</th>
         <th width="10%">Населенный пункт</th>
         <th width="15%">Учитель</th>
-        <th width="20%">Участники</th>
+        <th width="17%">Участники</th>
         <th width="10%">Статус платежа</th>' .
         (($has_access) ? ('<th width="48" class="last">&nbsp;</th>') : (''))
         . '</tr>' . "\n";
@@ -82,7 +83,7 @@ if (count($list) > 0) {
       $it = $list[$i];
       $d = $is_user_admin;
       $ps = $it['is_payment'];
-      $number = $it['grade'].'.'.$it['number'];
+      $number = $it['reg_grade'].'.'.$it['number'];
       $school_name = $it['school'];
       $region = $it['region'];
       $city = $it['city'];
@@ -99,8 +100,9 @@ if (count($list) > 0) {
 
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
               '<td class="n">' . $number . 
-                '<br/><i style="font-weight: normal">(рег. '.$it['grade'].'.'.$it['reg_number'].')<i/>'.
+                '<br/><i style="font-weight: normal">(рег. '.$it['reg_grade'].'.'.$it['reg_number'].')<i/>'.
               '</td>' . 
+              '<td>' . $it['team_type'] . '</td>' .        
               '<td>' . $school_name . '</td>' .
               '<td>' . ($it['country_id']=='1' ? $region : '***'.$it['country']) . '</td>' .
               '<td>' . $city . '</td>' .
