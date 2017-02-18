@@ -51,6 +51,11 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             var team_type = get_current_team_type();
             $('.grade_name').text(team_type.grade_name);
             
+            if (team_type.grade_start_number === team_type.grade_max_number)
+                $('#grade_line').hide();
+            else
+                $('#grade_line').show();
+            
             hide_msg('grade_check_res');
         };
         
@@ -77,13 +82,21 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             $('#payment').prop('checked', val < '2015-03-02').trigger('change');
             
             var result = true;
-            result = result && check_frm_grade();
             result = result && check_frm_teacher();
             result = result && check_frm_pupil();
             result = result && check_frm_comment();
             
-            if (result) 
+            if (result) {
+                var team_type = get_current_team_type();
+                if (team_type.grade_start_number === team_type.grade_max_number)
+                    $('#grade').val(team_type.grade_start_number);
+                else
+                    result = result && check_frm_grade();
+            }
+            
+            if (result) {
                 $(this).submit();
+            }
             
             return false;
         };  
@@ -159,6 +172,8 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
         $('#pupil1_full_name').on('blur', check_frm_pupil);
         $('#comment').on('blur', check_frm_comment);
         $('#edit_form').on('submit', check);
+        
+        team_type_changed();
     });  
 </script>
 
@@ -180,17 +195,19 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
         </tr>
     </table>
     <div id="hr"></div>      
-    <table class="clear" width="100%">
-        <tr><td width="30%">
-                <span class='grade_name'><?= $team_type['grade_name'] ?></span> участников: <span class="error">*</span>
-            </td>
-            <td style="padding: 0 2px;">
-                <input type="text" class="txt block" id="grade" name="grade" <?=check_can_user_edit_teamgrade_field($team)?'':'readonly="readonly"' ?> value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
-            </td>
-        </tr>
-    </table>
-    <div id="grade_check_res" style="display: none;"></div>
-    <div id="hr"></div>      
+    <div id="grade_line">
+        <table class="clear" width="100%" >
+            <tr><td width="30%">
+                    <span class='grade_name'><?= $team_type['grade_name'] ?></span> участников: <span class="error">*</span>
+                </td>
+                <td style="padding: 0 2px;">
+                    <input type="text" class="txt block" id="grade" name="grade" <?=check_can_user_edit_teamgrade_field($team)?'':'readonly="readonly"' ?> value="<?= htmlspecialchars(stripslashes($team['grade'])); ?>">
+                </td>
+            </tr>
+        </table>
+        <div id="grade_check_res" style="display: none;"></div>
+        <div id="hr"></div>      
+    </div>
     <table class ="clear" width="100%" id="teachers">
         <tr>
             <th style="width: 30%; text-align: left; font-weight: normal;">Учителя: <span class="error">*</span></th>

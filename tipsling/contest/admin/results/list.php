@@ -47,10 +47,10 @@ if (count($list) > 0) {
 
     while ($c < $perPage && $i < $n) {
       $team = $list[$i];
-      $number = $team['grade'].'.'.$team['number'];
+      $number = $team['reg_grade'].'.'.$team['number'];
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
               '<td class="n">' . $number . 
-                '<br/><i style="font-weight: normal">(рег. '.$team['grade'].'.'.$team['reg_number'].')<i/>'.
+                '<br/><i style="font-weight: normal">(рег. '.$team['reg_grade'].'.'.$team['reg_number'].')<i/>'.
               '</td>' . 
               '<td align="center"><input type=text name="mark['.$team['id'].']" value="' . $team['mark'] . '"/></td>' .
               '<td align="center"><input type=text readonly="readonly" name="place['.$team['id'].']" value="' . $team['place'] . '"/></td>' .

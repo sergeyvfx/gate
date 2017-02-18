@@ -366,7 +366,14 @@ if ($_team_included_ != '#team_Included#') {
     global $current_contest;
     $team_id = stripslashes(trim($_POST['Team']));
     $this_team = team_get_by_id($team_id);
+    $this_team_type = teamType_get_by_id($this_team['team_type_id']);
     $grade = $this_team['grade']+1;
+    $reg_grade = $this_team['reg_grade']+1;
+    if ($grade > $this_team_type['grade_max_number']){
+        $this_team_type = teamType_get_next($this_team['team_type_id']);
+        $grade = $this_team_type['grade_start_number'];
+        $reg_grade = $grade + $this_team_type['grade_offset_number'];
+    }
     $teachers_fio = gate_array_column($this_team['teachers'], 'FIO');
     $pupils_fio = gate_array_column($this_team['pupils'], 'FIO');
     $contest_day = $this_team['contest_day'] == '' ? 'сб' : $this_team['contest_day'];
@@ -398,9 +405,9 @@ if ($_team_included_ != '#team_Included#') {
         
         $pupils[]=$pupil_tmp;
     }
-    
-    if (team_create($number, $responsible_id, $contest_id, $payment_id, $grade,
-                    $teachers, $pupils, $is_payment, $contest_day, $smena, 
+        
+    if (team_create($this_team_type['id'], $number, $responsible_id, $contest_id, $payment_id, 
+                    $grade, $reg_grade, $teachers, $pupils, $is_payment, $contest_day, $smena, 
                     null, null, "1300", $comment)) {
       $_POST = array();
       return true;
@@ -513,7 +520,7 @@ if ($_team_included_ != '#team_Included#') {
         $pupils[$i]['other_contest']=db_string($pupils[$i]['other_contest']);
     }
     
-    $update = array('team_type_id' => team_type_id,
+    $update = array('team_type_id' => $team_type_id,
         'payment_id' => $payment_id,
         'grade' => $grade,
         'reg_grade' => $reg_grade,
@@ -685,7 +692,7 @@ if ($_team_included_ != '#team_Included#') {
       $reg_number = $team['reg_number'];
     }
 
-    if (team_update($team_type, $id, $payment_id, $grade, $reg_grade, $teachers, $teachers_team, 
+    if (team_update($id, $team_type, $payment_id, $grade, $reg_grade, $teachers, $teachers_team, 
                     $pupils, $pupils_team, $is_payment, $reg_number, $number, 
                     $contest_day, $smena, $date, $reposts, $pupil_contest_count, 
                     $pupil_winner_count, $pupil_contest, $pupil_winner, 

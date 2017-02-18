@@ -237,11 +237,11 @@ $user = user_get_by_id($payment['responsible_id']);
         <td style="padding: 0 2px;">
           <?php
           $responsible_id = $payment['responsible_id'];
-          $teams = arr_from_query("SELECT * FROM `team` WHERE (`team`.`is_payment`=0 OR `team`.`payment_id`=".$id.") AND `team`.`responsible_id`=" . $responsible_id . " AND `team`.`contest_id`=".$current_contest." ORDER BY `team`.`grade`, `team`.`number`");
+          $teams = arr_from_query("SELECT * FROM `team` WHERE (`team`.`is_payment`=0 OR `team`.`payment_id`=".$id.") AND `team`.`responsible_id`=" . $responsible_id . " AND `team`.`contest_id`=".$current_contest." ORDER BY `team`.`reg_grade`, `team`.`number`");
           foreach ($teams as $team) {
           ?>
               <input type="checkbox" name=<?="team_".$team['id']?> value=<?="team_".$team['id']?> <?=$team['is_payment']==1?"checked='checked'":"" ?>>
-              <a href="../../team/all/?action=edit&id=<?=$team['id']?>"><?=$team['grade'] . '.' . $team['number']?></a>
+              <a href="../../team/all/?action=edit&id=<?=$team['id']?>"><?=$team['reg_grade'] . '.' . $team['number']?></a>
               <div id="hr"></div>
           <?php
           }

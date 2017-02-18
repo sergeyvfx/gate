@@ -87,7 +87,7 @@ ${information}
                 while ($i<$n)
                 {
                     $team = $teams[$i];
-                    echo('<tr name="'.$i.'"><td>'.$team["grade"].'.'.$team["number"].'</td>');
+                    echo('<tr name="'.$i.'"><td>'.$team["reg_grade"].'.'.$team["number"].'</td>');
                     
                     foreach ($certificate_teams_array as $certificate_teams) {
                         $is_show = false;

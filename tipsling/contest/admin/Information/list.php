@@ -25,7 +25,7 @@ formo('title=Инфорация о командах и их ответствен
 <?php
 $query = 'SELECT 
     team.id as "id", 
-    concat(team.grade,".",team.number) as "Номер команды", 
+    concat(team.reg_grade,".",team.number) as "Номер команды", 
     timezone.offset as "Часовой пояс",    
     team.contest_day as "День",
     team.smena as "Смена",
@@ -45,7 +45,7 @@ AND teacher_team.team_id = team.id
 AND teacher.id = teacher_team.teacher_id
 AND team.contest_id ='.$current_contest.
 ' GROUP BY team.id
-ORDER BY team.grade ASC, team.number';
+ORDER BY team.reg_grade ASC, team.number';
 
 $list = arr_from_query($query);
 if (count($list) > 0) {

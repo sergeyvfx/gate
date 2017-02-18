@@ -58,6 +58,50 @@
   <table class="clear" width="100%">
     <tr>
       <td width="20%" style="padding: 0 2px;">
+        Название класса (класс, курс и т.д.):
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="grade_name" id="grade_name">
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="20%" style="padding: 0 2px;">
+        Минимальный номер класса/курса:
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="grade_start_number" id="grade_start_number">
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="20%" style="padding: 0 2px;">
+        Максимальный номер класса/курса:
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="grade_max_number" id="grade_max_number">
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="20%" style="padding: 0 2px;">
+        Смещение номера команды:
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="grade_offset_number" id="grade_offset_number">
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="20%" style="padding: 0 2px;">
         Учавствуют вне конкурса
       </td>
       <td style="padding: 0 2px;">

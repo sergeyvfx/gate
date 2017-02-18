@@ -92,7 +92,7 @@ ${information}
         $k++;
         $bottom_line = '';
       }
-      print('<tr onmouseover="this.bgColor=\'#C2DFFF\';" onmouseout="this.bgColor=\'#EEEEEE\';"' . $bottom_line . '><th scope="row" style="text-align: center; border: 1px solid #AAAAAA">' . $t["grade"] . '.' . $t["number"] . '</th>');
+      print('<tr onmouseover="this.bgColor=\'#C2DFFF\';" onmouseout="this.bgColor=\'#EEEEEE\';"' . $bottom_line . '><th scope="row" style="text-align: center; border: 1px solid #AAAAAA">' . $t["reg_grade"] . '.' . $t["number"] . '</th>');
 
       $j = 0;
       for ($i = 1; $i <= $task_count; $i++) {

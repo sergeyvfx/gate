@@ -171,7 +171,7 @@ function certificate_update_received($id) {
           if (!check_contestadmin_rights()) {
               $where .= '`team`.`responsible_id`='.user_id().' AND ';
           }
-          $order = 'ORDER BY `team`.`grade` ASC, `team`.`number` ASC';
+          $order = 'ORDER BY `team`.`reg_grade` ASC, `team`.`number` ASC';
           $table_team_id = db_field_value('visible_table', 'id', "`table`='team'");
           $tables = array($table_team_id);
       }

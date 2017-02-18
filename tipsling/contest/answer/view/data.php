@@ -69,7 +69,7 @@ ${information}
             }
         }
         
-        $sql = 'select cs.*, team.grade, team.number from contest_status cs join team on cs.team_id = team.id where cs.contest_id='.$contest['id'].' and cs.task='.$task.' order by cs.date desc, cs.time desc';
+        $sql = 'select cs.*, team.reg_grade, team.number from contest_status cs join team on cs.team_id = team.id where cs.contest_id='.$contest['id'].' and cs.task='.$task.' order by cs.date desc, cs.time desc';
         $answers = arr_from_query($sql);
         print '<table style="width:100%; text-align:center;">';
         print '<tr>';
@@ -81,7 +81,7 @@ ${information}
         foreach ($answers as $value) {
             $filename = '';
             foreach ($files as $name) {
-                $pos = strpos($name, $value['grade'].'.'.$value['number'].'-'.$task);
+                $pos = strpos($name, $value['reg_grade'].'.'.$value['number'].'-'.$task);
                 if ($pos !== false && $pos >= 0) {
                     $filename = $name;
                     break;

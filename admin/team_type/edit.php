@@ -40,7 +40,7 @@
         Название типа команды
       </td>
       <td style="padding: 0 2px;">
-        <input type="text" id="name" name="name" value="<?=$item['name']?>" class="txt block"><div id="hr"></div>
+        <input type="text" id="name" name="name" value="<?=$item['name']?>" class="txt block"></div>
       </td>
     </tr>
   </table>
@@ -52,6 +52,50 @@
       </td>
       <td style="padding: 0 2px;">
         <input type="text" class="txt block" name="description" id="description" value="<?=$item['description']?>">
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="20%" style="padding: 0 2px;">
+        Название класса (класс, курс и т.д.):
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="grade_name" id="grade_name" value="<?=$item['grade_name']?>">
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="20%" style="padding: 0 2px;">
+        Минимальный номер класса/курса:
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="grade_start_number" id="grade_start_number" value="<?=$item['grade_start_number']?>">
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="20%" style="padding: 0 2px;">
+        Максимальный номер класса/курса:
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="grade_max_number" id="grade_max_number" value="<?=$item['grade_max_number']?>">
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <table class="clear" width="100%">
+    <tr>
+      <td width="20%" style="padding: 0 2px;">
+        Смещение номера команды:
+      </td>
+      <td style="padding: 0 2px;">
+        <input type="text" class="txt block" name="grade_offset_number" id="grade_offset_number" value="<?=$item['grade_offset_number']?>">
       </td>
     </tr>
   </table>

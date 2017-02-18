@@ -57,7 +57,7 @@ ${information}
                     $offset = (-1)*parseint($offset)+5*60*60; //PERM OFFSET FROM SERVER TIME
                     $original_time = date("Y-m-d H:i:s", time()); //server time
                     $prm_time = date("H:i:s", strtotime($original_time." ".$offset." Seconds")); //perm time
-                    move_uploaded_file($_FILES["answer_file"]["tmp_name"], $directory."/".$team['grade'].'.'.$team['number'].'-'.$answer_task.strrchr($_FILES["answer_file"]["name"], '.'));
+                    move_uploaded_file($_FILES["answer_file"]["tmp_name"], $directory."/".$team['reg_grade'].'.'.$team['number'].'-'.$answer_task.strrchr($_FILES["answer_file"]["name"], '.'));
                     db_insert('contest_status', 
                               array('contest_id' => db_string($current_contest),
                                     'task' => db_string($answer_task),
@@ -94,7 +94,7 @@ ${information}
                             <?
                                 $list = team_list(user_id(), '', $current_contest);
                                 foreach ($list as $team) {
-                                    echo('<option value="'.$team['id'].'">'.$team['grade'].'.'.$team['number'].' (рег. '.$team['grade'].'.'.$team['number'].')</option>');
+                                    echo('<option value="'.$team['id'].'">'.$team['reg_grade'].'.'.$team['number'].' (рег. '.$team['reg_grade'].'.'.$team['number'].')</option>');
                                 }
                             ?>
                         </select>

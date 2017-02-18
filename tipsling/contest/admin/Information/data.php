@@ -149,7 +149,7 @@ ${information}
                             <option value="school_status.name">Статус учебного заведения</option>
                             <option value="country.name+' '+city.name+' '+school.street+school.house">Адрес учебного заведения</option>
                             <option value="timezone.offset">Часовой пояс</option>
-                            <option value="team.grade+'.'+team.number">Номер команды</option>
+                            <option value="team.reg_grade+'.'+team.number">Номер команды</option>
                             <option value="team.teacher_full_name">ФИО учителя команды</option>
                             <option value="team.pupil1_full_name">ФИО первого участника команды</option>
                             <option value="team.pupil2_full_name">ФИО второго участника команды</option>

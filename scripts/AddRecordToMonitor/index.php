@@ -4,7 +4,7 @@
     db_connect (config_get ('check-database'));
     $MonitorCode = opt_get("MonitorCode");
     
-    global $id, $contest_id, $grade, $number, $task, $date, $size, $action;
+    global $id, $contest_id, $reg_grade, $number, $task, $date, $size, $action;
     if ($id == $MonitorCode) {
         if ($action == 'getfilelist') {
             $sql = "SELECT * FROM `contest` WHERE `id`=".$contest_id;
@@ -24,7 +24,7 @@
                 }
             }
         } else {
-            $sql = "SELECT `team`.`id` FROM `team` WHERE `team`.`grade`=".$grade." AND `team`.`number`=".$number." AND `team`.`contest_id`=".$contest_id;
+            $sql = "SELECT `team`.`id` FROM `team` WHERE `team`.`reg_grade`=".$reg_grade." AND `team`.`number`=".$number." AND `team`.`contest_id`=".$contest_id;
             $res = arr_from_query($sql);
             if (count($res)>0) {
                 $team = $res[0];
@@ -56,7 +56,7 @@
                             $directory = $DOCUMENT_ROOT."/uploaded_files/answers/".$task;
                         }
 
-                        move_uploaded_file($_FILES["answer_file"]["tmp_name"], $directory."/".$team['grade'].'.'.$team['number'].'-'.$task.strrchr($_FILES["answer_file"]["name"], '.'));
+                        move_uploaded_file($_FILES["answer_file"]["tmp_name"], $directory."/".$team['reg_grade'].'.'.$team['number'].'-'.$task.strrchr($_FILES["answer_file"]["name"], '.'));
                         db_update('contest_status', 
                                   array('size' => db_string($size)),
                                         "`team_id`=".$teamId." AND `task`=".$task." AND `contest_id`=".$contest_id);                        
