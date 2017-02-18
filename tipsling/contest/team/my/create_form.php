@@ -180,7 +180,7 @@ dd_formo('title=Новая команда;');
                 <select id='team_type' name='team_type' style='vertical-align: middle;'>
                     <?php
                         foreach ($team_type_list as $key => $value) {
-                            echo('<option value="'.$value['id'].'">'.$value['name'].'</option>');
+                            echo('<option value="'.$value['id'].'">'.$value['name'].($value['description'] ? ' ('.$value['description'].')' : '').'</option>');
                         }
                     ?>
                 </select>

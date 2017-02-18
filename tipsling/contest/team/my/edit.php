@@ -187,7 +187,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
                 <select id='team_type' name='team_type' style='vertical-align: middle;'>
                     <?php
                         foreach ($team_type_list as $key => $value) {
-                            echo('<option '.($value['id']==$team['team_type_id']?'selected="selected"':'').' value="'.$value['id'].'">'.$value['name'].'</option>');
+                            echo('<option '.($value['id']==$team['team_type_id']?'selected="selected"':'').' value="'.$value['id'].'">'.$value['name'].($value['description'] ? ' ('.$value['description'].')' : '').'</option>');
                         }
                     ?>
                 </select>
