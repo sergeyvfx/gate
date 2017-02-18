@@ -202,7 +202,7 @@ dd_formo('title=Новая команда;');
         <div id="grade_check_res" style="display: none;"></div>
         <div id="hr"></div>
     </div>
-    <table class ="clear" width="100%">
+    <table class ="clear" width="100%" id="teachers">
         <tr>
             <th style='width: 30%; text-align: left; font-weight: normal;'>Учителя: <span class="error">*</span></th>
             <th width="19%">ФИО</th>                        
@@ -619,7 +619,7 @@ dd_formo('title=Новая команда;');
             
             SetPaymentDiscount = function(){
                 var val = $('#date').val();
-                $('#payment').prop('checked', val < '2016-03-02').trigger('change');
+                $('#payment').prop('checked', val < '2017-03-02').trigger('change');
             },
         
             SetYearsDiscount = function(){
