@@ -77,9 +77,6 @@ function check () {
     );
     $context  = stream_context_create($options);
     $verify = file_get_contents($url, false, $context);
-    echo $response;
-    echo '  |  ';
-    echo $verify;
     $captcha_success=json_decode($verify);
     if ($captcha_success->success == false) {
         add_info('Вы не прошли тест Тьюринга на подтверждение того, что вы не бот.');
