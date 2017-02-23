@@ -243,9 +243,6 @@ ${information}
 $f = new CVCForm ();
 $f->Init('', 'action=.?action\=register' . (($redirect != '') ? ('&redirect\=' . prepare_arg($redirect)) : ('')) . ';method=POST;add_check_func=check;caption=Зарегистрироваться;backlink=' . prepare_arg($redirect));
 
-$rn = new CVCCaptcha ();
-$rn->Init();
-
 // Fields
 // FIXME Почему не используются поля специализироваанного типа?
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Фамилия: <span class="error">*</div></td><td style="padding: 0 2px;"><input type="text" class="txt block" id="surname" name="surname" onBlur="check_frm_surname ();" value="' . htmlspecialchars(stripslashes($surname)) . '"></td></tr>'.
