@@ -21,6 +21,7 @@ if ($PHP_SELF != '') {
   $max_patronymic_len = opt_get('max_patronymic_len');
   $max_passwd_len = opt_get('max_passwd_len');
 ?>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <div id="snavigator"><a href="<?=config_get ('document-root')?>/login">Вход в систему</a>Регистрация</div>
 ${information}
 <script language="JavaScript" type="text/JavaScript">
@@ -200,32 +201,43 @@ ${information}
   global $redirect, $action, $surname, $name, $patronymic, $login, $email, $phone, $passwd;
 
   function register () {
-  global $agree, $email, $keystring;
+    global $agree, $email, $keystring;
 
-  require_once('../../inc/stuff/captcha/recaptchalib.php');
-  $privatekey = config_get('recaptcha-private-key');
-  $resp = recaptcha_check_answer ($privatekey,
-                                $_SERVER["REMOTE_ADDR"],
-                                $_POST["recaptcha_challenge_field"],
-                                $_POST["recaptcha_response_field"]);
+    $privatekey = '6LfamhYUAAAAAJTgOpDhdkP4a6FD939yiQbFswPJ'; //config_get('recaptcha-private-key');
+    $response = $_POST["g-recaptcha-response"];
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = array(
+        'secret' => $privatekey,
+        'response' => $response
+    );
+    $options = array(
+        'http' => array (
+            'method' => 'POST',
+            'content' => http_build_query($data)
+        )
+    );
+    $context  = stream_context_create($options);
+    $verify = file_get_contents($url, false, $context);
+    $captcha_success=json_decode($verify);
+    
+    if ($captcha_success->success == false) {
+        add_info('Вы не прошли тест Тьюринга на подтверждение того, что вы не бот.');
+        return false;
+    } else if ($captcha_success->success == true) {
 
-  if (!$resp->is_valid) {
-    add_info('Вы не прошли тест Тьюринга на подтверждение того, что вы не бот.');
-    return false;
-  }
+        if ($email == config_get('null-email')) {
+          add_info('Недопустимый адрес электронной почты.');
+          return false;
+        }
 
-  if ($email == config_get('null-email')) {
-    add_info('Недопустимый адрес электронной почты.');
-    return false;
-  }
+        if (!$agree) {
+          add_info('Вы не согласны с правилами этого ресурса, так как же мы Вас здесь зарегестрируем?');
+          return false;
+        }
 
-  if (!$agree) {
-    add_info('Вы не согласны с правилами этого ресурса, так как же мы Вас здесь зарегестрируем?');
-    return false;
-  }
-
-  //return user_create_received(false);
-  return user_create_received(true);
+        //return user_create_received(false);
+        return user_create_received(true);
+    }
 }
 
 $f = new CVCForm ();
@@ -250,7 +262,7 @@ $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Пароль: <span class="error">*</span></td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd" name="passwd"></td></tr>' .
     '<tr><td>Подтверждение пароля: <span class="error">*</span></td><td style="padding: 2px;"><input type="password" class="txt block" id="passwd_confirm" name="passwd_confirm"  onBlur="check_passwd ();"><div id="passwd_msg"></div></td></tr>' .
     '</table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;" width="100%"><div>' . $rn->OuterHTML() . '</div></td></tr></table>'));
+$f->AppendCustomField(array ('src'=>'<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;"><div class="g-recaptcha" data-sitekey="6LfamhYUAAAAAK4OC9pKnyrj3y5at5dnx7_aoMO3"></div></td></tr></table>'));
 $f->AppendCUstomField(array('src' => '<center><input type="checkbox" class="cb" value="1" name="agree" id="agree">Я согласен с <a href="' . config_get('document-root') . '/articles/rules" target="blank">правилами</a> этого ресурса <span class="error">*</span></center>'));
 
 if ($action == 'register') {
