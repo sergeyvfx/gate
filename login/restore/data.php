@@ -15,6 +15,7 @@
     die;
   }
 ?>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <div id="snavigator"><a href="<?=config_get ('document-root');?>/login">Вход в систему</a>Восстановление пароля</div>
 ${information}
 <script language="JavaScript" type="text/JavaScript">
@@ -61,49 +62,59 @@ function check () {
     global $keystring, $login, $email;
     $hash = md5 ('#RANDOM_PREFIX#'.mtime ().'#RANDOM_SEPARATOR#'.$login.'#WITH#'.$email.'#RANDOM_SUFFIX#');
     
-    require_once('../../inc/stuff/captcha/recaptchalib.php');
-    $privatekey = config_get('recaptcha-private-key');
-    $resp = recaptcha_check_answer ($privatekey,
-                                    $_SERVER["REMOTE_ADDR"],
-                                    $_POST["recaptcha_challenge_field"],
-                                    $_POST["recaptcha_response_field"]);
-    if (!$resp->is_valid) {
+    $privatekey = '6LfamhYUAAAAAJTgOpDhdkP4a6FD939yiQbFswPJ'; //config_get('recaptcha-private-key');
+    $response = $_POST["g-recaptcha-response"];
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = array(
+        'secret' => $privatekey,
+        'response' => $response
+    );
+    $options = array(
+        'http' => array (
+            'method' => 'POST',
+            'content' => http_build_query($data)
+        )
+    );
+    $context  = stream_context_create($options);
+    $verify = file_get_contents($url, false, $context);
+    echo $response;
+    echo '  |  ';
+    echo $verify;
+    $captcha_success=json_decode($verify);
+    if ($captcha_success->success == false) {
         add_info('Вы не прошли тест Тьюринга на подтверждение того, что вы не бот.');
         return false;
+    } else if ($captcha_success->success == true) {
+        $r = db_row_value ('user', "(`login` =\"$login\") AND (`email`=\"$email\") AND (`authorized`=1)");
+        if ($r['id'] == '') {
+          add_info ('Неверное сочетание login <-> email');
+          return false;
+        }
+        $s = unserialize ($r['settings']);
+
+        if ($s['restore_timestamp'] && time () - $s['restore_timestamp'] < config_get ('restore-timeout')) {
+          add_info ('Вы не можете использовать сервис восстановления пароля так часто');
+          return false;
+        }
+
+        $s['restore_hash'] = $hash;
+        $s['restore_timestamp'] = time ();
+
+        db_update ('user', array ('settings'=>db_string (serialize ($s))), '`id`='.$r['id']);
+
+        $link = config_get ('http-document-root').'/login/restore/confirm/?id='.$r['id'].'&hash='.$hash;
+        sendmail_tpl (stripslashes ($email), 'Восстановление пароля', 'restore', array ('login'=>stripslashes ($login), 'email'=>stripslashes ($email), 'link'=>$link));
+
+        return true;
     }
-
-    $r = db_row_value ('user', "(`login` =\"$login\") AND (`email`=\"$email\") AND (`authorized`=1)");
-    if ($r['id'] == '') {
-      add_info ('Неверное сочетание login <-> email');
-      return false;
-    }
-    $s = unserialize ($r['settings']);
-
-    if ($s['restore_timestamp'] && time () - $s['restore_timestamp'] < config_get ('restore-timeout')) {
-      add_info ('Вы не можете использовать сервис восстановления пароля так часто');
-      return false;
-    }
-
-    $s['restore_hash'] = $hash;
-    $s['restore_timestamp'] = time ();
-
-    db_update ('user', array ('settings'=>db_string (serialize ($s))), '`id`='.$r['id']);
-
-    $link = config_get ('http-document-root').'/login/restore/confirm/?id='.$r['id'].'&hash='.$hash;
-    sendmail_tpl (stripslashes ($email), 'Восстановление пароля', 'restore', array ('login'=>stripslashes ($login), 'email'=>stripslashes ($email), 'link'=>$link));
-
-    return true;
   }
 
   $f = new CVCForm (); 
   $f->Init ('', 'action=.?action\=send'.(($redirect!='')?('&redirect\='.prepare_arg ($redirect)):('')).';method=POST;add_check_func=check;caption=Послать заявку на восстановление;backlink='.prepare_arg ($redirect));
 
-  $rn = new CVCCaptcha ();
-  $rn->Init ();
-
   $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td width="30%">Логин:</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="login" name="login" value="'.htmlspecialchars (stripslashes ($login)).'"></td></tr></table>'));
   $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td width="30%">E-Mail:</td><td style="padding: 0 2px;"><input type="text" class="txt block" id="email" name="email" value="'.htmlspecialchars (stripslashes ($email)).'"></td></tr></table>'));
-  $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;"><div>'.$rn->OuterHTML ().'</div></td></tr></table>'));
+  $f->AppendCustomField    (array ('src'=>'<table class="clear" width="100%"><tr><td align="center" style="padding: 0 2px;"><div class="g-recaptcha" data-sitekey="6LfamhYUAAAAAK4OC9pKnyrj3y5at5dnx7_aoMO3"></div></td></tr></table>'));
 
   if ($action == 'send') {
     if (!send ()) {
