@@ -685,7 +685,6 @@ if ($_team_included_ != '#team_Included#') {
     
     $team_type_object = teamType_get_by_id($team_type);
     $reg_grade = $grade + $team_type_object['grade_offset_number'];
-    echo $reg_grade;
     if (($team['reg_grade'] != $reg_grade) && check_can_user_edit_teamgrade_field($team)) {
       $number = db_max('team','number',"`reg_grade`=$reg_grade AND `contest_id`=".$team['contest_id']) + 1;
       $reg_number = $number;
