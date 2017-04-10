@@ -781,7 +781,7 @@ if ($_team_included_ != '#team_Included#') {
       
       $team_list[0]['common_place']=1;
       $team_list[0]['place']=1;
-      $team_list_by_grade[$team_list[0]['grade']][]=$team_list[0];
+      $team_list_by_grade[$team_list[0]['reg_grade']][]=$team_list[0];
       $n = count($team_list);
       for ($i=1; $i<$n; $i++){
           //set common place
@@ -793,7 +793,7 @@ if ($_team_included_ != '#team_Included#') {
           }
           
           //set place in grade
-          $team_grade = $team_list[$i]['grade'];
+          $team_grade = $team_list[$i]['reg_grade'];
           $team_list_by_grade[$team_grade][]=$team_list[$i];
           $team_grade_count = count($team_list_by_grade[$team_grade]);
           if ($team_grade_count == 1){
