@@ -43,7 +43,7 @@
         <li><a href="<?=$document_root . '/articles/docs/regulations'?>">Положение о конкурсе</a></li>
         <li><a href="<?=$document_root . '/articles/docs/workrules'?>">Правила работы на конкурсе</a></li>
         <li><a href="<?=$document_root . '/articles/regrules'?>">Правила регистрации</a></li>
-        <li><a href="<?=$document_root . '/articles/examples'?>">Образцы конкурсных заданий с решениями</a></li>
+        <li><a href="<?=$document_root . '/storage/files/examples.zip'?>">Образцы конкурсных заданий с решениями</a></li>
         <li><a href="<?=$document_root . '/articles/docs/contest'?>">Договор на участие и оплата</a></li>
         <li><a href="<?=$document_root . '/articles/docs/TrizSchool'?>">Школа ТРИЗформашки</a></li>
         <li><a href="<?=$document_root . '/articles/history'?>">История ТРИЗформашки</a></li>
