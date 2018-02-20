@@ -61,14 +61,14 @@ ${information}
       </br>
       </br>
       Суммарная скидка: <input type="text" id="discount" readonly="readonly" value="0"/>
-      Оргвзнос: <input type="text" id="result" readonly="readonly" value="1300"/>
+      Оргвзнос: <input type="text" id="result" readonly="readonly" value="1000"/>
   </div>
 </div>
 
 <script>
     $(function(){
        $('input[type="checkbox"]').on('change', function(){
-           var maxvalue = 1300,
+           var maxvalue = 1000,
                discount = 0;
            $('input:checked').each(function(){
                discount += parseInt($(this).val());

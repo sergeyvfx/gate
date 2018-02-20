@@ -408,7 +408,7 @@ if ($_team_included_ != '#team_Included#') {
         
     if (team_create($this_team_type['id'], $number, $responsible_id, $contest_id, $payment_id, 
                     $grade, $reg_grade, $teachers, $pupils, $is_payment, $contest_day, $smena, 
-                    null, null, "1300", $comment)) {
+                    null, null, "1000", $comment)) {
       $_POST = array();
       return true;
     }
