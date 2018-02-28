@@ -74,7 +74,7 @@ dd_formo('title=Новая команда;');
             });
 
             var val = $('#date').val();
-            $('#payment').prop('checked', val < '2015-03-02').trigger('change');
+            $('#payment').prop('checked', val < '2018-03-02').trigger('change');
             
             var result = true;
             result = result && check_frm_teacher();
