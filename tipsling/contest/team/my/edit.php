@@ -616,7 +616,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             
             SetPaymentDiscount = function(){
                 var val = $('#date').val();
-                $('#payment').prop('checked', val < '2017-03-02').trigger('change');
+                $('#payment').prop('checked', val < '2018-03-02').trigger('change');
             },
         
             SetYearsDiscount = function(){
