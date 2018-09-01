@@ -1,60 +1,15 @@
 <?php
-  $document_root = config_get ('document-root');
-    
   global $current_contest;
- 
+  $document_root = config_get ('document-root');
+  
   if ($current_contest=='' || $current_contest==-1)
       $current_contest = opt_get("current_contest_number");
+
+  $tpl=manage_template_by_name ('Страница / Меню навигации');
+  echo (wiki_menu_parse ($tpl->GetText ()));
 ?>
 
-<div class="menu">
-  <div class="cpt">Основное меню сайта</div>
-  <div class="body">
-    <ul class="navMenu" type="square">
-      <li><a href="<?=$document_root . '/articles/news'?>">Новости</a></li>
-      <li><a href="<?=$document_root . '/'?>">Главная страница</a></li>
-      <?php
-      if (user_authorized()) 
-      {
-        printf('<li><a href="'.$document_root.'/login/profile/info/main">Мой профиль</a></li>');
-        printf('<li><a href="'.$document_root.'/login/profile/info/school">Учебное заведение</a></li>');
-      }
-      ?>
-      <li><a href="<?=$document_root . '/articles/rules'?>">Правила сайта</a></li>
-      <li><a href="<?=$document_root?>/tipsling/contest/choose">Выбрать конкурс</a></li>
-      <?php
-        /*if (user_access_root ())
-        {
-            printf('<li><a href="'.$document_root . '/forum">Форум</a></li>');
-        }*/
-        if (!user_authorized()) printf('<li><a href="'.$document_root.'/login">Войти</a></li>');
-        else printf('<li><a href="'.$document_root.'/?action=logout">Выйти</a></li>');
-      ?>
-    </ul>
-  </div>
-</div>
-
 <br/> 
-
-<div class="menu">
-  <div class="cpt">Документы</div>
-  <div class="body">
-    <ul class="navMenu" type="square">
-        <li><a href="<?=$document_root . '/articles/docs/regulations'?>">Положение о конкурсе</a></li>
-        <li><a href="<?=$document_root . '/articles/docs/workrules'?>">Правила работы на конкурсе</a></li>
-        <li><a href="<?=$document_root . '/articles/regrules'?>">Правила регистрации</a></li>
-        <li><a href="<?=$document_root . '/storage/files/examples.zip'?>">Образцы конкурсных заданий с решениями</a></li>
-        <li><a href="<?=$document_root . '/articles/docs/contest'?>">Договор на участие и оплата</a></li>
-        <li><a href="<?=$document_root . '/articles/docs/TrizSchool'?>">Школа ТРИЗформашки</a></li>
-        <li><a href="<?=$document_root . '/articles/history'?>">История ТРИЗформашки</a></li>
-        <li><a href="<?=$document_root . '/articles/archive'?>">Итоги прошлых конкурсов</a></li>
-        <li><a href="<?=$document_root . '/articles/contacts'?>">Контакты</a></li>
-    </ul>
-  </div>
-</div>
-
-<br/> 
-
 <div class="menu">
   <?php
     if ($current_contest!='')
@@ -124,36 +79,3 @@
     </ul>
   </div>
 </div>
-
-
-<!--. [url href="$document_root/articles/news"]Новости[/url]
-. [url href="$document_root/articles/regrules"]Правила регистрации[/url]
-. [url href="$document_root/articles/docs/regulations"]Положение о конкурсе[/url]
-. [url href="$document_root/articles/docs"]Документы конкурса[/url]
-. [url href="$document_root/articles/docs"]Школа Тризформашки[/url]
-. [url href="$document_root/articles/history"]История Тризформашки[/url]
-. [url href="$document_root/articles/archive"]Прошлые конкурсы[/url]
-. [url href="$document_root/articles/rules"]Правила сайта[/url]
-. [url href="$document_root/articles/contacts"]Контакты[/url]-->
-  <br/>
-<?php
-  $tpl=manage_template_by_name ('Страница / Меню навигации');
-  echo (wiki_menu_parse ($tpl->GetText ()));
-?>
-<!--
-<div class="menu" style="padding-top: 8px;">
-  <div class="cpt">Wiki</div>
-  <div class="body">
-    <ul>
-      <li><a href="/articles/news">Новости</a></li>
-      <li><a href="/articles/regrules">Правила регистрации</a></li>
-      <li><a href="/articles/rules">Правила сайта</a></li>
-      <li><a href="/articles/docs">Документы</a></li>
-      <li><a href="/articles/docs/regulations">Положение о конкурсе</a></li>
-      <li><a href="/articles/history">История Тризформашки</a></li>
-      <li><a href="/articles/archive">Прошлые конкурсы</a></li>
-      <li><a href="/articles/contacts">Контакты</a></li>
-    </ul>
-  </div>
-</div>
--->

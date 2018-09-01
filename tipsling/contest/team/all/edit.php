@@ -530,9 +530,9 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
                 <input type="checkbox" disabled="disabled" id="teacher_winner" value="100">[100р]Скидка учителям-победителям прежних конкурсов</br>
                 <input type="checkbox" disabled="disabled" id="other_contest" value="100">[100р]Скидка за участие в конкурсах Российской ассоциации ТРИЗ и ТРИЗ-Саммита</br>
                 </br>
-                Макс. сумма оргвзноса: <input type="text" readonly="readonly" value="1000" style="width:75px"/>
+                Макс. сумма оргвзноса: <input type="text" readonly="readonly" value="1300" style="width:75px"/>
                 Суммарная скидка: <input type="text" id="discount" readonly="readonly" value="0" style="width:75px"/>
-                Оргвзнос: <input type="text" id="result" name="payment_sum" readonly="readonly" value="1000" style="width:75px" />
+                Оргвзнос: <input type="text" id="result" name="payment_sum" readonly="readonly" value="1300" style="width:75px" />
             </td>
         </tr>
       </table>
@@ -567,7 +567,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
 <script>
     $(function(){
        $('input[type="checkbox"]').on('change', function(){
-           var maxvalue = 1000,
+           var maxvalue = 1300,
                discount = 0;
            $('#discount_table input:checked').each(function(){
                discount += parseInt($(this).val());
