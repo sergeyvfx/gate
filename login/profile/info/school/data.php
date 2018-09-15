@@ -70,10 +70,8 @@ if ($action == 'save') {
     $arr['status_id'] = $school_status;
   else
     $err_string=$err_string==''?'Статус учебного заведения':$err_string.', Статус учебного заведения';
-  if ($zipcode!='')
-    $arr['zipcode'] = db_string($zipcode);
-  else
-    $err_string=$err_string==''?'Индекс':$err_string.', Индекс';
+  
+  $arr['zipcode'] = db_string($zipcode);
     
   if ($country<0)
   {
@@ -201,7 +199,7 @@ while($rows = mysql_fetch_array($result, MYSQL_ASSOC))
 
 $f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Название: <span class="error">*</span></td><td><input id="name" name="name" type="text" class="txt block" onblur="check_frm_name ();" value="' . htmlspecialchars($sc['name']) . '"></td></tr></table><div id="name_check_res" style="display: none;"></div>'));
 $f->AppendCustomField(array('src' => '<table width="100%"><tr><td width="30%">Статус учебного заведения: <span class="error">*</span></td><td><select id="school_status" name="school_status" class="block">'.addslashes($statuses).'</select></td></tr></table>'));
-$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Почтовый индекс: <span class="error">*</span></td><td><input id="zipcode" name="zipcode" type="text" class="txt block" onblur="check_frm_zipcode ();" value="' . htmlspecialchars($sc['zipcode']) . '"></td></tr></table><div id="zipcode_check_res" style="display: none;"></div>'));
+$f->AppendCustomField(array('src' => '<table class="clear" width="100%"><tr><td width="30%">Почтовый индекс:</td><td><input id="zipcode" name="zipcode" type="text" class="txt block" value="' . htmlspecialchars($sc['zipcode']) . '"></td></tr></table>'));
 
 //find all countries
 $country=-1;
@@ -370,16 +368,6 @@ if ($err_string!='')
         return false;
     }
 
-    if (qtrim(zipcode)=='') {
-      alert('Поле "Почтовый индекс" обязательно для заполнения');
-      return false;
-    }
-
-    if (!check_zipcode(zipcode)) {
-      alert('Указанный почтовый индекс не выглядит корректным. Индекс должен состоять из 6 цифр');
-      return false;
-    }
-    
     if (country==-1 && qtrim(other_country)=='') {
       alert('Поле "Страна" обязательно для заполнения');
       return false;
@@ -592,22 +580,6 @@ if ($err_string!='')
     }
 
     hide_msg('name_check_res');
-  }
-
-  function check_frm_zipcode () {
-    var zipcode = getElementById ('zipcode').value;
-
-    if (qtrim(zipcode)=='') {
-      show_msg ('zipcode_check_res', 'err', 'Это поле обязательно для заполнения');
-      return false;
-    }
-
-    if (!check_zipcode(zipcode)) {
-      show_msg ('zipcode_check_res', 'err', 'Указанный индекс не выглядит корректным. Индекс должен состоять из 6 цифр');
-      return false;
-    }
-
-    hide_msg('zipcode_check_res');
   }
 
   function check_frm_country () {
