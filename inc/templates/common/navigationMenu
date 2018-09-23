@@ -26,6 +26,7 @@
         if ($current_contest!='')
         {
             $it = contest_get_by_id($current_contest);
+            $contest_status = get_contest_status($current_contest);
             if (user_authorized())
             {
                 $query = arr_from_query ("select * ".
@@ -36,7 +37,7 @@
                 {
                     printf('<li><a href="'.$document_root.'/tipsling/contest/admin/">Администрирование</a></li>');
                 }
-                if (get_contest_status($current_contest)==4){
+                if (($contest_status & 8) == 8 && ($contest_status & 16) == 0){
                     printf('<li><a href="'.$document_root.'/tipsling/contest/team/certificate/">Сертификаты</a></li>');
                 }
                 printf('<li><a href="'.$document_root.'/tipsling/contest/team/my/">Мои команды</a></li>');
@@ -50,17 +51,13 @@
                 printf('<li><a href="'.$document_root.'/tipsling/contest/payment/all">Все платежи</a></li>');
             }
             
-            $contest_status = get_contest_status($current_contest);
-            if ($contest_status>2 && $contest_status<5){
+            if (($contest_status & 4) == 4 && ($contest_status & 16) == 0){
                 printf('<li><a href="'.$document_root.'/tipsling/contest/status">Монитор</a></li>');
             }
-            if (user_authorized() && $contest_status == 3){
+                
+            if (user_authorized() && ($contest_status & 4) == 4 && ($contest_status & 8) == 0) {
                 printf('<li><a href="'.$document_root.'/tipsling/contest/answer">Отослать решение</a></li>');
             }
-            /*if (user_authorized())
-            {
-                printf('<li><a href="'.$document_root.'/tipsling/contest/poll?action=vote&id=1">Опрос</a></li>');
-            }*/
             printf('</ul></li>');
         }
       ?>

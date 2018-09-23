@@ -32,7 +32,7 @@ if ($current_contest=='' || $current_contest==-1)
 
 
 $contest = contest_get_by_id($current_contest);
-$contest_stat = get_contest_status($current_contest);
+//$contest_stat = get_contest_status($current_contest);
 $allow_registration = check_create_team_allow($current_contest);
 $allow_edit = check_edit_team_allow($current_contest);
 ?>

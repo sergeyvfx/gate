@@ -61,7 +61,7 @@ ${information}
   На мониторе отражается текущее состояние присланных заданий.
 </p>
 <p>
-  Если задание прислано, то, в соответствующей ячейке, будет указано время получения письма (по Перми) и объем вложения.
+  Если задание прислано, то, в соответствующей ячейке, будет указано время получения решения (по Перми) и объем вложения.
 </p>
 <table class="list">
   <tr class="h">
@@ -78,7 +78,7 @@ ${information}
     foreach ($teams as $t) {
       $status = arr_from_query(
           "SELECT
-            `contest_status`.`time`, `contest_status`.`task`, `contest_status`.`size`
+            `contest_status`.`date`, `contest_status`.`time`, `contest_status`.`task`, `contest_status`.`size`
            FROM
             `contest_status`
            WHERE
@@ -99,10 +99,12 @@ ${information}
         $s = $status[$j];
         if ($s["task"] == $i) {
           $text = '<span style="color: green">';
+          $date = DateTime::createFromFormat('Y-m-d', $s["date"]);
+          $string_date = $date->format('d.m');
           $time = $s["time"];
           $time = preg_replace('/:[0-9]{2}$/i', '', $time);
           $size = round($s["size"] / 1024);
-          $text .= $time . '<br>' . $size . ' KB';
+          $text .= $string_date . '<br>' . $time . '<br>' . $size . ' KB';
           $text .= '</span>';
           $j++;
         } else {

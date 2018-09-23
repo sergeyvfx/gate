@@ -338,37 +338,32 @@ function contest_update_received($id) {
       
       $query = "select * from contest where DATE_FORMAT(registration_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
-      if (count($r)>0)
-      {
-          $status = 1; //"Идет регистрация"
+      if (count($r)>0) {
+          $status |= 1; //"Идет регистрация"
       }
       
       $query = "select * from contest where DATE_FORMAT(registration_finish,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
-      if (count($r)>0)
-      {
-          $status = 2; //"Регистрация закончилась"
+      if (count($r)>0) {
+          $status |= 2; //"Регистрация закончилась"
       }
       
       $query = "select * from contest where DATE_FORMAT(contest_start,'%Y-%m-%d')<=DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
-      if (count($r)>0)
-      {
-          $status = 3; //"Конкурс начался"
+      if (count($r)>0) {
+          $status |= 4; //"Конкурс начался"
       }
       
       $query = "select * from contest where DATE_FORMAT(contest_finish,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
-      if (count($r)>0)
-      {
-          $status = 4; //"Конкурс завершился"
+      if (count($r)>0) {
+          $status |= 8; //"Конкурс завершился"
       }
       
       $query = "select * from contest where DATE_FORMAT(send_to_archive,'%Y-%m-%d')<DATE_FORMAT(".db_string(date("Y-m-d")).",'%Y-%m-%d') and id=".$id;
       $r = arr_from_query($query);
-      if (count($r)>0)
-      {
-          $status = 5; //"Архивный"
+      if (count($r)>0) {
+          $status |= 16; //"Архивный"
       }
       return $status;
   }
@@ -376,17 +371,17 @@ function contest_update_received($id) {
   function get_contest_text_status($id)
   {
       $status = get_contest_status($id);
-      if ($status == 0)
+      if (($status & 1) == 0)
         return "Предстоящий";
-      if ($status == 1)
+      if (($status & 2) == 0)
         return "Идет регистрация";
-      if ($status == 2)
+      if (($status & 4) == 0)
         return "Регистрация закончилась";
-      if ($status == 3)
+      if (($status & 8) == 0)
         return "Конкурс начался";
-      if ($status == 4)
+      if (($status & 16) == 0)
         return "Конкурс завершился";
-      if ($status == 5)
+      if (($status & 16) == 16)
         return "Архивный";
       
       return "Невозможно определить статус";

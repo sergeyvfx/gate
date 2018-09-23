@@ -27,7 +27,8 @@ if ($current_contest=='' || $current_contest==-1)
     header('Location: ../../choose');
 
 $contest = contest_get_by_id($current_contest);
-$allow_create = get_contest_status($current_contest)<3;
+$contest_status = get_contest_status($current_contest);
+$allow_create = ($contest_status & 2) == 0 && ($contest_status & 4) == 0;
 ?>
 <div id="snavigator"><a href="<?= config_get('document-root') . "/tipsling/contest/" ?>"><?=$contest['name']?></a><a href="<?= config_get('document-root') . "/tipsling/contest/payment" ?>">Платежи</a>Мои платежи</div>    
 ${information}
@@ -41,7 +42,7 @@ ${information}
     if ($id!='' && $id != -1)
     {
         $p = payment_get_by_id($id);
-        $allow_editing = get_contest_status($current_contest)<3 && user_id()==$p['responsible_id'];
+        $allow_editing = $allow_create && user_id()==$p['responsible_id'];
     }
     
     $payment_menu->SetActive('my');

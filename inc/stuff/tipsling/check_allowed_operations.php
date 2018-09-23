@@ -9,14 +9,15 @@ global $current_contest;
 function check_create_team_allow($contest_id='') {    
     if ($contest_id == '')
         $contest_id = $current_contest;
-    return get_contest_status($contest_id) == 1;
+    $contest_status = get_contest_status($contest_id);
+    return ($contest_status & 1) == 1 && ($contest_status & 2) == 0;
 }
 
 function check_edit_team_allow($contest_id='') {    
     if ($contest_id == '')
         $contest_id = $current_contest;
     $contest_status = get_contest_status($contest_id);
-    return $contest_status == 1 || $contest_status == 2 || $contest_status == 3;
+    return ($contest_status & 1) == 1 && ($contest_status & 8) == 0;;
 }
 
 function check_is_team_owner($team, $user_id='') {    
@@ -48,6 +49,6 @@ function check_can_user_edit_teamgrade_field($team) {
 
 function check_can_user_edit_teamsmena_field($team) {    
     $contest_status = get_contest_status($team['contest_id']);
-    return $contest_status == 1 || $contest_status == 2 || check_contestadmin_rights($team['contest_id']);
+    return (($contest_status & 1) == 1 && ($contest_status & 4) == 0) || check_contestadmin_rights($team['contest_id']);
 }
 ?>

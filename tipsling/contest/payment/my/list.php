@@ -50,7 +50,8 @@ if (count($list) > 0) {
       if (!preg_match('/\./', $amount)) {
         $amount = $amount . '.00';
       }
-      $contest_not_running = get_contest_status($it['contest_id'])<3;
+      $it_contest_status = get_contest_status($it['contest_id']);
+      $contest_allow_payment_editing = ($it_contest_status & 2) == 0 && ($it_contest_status & 4) == 0;
       $amount = $amount . ' руб.';
       switch ($it['payment_option']){
           case 1: $payment_option_name = 'Учебный центр "Информатика" (банковский перевод)'; break;
@@ -62,7 +63,7 @@ if (count($list) > 0) {
           case -1: $payment_option_name = 'Другое (указать в примечании)'; break;
       }
       $pageSrc .= '<tr' . (($i == $n - 1 || $c == $perPage - 1) ? (' class="last"') : ('')) . '>' .
-      '<td class="n">' . (($d && $contest_not_running) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')) . date_format(date_create($it['date']), 'd.m.Y') . (($d && $contest_not_running) ? ('</a>') : ('')) . '</td>' .
+      '<td class="n">' . (($d && $contest_allow_payment_editing) ? ('<a href=".?action=edit&id=' . $it['id'] . '&' . $pageid . '">') : ('')) . date_format(date_create($it['date']), 'd.m.Y') . (($d && $contest_allow_payment_editing) ? ('</a>') : ('')) . '</td>' .
       '<td style="text-align: center;">' . $payment_option_name . '</td>' .
       '<td style="text-align: center;">' . $amount . '</td>' .
       '<td style="text-align: center;">' . $it['team_numbers'] . '</td>' .
@@ -70,8 +71,8 @@ if (count($list) > 0) {
       '<td style="text-align: center;">' . $it['cheque_number'] . '</td>' .
       '<td style="text-align: center;">' . (($d) ? ('<span style="color: red">Не поступил</span>') : ('<span style="color: green">' . date_format(date_create($it['date_arrival']), 'd.m.Y') . '</span>')) . '</td>' .
       '<td align="right">' .
-        stencil_ibtnav((($d && $contest_not_running) ? 'edit.gif' : 'edit_d.gif'), (($d && $contest_not_running) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : ''), 'Изменить информацию о платеже') .
-        stencil_ibtnav((($d && $contest_not_running) ? 'cross.gif' : 'cross_d.gif'), (($d && $contest_not_running) ? '?action=delete&id=' . $it['id'] . '&' . $pageid : ''), 'Удалить платеж', 'Удалить этот платеж?') .
+        stencil_ibtnav((($d && $contest_allow_payment_editing) ? 'edit.gif' : 'edit_d.gif'), (($d && $contest_allow_payment_editing) ? '?action=edit&id=' . $it['id'] . '&' . $pageid : ''), 'Изменить информацию о платеже') .
+        stencil_ibtnav((($d && $contest_allow_payment_editing) ? 'cross.gif' : 'cross_d.gif'), (($d && $contest_allow_payment_editing) ? '?action=delete&id=' . $it['id'] . '&' . $pageid : ''), 'Удалить платеж', 'Удалить этот платеж?') .
       '</td></tr>' . "\n";
       $c++;
       $i++;

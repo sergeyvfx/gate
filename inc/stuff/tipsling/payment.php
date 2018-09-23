@@ -56,7 +56,7 @@ if ($_payment_included_ != '#payment_Included#') {
       $b = group_get_by_name("Бухгалтеры");
       $contest = contest_get_by_id($p['contest_id']);
       $contest_status = get_contest_status($contest['id']);
-      if ($contest_status>2 && $p['date_arrival'] != null && !is_user_in_group(user_id(), $b['id'])) {
+      if (($contest_status & 2) == 2 && $p['date_arrival'] != null && !is_user_in_group(user_id(), $b['id'])) {
         add_info("Данный платеж не доступен для редактирования");
         return false;
       }

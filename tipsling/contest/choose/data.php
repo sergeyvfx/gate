@@ -27,7 +27,7 @@ ${information}
     <?php
     global $DOCUMENT_ROOT, $action, $current_contest, $contest;
     
-    $archived = get_contest_status($current_contest)==5;//"Архивный конкурс"
+    $archived = (get_contest_status($current_contest) & 16) == 16;//"Архивный конкурс"
     if ($action == 'chosen' && !$archived) {
       $current_contest = $contest;
     }
