@@ -99,8 +99,12 @@ ${information}
         $s = $status[$j];
         if ($s["task"] == $i) {
           $text = '<span style="color: green">';
-          $date = DateTime::createFromFormat('Y-m-d', $s["date"]);
-          $string_date = $date->format('d.m');
+          if ($s["date"] != '') {
+            $unix = strtotime('2018-09-23');
+            $string_date = date('d.m', $unix);            
+          } else {
+            $string_date = '';
+          }
           $time = $s["time"];
           $time = preg_replace('/:[0-9]{2}$/i', '', $time);
           $size = round($s["size"] / 1024);
