@@ -100,8 +100,8 @@ ${information}
         if ($s["task"] == $i) {
           $text = '<span style="color: green">';
           if ($s["date"] != '') {
-            $unix = strtotime('2018-09-23');
-            $string_date = date('d.m', $unix);            
+            $unix_date = strtotime($s["date"]);
+            $string_date = date('d.m', $unix_date);
           } else {
             $string_date = '';
           }
