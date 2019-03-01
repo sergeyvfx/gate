@@ -79,7 +79,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             });
 
             var val = $('#date').val();
-            $('#payment').prop('checked', val < '2018-03-02').trigger('change');
+            $('#payment').prop('checked', val < '2019-03-10').trigger('change');
             
             var result = true;
             result = result && check_frm_teacher();
@@ -527,7 +527,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             </td>
             <td style="padding: 0 2px;">
                 <input type="checkbox" disabled="disabled" id="repost" value="100">[100р]Скидка за распространение информации о конкурсе (не менее 10 сообщений о конкурсе в сети)</br>
-                <input type="checkbox" disabled="disabled" id="payment" value="100">[100р]Скидка за раннюю оплату (до 1 марта)</br>
+                <input type="checkbox" disabled="disabled" id="payment" value="100">[100р]Скидка за раннюю оплату (до 10 марта)</br>
                 <input type="checkbox" disabled="disabled" id="years" value="100">[100р]Скидка за возраст (для команд с 1 по 9 класс)</br>
                 <input type="checkbox" disabled="disabled" id="participant" value="100">[100р]Скидка участникам предыдущих конкурсов (хотя бы один из учеников уже принимал участие в конкурсе)</br>
                 <input type="checkbox" disabled="disabled" id="veteran" value="100">[100р]Скидка "ветеранам" конкурса (хотя бы один из учеников принимал участие в конкурсе 3 или более раз)</br>
@@ -536,9 +536,9 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
                 <input type="checkbox" disabled="disabled" id="teacher_winner" value="100">[100р]Скидка учителям-победителям прежних конкурсов</br>
                 <input type="checkbox" disabled="disabled" id="other_contest" value="100">[100р]Скидка за участие в конкурсах Российской ассоциации ТРИЗ и ТРИЗ-Саммита</br>
                 </br>
-                Макс. сумма оргвзноса: <input type="text" readonly="readonly" value="1300" style="width:75px"/>
+                Макс. сумма оргвзноса: <input type="text" readonly="readonly" value="1000" style="width:75px"/>
                 Суммарная скидка: <input type="text" id="discount" readonly="readonly" value="0" style="width:75px"/>
-                Оргвзнос: <input type="text" id="result" name="payment_sum" readonly="readonly" value="1300" style="width:75px" />
+                Оргвзнос: <input type="text" id="result" name="payment_sum" readonly="readonly" value="1000" style="width:75px" />
             </td>
         </tr>
     </table>
@@ -555,7 +555,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
 <script>
     $(function(){
        $('input[type="checkbox"]').on('change', function(){
-           var maxvalue = 1300,
+           var maxvalue = 1000,
                discount = 0;
            $('input:checked').each(function(){
                discount += parseInt($(this).val());
@@ -616,7 +616,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             
             SetPaymentDiscount = function(){
                 var val = $('#date').val();
-                $('#payment').prop('checked', val < '2018-03-02').trigger('change');
+                $('#payment').prop('checked', val < '2019-03-10').trigger('change');
             },
         
             SetYearsDiscount = function(){
