@@ -22,6 +22,7 @@ if ($PHP_SELF != '') {
             <option value="1" <?=($sort == 1) ? ('selected') : ('')?>>По номеру команды</option>
             <option value="2" <?=($sort == 2) ? ('selected') : ('')?>>По региону</option>
             <option value="3" <?=($sort == 3) ? ('selected') : ('')?>>По учебному заведению</option>
+            <option value="4" <?=($sort == 4) ? ('selected') : ('')?>>По порядку регистрации</option>
           </select>
         </td>
         <td style="text-align: right; padding-right: 5px;">

@@ -79,7 +79,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             });
 
             var val = $('#date').val();
-            $('#payment').prop('checked', val < '2019-03-10').trigger('change');
+            $('#payment').prop('checked', val < '2020-03-01').trigger('change');
             
             var result = true;
             result = result && check_frm_teacher();
@@ -527,7 +527,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             </td>
             <td style="padding: 0 2px;">
                 <input type="checkbox" disabled="disabled" id="repost" value="100">[100р]Скидка за распространение информации о конкурсе (не менее 10 сообщений о конкурсе в сети)</br>
-                <input type="checkbox" disabled="disabled" id="payment" value="100">[100р]Скидка за раннюю оплату (до 10 марта)</br>
+                <input type="checkbox" disabled="disabled" id="payment" value="100">[100р]Скидка за раннюю оплату (до 1 марта)</br>
                 <input type="checkbox" disabled="disabled" id="years" value="100">[100р]Скидка за возраст (для команд с 1 по 9 класс)</br>
                 <input type="checkbox" disabled="disabled" id="participant" value="100">[100р]Скидка участникам предыдущих конкурсов (хотя бы один из учеников уже принимал участие в конкурсе)</br>
                 <input type="checkbox" disabled="disabled" id="veteran" value="100">[100р]Скидка "ветеранам" конкурса (хотя бы один из учеников принимал участие в конкурсе 3 или более раз)</br>
@@ -616,7 +616,7 @@ formo('title=Редактирование команды '.$team['reg_grade'].'.
             
             SetPaymentDiscount = function(){
                 var val = $('#date').val();
-                $('#payment').prop('checked', val < '2019-03-10').trigger('change');
+                $('#payment').prop('checked', val < '2020-03-01').trigger('change');
             },
         
             SetYearsDiscount = function(){

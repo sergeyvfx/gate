@@ -38,6 +38,8 @@ if ($_team_included_ != '#team_Included#') {
       $sort = "ORDER BY region.name, team.reg_grade, team.number";
     } elseif ($sort == 3) {
       $sort = "ORDER BY region.name, city.name, school.name, team.reg_grade, team.number";
+    } elseif ($sort == 4) {
+        $sort = "ORDER BY team.id";
     }
 
     if ($responsible_id < 0) {
