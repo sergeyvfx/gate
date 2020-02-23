@@ -66,7 +66,9 @@ if (count($list) > 0) {
     $c = 0;
     //$pageSrc = '<div>'.$query.'</div>';
     $pageSrc = '<table class="list">' . "\n";
-    $pageSrc .= '<tr class="h"><th width="100" style="text-align: center;">Номер команды</th>
+    $pageSrc .= '<tr class="h">
+        <th style="text-align: center;">Идентификатор</th>
+        <th width="100" style="text-align: center;">Номер команды</th>
         <th style="text-align: center;">Часовой пояс</th>
         <th style="text-align: center;">День</th>
         <th style="text-align: center;">Смена</th>
@@ -81,7 +83,8 @@ if (count($list) > 0) {
         </tr>' . "\n";
     while ($c < $perPage && $i < $n) {
       $it = $list[$i];
-      $pageSrc .= 
+      $pageSrc .=
+      '<td class="center">' . $it["id"] . '</td>' .
       '<td class="center">' . $it["Номер команды"] . '</td>' .
       '<td class="center">' . ($it["Часовой пояс"]<0?$it["Часовой пояс"]:'+'. $it["Часовой пояс"]) . '</td>' .
       '<td class="center">' . $it["День"] . '</td>' .
